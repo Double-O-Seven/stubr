@@ -1,11 +1,22 @@
 package ch.leadrian.stubr.core;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.reverse;
 
 public interface RootStubber {
 
     static RootStubberBuilder builder() {
         return new RootStubberImpl.Builder();
+    }
+
+    static RootStubber compose(RootStubber... rootStubbers) {
+        List<RootStubber> reversedRootStubbers = new ArrayList<>(asList(rootStubbers));
+        reverse(reversedRootStubbers);
+        return new CompositeRootStubber(reversedRootStubbers);
     }
 
     Result<?> tryToStub(Type type);
