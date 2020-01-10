@@ -10,10 +10,20 @@ public interface RootStubber {
 
     Result<?> tryToStub(Type type);
 
-    Object stub(Type type);
+    default Object stub(Type type) {
+        Result<?> result = tryToStub(type);
+        if (result.isFailure()) {
+            throw new IllegalStateException(String.format("Failed to stub instance of %s", type));
+        }
+        return result.getValue();
+    }
 
-    <T> Result<T> tryToStub(Class<T> classToStub);
+    default <T> Result<T> tryToStub(Class<T> classToStub) {
+        return tryToStub((Type) classToStub).map(classToStub::cast);
+    }
 
-    <T> T stub(Class<T> classToStub);
+    default <T> T stub(Class<T> classToStub) {
+        return classToStub.cast(stub((Type) classToStub));
+    }
 
 }

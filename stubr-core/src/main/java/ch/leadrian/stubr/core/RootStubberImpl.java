@@ -28,25 +28,6 @@ final class RootStubberImpl implements RootStubber {
         return Result.failure();
     }
 
-    @Override
-    public Object stub(Type type) {
-        Result<?> result = tryToStub(type);
-        if (result.isFailure()) {
-            throw new IllegalStateException(String.format("Failed to stub instance of %s", type));
-        }
-        return result.getValue();
-    }
-
-    @Override
-    public <T> Result<T> tryToStub(Class<T> classToStub) {
-        return tryToStub((Type) classToStub).map(classToStub::cast);
-    }
-
-    @Override
-    public <T> T stub(Class<T> classToStub) {
-        return classToStub.cast(stub((Type) classToStub));
-    }
-
     static final class Builder implements RootStubberBuilder {
 
         private final List<Stubber> stubbers = new ArrayList<>();
