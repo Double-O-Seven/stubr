@@ -4,6 +4,10 @@ import java.lang.reflect.Type;
 
 public interface RootStubber {
 
+    static RootStubberBuilder builder() {
+        return new RootStubberImpl.Builder();
+    }
+
     Result<?> tryToStub(Type type);
 
     Object stub(Type type);

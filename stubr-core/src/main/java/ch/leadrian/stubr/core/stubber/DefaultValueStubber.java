@@ -80,7 +80,7 @@ final class DefaultValueStubber implements Stubber {
 
                 @Override
                 public Optional<Object> visit(WildcardType wildcardType) {
-                    return getOnlyUpperBound(wildcardType).map(lowerBound -> accept(lowerBound, this));
+                    return getOnlyUpperBound(wildcardType).map(upperBound -> accept(upperBound, this));
                 }
 
                 @Override

@@ -49,7 +49,7 @@ class TypesTest {
     }
 
     @Nested
-    class GetUpperBoundTest {
+    class GetOnlyUpperBoundTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnObject() {
