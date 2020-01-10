@@ -45,7 +45,9 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType).map(upperBound -> accept(upperBound, this)).isPresent();
+                return getOnlyUpperBound(wildcardType)
+                        .map(upperBound -> accept(upperBound, this))
+                        .isPresent();
             }
 
             @Override
@@ -81,7 +83,9 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
             @Override
             public T visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType).map(upperBound -> accept(upperBound, this)).orElseThrow(IllegalAccessError::new);
+                return getOnlyUpperBound(wildcardType)
+                        .map(upperBound -> accept(upperBound, this))
+                        .orElseThrow(IllegalStateException::new);
             }
 
             @Override

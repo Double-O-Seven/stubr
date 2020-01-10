@@ -38,7 +38,9 @@ final class ConstantValueStubber implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType).filter(valueClass::equals).isPresent();
+                return getOnlyUpperBound(wildcardType)
+                        .filter(valueClass::equals)
+                        .isPresent();
             }
 
             @Override
