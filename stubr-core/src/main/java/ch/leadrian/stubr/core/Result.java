@@ -10,8 +10,9 @@ public abstract class Result<T> {
         return new Success<>(value);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Failure<T> failure() {
-        return new Failure<>();
+        return (Failure<T>) Failure.INSTANCE;
     }
 
     private Result() {
@@ -47,7 +48,7 @@ public abstract class Result<T> {
 
         @Override
         public <U> Success<U> map(Function<T, U> mappingFunction) {
-            return new Success<>(mappingFunction.apply(value));
+            return Result.success(mappingFunction.apply(value));
         }
 
         @Override
@@ -68,6 +69,8 @@ public abstract class Result<T> {
 
     public static final class Failure<T> extends Result<T> {
 
+        private static final Failure<Object> INSTANCE = new Failure<>();
+
         private Failure() {
         }
 
@@ -83,17 +86,7 @@ public abstract class Result<T> {
 
         @Override
         public <U> Failure<U> map(Function<T, U> mappingFunction) {
-            return new Failure<>();
-        }
-
-        @Override
-        public int hashCode() {
-            return 31;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof Failure;
+            return Result.failure();
         }
     }
 }
