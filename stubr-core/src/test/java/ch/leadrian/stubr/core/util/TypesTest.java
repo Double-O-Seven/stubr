@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.core.util;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.ParameterizedType;
@@ -12,34 +13,74 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TypesTest {
 
-    @Test
-    void shouldReturnLowerBound() {
-        WildcardType type = getWildcardType("returnTypeWithLowerBound");
+    @Nested
+    class GetLowerBoundTest {
 
-        Optional<Type> lowerBound = Types.getLowerBound(type);
+        @Test
+        void shouldReturnLowerBound() {
+            WildcardType type = getWildcardType("returnTypeWithLowerBound");
 
-        assertThat(lowerBound)
-                .hasValue(Number.class);
+            Optional<Type> lowerBound = Types.getLowerBound(type);
+
+            assertThat(lowerBound)
+                    .hasValue(Number.class);
+        }
+
+        @Test
+        void givenOnlyUpperBoundItShouldReturnEmpty() {
+            WildcardType type = getWildcardType("returnTypeWithUpperBound");
+
+            Optional<Type> lowerBound = Types.getLowerBound(type);
+
+            assertThat(lowerBound)
+                    .isEmpty();
+        }
+
+        @Test
+        void givenNoExplicitBoundsItShouldReturnEmpty() {
+            WildcardType type = getWildcardType("returnTypeWithoutExplicitBound");
+
+            Optional<Type> lowerBound = Types.getLowerBound(type);
+
+            assertThat(lowerBound)
+                    .isEmpty();
+        }
+
     }
 
-    @Test
-    void givenOnlyUpperBoundItShouldReturnEmpty() {
-        WildcardType type = getWildcardType("returnTypeWithUpperBound");
+    @Nested
+    class GetUpperBoundTest {
 
-        Optional<Type> lowerBound = Types.getLowerBound(type);
+        @Test
+        void givenOnlyLowerBoundItShouldReturnObject() {
+            WildcardType type = getWildcardType("returnTypeWithLowerBound");
 
-        assertThat(lowerBound)
-                .isEmpty();
-    }
+            Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
-    @Test
-    void givenNoExplicitBoundsItShouldReturnEmpty() {
-        WildcardType type = getWildcardType("returnTypeWithoutExplicitBound");
+            assertThat(upperBound)
+                    .hasValue(Object.class);
+        }
 
-        Optional<Type> lowerBound = Types.getLowerBound(type);
+        @Test
+        void shouldReturnUpperBound() {
+            WildcardType type = getWildcardType("returnTypeWithUpperBound");
 
-        assertThat(lowerBound)
-                .isEmpty();
+            Optional<Type> upperBound = Types.getOnlyUpperBound(type);
+
+            assertThat(upperBound)
+                    .hasValue(Number.class);
+        }
+
+        @Test
+        void givenNoExplicitBoundsItShouldReturnObject() {
+            WildcardType type = getWildcardType("returnTypeWithoutExplicitBound");
+
+            Optional<Type> upperBound = Types.getOnlyUpperBound(type);
+
+            assertThat(upperBound)
+                    .hasValue(Object.class);
+        }
+
     }
 
     private WildcardType getWildcardType(String methodName) {

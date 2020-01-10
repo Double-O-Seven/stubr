@@ -16,4 +16,12 @@ public final class Types {
         }
         return Optional.empty();
     }
+
+    public static Optional<Type> getOnlyUpperBound(WildcardType type) {
+        Type[] upperBounds = type.getUpperBounds();
+        if (upperBounds.length == 1) {
+            return Optional.of(upperBounds[0]);
+        }
+        return Optional.empty();
+    }
 }

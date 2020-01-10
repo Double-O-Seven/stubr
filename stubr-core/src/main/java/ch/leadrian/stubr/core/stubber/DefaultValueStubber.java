@@ -3,7 +3,6 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.util.TypeVisitor;
-import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -14,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
+import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 
 final class DefaultValueStubber implements Stubber {
 
@@ -80,7 +80,7 @@ final class DefaultValueStubber implements Stubber {
 
                 @Override
                 public Optional<Object> visit(WildcardType wildcardType) {
-                    return Types.getLowerBound(wildcardType).map(lowerBound -> accept(lowerBound, this));
+                    return getOnlyUpperBound(wildcardType).map(lowerBound -> accept(lowerBound, this));
                 }
 
                 @Override

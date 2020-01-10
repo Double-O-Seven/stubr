@@ -10,7 +10,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getLowerBound;
+import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 
 final class ConstantValueStubber implements Stubber {
 
@@ -38,7 +38,7 @@ final class ConstantValueStubber implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getLowerBound(wildcardType).filter(valueClass::equals).isPresent();
+                return getOnlyUpperBound(wildcardType).filter(valueClass::equals).isPresent();
             }
 
             @Override

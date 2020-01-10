@@ -16,4 +16,17 @@ public interface ParameterMatcher {
 
     boolean matches(Parameter parameter);
 
+    default ParameterMatcher and(ParameterMatcher other) {
+        return parameter -> this.matches(parameter) && other.matches(parameter);
+    }
+
+    default ParameterMatcher or(ParameterMatcher other) {
+        return parameter -> this.matches(parameter) || other.matches(parameter);
+    }
+
+    default ParameterMatcher negate() {
+        return parameter -> !matches(parameter);
+    }
+
+
 }

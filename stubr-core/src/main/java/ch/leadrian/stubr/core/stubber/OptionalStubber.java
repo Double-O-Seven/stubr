@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.core.stubber;
 
+import ch.leadrian.stubr.core.Result;
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.util.TypeVisitor;
@@ -12,7 +13,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getLowerBound;
+import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 
 final class OptionalStubber implements Stubber {
 
@@ -37,7 +38,7 @@ final class OptionalStubber implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getLowerBound(wildcardType).filter(lowerBound -> accept(lowerBound, this)).isPresent();
+                return getOnlyUpperBound(wildcardType).filter(lowerBound -> accept(lowerBound, this)).isPresent();
             }
 
             @Override
@@ -49,7 +50,10 @@ final class OptionalStubber implements Stubber {
 
     @Override
     public Optional<?> stub(RootStubber rootStubber, Type type) {
-        return getValueClass(type).flatMap(rootStubber::tryToStub);
+        return getValueClass(type)
+                .map(rootStubber::tryToStub)
+                .filter(Result::isSuccess)
+                .map(Result::getValue);
     }
 
     private Optional<Class<?>> getValueClass(Type type) {
@@ -67,7 +71,7 @@ final class OptionalStubber implements Stubber {
 
             @Override
             public Optional<Class<?>> visit(WildcardType wildcardType) {
-                return Types.getLowerBound(wildcardType).flatMap(lowerBound -> accept(lowerBound, this));
+                return Types.getOnlyUpperBound(wildcardType).flatMap(lowerBound -> accept(lowerBound, this));
             }
 
             @Override

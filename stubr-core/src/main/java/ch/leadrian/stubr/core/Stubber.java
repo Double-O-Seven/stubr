@@ -1,5 +1,7 @@
 package ch.leadrian.stubr.core;
 
+import ch.leadrian.stubr.core.stubber.Stubbers;
+
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
@@ -15,6 +17,14 @@ public interface Stubber {
 
     default Object stub(RootStubber rootStubber, Parameter parameter) {
         return stub(rootStubber, parameter.getParameterizedType());
+    }
+
+    default Stubber applyIf(TypeMatcher typeMatcher) {
+        return Stubbers.conditional(this, typeMatcher);
+    }
+
+    default Stubber applyIf(ParameterMatcher parameterMatcher) {
+        return Stubbers.conditional(this, parameterMatcher);
     }
 
 }

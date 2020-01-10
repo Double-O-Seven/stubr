@@ -1,6 +1,8 @@
 package ch.leadrian.stubr.core.stubber;
 
+import ch.leadrian.stubr.core.ParameterMatcher;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.TypeMatcher;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,6 +39,18 @@ public final class Stubbers {
         return collection(collectionClass, values -> collectionFactory.get(), 0);
     }
 
+    public static Stubber conditional(Stubber delegate, TypeMatcher typeMatcher, ParameterMatcher parameterMatcher) {
+        return new ConditionalStubber(delegate, typeMatcher, parameterMatcher);
+    }
+
+    public static Stubber conditional(Stubber delegate, TypeMatcher typeMatcher) {
+        return conditional(delegate, typeMatcher, parameter -> true);
+    }
+
+    public static Stubber conditional(Stubber delegate, ParameterMatcher parameterMatcher) {
+        return conditional(delegate, type -> true, parameterMatcher);
+    }
+
     public static Stubber constantValue(Object value) {
         requireNonNull(value, "value may not be null");
         return new ConstantValueStubber(value.getClass(), value);
@@ -44,6 +58,7 @@ public final class Stubbers {
 
     public static <T> Stubber constantValue(Class<T> targetClass, T value) {
         requireNonNull(targetClass, "targetClass may not be null");
+        requireNonNull(value, "value may not be null");
         return new ConstantValueStubber(targetClass, value);
     }
 
@@ -53,6 +68,10 @@ public final class Stubbers {
 
     public static Stubber nullValue() {
         return NullValueStubber.INSTANCE;
+    }
+
+    public static Stubber object() {
+        return ObjectStubber.INSTANCE;
     }
 
     public static Stubber optional() {

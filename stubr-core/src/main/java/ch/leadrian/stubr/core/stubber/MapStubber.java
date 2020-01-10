@@ -8,26 +8,25 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.emptyMap;
 
-final class CollectionStubber<T extends Collection<Object>> implements Stubber {
+final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
-    private final Class<T> collectionClass;
-    private final Function<List<Object>, ? extends T> collectionFactory;
-    private final int collectionSize;
+    private final Class<T> mapClass;
+    private final Function<Map<Object, Object>, ? extends T> mapFactory;
+    private final int mapSize;
 
-    CollectionStubber(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, int collectionSize) {
-        this.collectionClass = collectionClass;
-        this.collectionFactory = collectionFactory;
-        this.collectionSize = collectionSize;
+    MapStubber(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, int mapSize) {
+        this.mapClass = mapClass;
+        this.mapFactory = mapFactory;
+        this.mapSize = mapSize;
     }
 
     @Override
@@ -36,12 +35,12 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
 
             @Override
             public Boolean visit(Class<?> clazz) {
-                return collectionClass == clazz && collectionSize == 0;
+                return mapClass == clazz && mapSize == 0;
             }
 
             @Override
             public Boolean visit(ParameterizedType parameterizedType) {
-                return collectionClass == parameterizedType.getRawType() && parameterizedType.getActualTypeArguments().length == 1;
+                return mapClass == parameterizedType.getRawType() && parameterizedType.getActualTypeArguments().length == 2;
             }
 
             @Override
@@ -57,22 +56,27 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
     }
 
     @Override
-    public T stub(RootStubber rootStubber, Type type) {
+    public Object stub(RootStubber rootStubber, Type type) {
         return accept(type, new TypeVisitor<T>() {
 
             @Override
             public T visit(Class<?> clazz) {
-                return collectionFactory.apply(emptyList());
+                return mapFactory.apply(emptyMap());
             }
 
             @Override
             public T visit(ParameterizedType parameterizedType) {
-                Type valueType = parameterizedType.getActualTypeArguments()[0];
-                List<Object> values = IntStream.iterate(0, i -> i + 1)
-                        .limit(collectionSize)
-                        .mapToObj(i -> rootStubber.stub(valueType))
-                        .collect(toList());
-                return collectionFactory.apply(values);
+                Type keyType = parameterizedType.getActualTypeArguments()[0];
+                Type valueType = parameterizedType.getActualTypeArguments()[1];
+                Map<Object, Object> values = new HashMap<>(mapSize);
+                IntStream.iterate(0, i -> i + 1)
+                        .limit(mapSize)
+                        .forEach(i -> {
+                            Object key = rootStubber.stub(keyType);
+                            Object value = rootStubber.stub(valueType);
+                            values.put(key, value);
+                        });
+                return mapFactory.apply(values);
             }
 
             @Override
