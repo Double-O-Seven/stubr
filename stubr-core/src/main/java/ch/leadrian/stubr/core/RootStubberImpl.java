@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.addAll;
 import static java.util.Collections.reverse;
 import static java.util.Objects.requireNonNull;
 
@@ -69,6 +70,36 @@ final class RootStubberImpl implements RootStubber {
             requireNonNull(stubber, "stubber may not be null");
             requireNonNull(matcher, "matcher may not be null");
             return stubber(Stubbers.conditional(stubber, matcher));
+        }
+
+        @Override
+        public RootStubberBuilder stubbers(Iterable<? extends Stubber> stubbers) {
+            requireNonNull(stubbers, "stubbers may not be null");
+            stubbers.forEach(this.stubbers::add);
+            return this;
+        }
+
+        @Override
+        public RootStubberBuilder stubbers(Iterable<? extends Stubber> stubbers, TypeMatcher matcher) {
+            requireNonNull(stubbers, "stubbers may not be null");
+            requireNonNull(matcher, "matcher may not be null");
+            stubbers.forEach(stubber -> stubber(stubber, matcher));
+            return this;
+        }
+
+        @Override
+        public RootStubberBuilder stubbers(Iterable<? extends Stubber> stubbers, ParameterMatcher matcher) {
+            requireNonNull(stubbers, "stubbers may not be null");
+            requireNonNull(matcher, "matcher may not be null");
+            stubbers.forEach(stubber -> stubber(stubber, matcher));
+            return this;
+        }
+
+        @Override
+        public RootStubberBuilder stubbers(Stubber... stubbers) {
+            requireNonNull(stubbers, "stubbers may not be null");
+            addAll(this.stubbers, stubbers);
+            return this;
         }
 
         @Override
