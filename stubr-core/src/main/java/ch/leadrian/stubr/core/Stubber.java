@@ -17,12 +17,4 @@ public interface Stubber {
         return stub(rootStubber, parameter.getParameterizedType());
     }
 
-    default Stubber applyIf(TypeMatcher typeMatcher) {
-        return new ConditionalStubber(this, typeMatcher, this::accepts);
-    }
-
-    default Stubber applyIf(ParameterMatcher typeMatcher) {
-        return new ConditionalStubber(this, this::accepts, typeMatcher);
-    }
-
 }
