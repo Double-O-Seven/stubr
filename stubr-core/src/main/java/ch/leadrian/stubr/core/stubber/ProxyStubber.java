@@ -17,9 +17,10 @@ import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 
 final class ProxyStubber implements Stubber {
 
-    static final ProxyStubber INSTANCE = new ProxyStubber();
+    private final ClassLoader classLoader;
 
-    private ProxyStubber() {
+    ProxyStubber(ClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 
     @Override
@@ -55,7 +56,7 @@ final class ProxyStubber implements Stubber {
             @Override
             public Object visit(Class clazz) {
                 StubbingInvocationHandler invocationHandler = new StubbingInvocationHandler(rootStubber);
-                return Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{clazz}, invocationHandler);
+                return Proxy.newProxyInstance(classLoader, new Class<?>[]{clazz}, invocationHandler);
             }
 
             @Override
