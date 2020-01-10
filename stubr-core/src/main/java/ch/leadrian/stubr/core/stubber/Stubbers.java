@@ -77,4 +77,8 @@ public final class Stubbers {
     public static Stubber optional() {
         return OptionalStubber.INSTANCE;
     }
+
+    public static Stubber proxy() {
+        return ProxyStubber.INSTANCE;
+    }
 }
