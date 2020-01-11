@@ -11,6 +11,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.IntSupplier;
 import java.util.stream.IntStream;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
@@ -22,9 +23,9 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
 
     private final Class<T> collectionClass;
     private final Function<List<Object>, ? extends T> collectionFactory;
-    private final int collectionSize;
+    private final IntSupplier collectionSize;
 
-    CollectionStubber(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, int collectionSize) {
+    CollectionStubber(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, IntSupplier collectionSize) {
         this.collectionClass = collectionClass;
         this.collectionFactory = collectionFactory;
         this.collectionSize = collectionSize;
@@ -36,7 +37,7 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
 
             @Override
             public Boolean visit(Class<?> clazz) {
-                return collectionClass == clazz && collectionSize == 0;
+                return collectionClass == clazz && collectionSize.getAsInt() == 0;
             }
 
             @Override
@@ -71,7 +72,7 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
             public T visit(ParameterizedType parameterizedType) {
                 Type valueType = parameterizedType.getActualTypeArguments()[0];
                 List<Object> values = IntStream.iterate(0, i -> i + 1)
-                        .limit(collectionSize)
+                        .limit(collectionSize.getAsInt())
                         .mapToObj(i -> rootStubber.stub(valueType))
                         .collect(toList());
                 return collectionFactory.apply(values);

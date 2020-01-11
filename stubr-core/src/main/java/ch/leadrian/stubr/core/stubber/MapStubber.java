@@ -11,6 +11,7 @@ import java.lang.reflect.WildcardType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.IntSupplier;
 import java.util.stream.IntStream;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
@@ -21,9 +22,9 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
     private final Class<T> mapClass;
     private final Function<Map<Object, Object>, ? extends T> mapFactory;
-    private final int mapSize;
+    private final IntSupplier mapSize;
 
-    MapStubber(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, int mapSize) {
+    MapStubber(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, IntSupplier mapSize) {
         this.mapClass = mapClass;
         this.mapFactory = mapFactory;
         this.mapSize = mapSize;
@@ -35,7 +36,7 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
             @Override
             public Boolean visit(Class<?> clazz) {
-                return mapClass == clazz && mapSize == 0;
+                return mapClass == clazz && mapSize.getAsInt() == 0;
             }
 
             @Override
@@ -70,9 +71,9 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
             public T visit(ParameterizedType parameterizedType) {
                 Type keyType = parameterizedType.getActualTypeArguments()[0];
                 Type valueType = parameterizedType.getActualTypeArguments()[1];
-                Map<Object, Object> values = new HashMap<>(mapSize);
+                Map<Object, Object> values = new HashMap<>(mapSize.getAsInt());
                 IntStream.iterate(0, i -> i + 1)
-                        .limit(mapSize)
+                        .limit(mapSize.getAsInt())
                         .forEach(i -> {
                             Object key = rootStubber.stub(keyType);
                             Object value = rootStubber.stub(valueType);
