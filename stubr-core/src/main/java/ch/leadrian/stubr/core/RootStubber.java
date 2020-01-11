@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.core;
 
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,16 @@ public interface RootStubber {
         Result<?> result = tryToStub(type);
         if (result.isFailure()) {
             throw new IllegalStateException(String.format("Failed to stub instance of %s", type));
+        }
+        return result.getValue();
+    }
+
+    Result<?> tryToStub(Parameter parameter);
+
+    default Object stub(Parameter parameter) {
+        Result<?> result = tryToStub(parameter);
+        if (result.isFailure()) {
+            throw new IllegalStateException(String.format("Failed to stub value %s", parameter));
         }
         return result.getValue();
     }

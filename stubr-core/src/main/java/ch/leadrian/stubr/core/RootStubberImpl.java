@@ -2,6 +2,7 @@ package ch.leadrian.stubr.core;
 
 import ch.leadrian.stubr.core.stubber.Stubbers;
 
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,16 @@ final class RootStubberImpl implements RootStubber {
         for (Stubber stubber : stubbers) {
             if (stubber.accepts(type)) {
                 return Result.success(stubber.stub(this, type));
+            }
+        }
+        return Result.failure();
+    }
+
+    @Override
+    public Result<?> tryToStub(Parameter parameter) {
+        for (Stubber stubber : stubbers) {
+            if (stubber.accepts(parameter)) {
+                return Result.success(stubber.stub(this, parameter));
             }
         }
         return Result.failure();
