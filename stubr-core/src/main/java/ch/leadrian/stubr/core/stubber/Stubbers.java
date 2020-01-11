@@ -1,8 +1,10 @@
 package ch.leadrian.stubr.core.stubber;
 
+import ch.leadrian.stubr.core.ConstructorMatcher;
 import ch.leadrian.stubr.core.ParameterMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.TypeMatcher;
+import ch.leadrian.stubr.core.matcher.ConstructorMatchers;
 
 import java.util.Collection;
 import java.util.List;
@@ -60,6 +62,15 @@ public final class Stubbers {
         requireNonNull(targetClass, "targetClass may not be null");
         requireNonNull(value, "value may not be null");
         return new ConstantValueStubber(targetClass, value);
+    }
+
+    public static Stubber constructor(ConstructorMatcher matcher) {
+        requireNonNull(matcher, "matcher may not be null");
+        return new ConstructorStubber(matcher);
+    }
+
+    public static Stubber constructor() {
+        return constructor(ConstructorMatchers.any());
     }
 
     public static Stubber defaultValue() {
