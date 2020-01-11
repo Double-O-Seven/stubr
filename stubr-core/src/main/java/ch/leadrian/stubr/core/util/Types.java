@@ -1,12 +1,41 @@
 package ch.leadrian.stubr.core.util;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Optional;
+
+import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 
 public final class Types {
 
     private Types() {
+    }
+
+    public static Optional<Class<?>> getActualClass(Type type) {
+        return accept(type, new TypeVisitor<Optional<Class<?>>>() {
+
+            @Override
+            public Optional<Class<?>> visit(Class<?> clazz) {
+                return Optional.of(clazz);
+            }
+
+            @Override
+            public Optional<Class<?>> visit(ParameterizedType parameterizedType) {
+                return accept(parameterizedType.getRawType(), this);
+            }
+
+            @Override
+            public Optional<Class<?>> visit(WildcardType wildcardType) {
+                return getOnlyUpperBound(wildcardType).flatMap(upperBound -> accept(upperBound, this));
+            }
+
+            @Override
+            public Optional<Class<?>> visit(TypeVariable<?> typeVariable) {
+                return Optional.empty();
+            }
+        });
     }
 
     public static Optional<Type> getLowerBound(WildcardType type) {

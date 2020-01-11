@@ -39,7 +39,9 @@ final class ProxyStubber implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType).map(upperBound -> accept(upperBound, this)).isPresent();
+                return getOnlyUpperBound(wildcardType)
+                        .filter(upperBound -> accept(upperBound, this))
+                        .isPresent();
             }
 
             @Override

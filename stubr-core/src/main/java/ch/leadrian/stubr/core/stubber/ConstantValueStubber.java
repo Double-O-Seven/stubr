@@ -33,13 +33,13 @@ final class ConstantValueStubber implements Stubber {
 
             @Override
             public Boolean visit(ParameterizedType parameterizedType) {
-                return valueClass == parameterizedType.getRawType();
+                return accept(parameterizedType.getRawType(), this);
             }
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
                 return getOnlyUpperBound(wildcardType)
-                        .filter(valueClass::equals)
+                        .filter(upperBound -> accept(upperBound, this))
                         .isPresent();
             }
 

@@ -3,21 +3,16 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.ConstructorMatcher;
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
-import ch.leadrian.stubr.core.util.TypeVisitor;
+import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -50,30 +45,7 @@ final class ConstructorStubber implements Stubber {
     }
 
     private Optional<Constructor<?>> getConstructor(Type type) {
-        Optional<Class<?>> targetClass = accept(type, new TypeVisitor<Optional<Class<?>>>() {
-
-            @Override
-            public Optional<Class<?>> visit(Class<?> clazz) {
-                return Optional.of(clazz);
-            }
-
-            @Override
-            public Optional<Class<?>> visit(ParameterizedType parameterizedType) {
-                return accept(parameterizedType.getRawType(), this);
-            }
-
-            @Override
-            public Optional<Class<?>> visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType)
-                        .map(upperBound -> accept(upperBound, this))
-                        .orElseThrow(IllegalStateException::new);
-            }
-
-            @Override
-            public Optional<Class<?>> visit(TypeVariable<?> typeVariable) {
-                return Optional.empty();
-            }
-        });
+        Optional<Class<?>> targetClass = Types.getActualClass(type);
         return targetClass.flatMap(this::getConstructor);
     }
 

@@ -46,7 +46,7 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
             @Override
             public Boolean visit(WildcardType wildcardType) {
                 return getOnlyUpperBound(wildcardType)
-                        .map(upperBound -> accept(upperBound, this))
+                        .filter(upperBound -> accept(upperBound, this))
                         .isPresent();
             }
 
