@@ -19,11 +19,11 @@ public interface Stubber {
         return stub(rootStubber, parameter.getParameterizedType());
     }
 
-    default Stubber applyIf(TypeMatcher typeMatcher) {
+    default Stubber when(TypeMatcher typeMatcher) {
         return Stubbers.conditional(this, typeMatcher);
     }
 
-    default Stubber applyIf(ParameterMatcher parameterMatcher) {
+    default Stubber when(ParameterMatcher parameterMatcher) {
         return Stubbers.conditional(this, parameterMatcher);
     }
 
