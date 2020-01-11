@@ -75,7 +75,7 @@ final class DefaultValueStubber implements Stubber {
 
                 @Override
                 public Optional<Object> visit(ParameterizedType parameterizedType) {
-                    return accept(parameterizedType, this);
+                    return accept(parameterizedType.getRawType(), this);
                 }
 
                 @Override

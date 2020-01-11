@@ -34,7 +34,7 @@ final class ProxyStubber implements Stubber {
 
             @Override
             public Boolean visit(ParameterizedType parameterizedType) {
-                return accept(parameterizedType, this);
+                return accept(parameterizedType.getRawType(), this);
             }
 
             @Override
