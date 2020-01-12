@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core;
 import ch.leadrian.equalizer.EqualsAndHashCode;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
+import static java.util.Objects.requireNonNull;
 
 final class StubbingContextImpl implements StubbingContext {
 
@@ -11,17 +12,19 @@ final class StubbingContextImpl implements StubbingContext {
             .compare(StubbingContextImpl::getSite)
             .build();
 
-    private final RootStubber rootStubber;
+    private final RootStubber stubber;
     private final StubbingSite site;
 
-    StubbingContextImpl(RootStubber rootStubber, StubbingSite site) {
-        this.rootStubber = rootStubber;
+    StubbingContextImpl(RootStubber stubber, StubbingSite site) {
+        requireNonNull(stubber, "stubber");
+        requireNonNull(site, "site");
+        this.stubber = stubber;
         this.site = site;
     }
 
     @Override
     public RootStubber getStubber() {
-        return rootStubber;
+        return stubber;
     }
 
     @Override
