@@ -17,7 +17,7 @@ class DefaultValueStubberTest {
     @ParameterizedTest
     @ArgumentsSource(AcceptedTypesArgumentsProvider.class)
     void shouldReturnDefaultValueForByte(Class<?> clazz) {
-        boolean accepted = DefaultValueStubber.INSTANCE.accepts(clazz);
+        boolean accepted = DefaultValueStubber.INSTANCE.accepts(null, clazz);
 
         assertThat(accepted)
                 .isTrue();
@@ -34,7 +34,7 @@ class DefaultValueStubberTest {
 
     @Test
     void shouldNotAcceptUnknownClass() {
-        boolean accepted = DefaultValueStubber.INSTANCE.accepts(Foo.class);
+        boolean accepted = DefaultValueStubber.INSTANCE.accepts(null, Foo.class);
 
         assertThat(accepted)
                 .isFalse();

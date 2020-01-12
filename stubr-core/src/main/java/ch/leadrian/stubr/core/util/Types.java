@@ -28,7 +28,7 @@ public final class Types {
 
             @Override
             public Optional<Class<?>> visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType).flatMap(upperBound -> accept(upperBound, this));
+                return getMostSpecificType(wildcardType).flatMap(type -> accept(type, this));
             }
 
             @Override
@@ -52,5 +52,13 @@ public final class Types {
             return Optional.of(upperBounds[0]);
         }
         return Optional.empty();
+    }
+
+    public static Optional<Type> getMostSpecificType(WildcardType wildcardType) {
+        Optional<Type> lowerBound = getLowerBound(wildcardType);
+        if (lowerBound.isPresent()) {
+            return lowerBound;
+        }
+        return getOnlyUpperBound(wildcardType);
     }
 }

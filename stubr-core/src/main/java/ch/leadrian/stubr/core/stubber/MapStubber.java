@@ -17,7 +17,7 @@ import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
+import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 
@@ -52,7 +52,7 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType)
+                return getMostSpecificType(wildcardType)
                         .filter(upperBound -> accept(upperBound, this))
                         .isPresent();
             }
@@ -93,7 +93,7 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
             @Override
             public T visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType)
+                return getMostSpecificType(wildcardType)
                         .map(upperBound -> accept(upperBound, this))
                         .orElseThrow(IllegalStateException::new);
             }

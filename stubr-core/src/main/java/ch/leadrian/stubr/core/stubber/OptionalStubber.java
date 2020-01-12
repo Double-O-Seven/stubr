@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getActualClass;
-import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
+import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
 
 final class OptionalStubber implements Stubber {
 
@@ -32,16 +32,16 @@ final class OptionalStubber implements Stubber {
     }
 
     @Override
-    public Optional<?> stub(StubbingContext context, Type type) {
-        return accept(type, new TypeVisitor<Optional<?>>() {
+    public Optional<Object> stub(StubbingContext context, Type type) {
+        return accept(type, new TypeVisitor<Optional<Object>>() {
 
             @Override
-            public Optional<?> visit(Class<?> clazz) {
+            public Optional<Object> visit(Class<?> clazz) {
                 return Optional.empty();
             }
 
             @Override
-            public Optional<?> visit(ParameterizedType parameterizedType) {
+            public Optional<Object> visit(ParameterizedType parameterizedType) {
                 StubbingSite site = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 0);
                 Result<?> result = context.getStubber().tryToStub(parameterizedType.getActualTypeArguments()[0], site);
                 if (result.isSuccess()) {
@@ -51,12 +51,12 @@ final class OptionalStubber implements Stubber {
             }
 
             @Override
-            public Optional<?> visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType).flatMap(upperBound -> accept(upperBound, this));
+            public Optional<Object> visit(WildcardType wildcardType) {
+                return getMostSpecificType(wildcardType).flatMap(upperBound -> accept(upperBound, this));
             }
 
             @Override
-            public Optional<?> visit(TypeVariable<?> typeVariable) {
+            public Optional<Object> visit(TypeVariable<?> typeVariable) {
                 return Optional.empty();
             }
         });
