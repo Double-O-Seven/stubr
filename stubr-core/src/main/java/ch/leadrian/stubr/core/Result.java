@@ -9,12 +9,12 @@ import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 
 public abstract class Result<T> {
 
-    public static <T> Success<T> success(T value) {
+    public static <T> Result<T> success(T value) {
         return new Success<>(value);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Failure<T> failure() {
+    public static <T> Result<T> failure() {
         return (Failure<T>) Failure.INSTANCE;
     }
 
@@ -31,7 +31,7 @@ public abstract class Result<T> {
 
     public abstract <U> Result<U> map(Function<T, U> mappingFunction);
 
-    public static final class Success<T> extends Result<T> {
+    private static final class Success<T> extends Result<T> {
 
         private static final EqualsAndHashCode<Success> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Success.class)
                 .compare(Success::getValue)
@@ -54,7 +54,7 @@ public abstract class Result<T> {
         }
 
         @Override
-        public <U> Success<U> map(Function<T, U> mappingFunction) {
+        public <U> Result<U> map(Function<T, U> mappingFunction) {
             return Result.success(mappingFunction.apply(value));
         }
 
@@ -69,7 +69,7 @@ public abstract class Result<T> {
         }
     }
 
-    public static final class Failure<T> extends Result<T> {
+    private static final class Failure<T> extends Result<T> {
 
         private static final Failure<Object> INSTANCE = new Failure<>();
 
@@ -87,7 +87,7 @@ public abstract class Result<T> {
         }
 
         @Override
-        public <U> Failure<U> map(Function<T, U> mappingFunction) {
+        public <U> Result<U> map(Function<T, U> mappingFunction) {
             return Result.failure();
         }
     }
