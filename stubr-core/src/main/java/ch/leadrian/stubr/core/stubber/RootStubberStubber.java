@@ -8,12 +8,8 @@ import java.lang.reflect.Type;
 
 import static ch.leadrian.stubr.core.util.Types.getActualClass;
 
-final class RootStubberStubber implements Stubber {
-
-    static final RootStubberStubber INSTANCE = new RootStubberStubber();
-
-    private RootStubberStubber() {
-    }
+enum RootStubberStubber implements Stubber {
+    INSTANCE;
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {

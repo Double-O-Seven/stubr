@@ -18,12 +18,8 @@ import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
 
-final class OptionalStubber implements Stubber {
-
-    static final OptionalStubber INSTANCE = new OptionalStubber();
-
-    private OptionalStubber() {
-    }
+enum OptionalStubber implements Stubber {
+    INSTANCE;
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {

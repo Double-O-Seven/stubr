@@ -12,9 +12,8 @@ import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.Types.getActualClass;
 
-final class DefaultValueStubber implements Stubber {
-
-    static final DefaultValueStubber INSTANCE = new DefaultValueStubber();
+enum DefaultValueStubber implements Stubber {
+    INSTANCE;
 
     private final DefaultValuesMap defaultValuesMap = new DefaultValuesMap()
             .add(boolean.class, false)
@@ -37,9 +36,6 @@ final class DefaultValueStubber implements Stubber {
             .add(Number.class, 0)
             .add(BigInteger.ZERO)
             .add(BigDecimal.ZERO);
-
-    private DefaultValueStubber() {
-    }
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {

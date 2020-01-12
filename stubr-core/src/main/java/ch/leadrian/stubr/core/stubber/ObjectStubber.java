@@ -7,12 +7,8 @@ import java.lang.reflect.Type;
 
 import static ch.leadrian.stubr.core.util.Types.getActualClass;
 
-final class ObjectStubber implements Stubber {
-
-    static final ObjectStubber INSTANCE = new ObjectStubber();
-
-    private ObjectStubber() {
-    }
+enum ObjectStubber implements Stubber {
+    INSTANCE;
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {

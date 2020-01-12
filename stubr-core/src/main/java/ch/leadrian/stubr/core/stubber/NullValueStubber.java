@@ -5,12 +5,8 @@ import ch.leadrian.stubr.core.StubbingContext;
 
 import java.lang.reflect.Type;
 
-final class NullValueStubber implements Stubber {
-
-    static final NullValueStubber INSTANCE = new NullValueStubber();
-
-    private NullValueStubber() {
-    }
+enum NullValueStubber implements Stubber {
+    INSTANCE;
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
