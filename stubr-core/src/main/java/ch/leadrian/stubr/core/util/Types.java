@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.core.util;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -33,6 +34,11 @@ public final class Types {
 
             @Override
             public Optional<Class<?>> visit(TypeVariable<?> typeVariable) {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Class<?>> visit(GenericArrayType genericArrayType) {
                 return Optional.empty();
             }
         });

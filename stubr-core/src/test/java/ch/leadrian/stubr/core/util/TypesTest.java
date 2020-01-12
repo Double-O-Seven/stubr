@@ -55,6 +55,22 @@ class TypesTest {
             assertThat(clazz)
                     .hasValue(Object.class);
         }
+
+        @Test
+        void givenTypeVariableItShouldReturnEmpty() {
+            Optional<Class<?>> clazz = Types.getActualClass(getGenericReturnType("getParameterized"));
+
+            assertThat(clazz)
+                    .isEmpty();
+        }
+
+        @Test
+        void givenGenericArrayItShouldReturnEmpty() {
+            Optional<Class<?>> clazz = Types.getActualClass(getGenericReturnType("getGenericArray"));
+
+            assertThat(clazz)
+                    .isEmpty();
+        }
     }
 
     @Nested
@@ -177,6 +193,14 @@ class TypesTest {
 
     @SuppressWarnings("unused")
     String getString() {
+        throw new UnsupportedOperationException();
+    }
+
+    <T> T getParameterized() {
+        throw new UnsupportedOperationException();
+    }
+
+    <T> T[] getGenericArray() {
         throw new UnsupportedOperationException();
     }
 

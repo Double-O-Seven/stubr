@@ -7,6 +7,7 @@ import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.TypeVisitor;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -57,6 +58,11 @@ final class OptionalStubber implements Stubber {
 
             @Override
             public Optional<Object> visit(TypeVariable<?> typeVariable) {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Object> visit(GenericArrayType genericArrayType) {
                 return Optional.empty();
             }
         });
