@@ -108,8 +108,12 @@ public final class Stubbers {
         return OptionalStubber.INSTANCE;
     }
 
+    public static Stubber proxy(boolean cacheStubs) {
+        return cacheStubs ? ProxyStubber.CACHING_INSTANCE : ProxyStubber.NON_CACHING_INSTANCE;
+    }
+
     public static Stubber proxy() {
-        return ProxyStubber.INSTANCE;
+        return proxy(true);
     }
 
     public static Stubber rootStubber() {
