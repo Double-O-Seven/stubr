@@ -20,7 +20,7 @@ final class RootStubberImpl implements RootStubber {
 
     @Override
     public Result<?> tryToStub(Type type, StubbingSite site) {
-        StubbingContext context = new StubbingContextImpl(this, site);
+        StubbingContext context = new StubbingContext(this, site);
         return stubbers.stream()
                 .filter(stubber -> stubber.accepts(context, type))
                 .map(stubber -> Result.success(stubber.stub(context, type)))
@@ -30,7 +30,7 @@ final class RootStubberImpl implements RootStubber {
 
     @Override
     public Result<?> tryToStub(Parameter parameter, StubbingSite site) {
-        StubbingContext context = new StubbingContextImpl(this, site);
+        StubbingContext context = new StubbingContext(this, site);
         return stubbers.stream()
                 .filter(stubber -> stubber.accepts(context, parameter))
                 .map(stubber -> Result.success(stubber.stub(context, parameter)))

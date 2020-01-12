@@ -21,11 +21,16 @@ public final class Stubbers {
     private Stubbers() {
     }
 
-    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
+    public static <T extends Collection> Stubber collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
         return new CollectionStubber<>(collectionClass, collectionFactory, collectionSize);
     }
 
-    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
+    public static <T extends Collection> Stubber collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, int collectionSize) {
+        return new CollectionStubber<>(collectionClass, collectionFactory, context -> collectionSize);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Collection> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
         requireNonNull(collectionFactory, "collectionFactory");
         Function<List<Object>, T> actualCollectionFactory = values -> {
             T collection = collectionFactory.get();
@@ -35,11 +40,11 @@ public final class Stubbers {
         return collection(collectionClass, actualCollectionFactory, collectionSize);
     }
 
-    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, int collectionSize) {
+    public static <T extends Collection> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, int collectionSize) {
         return collection(collectionClass, collectionFactory, context -> collectionSize);
     }
 
-    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory) {
+    public static <T extends Collection> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory) {
         requireNonNull(collectionFactory, "collectionFactory");
         return collection(collectionClass, values -> collectionFactory.get(), context -> 0);
     }

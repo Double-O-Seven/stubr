@@ -23,7 +23,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
-final class CollectionStubber<T extends Collection<Object>> implements Stubber {
+final class CollectionStubber<T extends Collection> implements Stubber {
 
     private final Class<T> collectionClass;
     private final Function<List<Object>, ? extends T> collectionFactory;
