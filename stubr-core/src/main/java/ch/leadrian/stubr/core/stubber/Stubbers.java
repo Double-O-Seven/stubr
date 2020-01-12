@@ -111,4 +111,8 @@ public final class Stubbers {
     public static Stubber proxy() {
         return ProxyStubber.INSTANCE;
     }
+
+    public static Stubber rootStubber() {
+        return RootStubberStubber.INSTANCE;
+    }
 }
