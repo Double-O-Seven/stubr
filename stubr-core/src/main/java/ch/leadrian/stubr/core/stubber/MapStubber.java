@@ -22,7 +22,7 @@ import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 
-final class MapStubber<T extends Map<Object, Object>> implements Stubber {
+final class MapStubber<T extends Map> implements Stubber {
 
     private final Class<T> mapClass;
     private final Function<Map<Object, Object>, ? extends T> mapFactory;

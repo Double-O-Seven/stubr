@@ -72,11 +72,12 @@ public final class Stubbers {
         return DefaultValueStubber.INSTANCE;
     }
 
-    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
+    public static <T extends Map> Stubber map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
         return new MapStubber<>(mapClass, mapFactory, mapSize);
     }
 
-    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
+    @SuppressWarnings("unchecked")
+    public static <T extends Map> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
         requireNonNull(mapFactory, "mapFactory");
         Function<Map<Object, Object>, T> actualMapFactory = values -> {
             T map = mapFactory.get();
@@ -86,11 +87,11 @@ public final class Stubbers {
         return map(mapClass, actualMapFactory, mapSize);
     }
 
-    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, int mapSize) {
+    public static <T extends Map> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, int mapSize) {
         return map(mapClass, mapFactory, context -> mapSize);
     }
 
-    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory) {
+    public static <T extends Map> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory) {
         requireNonNull(mapFactory, "mapFactory");
         return map(mapClass, values -> mapFactory.get(), context -> 0);
     }
