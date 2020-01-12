@@ -15,7 +15,9 @@ final class ConstantValueStubber implements Stubber {
 
     ConstantValueStubber(Class<?> valueClass, Object value) {
         requireNonNull(valueClass, "valueClass");
-        requireNonNull(value, "value");
+        if (!valueClass.isInstance(value)) {
+            throw new IllegalArgumentException("value");
+        }
         this.valueClass = valueClass;
         this.value = value;
     }
