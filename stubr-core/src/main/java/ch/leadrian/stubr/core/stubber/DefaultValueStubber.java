@@ -2,18 +2,12 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.util.TypeVisitor;
+import ch.leadrian.stubr.core.util.Types;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 
 final class DefaultValueStubber implements Stubber {
 
@@ -66,28 +60,7 @@ final class DefaultValueStubber implements Stubber {
         }
 
         Optional<Object> get(Type type) {
-            return accept(type, new TypeVisitor<Optional<Object>>() {
-
-                @Override
-                public Optional<Object> visit(Class<?> clazz) {
-                    return Optional.ofNullable(defaultValuesByClass.get(clazz));
-                }
-
-                @Override
-                public Optional<Object> visit(ParameterizedType parameterizedType) {
-                    return accept(parameterizedType.getRawType(), this);
-                }
-
-                @Override
-                public Optional<Object> visit(WildcardType wildcardType) {
-                    return getOnlyUpperBound(wildcardType).flatMap(upperBound -> accept(upperBound, this));
-                }
-
-                @Override
-                public Optional<Object> visit(TypeVariable<?> typeVariable) {
-                    return Optional.empty();
-                }
-            });
+            return Types.getActualClass(type).map(defaultValuesByClass::get);
         }
 
     }
