@@ -1,13 +1,13 @@
 package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.ConstructorMatcher;
-import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
@@ -35,7 +35,7 @@ final class AcceptingConstructorMatcher implements ConstructorMatcher {
     }
 
     private boolean isAssignable(Parameter parameter, Class<?> type) {
-        return Types.getActualClass(parameter.getParameterizedType())
+        return getActualClass(parameter.getParameterizedType())
                 .filter(clazz -> clazz.isAssignableFrom(type))
                 .isPresent();
     }

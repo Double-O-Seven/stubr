@@ -5,7 +5,6 @@ import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.ConstructorParameterStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
@@ -52,8 +52,7 @@ final class ConstructorStubber implements Stubber {
     }
 
     private Optional<Constructor<?>> getConstructor(Type type) {
-        Optional<Class<?>> targetClass = Types.getActualClass(type);
-        return targetClass.flatMap(this::getConstructor);
+        return getActualClass(type).flatMap(this::getConstructor);
     }
 
     private Optional<Constructor<?>> getConstructor(Class<?> targetClass) {

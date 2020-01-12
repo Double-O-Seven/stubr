@@ -14,6 +14,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 
 final class OptionalStubber implements Stubber {
@@ -25,30 +26,9 @@ final class OptionalStubber implements Stubber {
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return accept(type, new TypeVisitor<Boolean>() {
-
-            @Override
-            public Boolean visit(Class<?> clazz) {
-                return Optional.class == clazz;
-            }
-
-            @Override
-            public Boolean visit(ParameterizedType parameterizedType) {
-                return Optional.class == parameterizedType.getRawType();
-            }
-
-            @Override
-            public Boolean visit(WildcardType wildcardType) {
-                return getOnlyUpperBound(wildcardType)
-                        .filter(upperBound -> accept(upperBound, this))
-                        .isPresent();
-            }
-
-            @Override
-            public Boolean visit(TypeVariable<?> typeVariable) {
-                return false;
-            }
-        });
+        return getActualClass(type)
+                .filter(Optional.class::equals)
+                .isPresent();
     }
 
     @Override

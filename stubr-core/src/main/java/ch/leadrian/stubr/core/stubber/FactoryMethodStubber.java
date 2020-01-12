@@ -4,7 +4,6 @@ import ch.leadrian.stubr.core.MethodMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.stream;
@@ -49,7 +49,7 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private Optional<Method> getFactoryMethod(Type type) {
-        Optional<Class<?>> targetClass = Types.getActualClass(type);
+        Optional<Class<?>> targetClass = getActualClass(type);
         return targetClass.flatMap(this::getFactoryMethod);
     }
 
@@ -69,7 +69,7 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private boolean canReturn(Method method, Class<?> type) {
-        return Types.getActualClass(method.getGenericReturnType())
+        return getActualClass(method.getGenericReturnType())
                 .filter(clazz -> clazz.isAssignableFrom(type))
                 .isPresent();
     }

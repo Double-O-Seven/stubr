@@ -2,12 +2,13 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 
 final class DefaultValueStubber implements Stubber {
 
@@ -60,7 +61,7 @@ final class DefaultValueStubber implements Stubber {
         }
 
         Optional<Object> get(Type type) {
-            return Types.getActualClass(type).map(defaultValuesByClass::get);
+            return getActualClass(type).map(defaultValuesByClass::get);
         }
 
     }

@@ -2,9 +2,10 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.Type;
+
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 
 final class ObjectStubber implements Stubber {
 
@@ -15,7 +16,7 @@ final class ObjectStubber implements Stubber {
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return Types.getActualClass(type)
+        return getActualClass(type)
                 .filter(Object.class::equals)
                 .isPresent();
     }
