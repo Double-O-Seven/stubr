@@ -10,7 +10,7 @@ import java.util.Optional;
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static java.util.Objects.requireNonNull;
 
-public final class MethodParameterStubbingSite implements StubbingSite {
+public final class MethodParameterStubbingSite implements ParameterStubbingSite, MethodStubbingSite {
 
     private static final EqualsAndHashCode<MethodParameterStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(MethodParameterStubbingSite.class)
             .compare(MethodParameterStubbingSite::getParent)
@@ -36,10 +36,12 @@ public final class MethodParameterStubbingSite implements StubbingSite {
         return Optional.of(parent);
     }
 
+    @Override
     public Method getMethod() {
         return method;
     }
 
+    @Override
     public Parameter getParameter() {
         return parameter;
     }

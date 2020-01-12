@@ -10,7 +10,7 @@ import java.util.Optional;
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static java.util.Objects.requireNonNull;
 
-public final class ConstructorParameterStubbingSite implements StubbingSite {
+public final class ConstructorParameterStubbingSite implements ParameterStubbingSite {
 
     private static final EqualsAndHashCode<ConstructorParameterStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ConstructorParameterStubbingSite.class)
             .compare(ConstructorParameterStubbingSite::getParent)
@@ -40,6 +40,7 @@ public final class ConstructorParameterStubbingSite implements StubbingSite {
         return constructor;
     }
 
+    @Override
     public Parameter getParameter() {
         return parameter;
     }

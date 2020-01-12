@@ -9,7 +9,7 @@ import java.util.Optional;
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static java.util.Objects.requireNonNull;
 
-public final class MethodReturnValueStubbingSite implements StubbingSite {
+public final class MethodReturnValueStubbingSite implements MethodStubbingSite {
 
     private static final EqualsAndHashCode<MethodReturnValueStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(MethodReturnValueStubbingSite.class)
             .compare(MethodReturnValueStubbingSite::getParent)
@@ -31,6 +31,7 @@ public final class MethodReturnValueStubbingSite implements StubbingSite {
         return Optional.of(parent);
     }
 
+    @Override
     public Method getMethod() {
         return method;
     }
