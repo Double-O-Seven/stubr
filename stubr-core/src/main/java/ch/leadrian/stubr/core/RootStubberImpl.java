@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.addAll;
-import static java.util.Collections.reverse;
 import static java.util.Objects.requireNonNull;
 
 final class RootStubberImpl implements RootStubber {
@@ -48,7 +47,7 @@ final class RootStubberImpl implements RootStubber {
         @Override
         public RootStubberBuilder stubWith(Stubber stubber) {
             requireNonNull(stubber, "stubber");
-            stubbers.add(stubber);
+            stubbers.add(0, stubber);
             return this;
         }
 
@@ -69,7 +68,7 @@ final class RootStubberImpl implements RootStubber {
         @Override
         public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers) {
             requireNonNull(stubbers, "stubbers");
-            stubbers.forEach(this.stubbers::add);
+            stubbers.forEach(this::stubWith);
             return this;
         }
 
@@ -98,9 +97,7 @@ final class RootStubberImpl implements RootStubber {
 
         @Override
         public RootStubber build() {
-            List<Stubber> reversedStubbers = new ArrayList<>(stubbers);
-            reverse(reversedStubbers);
-            return new RootStubberImpl(reversedStubbers);
+            return new RootStubberImpl(stubbers);
         }
     }
 }
