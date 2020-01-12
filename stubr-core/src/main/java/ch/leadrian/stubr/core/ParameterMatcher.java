@@ -5,10 +5,6 @@ import java.lang.reflect.Parameter;
 @FunctionalInterface
 public interface ParameterMatcher {
 
-    static ParameterMatcher from(TypeMatcher typeMatcher) {
-        return (context, parameter) -> typeMatcher.matches(context, parameter.getParameterizedType());
-    }
-
     boolean matches(StubbingContext context, Parameter parameter);
 
     default ParameterMatcher and(ParameterMatcher other) {
