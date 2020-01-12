@@ -11,4 +11,9 @@ public enum UnknownStubbingSite implements StubbingSite {
     public Optional<? extends StubbingSite> getParent() {
         return Optional.empty();
     }
+
+    @Override
+    public String toString() {
+        return "UnknownStubbingSite";
+    }
 }

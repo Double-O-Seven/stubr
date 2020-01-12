@@ -8,6 +8,7 @@ import java.lang.reflect.Parameter;
 import java.util.Optional;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
+import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
 public final class MethodParameterStubbingSite implements ParameterStubbingSite, MethodStubbingSite {
@@ -54,5 +55,14 @@ public final class MethodParameterStubbingSite implements ParameterStubbingSite,
     @Override
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return toStringHelper(this)
+                .add("parent", parent)
+                .add("method", method)
+                .add("parameter", parameter)
+                .toString();
     }
 }

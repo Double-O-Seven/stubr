@@ -7,6 +7,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
+import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
 public final class ParameterizedTypeStubbingSite implements StubbingSite {
@@ -14,7 +15,7 @@ public final class ParameterizedTypeStubbingSite implements StubbingSite {
     private static final EqualsAndHashCode<ParameterizedTypeStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ParameterizedTypeStubbingSite.class)
             .compare(ParameterizedTypeStubbingSite::getParent)
             .compare(ParameterizedTypeStubbingSite::getType)
-            .compare(ParameterizedTypeStubbingSite::getParameterIndex)
+            .comparePrimitive(ParameterizedTypeStubbingSite::getParameterIndex)
             .build();
 
     private final StubbingSite parent;
@@ -50,5 +51,14 @@ public final class ParameterizedTypeStubbingSite implements StubbingSite {
     @Override
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return toStringHelper(this)
+                .add("parent", parent)
+                .add("type", type)
+                .add("parameterIndex", parameterIndex)
+                .toString();
     }
 }

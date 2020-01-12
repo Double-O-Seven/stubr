@@ -8,26 +8,41 @@ import com.google.common.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static ch.leadrian.stubr.core.TypeTokens.getTypeArgument;
-import static ch.leadrian.stubr.core.stubber.Stubbers.constantValue;
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("UnstableApiUsage")
 class CollectionStubberTest {
 
     private StubbingContext context;
+    private RootStubber rootStubber;
 
     @BeforeEach
     void setUp() {
-        RootStubber rootStubber = RootStubber.builder()
-                .stubWith(constantValue("Test"))
-                .stubWith(constantValue(Number.class, 1337))
-                .build();
+        rootStubber = mock(RootStubber.class);
+        when(rootStubber.stub(any(Type.class), any()))
+                .thenAnswer(invocation -> {
+                    Class<?> actualClass = getActualClass(invocation.getArgument(0, Type.class)).orElseThrow(UnsupportedOperationException::new);
+                    if (actualClass == String.class) {
+                        return "Test";
+                    } else if (actualClass == Number.class) {
+                        return 1337;
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
+                });
         context = new StubbingContext(rootStubber, StubbingSites.unknown());
     }
 
@@ -257,6 +272,18 @@ class CollectionStubberTest {
 
         assertThat(accepts)
                 .isFalse();
+    }
+
+    @Test
+    void shouldUseParameterizedTypeStubbingSite() {
+        Type type = new TypeToken<Collection<Number>>() {
+        }.getType();
+        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 1);
+
+        stubber.stub(context, type);
+
+        verify(rootStubber, times(1)).stub(any(Type.class), any());
+        verify(rootStubber).stub((Type) Number.class, StubbingSites.parameterizedType(StubbingSites.unknown(), (ParameterizedType) type, 0));
     }
 
 }

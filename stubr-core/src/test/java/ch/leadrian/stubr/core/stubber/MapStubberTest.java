@@ -8,28 +8,44 @@ import com.google.common.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
 import static ch.leadrian.stubr.core.TypeTokens.getTypeArgument;
-import static ch.leadrian.stubr.core.stubber.Stubbers.constantValue;
+import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.entry;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("UnstableApiUsage")
 class MapStubberTest {
 
     private StubbingContext context;
+    private RootStubber rootStubber;
 
     @BeforeEach
     void setUp() {
-        RootStubber rootStubber = RootStubber.builder()
-                .stubWith(constantValue("Test"))
-                .stubWith(constantValue(1234))
-                .stubWith(constantValue(Number.class, 1337))
-                .build();
+        rootStubber = mock(RootStubber.class);
+        when(rootStubber.stub(any(Type.class), any()))
+                .thenAnswer(invocation -> {
+                    Class<?> actualClass = getActualClass(invocation.getArgument(0, Type.class)).orElseThrow(UnsupportedOperationException::new);
+                    if (actualClass == String.class) {
+                        return "Test";
+                    } else if (actualClass == Integer.class) {
+                        return 1234;
+                    } else if (actualClass == Number.class) {
+                        return 1337;
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
+                });
         context = new StubbingContext(rootStubber, StubbingSites.unknown());
     }
 
@@ -258,6 +274,19 @@ class MapStubberTest {
 
         assertThat(accepts)
                 .isFalse();
+    }
+
+    @Test
+    void shouldUseParameterizedTypeStubbingSite() {
+        Type type = new TypeToken<Map<Integer, String>>() {
+        }.getType();
+        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+
+        stubber.stub(context, type);
+
+        verify(rootStubber, times(2)).stub(any(Type.class), any());
+        verify(rootStubber).stub((Type) Integer.class, StubbingSites.parameterizedType(StubbingSites.unknown(), (ParameterizedType) type, 0));
+        verify(rootStubber).stub((Type) String.class, StubbingSites.parameterizedType(StubbingSites.unknown(), (ParameterizedType) type, 1));
     }
 
 }
