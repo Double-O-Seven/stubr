@@ -4,12 +4,8 @@ import ch.leadrian.stubr.core.StubbingSite;
 
 import java.util.Optional;
 
-public final class UnknownStubbingSite implements StubbingSite {
-
-    static final UnknownStubbingSite INSTANCE = new UnknownStubbingSite();
-
-    private UnknownStubbingSite() {
-    }
+public enum UnknownStubbingSite implements StubbingSite {
+    INSTANCE;
 
     @Override
     public Optional<? extends StubbingSite> getParent() {
