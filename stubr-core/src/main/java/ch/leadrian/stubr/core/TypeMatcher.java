@@ -1,14 +1,9 @@
 package ch.leadrian.stubr.core;
 
 import java.lang.reflect.Type;
-import java.util.function.BiPredicate;
 
 @FunctionalInterface
 public interface TypeMatcher {
-
-    static TypeMatcher from(BiPredicate<? super StubbingContext, ? super Type> predicate) {
-        return predicate::test;
-    }
 
     boolean matches(StubbingContext context, Type type);
 
