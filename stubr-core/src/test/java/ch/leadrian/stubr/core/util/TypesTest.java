@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.core.util;
 
+import com.google.common.reflect.TypeToken;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("UnstableApiUsage")
 class TypesTest {
 
     @Nested
@@ -18,7 +20,9 @@ class TypesTest {
 
         @Test
         void givenClassItShouldReturnIt() {
-            Optional<Class<?>> clazz = Types.getActualClass(getGenericReturnType("getString"));
+            Type type = new TypeToken<String>() {
+            }.getType();
+            Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)
                     .hasValue(String.class);
@@ -26,7 +30,9 @@ class TypesTest {
 
         @Test
         void givenParameterizedTypeItShouldReturnRawType() {
-            Optional<Class<?>> clazz = Types.getActualClass(getGenericReturnType("returnTypeWithLowerBound"));
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)
                     .hasValue(List.class);
@@ -34,7 +40,9 @@ class TypesTest {
 
         @Test
         void givenWildcardTypeWithLowerBoundItShouldReturnLowerBound() {
-            Optional<Class<?>> clazz = Types.getActualClass(getWildcardType("returnTypeWithLowerBound"));
+            Type type = ((ParameterizedType) new TypeToken<List<? super Number>>() {
+            }.getType()).getActualTypeArguments()[0];
+            Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)
                     .hasValue(Number.class);
@@ -42,7 +50,9 @@ class TypesTest {
 
         @Test
         void givenWildcardTypeWithUpperBoundItShouldReturnUpperBound() {
-            Optional<Class<?>> clazz = Types.getActualClass(getWildcardType("returnTypeWithUpperBound"));
+            Type type = ((ParameterizedType) new TypeToken<List<? extends Number>>() {
+            }.getType()).getActualTypeArguments()[0];
+            Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)
                     .hasValue(Number.class);
@@ -50,23 +60,29 @@ class TypesTest {
 
         @Test
         void givenWildcardTypeWithoutExplicitBoundItShouldReturnObject() {
-            Optional<Class<?>> clazz = Types.getActualClass(getWildcardType("returnTypeWithoutExplicitBound"));
+            Type type = ((ParameterizedType) new TypeToken<List<?>>() {
+            }.getType()).getActualTypeArguments()[0];
+            Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)
                     .hasValue(Object.class);
         }
 
         @Test
-        void givenTypeVariableItShouldReturnEmpty() {
-            Optional<Class<?>> clazz = Types.getActualClass(getGenericReturnType("getParameterized"));
+        <T> void givenTypeVariableItShouldReturnEmpty() {
+            Type type = ((ParameterizedType) new TypeToken<List<T>>() {
+            }.getType()).getActualTypeArguments()[0];
+            Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)
                     .isEmpty();
         }
 
         @Test
-        void givenGenericArrayItShouldReturnEmpty() {
-            Optional<Class<?>> clazz = Types.getActualClass(getGenericReturnType("getGenericArray"));
+        <T> void givenGenericArrayItShouldReturnEmpty() {
+            Type type = ((ParameterizedType) new TypeToken<List<T[]>>() {
+            }.getType()).getActualTypeArguments()[0];
+            Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)
                     .isEmpty();
@@ -78,7 +94,8 @@ class TypesTest {
 
         @Test
         void shouldReturnLowerBound() {
-            WildcardType type = getWildcardType("returnTypeWithLowerBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<? super Number>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -88,7 +105,8 @@ class TypesTest {
 
         @Test
         void givenOnlyUpperBoundItShouldReturnEmpty() {
-            WildcardType type = getWildcardType("returnTypeWithUpperBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<? extends Number>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -98,7 +116,8 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnEmpty() {
-            WildcardType type = getWildcardType("returnTypeWithoutExplicitBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<?>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -113,7 +132,8 @@ class TypesTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnObject() {
-            WildcardType type = getWildcardType("returnTypeWithLowerBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<? super Number>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -123,7 +143,8 @@ class TypesTest {
 
         @Test
         void shouldReturnUpperBound() {
-            WildcardType type = getWildcardType("returnTypeWithUpperBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<? extends Number>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -133,7 +154,8 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnObject() {
-            WildcardType type = getWildcardType("returnTypeWithoutExplicitBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<?>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -148,7 +170,8 @@ class TypesTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnLowerBound() {
-            WildcardType type = getWildcardType("returnTypeWithLowerBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<? super Number>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> upperBound = Types.getMostSpecificType(type);
 
@@ -158,7 +181,8 @@ class TypesTest {
 
         @Test
         void shouldReturnUpperBound() {
-            WildcardType type = getWildcardType("returnTypeWithUpperBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<? extends Number>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> upperBound = Types.getMostSpecificType(type);
 
@@ -168,7 +192,8 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnObject() {
-            WildcardType type = getWildcardType("returnTypeWithoutExplicitBound");
+            WildcardType type = (WildcardType) ((ParameterizedType) new TypeToken<List<?>>() {
+            }.getType()).getActualTypeArguments()[0];
 
             Optional<Type> upperBound = Types.getMostSpecificType(type);
 
@@ -176,47 +201,6 @@ class TypesTest {
                     .hasValue(Object.class);
         }
 
-    }
-
-    private WildcardType getWildcardType(String methodName) {
-        ParameterizedType returnType = (ParameterizedType) getGenericReturnType(methodName);
-        return (WildcardType) returnType.getActualTypeArguments()[0];
-    }
-
-    private Type getGenericReturnType(String methodName) {
-        try {
-            return getClass().getDeclaredMethod(methodName).getGenericReturnType();
-        } catch (NoSuchMethodException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    String getString() {
-        throw new UnsupportedOperationException();
-    }
-
-    <T> T getParameterized() {
-        throw new UnsupportedOperationException();
-    }
-
-    <T> T[] getGenericArray() {
-        throw new UnsupportedOperationException();
-    }
-
-    @SuppressWarnings("unused")
-    List<? super Number> returnTypeWithLowerBound() {
-        throw new UnsupportedOperationException();
-    }
-
-    @SuppressWarnings("unused")
-    List<? extends Number> returnTypeWithUpperBound() {
-        throw new UnsupportedOperationException();
-    }
-
-    @SuppressWarnings("unused")
-    List<?> returnTypeWithoutExplicitBound() {
-        throw new UnsupportedOperationException();
     }
 
 }
