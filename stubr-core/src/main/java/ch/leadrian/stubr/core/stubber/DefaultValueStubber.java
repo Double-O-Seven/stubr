@@ -4,6 +4,8 @@ import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +33,10 @@ final class DefaultValueStubber implements Stubber {
             .add(0f)
             .add(double.class, 0.0)
             .add(0.0)
-            .add("");
+            .add("")
+            .add(Number.class, 0)
+            .add(BigInteger.ZERO)
+            .add(BigDecimal.ZERO);
 
     private DefaultValueStubber() {
     }
