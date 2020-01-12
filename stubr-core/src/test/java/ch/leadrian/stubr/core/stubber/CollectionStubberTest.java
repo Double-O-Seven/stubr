@@ -48,8 +48,7 @@ class CollectionStubberTest {
 
     @Test
     void givenCollectionSizeOfZeroItShouldAcceptNotParameterizedList() {
-        Type type = new TypeToken<Collection>() {
-        }.getType();
+        Type type = Collection.class;
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
         boolean accepts = stubber.accepts(context, type);
@@ -60,8 +59,7 @@ class CollectionStubberTest {
 
     @Test
     void givenCollectionSizeOfZeroItShouldStubNotParameterizedList() {
-        Type type = new TypeToken<Collection>() {
-        }.getType();
+        Type type = Collection.class;
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
         Object stub = stubber.stub(context, type);
@@ -72,8 +70,7 @@ class CollectionStubberTest {
 
     @Test
     void givenCollectionSizeGreaterThanZeroItShouldNotAcceptNotParameterizedList() {
-        Type type = new TypeToken<Collection>() {
-        }.getType();
+        Type type = Collection.class;
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
@@ -240,8 +237,7 @@ class CollectionStubberTest {
 
     @Test
     void shouldNotAcceptCollectionThatIsNoExactMatch() {
-        Type type = new TypeToken<ArrayList>() {
-        }.getType();
+        Type type = ArrayList.class;
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
@@ -264,8 +260,7 @@ class CollectionStubberTest {
 
     @Test
     void shouldNotAcceptNonCollectionType() {
-        Type type = new TypeToken<Number>() {
-        }.getType();
+        Type type = Number.class;
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);

@@ -20,8 +20,7 @@ class TypesTest {
 
         @Test
         void givenClassItShouldReturnIt() {
-            Type type = new TypeToken<String>() {
-            }.getType();
+            Type type = String.class;
             Optional<Class<?>> clazz = Types.getActualClass(type);
 
             assertThat(clazz)

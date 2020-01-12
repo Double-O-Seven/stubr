@@ -51,8 +51,7 @@ class MapStubberTest {
 
     @Test
     void givenMapSizeOfZeroItShouldAcceptNotParameterizedMap() {
-        Type type = new TypeToken<Map>() {
-        }.getType();
+        Type type = Map.class;
         Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
 
         boolean accepts = stubber.accepts(context, type);
@@ -64,8 +63,7 @@ class MapStubberTest {
     @SuppressWarnings("unchecked")
     @Test
     void givenMapSizeOfZeroItShouldStubNotParameterizedMap() {
-        Type type = new TypeToken<Map>() {
-        }.getType();
+        Type type = Map.class;
         Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
 
         Object stub = stubber.stub(context, type);
@@ -76,8 +74,7 @@ class MapStubberTest {
 
     @Test
     void givenMapSizeGreaterThanZeroItShouldNotAcceptNotParameterizedMap() {
-        Type type = new TypeToken<Map>() {
-        }.getType();
+        Type type = Map.class;
         Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
@@ -242,8 +239,7 @@ class MapStubberTest {
 
     @Test
     void shouldNotAcceptMapThatIsNoExactMatch() {
-        Type type = new TypeToken<HashMap>() {
-        }.getType();
+        Type type = HashMap.class;
         Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
@@ -266,8 +262,7 @@ class MapStubberTest {
 
     @Test
     void shouldNotAcceptNonMapType() {
-        Type type = new TypeToken<Number>() {
-        }.getType();
+        Type type = Number.class;
         Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
