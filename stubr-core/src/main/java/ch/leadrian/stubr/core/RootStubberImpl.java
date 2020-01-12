@@ -21,23 +21,21 @@ final class RootStubberImpl implements RootStubber {
     @Override
     public Result<?> tryToStub(Type type, StubbingSite site) {
         StubbingContext context = new StubbingContextImpl(this, site);
-        for (Stubber stubber : stubbers) {
-            if (stubber.accepts(context, type)) {
-                return Result.success(stubber.stub(context, type));
-            }
-        }
-        return Result.failure();
+        return stubbers.stream()
+                .filter(stubber -> stubber.accepts(context, type))
+                .map(stubber -> Result.success(stubber.stub(context, type)))
+                .findFirst()
+                .orElse(Result.failure());
     }
 
     @Override
     public Result<?> tryToStub(Parameter parameter, StubbingSite site) {
         StubbingContext context = new StubbingContextImpl(this, site);
-        for (Stubber stubber : stubbers) {
-            if (stubber.accepts(context, parameter)) {
-                return Result.success(stubber.stub(context, parameter));
-            }
-        }
-        return Result.failure();
+        return stubbers.stream()
+                .filter(stubber -> stubber.accepts(context, parameter))
+                .map(stubber -> Result.success(stubber.stub(context, parameter)))
+                .findFirst()
+                .orElse(Result.failure());
     }
 
     static final class Builder implements RootStubberBuilder {

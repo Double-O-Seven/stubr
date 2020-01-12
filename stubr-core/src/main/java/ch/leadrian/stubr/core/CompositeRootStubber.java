@@ -14,23 +14,19 @@ final class CompositeRootStubber implements RootStubber {
 
     @Override
     public Result<?> tryToStub(Type type, StubbingSite site) {
-        for (RootStubber rootStubber : rootStubbers) {
-            Result<?> result = rootStubber.tryToStub(type, site);
-            if (result.isSuccess()) {
-                return result;
-            }
-        }
-        return Result.failure();
+        return rootStubbers.stream()
+                .map(rootStubber -> rootStubber.tryToStub(type, site))
+                .filter(Result::isSuccess)
+                .findFirst()
+                .orElse(Result.failure());
     }
 
     @Override
     public Result<?> tryToStub(Parameter parameter, StubbingSite site) {
-        for (RootStubber rootStubber : rootStubbers) {
-            Result<?> result = rootStubber.tryToStub(parameter, site);
-            if (result.isSuccess()) {
-                return result;
-            }
-        }
-        return Result.failure();
+        return rootStubbers.stream()
+                .map(rootStubber -> rootStubber.tryToStub(parameter, site))
+                .filter(Result::isSuccess)
+                .findFirst()
+                .orElse(Result.failure());
     }
 }
