@@ -2,7 +2,6 @@ package ch.leadrian.stubr.core;
 
 import ch.leadrian.stubr.core.stubber.Stubbers;
 
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +27,6 @@ final class RootStubberImpl implements RootStubber {
                 .orElse(Result.failure());
     }
 
-    @Override
-    public Result<?> tryToStub(Parameter parameter, StubbingSite site) {
-        StubbingContext context = new StubbingContext(this, site);
-        return stubbers.stream()
-                .filter(stubber -> stubber.accepts(context, parameter))
-                .map(stubber -> Result.success(stubber.stub(context, parameter)))
-                .findFirst()
-                .orElse(Result.failure());
-    }
-
     static final class Builder implements RootStubberBuilder {
 
         private final List<Stubber> stubbers = new ArrayList<>();
@@ -57,13 +46,6 @@ final class RootStubberImpl implements RootStubber {
         }
 
         @Override
-        public RootStubberBuilder stubWith(Stubber stubber, ParameterMatcher matcher) {
-            requireNonNull(stubber, "stubber");
-            requireNonNull(matcher, "matcher");
-            return stubWith(Stubbers.conditional(stubber, matcher));
-        }
-
-        @Override
         public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers) {
             requireNonNull(stubbers, "stubbers");
             stubbers.forEach(this::stubWith);
@@ -72,14 +54,6 @@ final class RootStubberImpl implements RootStubber {
 
         @Override
         public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers, TypeMatcher matcher) {
-            requireNonNull(stubbers, "stubbers");
-            requireNonNull(matcher, "matcher");
-            stubbers.forEach(stubber -> stubWith(stubber, matcher));
-            return this;
-        }
-
-        @Override
-        public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers, ParameterMatcher matcher) {
             requireNonNull(stubbers, "stubbers");
             requireNonNull(matcher, "matcher");
             stubbers.forEach(stubber -> stubWith(stubber, matcher));

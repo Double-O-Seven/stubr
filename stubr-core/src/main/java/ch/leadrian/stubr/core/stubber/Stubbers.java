@@ -1,7 +1,6 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.ConstructorMatcher;
-import ch.leadrian.stubr.core.ParameterMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
@@ -49,16 +48,8 @@ public final class Stubbers {
         return collection(collectionClass, values -> collectionFactory.get(), context -> 0);
     }
 
-    public static Stubber conditional(Stubber delegate, TypeMatcher typeMatcher, ParameterMatcher parameterMatcher) {
-        return new ConditionalStubber(delegate, typeMatcher, parameterMatcher);
-    }
-
     public static Stubber conditional(Stubber delegate, TypeMatcher typeMatcher) {
-        return conditional(delegate, typeMatcher, (context, parameter) -> true);
-    }
-
-    public static Stubber conditional(Stubber delegate, ParameterMatcher parameterMatcher) {
-        return conditional(delegate, (context, type) -> true, parameterMatcher);
+        return new ConditionalStubber(delegate, typeMatcher);
     }
 
     public static Stubber constantValue(Object value) {
