@@ -1,8 +1,11 @@
 package ch.leadrian.stubr.core;
 
+import ch.leadrian.equalizer.EqualsAndHashCode;
+
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.function.Function;
+
+import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 
 public abstract class Result<T> {
 
@@ -30,6 +33,10 @@ public abstract class Result<T> {
 
     public static final class Success<T> extends Result<T> {
 
+        private static final EqualsAndHashCode<Success> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Success.class)
+                .compare(Success::getValue)
+                .build();
+
         private final T value;
 
         private Success(T value) {
@@ -52,18 +59,13 @@ public abstract class Result<T> {
         }
 
         @Override
-        public int hashCode() {
-            return 31 * Objects.hashCode(value);
+        public boolean equals(Object obj) {
+            return EQUALS_AND_HASH_CODE.equals(this, obj);
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof Success)) {
-                return false;
-            }
-
-            Success<?> other = (Success<?>) obj;
-            return Objects.equals(this.value, other.value);
+        public int hashCode() {
+            return EQUALS_AND_HASH_CODE.hashCode(this);
         }
     }
 
