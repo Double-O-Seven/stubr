@@ -1,10 +1,12 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.ConstructorMatcher;
+import ch.leadrian.stubr.core.MethodMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
 import ch.leadrian.stubr.core.matcher.ConstructorMatchers;
+import ch.leadrian.stubr.core.matcher.MethodMatchers;
 
 import java.util.Collection;
 import java.util.List;
@@ -70,6 +72,14 @@ public final class Stubbers {
 
     public static Stubber defaultValue() {
         return DefaultValueStubber.INSTANCE;
+    }
+
+    public static Stubber factoryMethod(MethodMatcher matcher) {
+        return new FactoryMethodStubber(matcher);
+    }
+
+    public static Stubber factoryMethod() {
+        return factoryMethod(MethodMatchers.any());
     }
 
     public static <T extends Map> Stubber map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
