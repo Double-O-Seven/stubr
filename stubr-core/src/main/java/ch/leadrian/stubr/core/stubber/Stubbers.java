@@ -111,11 +111,7 @@ public final class Stubbers {
         return OptionalStubber.INSTANCE;
     }
 
-    public static Stubber proxy(ClassLoader classLoader) {
-        return new ProxyStubber(classLoader);
-    }
-
     public static Stubber proxy() {
-        return proxy(Stubbers.class.getClassLoader());
+        return ProxyStubber.INSTANCE;
     }
 }

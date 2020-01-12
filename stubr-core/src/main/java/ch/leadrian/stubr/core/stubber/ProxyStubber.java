@@ -10,15 +10,12 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 
 import static ch.leadrian.stubr.core.util.Types.getActualClass;
-import static java.util.Objects.requireNonNull;
 
 final class ProxyStubber implements Stubber {
 
-    private final ClassLoader classLoader;
+    static final ProxyStubber INSTANCE = new ProxyStubber();
 
-    ProxyStubber(ClassLoader classLoader) {
-        requireNonNull(classLoader, "classLoader");
-        this.classLoader = classLoader;
+    private ProxyStubber() {
     }
 
     @Override
@@ -33,9 +30,13 @@ final class ProxyStubber implements Stubber {
         return getActualClass(type)
                 .map(clazz -> {
                     StubbingInvocationHandler invocationHandler = new StubbingInvocationHandler(context);
-                    return Proxy.newProxyInstance(classLoader, new Class<?>[]{clazz}, invocationHandler);
+                    return createProxy(clazz, invocationHandler);
                 })
                 .orElseThrow(IllegalStateException::new);
+    }
+
+    private Object createProxy(Class<?> clazz, StubbingInvocationHandler invocationHandler) {
+        return Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, invocationHandler);
     }
 
     private static final class StubbingInvocationHandler implements InvocationHandler {
