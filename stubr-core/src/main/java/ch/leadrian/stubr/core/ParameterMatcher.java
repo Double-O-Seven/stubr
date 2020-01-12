@@ -1,31 +1,31 @@
 package ch.leadrian.stubr.core;
 
 import java.lang.reflect.Parameter;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
 @FunctionalInterface
 public interface ParameterMatcher {
 
     static ParameterMatcher from(TypeMatcher typeMatcher) {
-        return parameter -> typeMatcher.matches(parameter.getParameterizedType());
+        return (context, parameter) -> typeMatcher.matches(context, parameter.getParameterizedType());
     }
 
-    static ParameterMatcher from(Predicate<? super Parameter> predicate) {
+    static ParameterMatcher from(BiPredicate<? super StubbingContext, ? super Parameter> predicate) {
         return predicate::test;
     }
 
-    boolean matches(Parameter parameter);
+    boolean matches(StubbingContext context, Parameter parameter);
 
     default ParameterMatcher and(ParameterMatcher other) {
-        return parameter -> this.matches(parameter) && other.matches(parameter);
+        return (context, parameter) -> this.matches(context, parameter) && other.matches(context, parameter);
     }
 
     default ParameterMatcher or(ParameterMatcher other) {
-        return parameter -> this.matches(parameter) || other.matches(parameter);
+        return (context, parameter) -> this.matches(context, parameter) || other.matches(context, parameter);
     }
 
     default ParameterMatcher negate() {
-        return parameter -> !matches(parameter);
+        return (context, parameter) -> !matches(context, parameter);
     }
 
 

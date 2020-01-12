@@ -27,12 +27,12 @@ final class ConditionalStubber implements Stubber {
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return typeMatcher.matches(type) && delegate.accepts(context, type);
+        return typeMatcher.matches(context, type) && delegate.accepts(context, type);
     }
 
     @Override
     public boolean accepts(StubbingContext context, Parameter parameter) {
-        return parameterMatcher.matches(parameter) && delegate.accepts(context, parameter);
+        return parameterMatcher.matches(context, parameter) && delegate.accepts(context, parameter);
     }
 
     @Override

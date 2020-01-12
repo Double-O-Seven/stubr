@@ -48,11 +48,11 @@ public final class Stubbers {
     }
 
     public static Stubber conditional(Stubber delegate, TypeMatcher typeMatcher) {
-        return conditional(delegate, typeMatcher, parameter -> true);
+        return conditional(delegate, typeMatcher, (context, parameter) -> true);
     }
 
     public static Stubber conditional(Stubber delegate, ParameterMatcher parameterMatcher) {
-        return conditional(delegate, type -> true, parameterMatcher);
+        return conditional(delegate, (context, type) -> true, parameterMatcher);
     }
 
     public static Stubber constantValue(Object value) {
