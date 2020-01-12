@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.stream;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 final class FactoryMethodStubber implements Stubber {
@@ -25,6 +26,7 @@ final class FactoryMethodStubber implements Stubber {
     private final Map<Class<?>, Method> constructorsByClass = new ConcurrentHashMap<>();
 
     FactoryMethodStubber(MethodMatcher methodMatcher) {
+        requireNonNull(methodMatcher, "methodMatcher");
         this.methodMatcher = methodMatcher;
     }
 

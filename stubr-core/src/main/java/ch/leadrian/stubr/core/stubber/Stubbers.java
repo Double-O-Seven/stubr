@@ -21,13 +21,11 @@ public final class Stubbers {
     }
 
     public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, IntSupplier collectionSize) {
-        requireNonNull(collectionClass, "collectionClass may not be null");
-        requireNonNull(collectionFactory, "collectionFactory may not be null");
         return new CollectionStubber<>(collectionClass, collectionFactory, collectionSize);
     }
 
     public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, IntSupplier collectionSize) {
-        requireNonNull(collectionFactory, "collectionFactory may not be null");
+        requireNonNull(collectionFactory, "collectionFactory");
         Function<List<Object>, T> actualCollectionFactory = values -> {
             T collection = collectionFactory.get();
             collection.addAll(values);
@@ -41,7 +39,7 @@ public final class Stubbers {
     }
 
     public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory) {
-        requireNonNull(collectionFactory, "collectionFactory may not be null");
+        requireNonNull(collectionFactory, "collectionFactory");
         return collection(collectionClass, values -> collectionFactory.get(), () -> 0);
     }
 
@@ -58,18 +56,14 @@ public final class Stubbers {
     }
 
     public static Stubber constantValue(Object value) {
-        requireNonNull(value, "value may not be null");
         return new ConstantValueStubber(value.getClass(), value);
     }
 
     public static <T> Stubber constantValue(Class<T> targetClass, T value) {
-        requireNonNull(targetClass, "targetClass may not be null");
-        requireNonNull(value, "value may not be null");
         return new ConstantValueStubber(targetClass, value);
     }
 
     public static Stubber constructor(ConstructorMatcher matcher) {
-        requireNonNull(matcher, "matcher may not be null");
         return new ConstructorStubber(matcher);
     }
 
@@ -82,13 +76,11 @@ public final class Stubbers {
     }
 
     public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, IntSupplier mapSize) {
-        requireNonNull(mapClass, "mapClass may not be null");
-        requireNonNull(mapFactory, "mapFactory may not be null");
         return new MapStubber<>(mapClass, mapFactory, mapSize);
     }
 
     public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, IntSupplier mapSize) {
-        requireNonNull(mapFactory, "mapFactory may not be null");
+        requireNonNull(mapFactory, "mapFactory");
         Function<Map<Object, Object>, T> actualMapFactory = values -> {
             T map = mapFactory.get();
             map.putAll(values);
@@ -102,7 +94,7 @@ public final class Stubbers {
     }
 
     public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory) {
-        requireNonNull(mapFactory, "mapFactory may not be null");
+        requireNonNull(mapFactory, "mapFactory");
         return map(mapClass, values -> mapFactory.get(), () -> 0);
     }
 

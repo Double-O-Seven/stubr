@@ -15,12 +15,14 @@ import java.lang.reflect.WildcardType;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
+import static java.util.Objects.requireNonNull;
 
 final class ProxyStubber implements Stubber {
 
     private final ClassLoader classLoader;
 
     ProxyStubber(ClassLoader classLoader) {
+        requireNonNull(classLoader, "classLoader");
         this.classLoader = classLoader;
     }
 

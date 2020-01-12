@@ -47,51 +47,51 @@ final class RootStubberImpl implements RootStubber {
 
         @Override
         public RootStubberBuilder stubWith(Stubber stubber) {
-            requireNonNull(stubber, "stubber may not be null");
+            requireNonNull(stubber, "stubber");
             stubbers.add(stubber);
             return this;
         }
 
         @Override
         public RootStubberBuilder stubWith(Stubber stubber, TypeMatcher matcher) {
-            requireNonNull(stubber, "stubber may not be null");
-            requireNonNull(matcher, "matcher may not be null");
+            requireNonNull(stubber, "stubber");
+            requireNonNull(matcher, "matcher");
             return stubWith(Stubbers.conditional(stubber, matcher));
         }
 
         @Override
         public RootStubberBuilder stubWith(Stubber stubber, ParameterMatcher matcher) {
-            requireNonNull(stubber, "stubber may not be null");
-            requireNonNull(matcher, "matcher may not be null");
+            requireNonNull(stubber, "stubber");
+            requireNonNull(matcher, "matcher");
             return stubWith(Stubbers.conditional(stubber, matcher));
         }
 
         @Override
         public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers) {
-            requireNonNull(stubbers, "stubbers may not be null");
+            requireNonNull(stubbers, "stubbers");
             stubbers.forEach(this.stubbers::add);
             return this;
         }
 
         @Override
         public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers, TypeMatcher matcher) {
-            requireNonNull(stubbers, "stubbers may not be null");
-            requireNonNull(matcher, "matcher may not be null");
+            requireNonNull(stubbers, "stubbers");
+            requireNonNull(matcher, "matcher");
             stubbers.forEach(stubber -> stubWith(stubber, matcher));
             return this;
         }
 
         @Override
         public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers, ParameterMatcher matcher) {
-            requireNonNull(stubbers, "stubbers may not be null");
-            requireNonNull(matcher, "matcher may not be null");
+            requireNonNull(stubbers, "stubbers");
+            requireNonNull(matcher, "matcher");
             stubbers.forEach(stubber -> stubWith(stubber, matcher));
             return this;
         }
 
         @Override
         public RootStubberBuilder stubWith(Stubber... stubbers) {
-            requireNonNull(stubbers, "stubbers may not be null");
+            requireNonNull(stubbers, "stubbers");
             addAll(this.stubbers, stubbers);
             return this;
         }

@@ -6,6 +6,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
+
 public final class ConstructorParameterStubbingSite implements StubbingSite {
 
     private final StubbingSite parent;
@@ -13,6 +15,9 @@ public final class ConstructorParameterStubbingSite implements StubbingSite {
     private final Parameter parameter;
 
     ConstructorParameterStubbingSite(StubbingSite parent, Constructor<?> constructor, Parameter parameter) {
+        requireNonNull(parent, "parent");
+        requireNonNull(constructor, "constructor");
+        requireNonNull(parameter, "parameter");
         this.parent = parent;
         this.constructor = constructor;
         this.parameter = parameter;

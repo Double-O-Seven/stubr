@@ -11,6 +11,7 @@ import java.lang.reflect.WildcardType;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
+import static java.util.Objects.requireNonNull;
 
 final class ConstantValueStubber implements Stubber {
 
@@ -18,6 +19,8 @@ final class ConstantValueStubber implements Stubber {
     private final Object value;
 
     ConstantValueStubber(Class<?> valueClass, Object value) {
+        requireNonNull(valueClass, "valueClass");
+        requireNonNull(value, "value");
         this.valueClass = valueClass;
         this.value = value;
     }

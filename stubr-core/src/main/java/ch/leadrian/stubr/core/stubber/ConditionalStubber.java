@@ -8,6 +8,8 @@ import ch.leadrian.stubr.core.TypeMatcher;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
+import static java.util.Objects.requireNonNull;
+
 final class ConditionalStubber implements Stubber {
 
     private final Stubber delegate;
@@ -15,6 +17,9 @@ final class ConditionalStubber implements Stubber {
     private final ParameterMatcher parameterMatcher;
 
     ConditionalStubber(Stubber delegate, TypeMatcher typeMatcher, ParameterMatcher parameterMatcher) {
+        requireNonNull(delegate, "delegate");
+        requireNonNull(typeMatcher, "typeMatcher");
+        requireNonNull(parameterMatcher, "parameterMatcher");
         this.delegate = delegate;
         this.typeMatcher = typeMatcher;
         this.parameterMatcher = parameterMatcher;

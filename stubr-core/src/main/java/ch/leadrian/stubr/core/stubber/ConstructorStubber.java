@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.ConstructorMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.stubbingsite.ConstructorParameterStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.Types;
 
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 final class ConstructorStubber implements Stubber {
@@ -24,6 +26,7 @@ final class ConstructorStubber implements Stubber {
     private final Map<Class<?>, Constructor<?>> constructorsByClass = new ConcurrentHashMap<>();
 
     ConstructorStubber(ConstructorMatcher constructorMatcher) {
+        requireNonNull(constructorMatcher, "constructorMatcher");
         this.constructorMatcher = constructorMatcher;
     }
 
@@ -36,7 +39,10 @@ final class ConstructorStubber implements Stubber {
     public Object stub(StubbingContext context, Type type) {
         Constructor<?> constructor = getConstructor(type).orElseThrow(IllegalStateException::new);
         Object[] parameterValues = stream(constructor.getParameters())
-                .map(parameter -> context.getStubber().stub(parameter, StubbingSites.constructorParameter(constructor, parameter)))
+                .map(parameter -> {
+                    ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(context.getSite(), constructor, parameter);
+                    return context.getStubber().stub(parameter, site);
+                })
                 .toArray(Object[]::new);
         try {
             return constructor.newInstance(parameterValues);

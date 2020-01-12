@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Objects.requireNonNull;
 
 final class AcceptingConstructorMatcher implements ConstructorMatcher {
 
     private final List<Class<?>> parameterTypes;
 
     AcceptingConstructorMatcher(Class<?>... parameterTypes) {
+        requireNonNull(parameterTypes, "parameterTypes");
         this.parameterTypes = new ArrayList<>(asList(parameterTypes));
     }
 

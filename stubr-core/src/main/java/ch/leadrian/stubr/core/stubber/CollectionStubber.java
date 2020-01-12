@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 final class CollectionStubber<T extends Collection<Object>> implements Stubber {
@@ -28,6 +29,9 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
     private final IntSupplier collectionSize;
 
     CollectionStubber(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, IntSupplier collectionSize) {
+        requireNonNull(collectionClass, "collectionClass");
+        requireNonNull(collectionFactory, "collectionFactory");
+        requireNonNull(collectionSize, "collectionSize");
         this.collectionClass = collectionClass;
         this.collectionFactory = collectionFactory;
         this.collectionSize = collectionSize;

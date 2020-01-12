@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
 import static java.util.Collections.emptyMap;
+import static java.util.Objects.requireNonNull;
 
 final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
@@ -27,6 +28,9 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
     private final IntSupplier mapSize;
 
     MapStubber(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, IntSupplier mapSize) {
+        requireNonNull(mapClass, "mapClass");
+        requireNonNull(mapFactory, "mapFactory");
+        requireNonNull(mapSize, "mapSize");
         this.mapClass = mapClass;
         this.mapFactory = mapFactory;
         this.mapSize = mapSize;

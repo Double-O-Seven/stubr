@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
+
 public final class MethodParameterStubbingSite implements StubbingSite {
 
     private final StubbingSite parent;
@@ -13,6 +15,9 @@ public final class MethodParameterStubbingSite implements StubbingSite {
     private final Parameter parameter;
 
     MethodParameterStubbingSite(StubbingSite parent, Method method, Parameter parameter) {
+        requireNonNull(parent, "parent");
+        requireNonNull(method, "method");
+        requireNonNull(parameter, "parameter");
         this.parent = parent;
         this.method = method;
         this.parameter = parameter;
