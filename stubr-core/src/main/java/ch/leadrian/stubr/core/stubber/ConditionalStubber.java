@@ -1,8 +1,8 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.ParameterMatcher;
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
 
 import java.lang.reflect.Parameter;
@@ -21,22 +21,22 @@ final class ConditionalStubber implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
-        return typeMatcher.matches(type) && delegate.accepts(type);
+    public boolean accepts(StubbingContext context, Type type) {
+        return typeMatcher.matches(type) && delegate.accepts(context, type);
     }
 
     @Override
-    public boolean accepts(Parameter parameter) {
-        return parameterMatcher.matches(parameter) && delegate.accepts(parameter);
+    public boolean accepts(StubbingContext context, Parameter parameter) {
+        return parameterMatcher.matches(parameter) && delegate.accepts(context, parameter);
     }
 
     @Override
-    public Object stub(RootStubber rootStubber, Type type) {
-        return delegate.stub(rootStubber, type);
+    public Object stub(StubbingContext context, Type type) {
+        return delegate.stub(context, type);
     }
 
     @Override
-    public Object stub(RootStubber rootStubber, Parameter parameter) {
-        return delegate.stub(rootStubber, parameter);
+    public Object stub(StubbingContext context, Parameter parameter) {
+        return delegate.stub(context, parameter);
     }
 }

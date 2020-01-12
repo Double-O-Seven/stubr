@@ -1,8 +1,10 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Result;
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.TypeVisitor;
 
 import java.lang.reflect.ParameterizedType;
@@ -22,7 +24,7 @@ final class OptionalStubber implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
+    public boolean accepts(StubbingContext context, Type type) {
         return accept(type, new TypeVisitor<Boolean>() {
 
             @Override
@@ -50,33 +52,31 @@ final class OptionalStubber implements Stubber {
     }
 
     @Override
-    public Optional<?> stub(RootStubber rootStubber, Type type) {
-        return getValueClass(type)
-                .map(rootStubber::tryToStub)
-                .filter(Result::isSuccess)
-                .map(Result::getValue);
-    }
-
-    private Optional<Class<?>> getValueClass(Type type) {
-        return accept(type, new TypeVisitor<Optional<Class<?>>>() {
+    public Optional<?> stub(StubbingContext context, Type type) {
+        return accept(type, new TypeVisitor<Optional<?>>() {
 
             @Override
-            public Optional<Class<?>> visit(Class<?> clazz) {
+            public Optional<?> visit(Class<?> clazz) {
                 return Optional.empty();
             }
 
             @Override
-            public Optional<Class<?>> visit(ParameterizedType parameterizedType) {
-                return accept(parameterizedType.getActualTypeArguments()[0], this);
+            public Optional<?> visit(ParameterizedType parameterizedType) {
+                StubbingSite site = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 0);
+                Result<?> result = context.getStubber().tryToStub(parameterizedType.getActualTypeArguments()[0], site);
+                if (result.isSuccess()) {
+                    return Optional.of(result);
+                }
+                return Optional.empty();
             }
 
             @Override
-            public Optional<Class<?>> visit(WildcardType wildcardType) {
+            public Optional<?> visit(WildcardType wildcardType) {
                 return getOnlyUpperBound(wildcardType).flatMap(upperBound -> accept(upperBound, this));
             }
 
             @Override
-            public Optional<Class<?>> visit(TypeVariable<?> typeVariable) {
+            public Optional<?> visit(TypeVariable<?> typeVariable) {
                 return Optional.empty();
             }
         });

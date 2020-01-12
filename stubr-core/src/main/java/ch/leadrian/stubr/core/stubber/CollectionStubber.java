@@ -1,7 +1,9 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.TypeVisitor;
 
 import java.lang.reflect.ParameterizedType;
@@ -32,7 +34,7 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
+    public boolean accepts(StubbingContext context, Type type) {
         return accept(type, new TypeVisitor<Boolean>() {
 
             @Override
@@ -60,7 +62,7 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
     }
 
     @Override
-    public T stub(RootStubber rootStubber, Type type) {
+    public T stub(StubbingContext context, Type type) {
         return accept(type, new TypeVisitor<T>() {
 
             @Override
@@ -71,9 +73,10 @@ final class CollectionStubber<T extends Collection<Object>> implements Stubber {
             @Override
             public T visit(ParameterizedType parameterizedType) {
                 Type valueType = parameterizedType.getActualTypeArguments()[0];
+                StubbingSite site = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 0);
                 List<Object> values = IntStream.iterate(0, i -> i + 1)
                         .limit(collectionSize.getAsInt())
-                        .mapToObj(i -> rootStubber.stub(valueType))
+                        .mapToObj(i -> context.getStubber().stub(valueType, site))
                         .collect(toList());
                 return collectionFactory.apply(values);
             }

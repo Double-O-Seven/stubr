@@ -1,8 +1,9 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.ConstructorMatcher;
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.Constructor;
@@ -27,15 +28,15 @@ final class ConstructorStubber implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
+    public boolean accepts(StubbingContext context, Type type) {
         return getConstructor(type).isPresent();
     }
 
     @Override
-    public Object stub(RootStubber rootStubber, Type type) {
+    public Object stub(StubbingContext context, Type type) {
         Constructor<?> constructor = getConstructor(type).orElseThrow(IllegalStateException::new);
-        Object[] parameterValues = stream(constructor.getGenericParameterTypes())
-                .map(rootStubber::stub)
+        Object[] parameterValues = stream(constructor.getParameters())
+                .map(parameter -> context.getStubber().stub(parameter, StubbingSites.constructorParameter(constructor, parameter)))
                 .toArray(Object[]::new);
         try {
             return constructor.newInstance(parameterValues);

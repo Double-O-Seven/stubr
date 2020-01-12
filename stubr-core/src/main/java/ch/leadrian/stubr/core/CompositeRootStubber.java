@@ -13,9 +13,9 @@ final class CompositeRootStubber implements RootStubber {
     }
 
     @Override
-    public Result<?> tryToStub(Type type) {
+    public Result<?> tryToStub(Type type, StubbingSite site) {
         for (RootStubber rootStubber : rootStubbers) {
-            Result<?> result = rootStubber.tryToStub(type);
+            Result<?> result = rootStubber.tryToStub(type, site);
             if (result.isSuccess()) {
                 return result;
             }
@@ -24,9 +24,9 @@ final class CompositeRootStubber implements RootStubber {
     }
 
     @Override
-    public Result<?> tryToStub(Parameter parameter) {
+    public Result<?> tryToStub(Parameter parameter, StubbingSite site) {
         for (RootStubber rootStubber : rootStubbers) {
-            Result<?> result = rootStubber.tryToStub(parameter);
+            Result<?> result = rootStubber.tryToStub(parameter, site);
             if (result.isSuccess()) {
                 return result;
             }

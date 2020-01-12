@@ -7,16 +7,16 @@ import java.lang.reflect.Type;
 
 public interface Stubber {
 
-    boolean accepts(Type type);
+    boolean accepts(StubbingContext context, Type type);
 
-    default boolean accepts(Parameter parameter) {
-        return accepts(parameter.getParameterizedType());
+    default boolean accepts(StubbingContext context, Parameter parameter) {
+        return accepts(context, parameter.getParameterizedType());
     }
 
-    Object stub(RootStubber rootStubber, Type type);
+    Object stub(StubbingContext context, Type type);
 
-    default Object stub(RootStubber rootStubber, Parameter parameter) {
-        return stub(rootStubber, parameter.getParameterizedType());
+    default Object stub(StubbingContext context, Parameter parameter) {
+        return stub(context, parameter.getParameterizedType());
     }
 
     default Stubber when(TypeMatcher typeMatcher) {

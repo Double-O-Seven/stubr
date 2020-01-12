@@ -1,8 +1,9 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.MethodMatcher;
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.Types;
 
 import java.lang.reflect.InvocationTargetException;
@@ -28,15 +29,15 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
+    public boolean accepts(StubbingContext context, Type type) {
         return getFactoryMethod(type).isPresent();
     }
 
     @Override
-    public Object stub(RootStubber rootStubber, Type type) {
+    public Object stub(StubbingContext context, Type type) {
         Method method = getFactoryMethod(type).orElseThrow(IllegalStateException::new);
-        Object[] parameterValues = stream(method.getGenericParameterTypes())
-                .map(rootStubber::stub)
+        Object[] parameterValues = stream(method.getParameters())
+                .map(parameter -> context.getStubber().stub(parameter, StubbingSites.methodParameter(context.getSite(), method, parameter)))
                 .toArray(Object[]::new);
         try {
             return method.invoke(null, parameterValues);

@@ -1,7 +1,8 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.TypeVisitor;
 
 import java.lang.reflect.InvocationHandler;
@@ -24,7 +25,7 @@ final class ProxyStubber implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
+    public boolean accepts(StubbingContext context, Type type) {
         return accept(type, new TypeVisitor<Boolean>() {
 
             @Override
@@ -52,12 +53,12 @@ final class ProxyStubber implements Stubber {
     }
 
     @Override
-    public Object stub(RootStubber rootStubber, Type type) {
+    public Object stub(StubbingContext context, Type type) {
         return accept(type, new TypeVisitor<Object>() {
 
             @Override
             public Object visit(Class clazz) {
-                StubbingInvocationHandler invocationHandler = new StubbingInvocationHandler(rootStubber);
+                StubbingInvocationHandler invocationHandler = new StubbingInvocationHandler(context);
                 return Proxy.newProxyInstance(classLoader, new Class<?>[]{clazz}, invocationHandler);
             }
 
@@ -83,10 +84,10 @@ final class ProxyStubber implements Stubber {
 
     private static final class StubbingInvocationHandler implements InvocationHandler {
 
-        private final RootStubber rootStubber;
+        private final StubbingContext context;
 
-        StubbingInvocationHandler(RootStubber rootStubber) {
-            this.rootStubber = rootStubber;
+        StubbingInvocationHandler(StubbingContext context) {
+            this.context = context;
         }
 
         @Override
@@ -95,7 +96,7 @@ final class ProxyStubber implements Stubber {
             if (returnType == void.class || returnType == Void.class || returnType == null) {
                 return null;
             }
-            return rootStubber.stub(returnType);
+            return context.getStubber().stub(returnType, StubbingSites.methodReturnValue(context.getSite(), method));
         }
     }
 

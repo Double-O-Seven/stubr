@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.util.TypeVisitor;
 
 import java.lang.reflect.ParameterizedType;
@@ -42,12 +42,12 @@ final class DefaultValueStubber implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
+    public boolean accepts(StubbingContext context, Type type) {
         return defaultValuesMap.get(type).isPresent();
     }
 
     @Override
-    public Object stub(RootStubber rootStubber, Type type) {
+    public Object stub(StubbingContext context, Type type) {
         return defaultValuesMap.get(type).orElseThrow(IllegalStateException::new);
     }
 

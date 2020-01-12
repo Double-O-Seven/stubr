@@ -1,7 +1,9 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.util.TypeVisitor;
 
 import java.lang.reflect.ParameterizedType;
@@ -31,7 +33,7 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
     }
 
     @Override
-    public boolean accepts(Type type) {
+    public boolean accepts(StubbingContext context, Type type) {
         return accept(type, new TypeVisitor<Boolean>() {
 
             @Override
@@ -59,7 +61,7 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
     }
 
     @Override
-    public Object stub(RootStubber rootStubber, Type type) {
+    public Object stub(StubbingContext context, Type type) {
         return accept(type, new TypeVisitor<T>() {
 
             @Override
@@ -71,12 +73,14 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
             public T visit(ParameterizedType parameterizedType) {
                 Type keyType = parameterizedType.getActualTypeArguments()[0];
                 Type valueType = parameterizedType.getActualTypeArguments()[1];
+                StubbingSite keySite = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 0);
+                StubbingSite valueSite = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 1);
                 Map<Object, Object> values = new HashMap<>(mapSize.getAsInt());
                 IntStream.iterate(0, i -> i + 1)
                         .limit(mapSize.getAsInt())
                         .forEach(i -> {
-                            Object key = rootStubber.stub(keyType);
-                            Object value = rootStubber.stub(valueType);
+                            Object key = context.getStubber().stub(keyType, keySite);
+                            Object value = context.getStubber().stub(valueType, valueSite);
                             values.put(key, value);
                         });
                 return mapFactory.apply(values);

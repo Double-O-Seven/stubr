@@ -20,20 +20,22 @@ final class RootStubberImpl implements RootStubber {
     }
 
     @Override
-    public Result<?> tryToStub(Type type) {
+    public Result<?> tryToStub(Type type, StubbingSite site) {
+        StubbingContext context = new StubbingContextImpl(this, site);
         for (Stubber stubber : stubbers) {
-            if (stubber.accepts(type)) {
-                return Result.success(stubber.stub(this, type));
+            if (stubber.accepts(context, type)) {
+                return Result.success(stubber.stub(context, type));
             }
         }
         return Result.failure();
     }
 
     @Override
-    public Result<?> tryToStub(Parameter parameter) {
+    public Result<?> tryToStub(Parameter parameter, StubbingSite site) {
+        StubbingContext context = new StubbingContextImpl(this, site);
         for (Stubber stubber : stubbers) {
-            if (stubber.accepts(parameter)) {
-                return Result.success(stubber.stub(this, parameter));
+            if (stubber.accepts(context, parameter)) {
+                return Result.success(stubber.stub(context, parameter));
             }
         }
         return Result.failure();
