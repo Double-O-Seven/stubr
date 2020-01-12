@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 public abstract class Result<T> {
 
@@ -30,6 +31,9 @@ public abstract class Result<T> {
     public abstract boolean isFailure();
 
     public abstract <U> Result<U> map(Function<T, U> mappingFunction);
+
+    @Override
+    public abstract String toString();
 
     private static final class Success<T> extends Result<T> {
 
@@ -67,6 +71,13 @@ public abstract class Result<T> {
         public int hashCode() {
             return EQUALS_AND_HASH_CODE.hashCode(this);
         }
+
+        @Override
+        public String toString() {
+            return toStringHelper(this)
+                    .add("value", value)
+                    .toString();
+        }
     }
 
     private static final class Failure<T> extends Result<T> {
@@ -89,6 +100,11 @@ public abstract class Result<T> {
         @Override
         public <U> Result<U> map(Function<T, U> mappingFunction) {
             return Result.failure();
+        }
+
+        @Override
+        public String toString() {
+            return "Failure";
         }
     }
 }
