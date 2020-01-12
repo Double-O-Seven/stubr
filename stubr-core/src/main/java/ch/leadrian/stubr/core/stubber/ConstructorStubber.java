@@ -41,7 +41,7 @@ final class ConstructorStubber implements Stubber {
         Object[] parameterValues = stream(constructor.getParameters())
                 .map(parameter -> {
                     ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(context.getSite(), constructor, parameter);
-                    return context.getStubber().stub(parameter, site);
+                    return context.getStubber().stub(parameter.getParameterizedType(), site);
                 })
                 .toArray(Object[]::new);
         try {
