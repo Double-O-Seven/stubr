@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.ConstructorMatcher;
 import ch.leadrian.stubr.core.ParameterMatcher;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
 import ch.leadrian.stubr.core.matcher.ConstructorMatchers;
 
@@ -10,8 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.IntSupplier;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,11 +21,11 @@ public final class Stubbers {
     private Stubbers() {
     }
 
-    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, IntSupplier collectionSize) {
+    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
         return new CollectionStubber<>(collectionClass, collectionFactory, collectionSize);
     }
 
-    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, IntSupplier collectionSize) {
+    public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
         requireNonNull(collectionFactory, "collectionFactory");
         Function<List<Object>, T> actualCollectionFactory = values -> {
             T collection = collectionFactory.get();
@@ -35,12 +36,12 @@ public final class Stubbers {
     }
 
     public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory, int collectionSize) {
-        return collection(collectionClass, collectionFactory, () -> collectionSize);
+        return collection(collectionClass, collectionFactory, context -> collectionSize);
     }
 
     public static <T extends Collection<Object>> Stubber collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory) {
         requireNonNull(collectionFactory, "collectionFactory");
-        return collection(collectionClass, values -> collectionFactory.get(), () -> 0);
+        return collection(collectionClass, values -> collectionFactory.get(), context -> 0);
     }
 
     public static Stubber conditional(Stubber delegate, TypeMatcher typeMatcher, ParameterMatcher parameterMatcher) {
@@ -75,11 +76,11 @@ public final class Stubbers {
         return DefaultValueStubber.INSTANCE;
     }
 
-    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, IntSupplier mapSize) {
+    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
         return new MapStubber<>(mapClass, mapFactory, mapSize);
     }
 
-    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, IntSupplier mapSize) {
+    public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
         requireNonNull(mapFactory, "mapFactory");
         Function<Map<Object, Object>, T> actualMapFactory = values -> {
             T map = mapFactory.get();
@@ -90,12 +91,12 @@ public final class Stubbers {
     }
 
     public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory, int mapSize) {
-        return map(mapClass, mapFactory, () -> mapSize);
+        return map(mapClass, mapFactory, context -> mapSize);
     }
 
     public static <T extends Map<Object, Object>> Stubber map(Class<T> mapClass, Supplier<? extends T> mapFactory) {
         requireNonNull(mapFactory, "mapFactory");
-        return map(mapClass, values -> mapFactory.get(), () -> 0);
+        return map(mapClass, values -> mapFactory.get(), context -> 0);
     }
 
     public static Stubber nullValue() {

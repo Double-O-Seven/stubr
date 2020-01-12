@@ -13,7 +13,7 @@ import java.lang.reflect.WildcardType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.IntSupplier;
+import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
@@ -25,9 +25,9 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
     private final Class<T> mapClass;
     private final Function<Map<Object, Object>, ? extends T> mapFactory;
-    private final IntSupplier mapSize;
+    private final ToIntFunction<? super StubbingContext> mapSize;
 
-    MapStubber(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, IntSupplier mapSize) {
+    MapStubber(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
         requireNonNull(mapClass, "mapClass");
         requireNonNull(mapFactory, "mapFactory");
         requireNonNull(mapSize, "mapSize");
@@ -42,7 +42,7 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
 
             @Override
             public Boolean visit(Class<?> clazz) {
-                return mapClass == clazz && mapSize.getAsInt() == 0;
+                return mapClass == clazz && mapSize.applyAsInt(context) == 0;
             }
 
             @Override
@@ -79,9 +79,10 @@ final class MapStubber<T extends Map<Object, Object>> implements Stubber {
                 Type valueType = parameterizedType.getActualTypeArguments()[1];
                 StubbingSite keySite = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 0);
                 StubbingSite valueSite = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 1);
-                Map<Object, Object> values = new HashMap<>(mapSize.getAsInt());
+                int size = mapSize.applyAsInt(context);
+                Map<Object, Object> values = new HashMap<>(size);
                 IntStream.iterate(0, i -> i + 1)
-                        .limit(mapSize.getAsInt())
+                        .limit(size)
                         .forEach(i -> {
                             Object key = context.getStubber().stub(keyType, keySite);
                             Object value = context.getStubber().stub(valueType, valueSite);
