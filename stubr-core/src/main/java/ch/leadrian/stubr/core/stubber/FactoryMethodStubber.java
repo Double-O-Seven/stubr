@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 final class FactoryMethodStubber implements Stubber {
 
     private final MethodMatcher methodMatcher;
-    private final Map<Class<?>, Method> constructorsByClass = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Method> factoryMethodsByClass = new ConcurrentHashMap<>();
 
     FactoryMethodStubber(MethodMatcher methodMatcher) {
         requireNonNull(methodMatcher, "methodMatcher");
@@ -58,7 +58,7 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private Optional<Method> getFactoryMethod(Class<?> targetClass) {
-        Method method = constructorsByClass.computeIfAbsent(targetClass, clazz -> {
+        Method method = factoryMethodsByClass.computeIfAbsent(targetClass, clazz -> {
             List<Method> constructors = stream(clazz.getMethods())
                     .filter(m -> !m.isSynthetic() && !isPrivate(m.getModifiers()) && isStatic(m.getModifiers()))
                     .filter(m -> canReturn(m, targetClass))
