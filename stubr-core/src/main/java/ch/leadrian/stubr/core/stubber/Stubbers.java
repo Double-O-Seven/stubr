@@ -110,10 +110,6 @@ public final class Stubbers {
         return NullValueStubber.INSTANCE;
     }
 
-    public static Stubber object() {
-        return ObjectStubber.INSTANCE;
-    }
-
     public static Stubber optional() {
         return OptionalStubber.INSTANCE;
     }
