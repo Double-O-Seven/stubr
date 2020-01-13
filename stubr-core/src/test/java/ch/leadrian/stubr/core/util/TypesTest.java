@@ -170,7 +170,7 @@ class TypesTest {
             WildcardType type = (WildcardType) getTypeArgument(new TypeLiteral<List<? super Number>>() {
             }, 0);
 
-            Optional<Type> upperBound = Types.getMostSpecificType(type);
+            Optional<Type> upperBound = Types.getBound(type);
 
             assertThat(upperBound)
                     .hasValue(Number.class);
@@ -181,7 +181,7 @@ class TypesTest {
             WildcardType type = (WildcardType) getTypeArgument(new TypeLiteral<List<? extends Number>>() {
             }, 0);
 
-            Optional<Type> upperBound = Types.getMostSpecificType(type);
+            Optional<Type> upperBound = Types.getBound(type);
 
             assertThat(upperBound)
                     .hasValue(Number.class);
@@ -192,7 +192,7 @@ class TypesTest {
             WildcardType type = (WildcardType) getTypeArgument(new TypeLiteral<List<?>>() {
             }, 0);
 
-            Optional<Type> upperBound = Types.getMostSpecificType(type);
+            Optional<Type> upperBound = Types.getBound(type);
 
             assertThat(upperBound)
                     .hasValue(Object.class);

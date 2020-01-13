@@ -18,7 +18,7 @@ import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
+import static ch.leadrian.stubr.core.util.Types.getBound;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -54,7 +54,7 @@ final class CollectionStubber<T extends Collection> implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getMostSpecificType(wildcardType)
+                return getBound(wildcardType)
                         .filter(type -> accept(type, this))
                         .isPresent();
             }
@@ -93,7 +93,7 @@ final class CollectionStubber<T extends Collection> implements Stubber {
 
             @Override
             public T visit(WildcardType wildcardType) {
-                return getMostSpecificType(wildcardType)
+                return getBound(wildcardType)
                         .map(type -> accept(type, this))
                         .orElseThrow(IllegalStateException::new);
             }
