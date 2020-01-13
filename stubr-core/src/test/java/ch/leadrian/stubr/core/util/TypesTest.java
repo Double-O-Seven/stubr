@@ -163,7 +163,7 @@ class TypesTest {
     }
 
     @Nested
-    class GetMostSpecificTypeTest {
+    class GetBoundTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnLowerBound() {
