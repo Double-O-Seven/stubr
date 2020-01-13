@@ -1,6 +1,7 @@
 package ch.leadrian.stubr.core;
 
 import ch.leadrian.stubr.core.stubber.Stubbers;
+import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ final class RootStubberImpl implements RootStubber {
     private final List<Stubber> stubbers;
 
     private RootStubberImpl(List<Stubber> stubbers) {
-        this.stubbers = stubbers;
+        this.stubbers = ImmutableList.copyOf(stubbers);
     }
 
     @Override

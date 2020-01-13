@@ -1,5 +1,7 @@
 package ch.leadrian.stubr.core;
 
+import com.google.common.collect.ImmutableList;
+
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -7,8 +9,8 @@ final class CompositeRootStubber implements RootStubber {
 
     private final List<RootStubber> rootStubbers;
 
-    CompositeRootStubber(List<RootStubber> rootStubbers) {
-        this.rootStubbers = rootStubbers;
+    CompositeRootStubber(List<? extends RootStubber> rootStubbers) {
+        this.rootStubbers = ImmutableList.copyOf(rootStubbers);
     }
 
     @Override

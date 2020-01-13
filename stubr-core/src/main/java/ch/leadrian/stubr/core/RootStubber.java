@@ -3,11 +3,9 @@ package ch.leadrian.stubr.core;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.reverse;
 
 public interface RootStubber {
 
@@ -15,10 +13,12 @@ public interface RootStubber {
         return new RootStubberImpl.Builder();
     }
 
+    static RootStubber compose(List<? extends RootStubber> rootStubbers) {
+        return new CompositeRootStubber(rootStubbers);
+    }
+
     static RootStubber compose(RootStubber... rootStubbers) {
-        List<RootStubber> reversedRootStubbers = new ArrayList<>(asList(rootStubbers));
-        reverse(reversedRootStubbers);
-        return new CompositeRootStubber(reversedRootStubbers);
+        return compose(asList(rootStubbers));
     }
 
     Result<?> tryToStub(Type type, StubbingSite site);
