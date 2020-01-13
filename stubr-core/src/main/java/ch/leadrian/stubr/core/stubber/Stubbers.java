@@ -110,8 +110,12 @@ public final class Stubbers {
         return NullValueStubber.INSTANCE;
     }
 
+    public static Stubber optional(OptionalStubbingMode mode) {
+        return mode.getStubber();
+    }
+
     public static Stubber optional() {
-        return OptionalStubber.INSTANCE;
+        return optional(OptionalStubbingMode.EMPTY);
     }
 
     public static Stubber proxy(boolean cacheStubs) {
@@ -119,7 +123,7 @@ public final class Stubbers {
     }
 
     public static Stubber proxy() {
-        return proxy(true);
+        return proxy(false);
     }
 
     public static Stubber rootStubber() {

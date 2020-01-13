@@ -16,16 +16,47 @@ import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
 import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
-import static ch.leadrian.stubr.core.util.Types.getRawType;
 
 enum OptionalStubber implements Stubber {
-    INSTANCE;
+    EMPTY(EmptyStubbingStrategy.INSTANCE),
+    PRESENT(new PresentStubbingStrategy()),
+    PRESENT_IF_POSSIBLE(new PresentIfPossibleStubbingStrategy());
+
+    private final StubbingStrategy strategy;
+
+    OptionalStubber(StubbingStrategy strategy) {
+        this.strategy = strategy;
+    }
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return getRawType(type)
-                .filter(Optional.class::equals)
-                .isPresent();
+        return accept(type, new TypeVisitor<Boolean>() {
+
+            @Override
+            public Boolean visit(Class<?> clazz) {
+                return Optional.class == clazz && strategy.isEmptyAllowed();
+            }
+
+            @Override
+            public Boolean visit(ParameterizedType parameterizedType) {
+                return Optional.class == parameterizedType.getRawType();
+            }
+
+            @Override
+            public Boolean visit(WildcardType wildcardType) {
+                return accept(wildcardType, this);
+            }
+
+            @Override
+            public Boolean visit(TypeVariable<?> typeVariable) {
+                return false;
+            }
+
+            @Override
+            public Boolean visit(GenericArrayType genericArrayType) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -39,12 +70,7 @@ enum OptionalStubber implements Stubber {
 
             @Override
             public Optional<Object> visit(ParameterizedType parameterizedType) {
-                StubbingSite site = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 0);
-                Result<?> result = context.getStubber().tryToStub(parameterizedType.getActualTypeArguments()[0], site);
-                if (result.isSuccess()) {
-                    return Optional.ofNullable(result);
-                }
-                return Optional.empty();
+                return strategy.stub(context, parameterizedType);
             }
 
             @Override
@@ -62,5 +88,69 @@ enum OptionalStubber implements Stubber {
                 return Optional.empty();
             }
         });
+    }
+
+    private interface StubbingStrategy {
+
+        Optional<Object> stub(StubbingContext context, ParameterizedType type);
+
+        boolean isEmptyAllowed();
+
+    }
+
+    private enum EmptyStubbingStrategy implements StubbingStrategy {
+        INSTANCE;
+
+        @Override
+        public Optional<Object> stub(StubbingContext context, ParameterizedType type) {
+            return Optional.empty();
+        }
+
+        @Override
+        public boolean isEmptyAllowed() {
+            return true;
+        }
+    }
+
+    private static abstract class AbstractStubbingStrategy implements StubbingStrategy {
+
+        @Override
+        public final Optional<Object> stub(StubbingContext context, ParameterizedType type) {
+            StubbingSite site = StubbingSites.parameterizedType(context.getSite(), type, 0);
+            Type valueType = type.getActualTypeArguments()[0];
+            return stub(context, site, valueType);
+        }
+
+        protected abstract Optional<Object> stub(StubbingContext context, StubbingSite site, Type valueType);
+    }
+
+    private static final class PresentStubbingStrategy extends AbstractStubbingStrategy {
+
+        @Override
+        protected Optional<Object> stub(StubbingContext context, StubbingSite site, Type valueType) {
+            return Optional.ofNullable(context.getStubber().stub(valueType, site));
+        }
+
+        @Override
+        public boolean isEmptyAllowed() {
+            return false;
+        }
+    }
+
+    private static final class PresentIfPossibleStubbingStrategy extends AbstractStubbingStrategy {
+
+        @Override
+        protected Optional<Object> stub(StubbingContext context, StubbingSite site, Type valueType) {
+            Result<?> result = context.getStubber().tryToStub(valueType, site);
+            if (result.isSuccess()) {
+                return Optional.ofNullable(result.getValue());
+            }
+            return Optional.empty();
+        }
+
+        @Override
+        public boolean isEmptyAllowed() {
+            return true;
+        }
     }
 }
