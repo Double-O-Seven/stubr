@@ -16,12 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TypesTest {
 
     @Nested
-    class GetActualCassTest {
+    class GetRawTypeTest {
 
         @Test
         void givenClassItShouldReturnIt() {
             Type type = String.class;
-            Optional<Class<?>> clazz = Types.getActualClass(type);
+            Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .hasValue(String.class);
@@ -31,7 +31,7 @@ class TypesTest {
         void givenParameterizedTypeItShouldReturnRawType() {
             Type type = new TypeToken<List<String>>() {
             }.getType();
-            Optional<Class<?>> clazz = Types.getActualClass(type);
+            Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .hasValue(List.class);
@@ -42,7 +42,7 @@ class TypesTest {
             TypeToken<List<? super Number>> token = new TypeToken<List<? super Number>>() {
             };
             Type type = getTypeArgument(token, 0);
-            Optional<Class<?>> clazz = Types.getActualClass(type);
+            Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .hasValue(Number.class);
@@ -53,7 +53,7 @@ class TypesTest {
             TypeToken<List<? extends Number>> token = new TypeToken<List<? extends Number>>() {
             };
             Type type = getTypeArgument(token, 0);
-            Optional<Class<?>> clazz = Types.getActualClass(type);
+            Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .hasValue(Number.class);
@@ -64,7 +64,7 @@ class TypesTest {
             TypeToken<List<?>> token = new TypeToken<List<?>>() {
             };
             Type type = getTypeArgument(token, 0);
-            Optional<Class<?>> clazz = Types.getActualClass(type);
+            Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .hasValue(Object.class);
@@ -75,7 +75,7 @@ class TypesTest {
             TypeToken<List<T>> token = new TypeToken<List<T>>() {
             };
             Type type = getTypeArgument(token, 0);
-            Optional<Class<?>> clazz = Types.getActualClass(type);
+            Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .isEmpty();
@@ -86,7 +86,7 @@ class TypesTest {
             TypeToken<List<T[]>> token = new TypeToken<List<T[]>>() {
             };
             Type type = getTypeArgument(token, 0);
-            Optional<Class<?>> clazz = Types.getActualClass(type);
+            Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .isEmpty();

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static ch.leadrian.stubr.core.util.Types.getActualClass;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 
 enum DefaultValueStubber implements Stubber {
     INSTANCE;
@@ -62,7 +62,7 @@ enum DefaultValueStubber implements Stubber {
         }
 
         Optional<Object> get(Type type) {
-            return getActualClass(type).map(defaultValuesByClass::get);
+            return getRawType(type).map(defaultValuesByClass::get);
         }
 
     }

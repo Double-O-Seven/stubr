@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ch.leadrian.stubr.core.util.Types.getActualClass;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.stream;
@@ -53,7 +53,7 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private Optional<Method> getFactoryMethod(Type type) {
-        Optional<Class<?>> targetClass = getActualClass(type);
+        Optional<Class<?>> targetClass = getRawType(type);
         return targetClass.flatMap(this::getFactoryMethod);
     }
 
@@ -73,7 +73,7 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private boolean canReturn(Method method, Class<?> type) {
-        return getActualClass(method.getGenericReturnType())
+        return getRawType(method.getGenericReturnType())
                 .filter(clazz -> clazz.isAssignableFrom(type))
                 .isPresent();
     }

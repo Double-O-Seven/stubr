@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static ch.leadrian.stubr.core.TypeTokens.getTypeArgument;
-import static ch.leadrian.stubr.core.util.Types.getActualClass;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.entry;
@@ -35,12 +35,12 @@ class MapStubberTest {
         rootStubber = mock(RootStubber.class);
         when(rootStubber.stub(any(Type.class), any()))
                 .thenAnswer(invocation -> {
-                    Class<?> actualClass = getActualClass(invocation.getArgument(0, Type.class)).orElseThrow(UnsupportedOperationException::new);
-                    if (actualClass == String.class) {
+                    Class<?> rawType = getRawType(invocation.getArgument(0, Type.class)).orElseThrow(UnsupportedOperationException::new);
+                    if (rawType == String.class) {
                         return "Test";
-                    } else if (actualClass == Integer.class) {
+                    } else if (rawType == Integer.class) {
                         return 1234;
-                    } else if (actualClass == Number.class) {
+                    } else if (rawType == Number.class) {
                         return 1337;
                     } else {
                         throw new UnsupportedOperationException();

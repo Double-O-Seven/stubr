@@ -15,15 +15,15 @@ import java.lang.reflect.WildcardType;
 import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getActualClass;
 import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 
 enum OptionalStubber implements Stubber {
     INSTANCE;
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return getActualClass(type)
+        return getRawType(type)
                 .filter(Optional.class::equals)
                 .isPresent();
     }

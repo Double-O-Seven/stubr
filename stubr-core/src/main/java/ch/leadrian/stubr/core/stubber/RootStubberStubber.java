@@ -6,14 +6,14 @@ import ch.leadrian.stubr.core.StubbingContext;
 
 import java.lang.reflect.Type;
 
-import static ch.leadrian.stubr.core.util.Types.getActualClass;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 
 enum RootStubberStubber implements Stubber {
     INSTANCE;
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return getActualClass(type)
+        return getRawType(type)
                 .filter(RootStubber.class::equals)
                 .isPresent();
     }

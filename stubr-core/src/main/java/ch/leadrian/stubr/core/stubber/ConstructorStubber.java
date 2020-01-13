@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ch.leadrian.stubr.core.util.Types.getActualClass;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
@@ -52,7 +52,7 @@ final class ConstructorStubber implements Stubber {
     }
 
     private Optional<Constructor<?>> getConstructor(Type type) {
-        return getActualClass(type).flatMap(this::getConstructor);
+        return getRawType(type).flatMap(this::getConstructor);
     }
 
     private Optional<Constructor<?>> getConstructor(Class<?> targetClass) {

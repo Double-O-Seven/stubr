@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ch.leadrian.stubr.core.util.Types.getActualClass;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 
 final class ProxyStubber implements Stubber {
 
@@ -26,14 +26,14 @@ final class ProxyStubber implements Stubber {
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return getActualClass(type)
+        return getRawType(type)
                 .filter(Class::isInterface)
                 .isPresent();
     }
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        return getActualClass(type)
+        return getRawType(type)
                 .map(clazz -> createProxy(clazz, getInvocationHandler(context)))
                 .orElseThrow(IllegalStateException::new);
     }

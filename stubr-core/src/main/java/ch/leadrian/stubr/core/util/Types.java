@@ -14,7 +14,7 @@ public final class Types {
     private Types() {
     }
 
-    public static Optional<Class<?>> getActualClass(Type type) {
+    public static Optional<Class<?>> getRawType(Type type) {
         return accept(type, new TypeVisitor<Optional<Class<?>>>() {
 
             @Override
