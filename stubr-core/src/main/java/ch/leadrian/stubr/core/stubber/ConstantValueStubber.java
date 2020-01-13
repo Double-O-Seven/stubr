@@ -11,8 +11,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getLowerBound;
-import static ch.leadrian.stubr.core.util.Types.getOnlyUpperBound;
+import static ch.leadrian.stubr.core.util.Types.getBound;
 import static java.util.Objects.requireNonNull;
 
 final class ConstantValueStubber implements Stubber {
@@ -47,11 +46,9 @@ final class ConstantValueStubber implements Stubber {
                     return true;
                 }
 
-                if (getLowerBound(wildcardType).filter(type -> accept(type, this)).isPresent()) {
-                    return true;
-                } else {
-                    return getOnlyUpperBound(wildcardType).filter(type -> accept(type, this)).isPresent();
-                }
+                return getBound(wildcardType)
+                        .filter(type -> accept(type, this))
+                        .isPresent();
             }
 
             @Override
