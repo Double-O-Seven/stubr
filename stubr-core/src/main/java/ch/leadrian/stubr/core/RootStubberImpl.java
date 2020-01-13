@@ -30,7 +30,15 @@ final class RootStubberImpl implements RootStubber {
 
     static final class Builder implements RootStubberBuilder {
 
+        private final List<RootStubber> rootStubbers = new ArrayList<>();
         private final List<Stubber> stubbers = new ArrayList<>();
+
+        @Override
+        public RootStubberBuilder include(RootStubber rootStubber) {
+            requireNonNull(rootStubber, "rootStubber");
+            rootStubbers.add(0, rootStubber);
+            return this;
+        }
 
         @Override
         public RootStubberBuilder stubWith(Stubber stubber) {
@@ -70,7 +78,14 @@ final class RootStubberImpl implements RootStubber {
 
         @Override
         public RootStubber build() {
-            return new RootStubberImpl(stubbers);
+            RootStubber builtRootStubber = new RootStubberImpl(stubbers);
+            if (rootStubbers.isEmpty()) {
+                return builtRootStubber;
+            } else {
+                List<RootStubber> includedRootStubbers = new ArrayList<>(this.rootStubbers);
+                includedRootStubbers.add(0, builtRootStubber);
+                return RootStubber.compose(includedRootStubbers);
+            }
         }
     }
 }

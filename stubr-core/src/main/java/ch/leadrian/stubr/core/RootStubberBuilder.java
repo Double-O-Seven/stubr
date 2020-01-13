@@ -2,6 +2,8 @@ package ch.leadrian.stubr.core;
 
 public interface RootStubberBuilder {
 
+    RootStubberBuilder include(RootStubber rootStubber);
+
     RootStubberBuilder stubWith(Stubber stubber);
 
     RootStubberBuilder stubWith(Stubber stubber, TypeMatcher matcher);
