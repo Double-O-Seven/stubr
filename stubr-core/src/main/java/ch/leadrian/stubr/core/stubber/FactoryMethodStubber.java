@@ -8,6 +8,7 @@ import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -39,17 +40,23 @@ final class FactoryMethodStubber implements Stubber {
     @Override
     public Object stub(StubbingContext context, Type type) {
         Method method = getFactoryMethod(type).orElseThrow(UnsupportedOperationException::new);
-        Object[] parameterValues = stream(method.getParameters())
-                .map(parameter -> {
-                    MethodParameterStubbingSite site = StubbingSites.methodParameter(context.getSite(), method, parameter);
-                    return context.getStubber().stub(parameter.getParameterizedType(), site);
-                })
-                .toArray(Object[]::new);
+        Object[] parameterValues = stub(context, method);
         try {
             return method.invoke(null, parameterValues);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    private Object[] stub(StubbingContext context, Method method) {
+        return stream(method.getParameters())
+                .map(parameter -> stub(context, method, parameter))
+                .toArray(Object[]::new);
+    }
+
+    private Object stub(StubbingContext context, Method method, Parameter parameter) {
+        MethodParameterStubbingSite site = StubbingSites.methodParameter(context.getSite(), method, parameter);
+        return context.getStubber().stub(parameter.getParameterizedType(), site);
     }
 
     private Optional<Method> getFactoryMethod(Type type) {
@@ -58,18 +65,22 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private Optional<Method> getFactoryMethod(Class<?> targetClass) {
-        Method method = factoryMethodsByClass.computeIfAbsent(targetClass, clazz -> {
-            List<Method> constructors = stream(clazz.getMethods())
-                    .filter(m -> !m.isSynthetic() && !isPrivate(m.getModifiers()) && isStatic(m.getModifiers()))
-                    .filter(m -> canReturn(m, targetClass))
-                    .filter(methodMatcher::matches)
-                    .collect(toList());
+        Method method = factoryMethodsByClass.computeIfAbsent(targetClass, c -> {
+            List<Method> constructors = getFactoryMethods(targetClass);
             if (constructors.size() == 1) {
                 return constructors.get(0);
             }
             return null;
         });
         return Optional.ofNullable(method);
+    }
+
+    private List<Method> getFactoryMethods(Class<?> targetClass) {
+        return stream(targetClass.getMethods())
+                .filter(method -> !method.isSynthetic() && !isPrivate(method.getModifiers()) && isStatic(method.getModifiers()))
+                .filter(method -> canReturn(method, targetClass))
+                .filter(methodMatcher::matches)
+                .collect(toList());
     }
 
     private boolean canReturn(Method method, Class<?> type) {
