@@ -1,4 +1,4 @@
-package ch.leadrian.stubr.core.util;
+package ch.leadrian.stubr.core.type;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import java.lang.reflect.WildcardType;
 import java.util.List;
 import java.util.Optional;
 
-import static ch.leadrian.stubr.core.util.TypeLiterals.getTypeArgument;
+import static ch.leadrian.stubr.core.type.TypeLiterals.getTypeArgument;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TypesTest {

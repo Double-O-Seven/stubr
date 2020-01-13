@@ -1,4 +1,4 @@
-package ch.leadrian.stubr.core.util;
+package ch.leadrian.stubr.core.type;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

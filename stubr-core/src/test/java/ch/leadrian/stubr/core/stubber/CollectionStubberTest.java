@@ -4,7 +4,7 @@ import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import ch.leadrian.stubr.core.util.TypeLiteral;
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;

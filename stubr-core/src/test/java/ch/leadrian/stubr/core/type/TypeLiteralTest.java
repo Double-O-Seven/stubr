@@ -1,4 +1,4 @@
-package ch.leadrian.stubr.core.util;
+package ch.leadrian.stubr.core.type;
 
 import org.junit.jupiter.api.Test;
 

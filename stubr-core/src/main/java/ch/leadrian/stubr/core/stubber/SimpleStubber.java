@@ -2,7 +2,7 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.util.TypeVisitor;
+import ch.leadrian.stubr.core.type.TypeVisitor;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
@@ -10,8 +10,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
-import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getExplicitBound;
+import static ch.leadrian.stubr.core.type.TypeVisitor.accept;
+import static ch.leadrian.stubr.core.type.Types.getExplicitBound;
 
 public abstract class SimpleStubber<T> implements Stubber {
 

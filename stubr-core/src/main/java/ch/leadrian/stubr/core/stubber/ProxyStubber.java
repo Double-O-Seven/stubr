@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 
 final class ProxyStubber implements Stubber {
 

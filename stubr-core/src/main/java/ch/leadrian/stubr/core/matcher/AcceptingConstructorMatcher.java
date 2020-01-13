@@ -7,7 +7,7 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 

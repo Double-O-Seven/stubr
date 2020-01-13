@@ -1,4 +1,4 @@
-package ch.leadrian.stubr.core.util;
+package ch.leadrian.stubr.core.type;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.util.TypeLiterals.getTypeArgument;
+import static ch.leadrian.stubr.core.type.TypeLiterals.getTypeArgument;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;

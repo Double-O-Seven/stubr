@@ -6,7 +6,7 @@ import ch.leadrian.stubr.core.StubbingContext;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static com.google.common.base.Defaults.defaultValue;
 import static com.google.common.primitives.Primitives.unwrap;
 

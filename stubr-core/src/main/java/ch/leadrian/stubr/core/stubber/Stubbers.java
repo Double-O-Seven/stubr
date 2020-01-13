@@ -7,7 +7,7 @@ import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
 import ch.leadrian.stubr.core.matcher.ConstructorMatchers;
 import ch.leadrian.stubr.core.matcher.MethodMatchers;
-import ch.leadrian.stubr.core.util.TypeLiteral;
+import ch.leadrian.stubr.core.type.TypeLiteral;
 
 import java.util.Collection;
 import java.util.List;

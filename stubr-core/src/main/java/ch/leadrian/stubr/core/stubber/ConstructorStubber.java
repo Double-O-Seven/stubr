@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;

@@ -6,7 +6,7 @@ import ch.leadrian.stubr.core.StubbingContext;
 
 import java.lang.reflect.Type;
 
-import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 
 enum RootStubberStubber implements Stubber {
     INSTANCE;
