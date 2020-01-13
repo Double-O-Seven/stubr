@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@SuppressWarnings("UnstableApiUsage")
 class TypeVisitorTest {
 
     @Test

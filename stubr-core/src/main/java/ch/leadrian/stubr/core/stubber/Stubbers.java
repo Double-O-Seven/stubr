@@ -7,6 +7,7 @@ import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
 import ch.leadrian.stubr.core.matcher.ConstructorMatchers;
 import ch.leadrian.stubr.core.matcher.MethodMatchers;
+import ch.leadrian.stubr.core.util.TypeLiteral;
 
 import java.util.Collection;
 import java.util.List;
@@ -60,6 +61,10 @@ public final class Stubbers {
 
     public static <T> Stubber constantValue(Class<T> targetClass, T value) {
         return new ConstantValueStubber(targetClass, value);
+    }
+
+    public static <T> Stubber constantValue(TypeLiteral<T> type, T value) {
+        return new ConstantValueStubber(type.getType(), value);
     }
 
     public static Stubber constructor(ConstructorMatcher matcher) {

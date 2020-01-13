@@ -22,7 +22,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("UnstableApiUsage")
 class CollectionStubberTest {
 
     private StubbingContext context;
