@@ -20,7 +20,7 @@ enum DefaultValueStubber implements Stubber {
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        return getDefaultValue(type).orElseThrow(IllegalStateException::new);
+        return getDefaultValue(type).orElseThrow(UnsupportedOperationException::new);
     }
 
     private Optional<?> getDefaultValue(Type type) {

@@ -38,7 +38,7 @@ final class FactoryMethodStubber implements Stubber {
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        Method method = getFactoryMethod(type).orElseThrow(IllegalStateException::new);
+        Method method = getFactoryMethod(type).orElseThrow(UnsupportedOperationException::new);
         Object[] parameterValues = stream(method.getParameters())
                 .map(parameter -> {
                     MethodParameterStubbingSite site = StubbingSites.methodParameter(context.getSite(), method, parameter);

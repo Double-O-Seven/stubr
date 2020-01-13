@@ -35,7 +35,7 @@ final class ProxyStubber implements Stubber {
     public Object stub(StubbingContext context, Type type) {
         return getRawType(type)
                 .map(clazz -> createProxy(clazz, getInvocationHandler(context)))
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(UnsupportedOperationException::new);
     }
 
     private StubbingInvocationHandler getInvocationHandler(StubbingContext context) {
