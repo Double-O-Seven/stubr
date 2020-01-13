@@ -4,7 +4,7 @@ import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import com.google.common.reflect.TypeToken;
+import ch.leadrian.stubr.core.util.TypeLiteral;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static ch.leadrian.stubr.core.TypeTokens.getTypeArgument;
 import static ch.leadrian.stubr.core.util.Types.getRawType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -81,7 +80,7 @@ class CollectionStubberTest {
 
     @Test
     void givenCollectionSizeOfZeroItShouldAcceptParameterizedList() {
-        Type type = new TypeToken<Collection<String>>() {
+        Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
@@ -93,7 +92,7 @@ class CollectionStubberTest {
 
     @Test
     void givenCollectionSizeOfZeroItShouldStubParameterizedList() {
-        Type type = new TypeToken<Collection<String>>() {
+        Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
@@ -105,7 +104,7 @@ class CollectionStubberTest {
 
     @Test
     void givenCollectionSizeGreaterThanZeroItShouldAcceptParameterizedList() {
-        Type type = new TypeToken<Collection<String>>() {
+        Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -118,7 +117,7 @@ class CollectionStubberTest {
     @SuppressWarnings("unchecked")
     @Test
     void givenCollectionSizeGreaterThanZeroItShouldStubParameterizedList() {
-        Type type = new TypeToken<Collection<String>>() {
+        Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -132,7 +131,7 @@ class CollectionStubberTest {
 
     @Test
     void shouldAcceptListWithUpperBoundedWildcardType() {
-        Type type = new TypeToken<Collection<? extends Number>>() {
+        Type type = new TypeLiteral<Collection<? extends Number>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -145,7 +144,7 @@ class CollectionStubberTest {
     @SuppressWarnings("unchecked")
     @Test
     void shouldStubListWithUpperBoundedWildcardType() {
-        Type type = new TypeToken<Collection<? extends Number>>() {
+        Type type = new TypeLiteral<Collection<? extends Number>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -159,7 +158,7 @@ class CollectionStubberTest {
 
     @Test
     void shouldAcceptListWithLowerBoundedWildcardType() {
-        Type type = new TypeToken<Collection<? super Number>>() {
+        Type type = new TypeLiteral<Collection<? super Number>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -172,7 +171,7 @@ class CollectionStubberTest {
     @SuppressWarnings("unchecked")
     @Test
     void shouldStubListWithLowerBoundedWildcardType() {
-        Type type = new TypeToken<Collection<? super Number>>() {
+        Type type = new TypeLiteral<Collection<? super Number>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -186,7 +185,7 @@ class CollectionStubberTest {
 
     @Test
     <T> void shouldAcceptListWithTypeVariable() {
-        Type type = new TypeToken<Collection<T>>() {
+        Type type = new TypeLiteral<Collection<T>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -198,9 +197,8 @@ class CollectionStubberTest {
 
     @Test
     <T> void shouldNotAcceptTypeVariable() {
-        TypeToken<Collection<T>> token = new TypeToken<Collection<T>>() {
-        };
-        Type type = getTypeArgument(token, 0);
+        Type type = new TypeLiteral<T>() {
+        }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
@@ -211,9 +209,8 @@ class CollectionStubberTest {
 
     @Test
     <T> void shouldThrowExceptionWhenStubbingTypeVariable() {
-        TypeToken<Collection<T>> token = new TypeToken<Collection<T>>() {
-        };
-        Type type = getTypeArgument(token, 0);
+        Type type = new TypeLiteral<T>() {
+        }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
@@ -224,9 +221,20 @@ class CollectionStubberTest {
 
     @Test
     <T> void shouldNotAcceptGenericArrayType() {
-        TypeToken<Collection<T[]>> token = new TypeToken<Collection<T[]>>() {
-        };
-        Type type = getTypeArgument(token, 0);
+        Type type = new TypeLiteral<T[]>() {
+        }.getType();
+        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+
+        Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    <T> void shouldThrowExceptionWhenStubbingGenericArrayType() {
+        Type type = new TypeLiteral<T[]>() {
+        }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
@@ -248,7 +256,7 @@ class CollectionStubberTest {
 
     @Test
     void shouldNotAcceptParameterizedCollectionThatIsNoExactMatch() {
-        Type type = new TypeToken<ArrayList<String>>() {
+        Type type = new TypeLiteral<ArrayList<String>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
@@ -271,7 +279,7 @@ class CollectionStubberTest {
 
     @Test
     void shouldUseParameterizedTypeStubbingSite() {
-        Type type = new TypeToken<Collection<Number>>() {
+        Type type = new TypeLiteral<Collection<Number>>() {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 1);
 

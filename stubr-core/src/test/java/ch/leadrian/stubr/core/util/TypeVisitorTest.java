@@ -1,6 +1,5 @@
 package ch.leadrian.stubr.core.util;
 
-import com.google.common.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.GenericArrayType;
@@ -10,7 +9,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.TypeTokens.getTypeArgument;
+import static ch.leadrian.stubr.core.util.TypeLiterals.getTypeArgument;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
@@ -33,7 +32,7 @@ class TypeVisitorTest {
     void shouldVisitParameterizedType() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        Type type = new TypeToken<List<String>>() {
+        Type type = new TypeLiteral<List<String>>() {
         }.getType();
 
         TypeVisitor.accept(type, visitor);
@@ -45,9 +44,8 @@ class TypeVisitorTest {
     void shouldVisitWildcardType() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        TypeToken<List<?>> token = new TypeToken<List<?>>() {
-        };
-        Type type = getTypeArgument(token, 0);
+        Type type = getTypeArgument(new TypeLiteral<List<?>>() {
+        }, 0);
 
         TypeVisitor.accept(type, visitor);
 
@@ -58,9 +56,8 @@ class TypeVisitorTest {
     <T> void shouldVisitTypeVariable() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        TypeToken<List<T>> token = new TypeToken<List<T>>() {
-        };
-        Type type = getTypeArgument(token, 0);
+        Type type = new TypeLiteral<T>() {
+        }.getType();
 
         TypeVisitor.accept(type, visitor);
 
@@ -71,9 +68,8 @@ class TypeVisitorTest {
     <T> void shouldVisitGenericArrayType() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        TypeToken<List<T[]>> token = new TypeToken<List<T[]>>() {
-        };
-        Type type = getTypeArgument(token, 0);
+        Type type = new TypeLiteral<T[]>() {
+        }.getType();
 
         TypeVisitor.accept(type, visitor);
 
