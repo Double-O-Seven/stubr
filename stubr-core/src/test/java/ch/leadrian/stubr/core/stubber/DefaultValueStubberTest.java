@@ -66,8 +66,7 @@ class DefaultValueStubberTest {
                     float.class,
                     Float.class,
                     double.class,
-                    Double.class,
-                    String.class)
+                    Double.class)
                     .map(Arguments::of);
         }
     }
@@ -81,8 +80,8 @@ class DefaultValueStubberTest {
                     Arguments.of(Byte.class, (byte) 0),
                     Arguments.of(short.class, (short) 0),
                     Arguments.of(Short.class, (short) 0),
-                    Arguments.of(char.class, '?'),
-                    Arguments.of(Character.class, '?'),
+                    Arguments.of(char.class, '\0'),
+                    Arguments.of(Character.class, '\0'),
                     Arguments.of(int.class, 0),
                     Arguments.of(Integer.class, 0),
                     Arguments.of(long.class, 0L),
@@ -90,8 +89,7 @@ class DefaultValueStubberTest {
                     Arguments.of(float.class, 0f),
                     Arguments.of(Float.class, 0f),
                     Arguments.of(double.class, 0.0),
-                    Arguments.of(Double.class, 0.0),
-                    Arguments.of(String.class, ""));
+                    Arguments.of(Double.class, 0.0));
         }
     }
 

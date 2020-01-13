@@ -4,66 +4,30 @@ import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static com.google.common.base.Defaults.defaultValue;
+import static com.google.common.primitives.Primitives.unwrap;
 
 enum DefaultValueStubber implements Stubber {
     INSTANCE;
 
-    private final DefaultValuesMap defaultValuesMap = new DefaultValuesMap()
-            .add(boolean.class, false)
-            .add(false)
-            .add(byte.class, (byte) 0)
-            .add((byte) 0)
-            .add(short.class, (short) 0)
-            .add((short) 0)
-            .add(char.class, '?')
-            .add('?')
-            .add(int.class, 0)
-            .add(0)
-            .add(long.class, 0L)
-            .add(0L)
-            .add(float.class, 0f)
-            .add(0f)
-            .add(double.class, 0.0)
-            .add(0.0)
-            .add("")
-            .add(Number.class, 0)
-            .add(BigInteger.ZERO)
-            .add(BigDecimal.ZERO);
-
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return defaultValuesMap.get(type).isPresent();
+        return getDefaultValue(type).isPresent();
     }
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        return defaultValuesMap.get(type).orElseThrow(IllegalStateException::new);
+        return getDefaultValue(type).orElseThrow(IllegalStateException::new);
     }
 
-    private static final class DefaultValuesMap {
+    private Optional<?> getDefaultValue(Type type) {
+        return getRawType(type).flatMap(this::getDefaultValue);
+    }
 
-        private final Map<Class<?>, Object> defaultValuesByClass = new HashMap<>();
-
-        DefaultValuesMap add(Object value) {
-            defaultValuesByClass.put(value.getClass(), value);
-            return this;
-        }
-
-        <T> DefaultValuesMap add(Class<T> clazz, T value) {
-            defaultValuesByClass.put(clazz, value);
-            return this;
-        }
-
-        Optional<Object> get(Type type) {
-            return getRawType(type).map(defaultValuesByClass::get);
-        }
-
+    private Optional<?> getDefaultValue(Class<?> clazz) {
+        return Optional.ofNullable(defaultValue(unwrap(clazz)));
     }
 }
