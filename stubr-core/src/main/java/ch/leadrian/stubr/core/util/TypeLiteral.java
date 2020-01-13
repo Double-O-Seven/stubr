@@ -1,10 +1,18 @@
 package ch.leadrian.stubr.core.util;
 
+import ch.leadrian.equalizer.EqualsAndHashCode;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
+
 @SuppressWarnings("unused")
 public abstract class TypeLiteral<T> {
+
+    private static final EqualsAndHashCode<TypeLiteral> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(TypeLiteral.class)
+            .compare(TypeLiteral::getType)
+            .build();
 
     private final Type type;
 
@@ -22,5 +30,15 @@ public abstract class TypeLiteral<T> {
 
     public final Type getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EQUALS_AND_HASH_CODE.equals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return EQUALS_AND_HASH_CODE.hashCode(this);
     }
 }
