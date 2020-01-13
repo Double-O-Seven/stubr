@@ -11,7 +11,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getBound;
+import static ch.leadrian.stubr.core.util.Types.getExplicitBound;
 
 public abstract class SimpleStubber<T> implements Stubber {
 
@@ -31,7 +31,7 @@ public abstract class SimpleStubber<T> implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getBound(wildcardType)
+                return getExplicitBound(wildcardType)
                         .filter(t -> accept(t, this))
                         .isPresent();
             }
@@ -68,7 +68,7 @@ public abstract class SimpleStubber<T> implements Stubber {
 
             @Override
             public T visit(WildcardType wildcardType) {
-                return getBound(wildcardType)
+                return getExplicitBound(wildcardType)
                         .map(t -> accept(t, this))
                         .orElseThrow(UnsupportedOperationException::new);
             }

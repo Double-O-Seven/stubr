@@ -29,7 +29,7 @@ public final class Types {
 
             @Override
             public Optional<Class<?>> visit(WildcardType wildcardType) {
-                return getBound(wildcardType).flatMap(type -> accept(type, this));
+                return getExplicitBound(wildcardType).flatMap(type -> accept(type, this));
             }
 
             @Override
@@ -60,7 +60,7 @@ public final class Types {
         return Optional.empty();
     }
 
-    public static Optional<Type> getBound(WildcardType wildcardType) {
+    public static Optional<Type> getExplicitBound(WildcardType wildcardType) {
         Optional<Type> lowerBound = getLowerBound(wildcardType);
         if (lowerBound.isPresent()) {
             return lowerBound;
