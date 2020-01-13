@@ -162,4 +162,42 @@ class TypesTest {
 
     }
 
+    @Nested
+    class GetMostSpecificTypeTest {
+
+        @Test
+        void givenOnlyLowerBoundItShouldReturnLowerBound() {
+            WildcardType type = (WildcardType) getTypeArgument(new TypeLiteral<List<? super Number>>() {
+            }, 0);
+
+            Optional<Type> upperBound = Types.getMostSpecificType(type);
+
+            assertThat(upperBound)
+                    .hasValue(Number.class);
+        }
+
+        @Test
+        void shouldReturnUpperBound() {
+            WildcardType type = (WildcardType) getTypeArgument(new TypeLiteral<List<? extends Number>>() {
+            }, 0);
+
+            Optional<Type> upperBound = Types.getMostSpecificType(type);
+
+            assertThat(upperBound)
+                    .hasValue(Number.class);
+        }
+
+        @Test
+        void givenNoExplicitBoundsItShouldReturnObject() {
+            WildcardType type = (WildcardType) getTypeArgument(new TypeLiteral<List<?>>() {
+            }, 0);
+
+            Optional<Type> upperBound = Types.getMostSpecificType(type);
+
+            assertThat(upperBound)
+                    .hasValue(Object.class);
+        }
+
+    }
+
 }

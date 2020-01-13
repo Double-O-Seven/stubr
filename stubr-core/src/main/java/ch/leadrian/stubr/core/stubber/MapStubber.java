@@ -18,7 +18,7 @@ import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getRawType;
+import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 
@@ -53,7 +53,7 @@ final class MapStubber<T extends Map> implements Stubber {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getRawType(wildcardType)
+                return getMostSpecificType(wildcardType)
                         .filter(type -> accept(type, this))
                         .isPresent();
             }
@@ -99,7 +99,7 @@ final class MapStubber<T extends Map> implements Stubber {
 
             @Override
             public T visit(WildcardType wildcardType) {
-                return getRawType(wildcardType)
+                return getMostSpecificType(wildcardType)
                         .map(type -> accept(type, this))
                         .orElseThrow(IllegalStateException::new);
             }
