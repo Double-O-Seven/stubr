@@ -42,7 +42,7 @@ enum OptionalStubber implements Stubber {
                 StubbingSite site = StubbingSites.parameterizedType(context.getSite(), parameterizedType, 0);
                 Result<?> result = context.getStubber().tryToStub(parameterizedType.getActualTypeArguments()[0], site);
                 if (result.isSuccess()) {
-                    return Optional.of(result);
+                    return Optional.ofNullable(result);
                 }
                 return Optional.empty();
             }
