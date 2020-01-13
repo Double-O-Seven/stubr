@@ -1,95 +1,44 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Result;
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import ch.leadrian.stubr.core.util.TypeVisitor;
 
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 import java.util.Optional;
 
-import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getBound;
+final class OptionalStubber extends SimpleStubber<Optional<Object>> {
 
-enum OptionalStubber implements Stubber {
-    EMPTY(EmptyStubbingStrategy.INSTANCE),
-    PRESENT(new PresentStubbingStrategy()),
-    PRESENT_IF_POSSIBLE(new PresentIfPossibleStubbingStrategy());
+    static final OptionalStubber EMPTY = new OptionalStubber(EmptyStubbingStrategy.INSTANCE);
+    static final OptionalStubber PRESENT = new OptionalStubber(new PresentStubbingStrategy());
+    static final OptionalStubber PRESENT_IF_POSSIBLE = new OptionalStubber(new PresentIfPossibleStubbingStrategy());
 
     private final StubbingStrategy strategy;
 
-    OptionalStubber(StubbingStrategy strategy) {
+    private OptionalStubber(StubbingStrategy strategy) {
         this.strategy = strategy;
     }
 
     @Override
-    public boolean accepts(StubbingContext context, Type type) {
-        return accept(type, new TypeVisitor<Boolean>() {
-
-            @Override
-            public Boolean visit(Class<?> clazz) {
-                return Optional.class == clazz && strategy.isEmptyAllowed();
-            }
-
-            @Override
-            public Boolean visit(ParameterizedType parameterizedType) {
-                return Optional.class == parameterizedType.getRawType();
-            }
-
-            @Override
-            public Boolean visit(WildcardType wildcardType) {
-                return getBound(wildcardType)
-                        .filter(type -> accept(type, this))
-                        .isPresent();
-            }
-
-            @Override
-            public Boolean visit(TypeVariable<?> typeVariable) {
-                return false;
-            }
-
-            @Override
-            public Boolean visit(GenericArrayType genericArrayType) {
-                return false;
-            }
-        });
+    protected boolean accepts(StubbingContext context, Class<?> type) {
+        return Optional.class == type && strategy.isEmptyAllowed();
     }
 
     @Override
-    public Optional<Object> stub(StubbingContext context, Type type) {
-        return accept(type, new TypeVisitor<Optional<Object>>() {
+    protected boolean accepts(StubbingContext context, ParameterizedType parameterizedType) {
+        return Optional.class == parameterizedType.getRawType();
+    }
 
-            @Override
-            public Optional<Object> visit(Class<?> clazz) {
-                return Optional.empty();
-            }
+    @Override
+    protected Optional<Object> stub(StubbingContext context, Class<?> type) {
+        return Optional.empty();
+    }
 
-            @Override
-            public Optional<Object> visit(ParameterizedType parameterizedType) {
-                return strategy.stub(context, parameterizedType);
-            }
-
-            @Override
-            public Optional<Object> visit(WildcardType wildcardType) {
-                return getBound(wildcardType).flatMap(type -> accept(type, this));
-            }
-
-            @Override
-            public Optional<Object> visit(TypeVariable<?> typeVariable) {
-                return Optional.empty();
-            }
-
-            @Override
-            public Optional<Object> visit(GenericArrayType genericArrayType) {
-                return Optional.empty();
-            }
-        });
+    @Override
+    protected Optional<Object> stub(StubbingContext context, ParameterizedType type) {
+        return strategy.stub(context, type);
     }
 
     private interface StubbingStrategy {

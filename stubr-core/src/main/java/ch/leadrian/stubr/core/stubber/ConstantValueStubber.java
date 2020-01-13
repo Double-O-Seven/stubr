@@ -1,20 +1,13 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.util.TypeVisitor;
 
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 
-import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getBound;
 import static java.util.Objects.requireNonNull;
 
-final class ConstantValueStubber implements Stubber {
+final class ConstantValueStubber extends SimpleStubber<Object> {
 
     private final Type valueType;
     private final Object value;
@@ -27,44 +20,22 @@ final class ConstantValueStubber implements Stubber {
     }
 
     @Override
-    public boolean accepts(StubbingContext context, Type type) {
-        return accept(type, new TypeVisitor<Boolean>() {
-
-            @Override
-            public Boolean visit(Class<?> clazz) {
-                return valueType == clazz;
-            }
-
-            @Override
-            public Boolean visit(ParameterizedType parameterizedType) {
-                return valueType.equals(parameterizedType);
-            }
-
-            @Override
-            public Boolean visit(WildcardType wildcardType) {
-                if (valueType.equals(wildcardType)) {
-                    return true;
-                }
-
-                return getBound(wildcardType)
-                        .filter(type -> accept(type, this))
-                        .isPresent();
-            }
-
-            @Override
-            public Boolean visit(TypeVariable<?> typeVariable) {
-                return valueType.equals(typeVariable);
-            }
-
-            @Override
-            public Boolean visit(GenericArrayType genericArrayType) {
-                return valueType.equals(genericArrayType);
-            }
-        });
+    protected boolean accepts(StubbingContext context, Class<?> type) {
+        return valueType == type;
     }
 
     @Override
-    public Object stub(StubbingContext context, Type type) {
+    protected boolean accepts(StubbingContext context, ParameterizedType type) {
+        return valueType.equals(type);
+    }
+
+    @Override
+    protected Object stub(StubbingContext context, Class<?> type) {
+        return value;
+    }
+
+    @Override
+    protected Object stub(StubbingContext context, ParameterizedType type) {
         return value;
     }
 }

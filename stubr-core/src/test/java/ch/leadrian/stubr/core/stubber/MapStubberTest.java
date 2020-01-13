@@ -217,7 +217,7 @@ class MapStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
@@ -241,7 +241,7 @@ class MapStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test

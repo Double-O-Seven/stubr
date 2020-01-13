@@ -215,7 +215,7 @@ class CollectionStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
@@ -224,10 +224,10 @@ class CollectionStubberTest {
         }.getType();
         Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
-        Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
+        boolean accepts = stubber.accepts(context, type);
 
-        assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException.class);
+        assertThat(accepts)
+                .isFalse();
     }
 
     @Test
@@ -239,7 +239,7 @@ class CollectionStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
