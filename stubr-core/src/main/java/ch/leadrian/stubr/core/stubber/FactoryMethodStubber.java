@@ -76,7 +76,7 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private List<Method> getFactoryMethods(Class<?> targetClass) {
-        return stream(targetClass.getMethods())
+        return stream(targetClass.getDeclaredMethods())
                 .filter(method -> !method.isSynthetic() && !isPrivate(method.getModifiers()) && isStatic(method.getModifiers()))
                 .filter(method -> canReturn(method, targetClass))
                 .filter(methodMatcher::matches)

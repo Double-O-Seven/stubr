@@ -74,7 +74,7 @@ final class ConstructorStubber implements Stubber {
     }
 
     private List<Constructor<?>> getConstructors(Class<?> type) {
-        return stream(type.getConstructors())
+        return stream(type.getDeclaredConstructors())
                 .filter(c -> !c.isSynthetic() && !isPrivate(c.getModifiers()))
                 .filter(constructorMatcher::matches)
                 .collect(toList());
