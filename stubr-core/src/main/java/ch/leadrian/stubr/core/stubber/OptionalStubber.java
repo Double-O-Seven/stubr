@@ -15,7 +15,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Optional;
 
 import static ch.leadrian.stubr.core.util.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.util.Types.getMostSpecificType;
+import static ch.leadrian.stubr.core.util.Types.getRawType;
 
 enum OptionalStubber implements Stubber {
     EMPTY(EmptyStubbingStrategy.INSTANCE),
@@ -75,7 +75,7 @@ enum OptionalStubber implements Stubber {
 
             @Override
             public Optional<Object> visit(WildcardType wildcardType) {
-                return getMostSpecificType(wildcardType).flatMap(upperBound -> accept(upperBound, this));
+                return getRawType(wildcardType).flatMap(type -> accept(type, this));
             }
 
             @Override
