@@ -7,7 +7,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-final class CompositeRootStubber implements RootStubber {
+final class CompositeRootStubber extends RootStubber {
 
     private final List<RootStubber> rootStubbers;
 
@@ -17,9 +17,9 @@ final class CompositeRootStubber implements RootStubber {
     }
 
     @Override
-    public Result<?> tryToStub(Type type, StubbingSite site) {
+    protected Result<?> tryToStub(Type type, StubbingContext context) {
         return rootStubbers.stream()
-                .map(rootStubber -> rootStubber.tryToStub(type, site))
+                .map(rootStubber -> rootStubber.tryToStub(type, context))
                 .filter(Result::isSuccess)
                 .findFirst()
                 .orElse(Result.failure());

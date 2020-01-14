@@ -10,7 +10,7 @@ import java.util.List;
 import static java.util.Collections.addAll;
 import static java.util.Objects.requireNonNull;
 
-final class RootStubberImpl implements RootStubber {
+final class RootStubberImpl extends RootStubber {
 
     private final List<Stubber> stubbers;
 
@@ -19,8 +19,7 @@ final class RootStubberImpl implements RootStubber {
     }
 
     @Override
-    public Result<?> tryToStub(Type type, StubbingSite site) {
-        StubbingContext context = new StubbingContext(this, site);
+    protected Result<?> tryToStub(Type type, StubbingContext context) {
         return stubbers.stream()
                 .filter(stubber -> stubber.accepts(context, type))
                 .map(stubber -> Result.success(stubber.stub(context, type)))
