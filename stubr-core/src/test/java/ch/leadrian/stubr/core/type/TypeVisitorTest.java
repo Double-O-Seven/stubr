@@ -9,7 +9,6 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.type.TypeLiterals.getTypeArgument;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
@@ -43,8 +42,8 @@ class TypeVisitorTest {
     void shouldVisitWildcardType() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        Type type = getTypeArgument(new TypeLiteral<List<?>>() {
-        }, 0);
+        Type type = new ParameterizedTypeLiteral<List<?>>() {
+        }.getActualTypeArgument(0);
 
         TypeVisitor.accept(type, visitor);
 

@@ -28,7 +28,7 @@ public abstract class TypeLiteral<T> {
         type = typeArguments[0];
     }
 
-    public final Type getType() {
+    public Type getType() {
         return type;
     }
 
