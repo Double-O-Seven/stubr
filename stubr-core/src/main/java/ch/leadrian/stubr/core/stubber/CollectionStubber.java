@@ -32,22 +32,22 @@ final class CollectionStubber<T extends Collection> extends SimpleStubber<T> {
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, Class<?> type) {
+    protected boolean acceptsClass(StubbingContext context, Class<?> type) {
         return collectionClass == type && collectionSize.applyAsInt(context) == 0;
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, ParameterizedType type) {
+    protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
         return collectionClass == type.getRawType() && type.getActualTypeArguments().length == 1;
     }
 
     @Override
-    protected T stub(StubbingContext context, Class<?> type) {
+    protected T stubClass(StubbingContext context, Class<?> type) {
         return collectionFactory.apply(emptyList());
     }
 
     @Override
-    protected T stub(StubbingContext context, ParameterizedType type) {
+    protected T stubParameterizedType(StubbingContext context, ParameterizedType type) {
         Type valueType = type.getActualTypeArguments()[0];
         StubbingSite site = StubbingSites.parameterizedType(context.getSite(), type, 0);
         List<Object> values = IntStream.iterate(0, i -> i + 1)

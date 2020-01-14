@@ -21,12 +21,12 @@ public abstract class SimpleStubber<T> implements Stubber {
 
             @Override
             public Boolean visit(Class<?> clazz) {
-                return accepts(context, clazz);
+                return acceptsClass(context, clazz);
             }
 
             @Override
             public Boolean visit(ParameterizedType parameterizedType) {
-                return accepts(context, parameterizedType);
+                return acceptsParameterizedType(context, parameterizedType);
             }
 
             @Override
@@ -48,9 +48,9 @@ public abstract class SimpleStubber<T> implements Stubber {
         });
     }
 
-    protected abstract boolean accepts(StubbingContext context, Class<?> type);
+    protected abstract boolean acceptsClass(StubbingContext context, Class<?> type);
 
-    protected abstract boolean accepts(StubbingContext context, ParameterizedType type);
+    protected abstract boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type);
 
     @Override
     public T stub(StubbingContext context, Type type) {
@@ -58,12 +58,12 @@ public abstract class SimpleStubber<T> implements Stubber {
 
             @Override
             public T visit(Class<?> clazz) {
-                return stub(context, clazz);
+                return stubClass(context, clazz);
             }
 
             @Override
             public T visit(ParameterizedType parameterizedType) {
-                return stub(context, parameterizedType);
+                return stubParameterizedType(context, parameterizedType);
             }
 
             @Override
@@ -85,7 +85,7 @@ public abstract class SimpleStubber<T> implements Stubber {
         });
     }
 
-    protected abstract T stub(StubbingContext context, Class<?> type);
+    protected abstract T stubClass(StubbingContext context, Class<?> type);
 
-    protected abstract T stub(StubbingContext context, ParameterizedType type);
+    protected abstract T stubParameterizedType(StubbingContext context, ParameterizedType type);
 }

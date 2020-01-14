@@ -22,22 +22,22 @@ final class OptionalStubber extends SimpleStubber<Optional<Object>> {
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, Class<?> type) {
+    protected boolean acceptsClass(StubbingContext context, Class<?> type) {
         return Optional.class == type && strategy.isEmptyAllowed();
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, ParameterizedType parameterizedType) {
+    protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType parameterizedType) {
         return Optional.class == parameterizedType.getRawType();
     }
 
     @Override
-    protected Optional<Object> stub(StubbingContext context, Class<?> type) {
+    protected Optional<Object> stubClass(StubbingContext context, Class<?> type) {
         return Optional.empty();
     }
 
     @Override
-    protected Optional<Object> stub(StubbingContext context, ParameterizedType type) {
+    protected Optional<Object> stubParameterizedType(StubbingContext context, ParameterizedType type) {
         return strategy.stub(context, type);
     }
 

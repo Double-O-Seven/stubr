@@ -31,22 +31,22 @@ final class MapStubber<T extends Map> extends SimpleStubber<T> {
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, Class<?> type) {
+    protected boolean acceptsClass(StubbingContext context, Class<?> type) {
         return mapClass == type && mapSize.applyAsInt(context) == 0;
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, ParameterizedType type) {
+    protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
         return mapClass == type.getRawType() && type.getActualTypeArguments().length == 2;
     }
 
     @Override
-    protected T stub(StubbingContext context, Class<?> type) {
+    protected T stubClass(StubbingContext context, Class<?> type) {
         return mapFactory.apply(emptyMap());
     }
 
     @Override
-    protected T stub(StubbingContext context, ParameterizedType type) {
+    protected T stubParameterizedType(StubbingContext context, ParameterizedType type) {
         Type keyType = type.getActualTypeArguments()[0];
         Type valueType = type.getActualTypeArguments()[1];
         StubbingSite keySite = StubbingSites.parameterizedType(context.getSite(), type, 0);

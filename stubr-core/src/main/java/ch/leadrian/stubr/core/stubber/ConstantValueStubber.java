@@ -20,22 +20,22 @@ final class ConstantValueStubber extends SimpleStubber<Object> {
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, Class<?> type) {
+    protected boolean acceptsClass(StubbingContext context, Class<?> type) {
         return valueType == type;
     }
 
     @Override
-    protected boolean accepts(StubbingContext context, ParameterizedType type) {
+    protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
         return valueType.equals(type);
     }
 
     @Override
-    protected Object stub(StubbingContext context, Class<?> type) {
+    protected Object stubClass(StubbingContext context, Class<?> type) {
         return value;
     }
 
     @Override
-    protected Object stub(StubbingContext context, ParameterizedType type) {
+    protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
         return value;
     }
 }
