@@ -38,7 +38,7 @@ class FactoryMethodStubberTest {
                     } else if (rawType == int.class) {
                         return 1337;
                     } else {
-                        throw new UnsupportedOperationException();
+                        throw new AssertionError();
                     }
                 });
         context = new StubbingContext(rootStubber, StubbingSites.unknown());

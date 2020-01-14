@@ -33,7 +33,7 @@ class MapStubberTest {
         rootStubber = mock(RootStubber.class);
         when(rootStubber.stub(any(Type.class), any()))
                 .thenAnswer(invocation -> {
-                    Class<?> rawType = getRawType(invocation.getArgument(0, Type.class)).orElseThrow(UnsupportedOperationException::new);
+                    Class<?> rawType = getRawType(invocation.getArgument(0, Type.class)).orElseThrow(AssertionError::new);
                     if (rawType == String.class) {
                         return "Test";
                     } else if (rawType == Integer.class) {
@@ -41,7 +41,7 @@ class MapStubberTest {
                     } else if (rawType == Number.class) {
                         return 1337;
                     } else {
-                        throw new UnsupportedOperationException();
+                        throw new AssertionError();
                     }
                 });
         context = new StubbingContext(rootStubber, StubbingSites.unknown());
