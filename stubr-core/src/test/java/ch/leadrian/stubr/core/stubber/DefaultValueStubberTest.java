@@ -45,7 +45,7 @@ class DefaultValueStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> DefaultValueStubber.INSTANCE.stub(null, Foo.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 
     private static final class AcceptedTypesArgumentsProvider implements ArgumentsProvider {

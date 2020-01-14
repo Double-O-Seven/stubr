@@ -1,7 +1,6 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
@@ -50,7 +49,7 @@ class MapStubberTest {
     @Test
     void givenMapSizeOfZeroItShouldAcceptNotParameterizedMap() {
         Type type = Map.class;
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -62,7 +61,7 @@ class MapStubberTest {
     @Test
     void givenMapSizeOfZeroItShouldStubNotParameterizedMap() {
         Type type = Map.class;
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
 
         Object stub = stubber.stub(context, type);
 
@@ -73,7 +72,7 @@ class MapStubberTest {
     @Test
     void givenMapSizeGreaterThanZeroItShouldNotAcceptNotParameterizedMap() {
         Type type = Map.class;
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -85,7 +84,7 @@ class MapStubberTest {
     void givenMapSizeOfZeroItShouldAcceptParameterizedMap() {
         Type type = new TypeLiteral<Map<Integer, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -98,7 +97,7 @@ class MapStubberTest {
     void givenMapSizeOfZeroItShouldStubParameterizedMap() {
         Type type = new TypeLiteral<Map<Integer, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 0);
 
         Object stub = stubber.stub(context, type);
 
@@ -110,7 +109,7 @@ class MapStubberTest {
     void givenMapSizeGreaterThanZeroItShouldAcceptParameterizedMap() {
         Type type = new TypeLiteral<Map<Integer, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -123,7 +122,7 @@ class MapStubberTest {
     void givenMapSizeGreaterThanZeroItShouldStubParameterizedMap() {
         Type type = new TypeLiteral<Map<Integer, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         Object stub = stubber.stub(context, type);
 
@@ -136,7 +135,7 @@ class MapStubberTest {
     void shouldAcceptMapWithUpperBoundedWildcardType() {
         Type type = new TypeLiteral<Map<? extends Number, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -149,7 +148,7 @@ class MapStubberTest {
     void shouldStubMapWithUpperBoundedWildcardType() {
         Type type = new TypeLiteral<Map<? extends Number, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         Object stub = stubber.stub(context, type);
 
@@ -162,7 +161,7 @@ class MapStubberTest {
     void shouldAcceptMapWithLowerBoundedWildcardType() {
         Type type = new TypeLiteral<Map<? super Number, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -175,7 +174,7 @@ class MapStubberTest {
     void shouldStubMapWithLowerBoundedWildcardType() {
         Type type = new TypeLiteral<Map<? super Number, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         Object stub = stubber.stub(context, type);
 
@@ -188,7 +187,7 @@ class MapStubberTest {
     <T, U> void shouldAcceptMapWithTypeVariable() {
         Type type = new TypeLiteral<Map<T, U>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -200,7 +199,7 @@ class MapStubberTest {
     <T> void shouldNotAcceptTypeVariable() {
         Type type = new TypeLiteral<T>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -212,7 +211,7 @@ class MapStubberTest {
     <T> void shouldThrowExceptionWhenStubbingTypeVariable() {
         Type type = new TypeLiteral<T>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
@@ -224,7 +223,7 @@ class MapStubberTest {
     <T> void shouldNotAcceptGenericArrayType() {
         Type type = new TypeLiteral<T[]>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -236,7 +235,7 @@ class MapStubberTest {
     <T> void shouldThrowExceptionWhenStubbingGenericArrayType() {
         Type type = new TypeLiteral<T[]>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
@@ -247,7 +246,7 @@ class MapStubberTest {
     @Test
     void shouldNotAcceptMapThatIsNoExactMatch() {
         Type type = HashMap.class;
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -259,7 +258,7 @@ class MapStubberTest {
     void shouldNotAcceptParameterizedMapThatIsNoExactMatch() {
         Type type = new TypeLiteral<HashMap<Integer, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -270,7 +269,7 @@ class MapStubberTest {
     @Test
     void shouldNotAcceptNonMapType() {
         Type type = Number.class;
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -282,7 +281,7 @@ class MapStubberTest {
     void shouldUseParameterizedTypeStubbingSite() {
         Type type = new TypeLiteral<Map<Integer, String>>() {
         }.getType();
-        Stubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
+        MapStubber stubber = new MapStubber<>(Map.class, HashMap::new, context -> 1);
 
         stubber.stub(context, type);
 

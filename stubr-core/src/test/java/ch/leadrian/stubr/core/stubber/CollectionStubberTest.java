@@ -1,7 +1,6 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
@@ -47,7 +46,7 @@ class CollectionStubberTest {
     @Test
     void givenCollectionSizeOfZeroItShouldAcceptNotParameterizedList() {
         Type type = Collection.class;
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -58,7 +57,7 @@ class CollectionStubberTest {
     @Test
     void givenCollectionSizeOfZeroItShouldStubNotParameterizedList() {
         Type type = Collection.class;
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
         Object stub = stubber.stub(context, type);
 
@@ -69,7 +68,7 @@ class CollectionStubberTest {
     @Test
     void givenCollectionSizeGreaterThanZeroItShouldNotAcceptNotParameterizedList() {
         Type type = Collection.class;
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -81,7 +80,7 @@ class CollectionStubberTest {
     void givenCollectionSizeOfZeroItShouldAcceptParameterizedList() {
         Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -93,7 +92,7 @@ class CollectionStubberTest {
     void givenCollectionSizeOfZeroItShouldStubParameterizedList() {
         Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
 
         Object stub = stubber.stub(context, type);
 
@@ -105,7 +104,7 @@ class CollectionStubberTest {
     void givenCollectionSizeGreaterThanZeroItShouldAcceptParameterizedList() {
         Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -118,7 +117,7 @@ class CollectionStubberTest {
     void givenCollectionSizeGreaterThanZeroItShouldStubParameterizedList() {
         Type type = new TypeLiteral<Collection<String>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         Object stub = stubber.stub(context, type);
 
@@ -132,7 +131,7 @@ class CollectionStubberTest {
     void shouldAcceptListWithUpperBoundedWildcardType() {
         Type type = new TypeLiteral<Collection<? extends Number>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -145,7 +144,7 @@ class CollectionStubberTest {
     void shouldStubListWithUpperBoundedWildcardType() {
         Type type = new TypeLiteral<Collection<? extends Number>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         Object stub = stubber.stub(context, type);
 
@@ -159,7 +158,7 @@ class CollectionStubberTest {
     void shouldAcceptListWithLowerBoundedWildcardType() {
         Type type = new TypeLiteral<Collection<? super Number>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -172,7 +171,7 @@ class CollectionStubberTest {
     void shouldStubListWithLowerBoundedWildcardType() {
         Type type = new TypeLiteral<Collection<? super Number>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         Object stub = stubber.stub(context, type);
 
@@ -186,7 +185,7 @@ class CollectionStubberTest {
     <T> void shouldAcceptListWithTypeVariable() {
         Type type = new TypeLiteral<Collection<T>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -198,7 +197,7 @@ class CollectionStubberTest {
     <T> void shouldNotAcceptTypeVariable() {
         Type type = new TypeLiteral<T>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -210,7 +209,7 @@ class CollectionStubberTest {
     <T> void shouldThrowExceptionWhenStubbingTypeVariable() {
         Type type = new TypeLiteral<T>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
@@ -222,7 +221,7 @@ class CollectionStubberTest {
     <T> void shouldNotAcceptGenericArrayType() {
         Type type = new TypeLiteral<T[]>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -234,7 +233,7 @@ class CollectionStubberTest {
     <T> void shouldThrowExceptionWhenStubbingGenericArrayType() {
         Type type = new TypeLiteral<T[]>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
@@ -245,7 +244,7 @@ class CollectionStubberTest {
     @Test
     void shouldNotAcceptCollectionThatIsNoExactMatch() {
         Type type = ArrayList.class;
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -257,7 +256,7 @@ class CollectionStubberTest {
     void shouldNotAcceptParameterizedCollectionThatIsNoExactMatch() {
         Type type = new TypeLiteral<ArrayList<String>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -268,7 +267,7 @@ class CollectionStubberTest {
     @Test
     void shouldNotAcceptNonCollectionType() {
         Type type = Number.class;
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -280,7 +279,7 @@ class CollectionStubberTest {
     void shouldUseParameterizedTypeStubbingSite() {
         Type type = new TypeLiteral<Collection<Number>>() {
         }.getType();
-        Stubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 1);
+        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 1);
 
         stubber.stub(context, type);
 

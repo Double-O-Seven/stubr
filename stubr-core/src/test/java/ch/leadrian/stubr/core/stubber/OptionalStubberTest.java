@@ -2,7 +2,6 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Result;
 import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
@@ -37,9 +36,7 @@ class OptionalStubberTest {
 
         @Test
         void shouldAcceptOptionalWithoutTypeArguments() {
-            Stubber stubber = OptionalStubber.EMPTY;
-
-            boolean accepts = stubber.accepts(context, Optional.class);
+            boolean accepts = OptionalStubber.EMPTY.accepts(context, Optional.class);
 
             assertThat(accepts)
                     .isTrue();
@@ -48,9 +45,7 @@ class OptionalStubberTest {
         @SuppressWarnings("unchecked")
         @Test
         void shouldStubOptionalWithoutTypeArguments() {
-            Stubber stubber = OptionalStubber.EMPTY;
-
-            Object stub = stubber.stub(context, Optional.class);
+            Object stub = OptionalStubber.EMPTY.stub(context, Optional.class);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).isEmpty());
@@ -60,9 +55,8 @@ class OptionalStubberTest {
         void shouldAcceptOptionalWithTypeArguments() {
             Type type = new TypeLiteral<Optional<Float>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.EMPTY;
 
-            boolean accepts = stubber.accepts(context, type);
+            boolean accepts = OptionalStubber.EMPTY.accepts(context, type);
 
             assertThat(accepts)
                     .isTrue();
@@ -73,9 +67,8 @@ class OptionalStubberTest {
         void shouldStubOptionalWithTypeArgument() {
             Type type = new TypeLiteral<Optional<Float>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.EMPTY;
 
-            Object stub = stubber.stub(context, type);
+            Object stub = OptionalStubber.EMPTY.stub(context, type);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).isEmpty());
@@ -102,9 +95,7 @@ class OptionalStubberTest {
 
         @Test
         void shouldAcceptOptionalWithoutTypeArguments() {
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
-
-            boolean accepts = stubber.accepts(context, Optional.class);
+            boolean accepts = OptionalStubber.PRESENT_IF_POSSIBLE.accepts(context, Optional.class);
 
             assertThat(accepts)
                     .isTrue();
@@ -113,9 +104,7 @@ class OptionalStubberTest {
         @SuppressWarnings("unchecked")
         @Test
         void shouldStubOptionalWithoutTypeArguments() {
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
-
-            Object stub = stubber.stub(context, Optional.class);
+            Object stub = OptionalStubber.PRESENT_IF_POSSIBLE.stub(context, Optional.class);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).isEmpty());
@@ -125,9 +114,8 @@ class OptionalStubberTest {
         void shouldAcceptOptionalWithTypeArguments() {
             Type type = new TypeLiteral<Optional<Float>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
 
-            boolean accepts = stubber.accepts(context, type);
+            boolean accepts = OptionalStubber.PRESENT_IF_POSSIBLE.accepts(context, type);
 
             assertThat(accepts)
                     .isTrue();
@@ -138,9 +126,8 @@ class OptionalStubberTest {
         void shouldStubOptionalWithTypeArgument() {
             Type type = new TypeLiteral<Optional<Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
 
-            Object stub = stubber.stub(context, type);
+            Object stub = OptionalStubber.PRESENT_IF_POSSIBLE.stub(context, type);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).hasValue(1337));
@@ -150,9 +137,8 @@ class OptionalStubberTest {
         void shouldAcceptOptionalWithUpperBoundedTypeArguments() {
             Type type = new TypeLiteral<Optional<? extends Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
 
-            boolean accepts = stubber.accepts(context, type);
+            boolean accepts = OptionalStubber.PRESENT_IF_POSSIBLE.accepts(context, type);
 
             assertThat(accepts)
                     .isTrue();
@@ -163,9 +149,8 @@ class OptionalStubberTest {
         void shouldStubOptionalWithUpperBoundedTypeArgument() {
             Type type = new TypeLiteral<Optional<? extends Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
 
-            Object stub = stubber.stub(context, type);
+            Object stub = OptionalStubber.PRESENT_IF_POSSIBLE.stub(context, type);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).hasValue(1337));
@@ -175,9 +160,8 @@ class OptionalStubberTest {
         void shouldAcceptOptionalWithLowerBoundedTypeArguments() {
             Type type = new TypeLiteral<Optional<? super Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
 
-            boolean accepts = stubber.accepts(context, type);
+            boolean accepts = OptionalStubber.PRESENT_IF_POSSIBLE.accepts(context, type);
 
             assertThat(accepts)
                     .isTrue();
@@ -188,9 +172,8 @@ class OptionalStubberTest {
         void shouldStubOptionalWithLowerBoundedTypeArgument() {
             Type type = new TypeLiteral<Optional<? super Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
 
-            Object stub = stubber.stub(context, type);
+            Object stub = OptionalStubber.PRESENT_IF_POSSIBLE.stub(context, type);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).hasValue(1337));
@@ -200,9 +183,8 @@ class OptionalStubberTest {
         void shouldStubWithParameterizedTypeStubbingSite() {
             Type type = new TypeLiteral<Optional<Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT_IF_POSSIBLE;
 
-            stubber.stub(context, type);
+            OptionalStubber.PRESENT_IF_POSSIBLE.stub(context, type);
 
             verify(rootStubber)
                     .tryToStub((Type) Integer.class, StubbingSites.parameterizedType(StubbingSites.unknown(), (ParameterizedType) type, 0));
@@ -229,9 +211,7 @@ class OptionalStubberTest {
 
         @Test
         void shouldAcceptNotOptionalWithoutTypeArguments() {
-            Stubber stubber = OptionalStubber.PRESENT;
-
-            boolean accepts = stubber.accepts(context, Optional.class);
+            boolean accepts = OptionalStubber.PRESENT.accepts(context, Optional.class);
 
             assertThat(accepts)
                     .isFalse();
@@ -241,9 +221,8 @@ class OptionalStubberTest {
         void shouldAcceptOptionalWithTypeArguments() {
             Type type = new TypeLiteral<Optional<Float>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT;
 
-            boolean accepts = stubber.accepts(context, type);
+            boolean accepts = OptionalStubber.PRESENT.accepts(context, type);
 
             assertThat(accepts)
                     .isTrue();
@@ -254,9 +233,8 @@ class OptionalStubberTest {
         void shouldStubOptionalWithTypeArgument() {
             Type type = new TypeLiteral<Optional<Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT;
 
-            Object stub = stubber.stub(context, type);
+            Object stub = OptionalStubber.PRESENT.stub(context, type);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).hasValue(1337));
@@ -266,9 +244,8 @@ class OptionalStubberTest {
         void shouldAcceptOptionalWithUpperBoundedTypeArguments() {
             Type type = new TypeLiteral<Optional<? extends Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT;
 
-            boolean accepts = stubber.accepts(context, type);
+            boolean accepts = OptionalStubber.PRESENT.accepts(context, type);
 
             assertThat(accepts)
                     .isTrue();
@@ -279,9 +256,8 @@ class OptionalStubberTest {
         void shouldStubOptionalWithUpperBoundedTypeArgument() {
             Type type = new TypeLiteral<Optional<? extends Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT;
 
-            Object stub = stubber.stub(context, type);
+            Object stub = OptionalStubber.PRESENT.stub(context, type);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).hasValue(1337));
@@ -291,9 +267,8 @@ class OptionalStubberTest {
         void shouldAcceptOptionalWithLowerBoundedTypeArguments() {
             Type type = new TypeLiteral<Optional<? super Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT;
 
-            boolean accepts = stubber.accepts(context, type);
+            boolean accepts = OptionalStubber.PRESENT.accepts(context, type);
 
             assertThat(accepts)
                     .isTrue();
@@ -304,9 +279,8 @@ class OptionalStubberTest {
         void shouldStubOptionalWithLowerBoundedTypeArgument() {
             Type type = new TypeLiteral<Optional<? super Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT;
 
-            Object stub = stubber.stub(context, type);
+            Object stub = OptionalStubber.PRESENT.stub(context, type);
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).hasValue(1337));
@@ -316,9 +290,8 @@ class OptionalStubberTest {
         void shouldStubWithParameterizedTypeStubbingSite() {
             Type type = new TypeLiteral<Optional<Integer>>() {
             }.getType();
-            Stubber stubber = OptionalStubber.PRESENT;
 
-            stubber.stub(context, type);
+            OptionalStubber.PRESENT.stub(context, type);
 
             verify(rootStubber)
                     .stub((Type) Integer.class, StubbingSites.parameterizedType(StubbingSites.unknown(), (ParameterizedType) type, 0));
