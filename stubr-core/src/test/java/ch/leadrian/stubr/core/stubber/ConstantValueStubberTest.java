@@ -1,6 +1,7 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.type.ParameterizedTypeLiteral;
@@ -20,7 +21,7 @@ class ConstantValueStubberTest {
 
     @Test
     void shouldAcceptExactClass() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
+        Stubber stubber = new ConstantValueStubber(Number.class, 1337);
 
         boolean accepts = stubber.accepts(context, Number.class);
 
@@ -32,7 +33,7 @@ class ConstantValueStubberTest {
     void shouldAcceptWildcardTypeWithUpperBound() {
         Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {
         }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
+        Stubber stubber = new ConstantValueStubber(Number.class, 1337);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -44,7 +45,7 @@ class ConstantValueStubberTest {
     void shouldAcceptWildcardTypeWithLowerBound() {
         Type type = new ParameterizedTypeLiteral<List<? super Number>>() {
         }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
+        Stubber stubber = new ConstantValueStubber(Number.class, 1337);
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -54,7 +55,7 @@ class ConstantValueStubberTest {
 
     @Test
     void shouldNotAcceptSubclass() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
+        Stubber stubber = new ConstantValueStubber(Number.class, 1337);
 
         boolean accepts = stubber.accepts(context, Integer.class);
 
@@ -64,7 +65,7 @@ class ConstantValueStubberTest {
 
     @Test
     void shouldNotAcceptSuperclass() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
+        Stubber stubber = new ConstantValueStubber(Number.class, 1337);
 
         boolean accepts = stubber.accepts(context, Object.class);
 
@@ -78,7 +79,7 @@ class ConstantValueStubberTest {
         }.getType();
         Type type = new ParameterizedTypeLiteral<List<? extends List<String>>>() {
         }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(acceptedType, singletonList("ABC"));
+        Stubber stubber = new ConstantValueStubber(acceptedType, singletonList("ABC"));
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -92,7 +93,7 @@ class ConstantValueStubberTest {
         }.getType();
         Type type = new ParameterizedTypeLiteral<List<? super List<String>>>() {
         }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(acceptedType, singletonList("ABC"));
+        Stubber stubber = new ConstantValueStubber(acceptedType, singletonList("ABC"));
 
         boolean accepts = stubber.accepts(context, type);
 
@@ -102,7 +103,7 @@ class ConstantValueStubberTest {
 
     @Test
     void shouldReturnValue() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
+        Stubber stubber = new ConstantValueStubber(Number.class, 1337);
 
         Object stub = stubber.stub(context, Number.class);
 
