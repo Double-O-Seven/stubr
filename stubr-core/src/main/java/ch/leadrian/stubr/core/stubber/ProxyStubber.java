@@ -14,14 +14,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
 
-final class ProxyStubber implements Stubber {
-
-    static final ProxyStubber CACHING_INSTANCE = new ProxyStubber(true);
-    static final ProxyStubber NON_CACHING_INSTANCE = new ProxyStubber(false);
+enum ProxyStubber implements Stubber {
+    CACHING(true),
+    NON_CACHING(false);
 
     private final boolean cacheStubs;
 
-    private ProxyStubber(boolean cacheStubs) {
+    ProxyStubber(boolean cacheStubs) {
         this.cacheStubs = cacheStubs;
     }
 

@@ -124,7 +124,7 @@ public final class Stubbers {
     }
 
     public static Stubber proxy(boolean cacheStubs) {
-        return cacheStubs ? ProxyStubber.CACHING_INSTANCE : ProxyStubber.NON_CACHING_INSTANCE;
+        return cacheStubs ? ProxyStubber.CACHING : ProxyStubber.NON_CACHING;
     }
 
     public static Stubber proxy() {
