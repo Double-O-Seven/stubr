@@ -2,6 +2,7 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.BeforeEach;
@@ -214,7 +215,8 @@ class CollectionStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub T at UnknownStubbingSite");
     }
 
     @Test
@@ -238,7 +240,8 @@ class CollectionStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub T[] at UnknownStubbingSite");
     }
 
     @Test

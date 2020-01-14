@@ -2,6 +2,7 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.type.TypeVisitor;
 
 import java.lang.reflect.GenericArrayType;
@@ -70,17 +71,17 @@ public abstract class SimpleStubber<T> implements Stubber {
             public T visit(WildcardType wildcardType) {
                 return getExplicitBound(wildcardType)
                         .map(t -> accept(t, this))
-                        .orElseThrow(UnsupportedOperationException::new);
+                        .orElseThrow(() -> new StubbingException(context.getSite(), wildcardType));
             }
 
             @Override
             public T visit(TypeVariable<?> typeVariable) {
-                throw new UnsupportedOperationException();
+                throw new StubbingException(context.getSite(), typeVariable);
             }
 
             @Override
             public T visit(GenericArrayType genericArrayType) {
-                throw new UnsupportedOperationException();
+                throw new StubbingException(context.getSite(), genericArrayType);
             }
         });
     }

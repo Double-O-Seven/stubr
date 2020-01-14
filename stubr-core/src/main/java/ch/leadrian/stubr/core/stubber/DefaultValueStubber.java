@@ -2,6 +2,7 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -20,7 +21,7 @@ enum DefaultValueStubber implements Stubber {
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        return getDefaultValue(type).orElseThrow(UnsupportedOperationException::new);
+        return getDefaultValue(type).orElseThrow(() -> new StubbingException(context.getSite(), type));
     }
 
     private Optional<?> getDefaultValue(Type type) {

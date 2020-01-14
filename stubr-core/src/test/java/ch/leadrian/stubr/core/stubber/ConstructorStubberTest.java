@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.equalizer.Equals;
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.stubbingsite.ConstructorParameterStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import org.junit.jupiter.api.BeforeEach;
@@ -135,7 +136,8 @@ class ConstructorStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, Foo.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub class ch.leadrian.stubr.core.stubber.ConstructorStubberTest$Foo at UnknownStubbingSite: No matching constructor found");
     }
 
     @Test
@@ -155,7 +157,8 @@ class ConstructorStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, Bar.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub class ch.leadrian.stubr.core.stubber.ConstructorStubberTest$Bar at UnknownStubbingSite: No matching constructor found");
     }
 
     @Test
@@ -175,7 +178,8 @@ class ConstructorStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, Bar.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub class ch.leadrian.stubr.core.stubber.ConstructorStubberTest$Bar at UnknownStubbingSite: No matching constructor found");
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.ConstructorMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.stubbingsite.ConstructorParameterStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 
@@ -38,7 +39,8 @@ final class ConstructorStubber implements Stubber {
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        Constructor<?> constructor = getConstructor(type).orElseThrow(UnsupportedOperationException::new);
+        Constructor<?> constructor = getConstructor(type)
+                .orElseThrow(() -> new StubbingException("No matching constructor found", context.getSite(), type));
         Object[] parameterValues = stub(context, constructor);
         try {
             return constructor.newInstance(parameterValues);

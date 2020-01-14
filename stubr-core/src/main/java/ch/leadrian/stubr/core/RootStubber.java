@@ -82,7 +82,9 @@ public abstract class RootStubber {
 
     @SuppressWarnings("unchecked")
     private <T> Class<T> getRawType(TypeLiteral<T> typeLiteral) {
-        return (Class<T>) Types.getRawType(typeLiteral.getType()).orElseThrow(UnsupportedOperationException::new);
+        Type type = typeLiteral.getType();
+        return (Class<T>) Types.getRawType(type)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot get raw type of %s", type)));
     }
 
 }

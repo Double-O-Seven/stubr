@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.equalizer.Equals;
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.stubbingsite.MethodParameterStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import org.junit.jupiter.api.BeforeEach;
@@ -136,7 +137,8 @@ class FactoryMethodStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, Foo.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub class ch.leadrian.stubr.core.stubber.FactoryMethodStubberTest$Foo at UnknownStubbingSite: No matching factory method found");
     }
 
     @Test
@@ -156,7 +158,8 @@ class FactoryMethodStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, Bar.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub class ch.leadrian.stubr.core.stubber.FactoryMethodStubberTest$Bar at UnknownStubbingSite: No matching factory method found");
     }
 
     @Test
@@ -176,7 +179,8 @@ class FactoryMethodStubberTest {
         Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, Bar.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub class ch.leadrian.stubr.core.stubber.FactoryMethodStubberTest$Bar at UnknownStubbingSite: No matching factory method found");
     }
 
     @SuppressWarnings({"SameParameterValue", "WeakerAccess"})

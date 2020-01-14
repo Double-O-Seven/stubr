@@ -1,5 +1,9 @@
 package ch.leadrian.stubr.core.stubber;
 
+import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,13 +15,16 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.mock;
 
 class DefaultValueStubberTest {
+
+    private final StubbingContext context = new StubbingContext(mock(RootStubber.class), StubbingSites.unknown());
 
     @ParameterizedTest
     @ArgumentsSource(AcceptedTypesArgumentsProvider.class)
     void shouldReturnDefaultValueForByte(Class<?> clazz) {
-        boolean accepted = DefaultValueStubber.INSTANCE.accepts(null, clazz);
+        boolean accepted = DefaultValueStubber.INSTANCE.accepts(context, clazz);
 
         assertThat(accepted)
                 .isTrue();
@@ -26,7 +33,7 @@ class DefaultValueStubberTest {
     @ParameterizedTest
     @ArgumentsSource(StubbedValuesArgumentsProvider.class)
     void shouldStubValue(Class<?> clazz, Object expectedValue) {
-        Object value = DefaultValueStubber.INSTANCE.stub(null, clazz);
+        Object value = DefaultValueStubber.INSTANCE.stub(context, clazz);
 
         assertThat(value)
                 .isEqualTo(expectedValue);
@@ -34,7 +41,7 @@ class DefaultValueStubberTest {
 
     @Test
     void shouldNotAcceptUnknownClass() {
-        boolean accepted = DefaultValueStubber.INSTANCE.accepts(null, Foo.class);
+        boolean accepted = DefaultValueStubber.INSTANCE.accepts(context, Foo.class);
 
         assertThat(accepted)
                 .isFalse();
@@ -42,10 +49,11 @@ class DefaultValueStubberTest {
 
     @Test
     void givenUnknownClassStubShouldThrowException() {
-        Throwable caughtThrowable = catchThrowable(() -> DefaultValueStubber.INSTANCE.stub(null, Foo.class));
+        Throwable caughtThrowable = catchThrowable(() -> DefaultValueStubber.INSTANCE.stub(context, Foo.class));
 
         assertThat(caughtThrowable)
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(StubbingException.class)
+                .hasMessage("Cannot stub class ch.leadrian.stubr.core.stubber.DefaultValueStubberTest$Foo at UnknownStubbingSite");
     }
 
     private static final class AcceptedTypesArgumentsProvider implements ArgumentsProvider {

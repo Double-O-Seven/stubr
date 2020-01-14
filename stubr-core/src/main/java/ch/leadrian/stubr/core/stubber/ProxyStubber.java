@@ -2,6 +2,7 @@ package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 
 import java.lang.reflect.InvocationHandler;
@@ -35,7 +36,7 @@ final class ProxyStubber implements Stubber {
     public Object stub(StubbingContext context, Type type) {
         return getRawType(type)
                 .map(clazz -> createProxy(clazz, getInvocationHandler(context)))
-                .orElseThrow(UnsupportedOperationException::new);
+                .orElseThrow(() -> new StubbingException(context.getSite(), type));
     }
 
     private StubbingInvocationHandler getInvocationHandler(StubbingContext context) {

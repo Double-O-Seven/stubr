@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.MethodMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.stubbingsite.MethodParameterStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 
@@ -39,7 +40,8 @@ final class FactoryMethodStubber implements Stubber {
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        Method method = getFactoryMethod(type).orElseThrow(UnsupportedOperationException::new);
+        Method method = getFactoryMethod(type)
+                .orElseThrow(() -> new StubbingException("No matching factory method found", context.getSite(), type));
         Object[] parameterValues = stub(context, method);
         try {
             return method.invoke(null, parameterValues);
