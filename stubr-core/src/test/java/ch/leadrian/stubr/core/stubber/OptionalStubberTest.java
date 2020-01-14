@@ -87,6 +87,8 @@ class OptionalStubberTest {
                             return Result.success("Test");
                         } else if (type == Integer.class) {
                             return Result.success(1337);
+                        } else if (type == Double.class) {
+                            return Result.failure();
                         } else {
                             throw new AssertionError();
                         }
@@ -131,6 +133,18 @@ class OptionalStubberTest {
 
             assertThat(stub)
                     .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).hasValue(1337));
+        }
+
+        @SuppressWarnings("unchecked")
+        @Test
+        void givenStubbingFailsItShouldReturnEmpty() {
+            Type type = new TypeLiteral<Optional<Double>>() {
+            }.getType();
+
+            Object stub = OptionalStubber.PRESENT_IF_POSSIBLE.stub(context, type);
+
+            assertThat(stub)
+                    .isInstanceOfSatisfying(Optional.class, optional -> assertThat(optional).isEmpty());
         }
 
         @Test
