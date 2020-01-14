@@ -104,7 +104,7 @@ public abstract class Result<T> {
 
         @Override
         public String toString() {
-            return "Failure";
+            return getClass().getSimpleName();
         }
     }
 }

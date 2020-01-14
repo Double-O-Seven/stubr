@@ -14,6 +14,6 @@ public enum UnknownStubbingSite implements StubbingSite {
 
     @Override
     public String toString() {
-        return "UnknownStubbingSite";
+        return getClass().getSimpleName();
     }
 }
