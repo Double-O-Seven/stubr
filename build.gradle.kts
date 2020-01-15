@@ -5,8 +5,9 @@ plugins {
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
-val junitVersion by extra { "5.5.1" }
+val assertJVersion by extra { "3.12.1" }
 val guavaVersion by extra { "28.2-jre" }
+val junitVersion by extra { "5.5.1" }
 
 val gitVersion: Closure<String> by extra
 
@@ -24,7 +25,7 @@ subprojects {
     }
 
     dependencies {
-        testImplementation(group = "org.assertj", name = "assertj-core", version = "3.12.1")
+        testImplementation(group = "org.assertj", name = "assertj-core", version = assertJVersion)
         testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = junitVersion)
         testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-params", version = junitVersion)
         testImplementation(group = "org.mockito", name = "mockito-core", version = "3.2.4")
