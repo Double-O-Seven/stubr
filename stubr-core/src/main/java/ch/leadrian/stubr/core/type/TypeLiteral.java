@@ -6,12 +6,13 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 @SuppressWarnings("unused")
 public abstract class TypeLiteral<T> {
 
     private static final EqualsAndHashCode<TypeLiteral> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(TypeLiteral.class)
-            .compare(TypeLiteral::getType)
+            .compareAndHash(TypeLiteral::getType)
             .build();
 
     private final Type type;
@@ -40,5 +41,12 @@ public abstract class TypeLiteral<T> {
     @Override
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return toStringHelper(TypeLiteral.class)
+                .add("type", type)
+                .toString();
     }
 }
