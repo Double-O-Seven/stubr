@@ -1,293 +1,78 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingException;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.StubberTester;
 import ch.leadrian.stubr.core.type.TypeLiteral;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.type.Types.getRawType;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static java.util.function.Function.identity;
+import static org.assertj.core.util.Lists.newArrayList;
 
 class CollectionStubberTest {
 
-    private StubbingContext context;
-    private RootStubber rootStubber;
-
-    @BeforeEach
-    void setUp() {
-        rootStubber = mock(RootStubber.class);
-        when(rootStubber.stub(any(Type.class), any()))
-                .thenAnswer(invocation -> {
-                    Class<?> rawType = getRawType(invocation.getArgument(0, Type.class)).orElseThrow(AssertionError::new);
-                    if (rawType == String.class) {
-                        return "Test";
-                    } else if (rawType == Number.class) {
-                        return 1337;
-                    } else {
-                        throw new AssertionError();
-                    }
+    @TestFactory
+    Stream<DynamicTest> testEmptyCollectionStubber() {
+        StubberTester tester = new StubberTester()
+                .accepts(List.class, new ArrayList<>())
+                .accepts(new TypeLiteral<List<String>>() {
+                }, new ArrayList<>())
+                .accepts(new TypeLiteral<List<? super String>>() {
+                }, new ArrayList<>())
+                .accepts(new TypeLiteral<List<?>>() {
+                }, new ArrayList<>())
+                .accepts(new TypeLiteral<List<? extends String>>() {
+                }, new ArrayList<>())
+                .reject(Collection.class)
+                .reject(new TypeLiteral<Collection<String>>() {
+                })
+                .reject(new TypeLiteral<Collection<? super String>>() {
+                })
+                .reject(new TypeLiteral<Collection<? extends String>>() {
+                })
+                .reject(ArrayList.class)
+                .reject(new TypeLiteral<ArrayList<String>>() {
+                })
+                .reject(new TypeLiteral<ArrayList<? super String>>() {
+                })
+                .reject(new TypeLiteral<ArrayList<? extends String>>() {
                 });
-        context = new StubbingContext(rootStubber, StubbingSites.unknown());
+        return Stream.of(
+                tester.test(Stubbers.collection(List.class, ArrayList::new, context -> 0)),
+                tester.test(Stubbers.collection(List.class, ArrayList::new, 0)),
+                tester.test(Stubbers.collection(List.class, ArrayList::new))
+        ).flatMap(identity());
     }
 
-    @Test
-    void givenCollectionSizeOfZeroItShouldAcceptNotParameterizedList() {
-        Type type = Collection.class;
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void givenCollectionSizeOfZeroItShouldStubNotParameterizedList() {
-        Type type = Collection.class;
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
-
-        Object stub = stubber.stub(context, type);
-
-        assertThat(stub)
-                .isInstanceOfSatisfying(ArrayList.class, list -> assertThat(list).isEmpty());
-    }
-
-    @Test
-    void givenCollectionSizeGreaterThanZeroItShouldNotAcceptNotParameterizedList() {
-        Type type = Collection.class;
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    void givenCollectionSizeOfZeroItShouldAcceptParameterizedList() {
-        Type type = new TypeLiteral<Collection<String>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void givenCollectionSizeOfZeroItShouldStubParameterizedList() {
-        Type type = new TypeLiteral<Collection<String>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 0);
-
-        Object stub = stubber.stub(context, type);
-
-        assertThat(stub)
-                .isInstanceOfSatisfying(ArrayList.class, list -> assertThat(list).isEmpty());
-    }
-
-    @Test
-    void givenCollectionSizeGreaterThanZeroItShouldAcceptParameterizedList() {
-        Type type = new TypeLiteral<Collection<String>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    void givenCollectionSizeGreaterThanZeroItShouldStubParameterizedList() {
-        Type type = new TypeLiteral<Collection<String>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        Object stub = stubber.stub(context, type);
-
-        assertThat(stub)
-                .isInstanceOfSatisfying(ArrayList.class, list -> assertThat(list)
-                        .hasSize(3)
-                        .containsOnly("Test"));
-    }
-
-    @Test
-    void shouldAcceptListWithUpperBoundedWildcardType() {
-        Type type = new TypeLiteral<Collection<? extends Number>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    void shouldStubListWithUpperBoundedWildcardType() {
-        Type type = new TypeLiteral<Collection<? extends Number>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        Object stub = stubber.stub(context, type);
-
-        assertThat(stub)
-                .isInstanceOfSatisfying(ArrayList.class, list -> assertThat(list)
-                        .hasSize(3)
-                        .containsOnly(1337));
-    }
-
-    @Test
-    void shouldAcceptListWithLowerBoundedWildcardType() {
-        Type type = new TypeLiteral<Collection<? super Number>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    void shouldStubListWithLowerBoundedWildcardType() {
-        Type type = new TypeLiteral<Collection<? super Number>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        Object stub = stubber.stub(context, type);
-
-        assertThat(stub)
-                .isInstanceOfSatisfying(ArrayList.class, list -> assertThat(list)
-                        .hasSize(3)
-                        .containsOnly(1337));
-    }
-
-    @Test
-    <T> void shouldAcceptListWithTypeVariable() {
-        Type type = new TypeLiteral<Collection<T>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    <T> void shouldNotAcceptTypeVariable() {
-        Type type = new TypeLiteral<T>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    <T> void shouldThrowExceptionWhenStubbingTypeVariable() {
-        Type type = new TypeLiteral<T>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
-
-        assertThat(caughtThrowable)
-                .isInstanceOf(StubbingException.class)
-                .hasMessage("Cannot stub T at UnknownStubbingSite");
-    }
-
-    @Test
-    <T> void shouldNotAcceptGenericArrayType() {
-        Type type = new TypeLiteral<T[]>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    <T> void shouldThrowExceptionWhenStubbingGenericArrayType() {
-        Type type = new TypeLiteral<T[]>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        Throwable caughtThrowable = catchThrowable(() -> stubber.stub(context, type));
-
-        assertThat(caughtThrowable)
-                .isInstanceOf(StubbingException.class)
-                .hasMessage("Cannot stub T[] at UnknownStubbingSite");
-    }
-
-    @Test
-    void shouldNotAcceptCollectionThatIsNoExactMatch() {
-        Type type = ArrayList.class;
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    void shouldNotAcceptParameterizedCollectionThatIsNoExactMatch() {
-        Type type = new TypeLiteral<ArrayList<String>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    void shouldNotAcceptNonCollectionType() {
-        Type type = Number.class;
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 3);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    void shouldUseParameterizedTypeStubbingSite() {
-        Type type = new TypeLiteral<Collection<Number>>() {
-        }.getType();
-        CollectionStubber stubber = new CollectionStubber<>(Collection.class, ArrayList::new, context -> 1);
-
-        stubber.stub(context, type);
-
-        verify(rootStubber, times(1)).stub(any(Type.class), any());
-        verify(rootStubber).stub((Type) Number.class, StubbingSites.parameterizedType(StubbingSites.unknown(), (ParameterizedType) type, 0));
+    @TestFactory
+    Stream<DynamicTest> testNonEmptyCollectionStubber() {
+        StubberTester tester = new StubberTester()
+                .provideStub(String.class, "foo", "bar", "baz")
+                .reject(List.class)
+                .accepts(new TypeLiteral<List<String>>() {
+                }, newArrayList("foo", "bar", "baz"))
+                .reject(Collection.class)
+                .reject(new TypeLiteral<Collection<String>>() {
+                })
+                .reject(new TypeLiteral<Collection<? super String>>() {
+                })
+                .reject(new TypeLiteral<Collection<? extends String>>() {
+                })
+                .reject(ArrayList.class)
+                .reject(new TypeLiteral<ArrayList<String>>() {
+                })
+                .reject(new TypeLiteral<ArrayList<? super String>>() {
+                })
+                .reject(new TypeLiteral<ArrayList<? extends String>>() {
+                });
+        return Stream.of(
+                tester.test(Stubbers.collection(List.class, ArrayList::new, context -> 3)),
+                tester.test(Stubbers.collection(List.class, ArrayList::new, 3))
+        ).flatMap(identity());
     }
 
 }
