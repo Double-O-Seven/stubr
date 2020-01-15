@@ -75,4 +75,16 @@ class CollectionStubberTest {
         ).flatMap(identity());
     }
 
+    @TestFactory
+    Stream<DynamicTest> testUnsupportedParameterization() {
+        return new StubberTester()
+                .reject(new TypeLiteral<WeirdList<String, Integer>>() {
+                })
+                .test(Stubbers.collection(WeirdList.class, values -> new WeirdList(), context -> 3));
+    }
+
+    @SuppressWarnings("unused")
+    private static final class WeirdList<T, U> extends ArrayList<T> {
+    }
+
 }

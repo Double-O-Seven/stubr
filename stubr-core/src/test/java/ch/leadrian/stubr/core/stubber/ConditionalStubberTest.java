@@ -22,7 +22,7 @@ class ConditionalStubberTest {
             "false, true, false",
             "false, false, false"
     })
-    void acceptShouldReturnTrueIfAndOnlyIfDelegateAndMatcherReturnTrue(boolean delegateMatch, boolean matcherMatch, boolean expectedResult) {
+    void shouldAcceptIfAndOnlyIfDelegateAcceptsAndMatcherMatches(boolean delegateMatch, boolean matcherMatch, boolean expectedResult) {
         StubbingContext context = mock(StubbingContext.class);
         Type type = String.class;
         Stubber delegate = mock(Stubber.class);
