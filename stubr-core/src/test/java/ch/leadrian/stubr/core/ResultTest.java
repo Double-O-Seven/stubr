@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.core;
 
+import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
@@ -7,6 +8,7 @@ import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+@SuppressWarnings("ALL")
 class ResultTest {
 
     @Test
@@ -124,6 +126,36 @@ class ResultTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    void givenFailureToStringShouldReturnClassName() {
+        Result<String> failure = Result.failure();
+
+        String string = failure.toString();
+
+        assertThat(string)
+                .isEqualTo("Failure");
+    }
+
+    @Test
+    void givenSuccessToStringShouldReturnClassNameWithValue() {
+        Result<String> failure = Result.success("foo");
+
+        String string = failure.toString();
+
+        assertThat(string)
+                .isEqualTo("Success{value=foo}");
+    }
+
+    @Test
+    void resultsShouldBeEqualIfAndOnlyIfBothAreFailureOrBothAreSuccessWithSameValue() {
+        new EqualsTester()
+                .addEqualityGroup(Result.failure(), Result.failure())
+                .addEqualityGroup(Result.success("foo"), Result.success("foo"))
+                .addEqualityGroup(Result.success("bar"), Result.success("bar"))
+                .addEqualityGroup(Result.success(1337), Result.success(1337))
+                .testEquals();
     }
 
 }

@@ -38,7 +38,7 @@ public abstract class Result<T> {
     private static final class Success<T> extends Result<T> {
 
         private static final EqualsAndHashCode<Success> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Success.class)
-                .compare(Success::getValue)
+                .compareAndHash(Success::getValue)
                 .build();
 
         private final T value;
