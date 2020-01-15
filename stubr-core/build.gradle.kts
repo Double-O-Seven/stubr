@@ -2,6 +2,8 @@ plugins {
     jacoco
 }
 
+val guavaVersion: String by rootProject.extra
+
 tasks {
     jacocoTestReport {
         dependsOn(test)
@@ -17,5 +19,5 @@ jacoco {
 
 dependencies {
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core", version = "1.1.0")
-    implementation(group = "com.google.guava", name = "guava", version = "28.2-jre")
+    implementation(group = "com.google.guava", name = "guava", version = guavaVersion)
 }
