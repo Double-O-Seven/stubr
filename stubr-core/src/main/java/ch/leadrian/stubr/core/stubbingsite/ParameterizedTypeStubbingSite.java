@@ -13,9 +13,9 @@ import static java.util.Objects.requireNonNull;
 public final class ParameterizedTypeStubbingSite implements StubbingSite {
 
     private static final EqualsAndHashCode<ParameterizedTypeStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ParameterizedTypeStubbingSite.class)
-            .compare(ParameterizedTypeStubbingSite::getParent)
-            .compare(ParameterizedTypeStubbingSite::getType)
-            .comparePrimitive(ParameterizedTypeStubbingSite::getParameterIndex)
+            .compareAndHash(ParameterizedTypeStubbingSite::getParent)
+            .compareAndHash(ParameterizedTypeStubbingSite::getType)
+            .compareAndHashPrimitive(ParameterizedTypeStubbingSite::getParameterIndex)
             .build();
 
     private final StubbingSite parent;

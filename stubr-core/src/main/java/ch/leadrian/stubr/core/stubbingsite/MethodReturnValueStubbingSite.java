@@ -13,8 +13,8 @@ import static java.util.Objects.requireNonNull;
 public final class MethodReturnValueStubbingSite implements MethodStubbingSite {
 
     private static final EqualsAndHashCode<MethodReturnValueStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(MethodReturnValueStubbingSite.class)
-            .compare(MethodReturnValueStubbingSite::getParent)
-            .compare(MethodReturnValueStubbingSite::getMethod)
+            .compareAndHash(MethodReturnValueStubbingSite::getParent)
+            .compareAndHash(MethodReturnValueStubbingSite::getMethod)
             .build();
 
     private final StubbingSite parent;

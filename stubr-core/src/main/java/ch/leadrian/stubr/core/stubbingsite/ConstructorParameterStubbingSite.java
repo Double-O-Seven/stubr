@@ -14,9 +14,9 @@ import static java.util.Objects.requireNonNull;
 public final class ConstructorParameterStubbingSite implements ParameterStubbingSite {
 
     private static final EqualsAndHashCode<ConstructorParameterStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ConstructorParameterStubbingSite.class)
-            .compare(ConstructorParameterStubbingSite::getParent)
-            .compare(ConstructorParameterStubbingSite::getConstructor)
-            .compare(ConstructorParameterStubbingSite::getParameter)
+            .compareAndHash(ConstructorParameterStubbingSite::getParent)
+            .compareAndHash(ConstructorParameterStubbingSite::getConstructor)
+            .compareAndHash(ConstructorParameterStubbingSite::getParameter)
             .build();
 
     private final StubbingSite parent;
