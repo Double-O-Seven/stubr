@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.core.type;
 
+import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,6 @@
 plugins {
     jacoco
+    `java-test-fixtures`
 }
 
 val guavaVersion: String by rootProject.extra

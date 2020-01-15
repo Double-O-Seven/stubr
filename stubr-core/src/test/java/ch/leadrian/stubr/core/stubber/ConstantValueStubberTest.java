@@ -1,9 +1,9 @@
 package ch.leadrian.stubr.core.stubber;
 
+import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import ch.leadrian.stubr.core.type.ParameterizedTypeLiteral;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.Test;
 
