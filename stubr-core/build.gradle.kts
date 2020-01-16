@@ -24,6 +24,7 @@ dependencies {
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core", version = "1.1.0")
     implementation(group = "com.google.guava", name = "guava", version = guavaVersion)
 
+    testFixturesApi(group = "org.junit.jupiter", name = "junit-jupiter-api", version = junitVersion)
+
     testFixturesImplementation(group = "org.assertj", name = "assertj-core", version = assertJVersion)
-    testFixturesImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = junitVersion)
 }
