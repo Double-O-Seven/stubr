@@ -1,6 +1,9 @@
 package ch.leadrian.stubr.core.stubber;
 
+import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import ch.leadrian.stubr.core.StubberTester;
+import ch.leadrian.stubr.core.TestStubbingSite;
+import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -50,11 +53,18 @@ class CollectionStubberTest {
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyCollectionStubber() {
+        ParameterizedTypeLiteral<List<String>> listOfStrings = new ParameterizedTypeLiteral<List<String>>() {
+        };
         StubberTester tester = new StubberTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .rejects(List.class)
-                .acceptsAndStubs(new TypeLiteral<List<String>>() {
-                }, newArrayList("foo", "bar", "baz"))
+                .acceptsAndStubs(
+                        listOfStrings,
+                        newArrayList("foo", "bar", "baz"),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0)
+                )
                 .rejects(Collection.class)
                 .rejects(new TypeLiteral<Collection<String>>() {
                 })
