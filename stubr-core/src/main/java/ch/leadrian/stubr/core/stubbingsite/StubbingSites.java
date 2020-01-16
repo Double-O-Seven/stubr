@@ -24,6 +24,10 @@ public final class StubbingSites {
         return new MethodParameterStubbingSite(parent, method, parameter);
     }
 
+    public static MethodParameterStubbingSite methodParameter(StubbingSite parent, Method method, int parameterIndex) {
+        return new MethodParameterStubbingSite(parent, method, method.getParameters()[parameterIndex]);
+    }
+
     public static MethodReturnValueStubbingSite methodReturnValue(StubbingSite parent, Method method) {
         return new MethodReturnValueStubbingSite(parent, method);
     }
