@@ -17,10 +17,11 @@ final class TestRootStubber extends RootStubber {
 
     @Override
     protected Result<?> tryToStub(Type type, StubbingContext context) {
-        if (!resultProvidersByType.containsKey(type)) {
+        ResultProvider resultProvider = resultProvidersByType.get(type);
+        if (resultProvider == null) {
             throw new AssertionError(String.format("Unexpected type encountered: %s", type));
         }
-        return resultProvidersByType.get(type).get();
+        return resultProvider.get();
     }
 
 }
