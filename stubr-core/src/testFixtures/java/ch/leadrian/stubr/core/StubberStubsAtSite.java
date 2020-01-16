@@ -27,7 +27,7 @@ final class StubberStubsAtSite implements StubberTest {
     public DynamicTest toDynamicTest(Stubber stubber, StubbingContext context) {
         String displayName = getDisplayName(stubber);
         return dynamicTest(displayName, () -> {
-            StubbingSiteCapturingRootStubber capturingRootStubber = new StubbingSiteCapturingRootStubber(context.getStubber());
+            CapturingRootStubber capturingRootStubber = new CapturingRootStubber(context.getStubber());
             StubbingContext capturingContext = new StubbingContext(capturingRootStubber, context.getSite());
 
             stubber.stub(capturingContext, acceptedType);
@@ -43,5 +43,25 @@ final class StubberStubsAtSite implements StubberTest {
                 .map(Object::toString)
                 .collect(joining(", "));
         return String.format("%s should stub %s at %s", stubber.getClass().getSimpleName(), acceptedType, sites);
+    }
+
+    private static final class CapturingRootStubber extends RootStubber {
+
+        private final List<StubbingSite> capturedSites = new ArrayList<>();
+        private final RootStubber delegate;
+
+        CapturingRootStubber(RootStubber delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected Result<?> tryToStub(Type type, StubbingContext context) {
+            capturedSites.add(context.getSite());
+            return delegate.tryToStub(type, context);
+        }
+
+        public List<StubbingSite> getCapturedSites() {
+            return capturedSites;
+        }
     }
 }
