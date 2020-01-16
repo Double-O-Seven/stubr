@@ -40,6 +40,7 @@ class ConstructorStubberTest {
                 .rejects(AmbiguousPublicConstructor.class)
                 .rejects(AmbiguousProtectedConstructor.class)
                 .rejects(AmbiguousPackagePrivateConstructor.class)
+                .rejects(NotMatchingConstructor.class)
                 .test(Stubbers.constructor(constructor -> constructor.getParameterCount() == 2));
     }
 
@@ -154,6 +155,14 @@ class ConstructorStubberTest {
         }
 
         AmbiguousPackagePrivateConstructor(String stringValue, float intValue) {
+        }
+
+    }
+
+    @SuppressWarnings("unused")
+    private static class NotMatchingConstructor {
+
+        NotMatchingConstructor(String stringValue, int intValue, Object objectValue) {
         }
 
     }
