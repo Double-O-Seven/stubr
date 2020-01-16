@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static ch.leadrian.stubr.core.StubberTester.stubberTester;
 import static java.util.function.Function.identity;
 import static org.assertj.core.util.Lists.newArrayList;
 
@@ -20,16 +21,21 @@ class CollectionStubberTest {
 
     @TestFactory
     Stream<DynamicTest> testEmptyCollectionStubber() {
-        StubberTester tester = new StubberTester()
-                .acceptsAndStubs(List.class, new ArrayList<>())
-                .acceptsAndStubs(new TypeLiteral<List<String>>() {
-                }, new ArrayList<>())
-                .acceptsAndStubs(new TypeLiteral<List<? super String>>() {
-                }, new ArrayList<>())
-                .acceptsAndStubs(new TypeLiteral<List<?>>() {
-                }, new ArrayList<>())
-                .acceptsAndStubs(new TypeLiteral<List<? extends String>>() {
-                }, new ArrayList<>())
+        StubberTester tester = stubberTester()
+                .accepts(List.class)
+                .andStubs(new ArrayList<>())
+                .accepts(new TypeLiteral<List<String>>() {
+                })
+                .andStubs(new ArrayList<>())
+                .accepts(new TypeLiteral<List<? super String>>() {
+                })
+                .andStubs(new ArrayList<>())
+                .accepts(new TypeLiteral<List<?>>() {
+                })
+                .andStubs(new ArrayList<>())
+                .accepts(new TypeLiteral<List<? extends String>>() {
+                })
+                .andStubs(new ArrayList<>())
                 .rejects(Collection.class)
                 .rejects(new TypeLiteral<Collection<String>>() {
                 })
@@ -55,12 +61,12 @@ class CollectionStubberTest {
     Stream<DynamicTest> testNonEmptyCollectionStubber() {
         ParameterizedTypeLiteral<List<String>> listOfStrings = new ParameterizedTypeLiteral<List<String>>() {
         };
-        StubberTester tester = new StubberTester()
+        StubberTester tester = stubberTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .rejects(List.class)
-                .acceptsAndStubs(
-                        listOfStrings,
-                        newArrayList("foo", "bar", "baz"),
+                .accepts(listOfStrings)
+                .andStubs(newArrayList("foo", "bar", "baz"))
+                .atSite(
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0)
@@ -87,7 +93,7 @@ class CollectionStubberTest {
 
     @TestFactory
     Stream<DynamicTest> testUnsupportedParameterization() {
-        return new StubberTester()
+        return stubberTester()
                 .rejects(new TypeLiteral<WeirdList<String, Integer>>() {
                 })
                 .test(Stubbers.collection(WeirdList.class, values -> new WeirdList(), context -> 3));

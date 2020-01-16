@@ -4,93 +4,63 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
+public interface StubberTester {
 
-public final class StubberTester {
-
-    private final List<StubberTest> tests = new ArrayList<>();
-    private final Map<Type, ResultProvider> resultProvidersByType = new HashMap<>();
-
-    private StubberTester addResultProvider(Type type, ResultProvider resultProvider) {
-        if (resultProvidersByType.containsKey(type)) {
-            throw new IllegalArgumentException(String.format("Value for %s is already provided", type));
-        }
-        resultProvidersByType.put(type, resultProvider);
-        return this;
+    static StubberTester stubberTester() {
+        return new StubberTesterImpl();
     }
 
-    public StubberTester provideStub(Type type, Object... values) {
-        return addResultProvider(type, ResultProvider.of(values));
-    }
+    StubberTester provideStub(Type type, Object... values);
 
-    public StubberTester provideStub(Object value) {
+    default StubberTester provideStub(Object value) {
         return provideStub(value.getClass(), value);
     }
 
-    @SafeVarargs
-    public final <T> StubberTester provideStub(Class<T> type, T... values) {
+    @SuppressWarnings("unchecked")
+    default <T> StubberTester provideStub(Class<T> type, T... values) {
         return provideStub(type, (Object[]) values);
     }
 
-    @SafeVarargs
-    public final <T> StubberTester provideStub(TypeLiteral<T> typeLiteral, T... values) {
+    @SuppressWarnings("unchecked")
+    default <T> StubberTester provideStub(TypeLiteral<T> typeLiteral, T... values) {
         return provideStub(typeLiteral.getType(), (Object[]) values);
     }
 
-    public StubberTester doNotStub(Type type) {
-        return addResultProvider(type, ResultProvider.of());
-    }
+    StubberTester doNotStub(Type type);
 
-    public StubberTester doNotStub(TypeLiteral<?> typeLiteral) {
+    default StubberTester doNotStub(TypeLiteral<?> typeLiteral) {
         return doNotStub(typeLiteral.getType());
     }
 
-    public StubberTester acceptsAndStubs(Type type, Object expectedValue, StubbingSite... expectedSites) {
-        tests.add(new StubberAcceptsType(type));
-        tests.add(new StubberProvidesStub(type, expectedValue));
-        if (expectedSites.length > 0) {
-            tests.add(new StubberStubsAtSite(type, asList(expectedSites)));
-        }
-        return this;
+    <T> AndStubsStep<T> accepts(Type type);
+
+    default <T> AndStubsStep<T> accepts(Class<T> type) {
+        return accepts((Type) type);
     }
 
-    public <T> StubberTester acceptsAndStubs(Class<T> type, T expectedValue, StubbingSite... expectedSites) {
-        return acceptsAndStubs((Type) type, expectedValue, expectedSites);
+    default <T> AndStubsStep<T> accepts(TypeLiteral<T> typeLiteral) {
+        return accepts(typeLiteral.getType());
     }
 
-    public <T> StubberTester acceptsAndStubs(TypeLiteral<T> typeLiteral, T expectedValue, StubbingSite... expectedSites) {
-        return acceptsAndStubs(typeLiteral.getType(), expectedValue, expectedSites);
-    }
+    StubberTester rejects(Type type);
 
-    public StubberTester rejects(Type type) {
-        tests.add(new StubberRejectsType(type));
-        return this;
-    }
-
-    public StubberTester rejects(TypeLiteral<?> typeLiteral) {
+    default StubberTester rejects(TypeLiteral<?> typeLiteral) {
         return rejects(typeLiteral.getType());
     }
 
-    public Stream<DynamicTest> test(Stubber stubber) {
-        return new ArrayList<>(tests)
-                .stream()
-                .map(test -> {
-                    RootStubber rootStubber = createRootStubber();
-                    StubbingContext context = new StubbingContext(rootStubber, TestStubbingSite.INSTANCE);
-                    return test.toDynamicTest(stubber, context);
-                });
+    Stream<DynamicTest> test(Stubber stubber);
+
+    interface AndStubsStep<T> extends StubberTester {
+
+        AtSiteStep andStubs(T expectedValue);
+
     }
 
-    private RootStubber createRootStubber() {
-        Map<Type, ResultProvider> untouchedResultProvidersByType = new HashMap<>(resultProvidersByType);
-        untouchedResultProvidersByType.replaceAll((type, resultProvider) -> resultProvider.getUntouchedInstance());
-        return new TestRootStubber(untouchedResultProvidersByType);
-    }
+    interface AtSiteStep extends StubberTester {
 
+        StubberTester atSite(StubbingSite... expectedSites);
+
+    }
 }
