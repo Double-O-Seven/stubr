@@ -1,7 +1,6 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
-import ch.leadrian.stubr.core.StubberTester;
 import ch.leadrian.stubr.core.TestStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
@@ -14,14 +13,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.StubberTester.stubberTester;
-import static java.util.function.Function.identity;
 import static org.assertj.core.util.Lists.newArrayList;
 
 class CollectionStubberTest {
 
     @TestFactory
     Stream<DynamicTest> testEmptyCollectionStubber() {
-        StubberTester tester = stubberTester()
+        return stubberTester()
                 .accepts(List.class)
                 .andStubs(new ArrayList<>())
                 .accepts(new TypeLiteral<List<String>>() {
@@ -49,19 +47,19 @@ class CollectionStubberTest {
                 .rejects(new TypeLiteral<ArrayList<? super String>>() {
                 })
                 .rejects(new TypeLiteral<ArrayList<? extends String>>() {
-                });
-        return Stream.of(
-                tester.test(Stubbers.collection(List.class, ArrayList::new, context -> 0)),
-                tester.test(Stubbers.collection(List.class, ArrayList::new, 0)),
-                tester.test(Stubbers.collection(List.class, ArrayList::new))
-        ).flatMap(identity());
+                })
+                .test(
+                        Stubbers.collection(List.class, ArrayList::new, context -> 0),
+                        Stubbers.collection(List.class, ArrayList::new, 0),
+                        Stubbers.collection(List.class, ArrayList::new)
+                );
     }
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyCollectionStubber() {
         ParameterizedTypeLiteral<List<String>> listOfStrings = new ParameterizedTypeLiteral<List<String>>() {
         };
-        StubberTester tester = stubberTester()
+        return stubberTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .rejects(List.class)
                 .accepts(listOfStrings)
@@ -84,11 +82,8 @@ class CollectionStubberTest {
                 .rejects(new TypeLiteral<ArrayList<? super String>>() {
                 })
                 .rejects(new TypeLiteral<ArrayList<? extends String>>() {
-                });
-        return Stream.of(
-                tester.test(Stubbers.collection(List.class, ArrayList::new, context -> 3)),
-                tester.test(Stubbers.collection(List.class, ArrayList::new, 3))
-        ).flatMap(identity());
+                })
+                .test(Stubbers.collection(List.class, ArrayList::new, context -> 3), Stubbers.collection(List.class, ArrayList::new, 3));
     }
 
     @TestFactory

@@ -52,6 +52,10 @@ public interface StubberTester {
 
     Stream<DynamicTest> test(Stubber stubber);
 
+    default Stream<DynamicTest> test(Stubber... stubbers) {
+        return Stream.of(stubbers).flatMap(this::test);
+    }
+
     interface AndStubsStep<T> extends StubberTester {
 
         AtSiteStep andStubs(T expectedValue);
