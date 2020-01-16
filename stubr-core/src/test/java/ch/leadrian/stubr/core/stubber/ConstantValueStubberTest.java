@@ -1,113 +1,40 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
-import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.StubberTester;
 import ch.leadrian.stubr.core.type.TypeLiteral;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
-import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static ch.leadrian.stubr.core.StubberTester.stubberTester;
+import static java.util.function.Function.identity;
 
 class ConstantValueStubberTest {
 
-    private StubbingContext context = new StubbingContext(mock(RootStubber.class), StubbingSites.unknown());
-
-    @Test
-    void shouldAcceptExactClass() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
-
-        boolean accepts = stubber.accepts(context, Number.class);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void shouldAcceptWildcardTypeWithUpperBound() {
-        Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {
-        }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void shouldAcceptWildcardTypeWithLowerBound() {
-        Type type = new ParameterizedTypeLiteral<List<? super Number>>() {
-        }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void shouldNotAcceptSubclass() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
-
-        boolean accepts = stubber.accepts(context, Integer.class);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    void shouldNotAcceptSuperclass() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
-
-        boolean accepts = stubber.accepts(context, Object.class);
-
-        assertThat(accepts)
-                .isFalse();
-    }
-
-    @Test
-    void shouldAcceptUpperBoundParameterizedType() {
-        Type acceptedType = new TypeLiteral<List<String>>() {
-        }.getType();
-        Type type = new ParameterizedTypeLiteral<List<? extends List<String>>>() {
-        }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(acceptedType, singletonList("ABC"));
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void shouldAcceptLowerBoundParameterizedType() {
-        Type acceptedType = new TypeLiteral<List<String>>() {
-        }.getType();
-        Type type = new ParameterizedTypeLiteral<List<? super List<String>>>() {
-        }.getActualTypeArgument(0);
-        ConstantValueStubber stubber = new ConstantValueStubber(acceptedType, singletonList("ABC"));
-
-        boolean accepts = stubber.accepts(context, type);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void shouldReturnValue() {
-        ConstantValueStubber stubber = new ConstantValueStubber(Number.class, 1337);
-
-        Object stub = stubber.stub(context, Number.class);
-
-        assertThat(stub)
-                .isEqualTo(1337);
+    @TestFactory
+    Stream<DynamicTest> testConstantValueStubber() {
+        StubberTester stubberTester = stubberTester()
+                .accepts(BigDecimal.class)
+                .andStubs(new BigDecimal(1337))
+                .accepts(new ParameterizedTypeLiteral<List<? extends BigDecimal>>() {
+                }.getActualTypeArgument(0))
+                .andStubs(new BigDecimal(1337))
+                .accepts(new ParameterizedTypeLiteral<List<? super BigDecimal>>() {
+                }.getActualTypeArgument(0))
+                .andStubs(new BigDecimal(1337))
+                .rejects(Number.class)
+                .rejects(new BigDecimal(1337) {
+                }.getClass());
+        return Stream.of(
+                stubberTester.test(Stubbers.constantValue(new BigDecimal(1337))),
+                stubberTester.test(Stubbers.constantValue(BigDecimal.class, new BigDecimal(1337))),
+                stubberTester.test(Stubbers.constantValue(new TypeLiteral<BigDecimal>() {
+                }, new BigDecimal(1337)))
+        ).flatMap(identity());
     }
 
 }
