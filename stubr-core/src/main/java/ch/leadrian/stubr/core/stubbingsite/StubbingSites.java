@@ -16,6 +16,10 @@ public final class StubbingSites {
         return new ConstructorParameterStubbingSite(parent, constructor, parameter);
     }
 
+    public static ConstructorParameterStubbingSite constructorParameter(StubbingSite parent, Constructor<?> constructor, int parameterIndex) {
+        return new ConstructorParameterStubbingSite(parent, constructor, constructor.getParameters()[parameterIndex]);
+    }
+
     public static MethodParameterStubbingSite methodParameter(StubbingSite parent, Method method, Parameter parameter) {
         return new MethodParameterStubbingSite(parent, method, parameter);
     }
