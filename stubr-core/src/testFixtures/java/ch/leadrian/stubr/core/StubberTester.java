@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static java.util.Arrays.asList;
+
 public final class StubberTester {
 
     private final List<StubberTest> tests = new ArrayList<>();
@@ -49,18 +51,21 @@ public final class StubberTester {
         return doNotStub(typeLiteral.getType());
     }
 
-    public StubberTester acceptsAndStubs(Type type, Object expectedValue) {
+    public StubberTester acceptsAndStubs(Type type, Object expectedValue, StubbingSite... expectedSites) {
         tests.add(new StubberAcceptsType(type));
         tests.add(new StubberProvidesStub(type, expectedValue));
+        if (expectedSites.length > 0) {
+            tests.add(new StubberStubsAtSite(type, asList(expectedSites)));
+        }
         return this;
     }
 
-    public <T> StubberTester acceptsAndStubs(Class<T> type, T expectedValue) {
-        return acceptsAndStubs((Type) type, expectedValue);
+    public <T> StubberTester acceptsAndStubs(Class<T> type, T expectedValue, StubbingSite... expectedSites) {
+        return acceptsAndStubs((Type) type, expectedValue, expectedSites);
     }
 
-    public <T> StubberTester acceptsAndStubs(TypeLiteral<T> typeLiteral, T expectedValue) {
-        return acceptsAndStubs(typeLiteral.getType(), expectedValue);
+    public <T> StubberTester acceptsAndStubs(TypeLiteral<T> typeLiteral, T expectedValue, StubbingSite... expectedSites) {
+        return acceptsAndStubs(typeLiteral.getType(), expectedValue, expectedSites);
     }
 
     public StubberTester rejects(Type type) {
