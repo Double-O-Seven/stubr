@@ -18,28 +18,28 @@ class CollectionStubberTest {
     @TestFactory
     Stream<DynamicTest> testEmptyCollectionStubber() {
         StubberTester tester = new StubberTester()
-                .accepts(List.class, new ArrayList<>())
-                .accepts(new TypeLiteral<List<String>>() {
+                .acceptsAndStubs(List.class, new ArrayList<>())
+                .acceptsAndStubs(new TypeLiteral<List<String>>() {
                 }, new ArrayList<>())
-                .accepts(new TypeLiteral<List<? super String>>() {
+                .acceptsAndStubs(new TypeLiteral<List<? super String>>() {
                 }, new ArrayList<>())
-                .accepts(new TypeLiteral<List<?>>() {
+                .acceptsAndStubs(new TypeLiteral<List<?>>() {
                 }, new ArrayList<>())
-                .accepts(new TypeLiteral<List<? extends String>>() {
+                .acceptsAndStubs(new TypeLiteral<List<? extends String>>() {
                 }, new ArrayList<>())
-                .reject(Collection.class)
-                .reject(new TypeLiteral<Collection<String>>() {
+                .rejects(Collection.class)
+                .rejects(new TypeLiteral<Collection<String>>() {
                 })
-                .reject(new TypeLiteral<Collection<? super String>>() {
+                .rejects(new TypeLiteral<Collection<? super String>>() {
                 })
-                .reject(new TypeLiteral<Collection<? extends String>>() {
+                .rejects(new TypeLiteral<Collection<? extends String>>() {
                 })
-                .reject(ArrayList.class)
-                .reject(new TypeLiteral<ArrayList<String>>() {
+                .rejects(ArrayList.class)
+                .rejects(new TypeLiteral<ArrayList<String>>() {
                 })
-                .reject(new TypeLiteral<ArrayList<? super String>>() {
+                .rejects(new TypeLiteral<ArrayList<? super String>>() {
                 })
-                .reject(new TypeLiteral<ArrayList<? extends String>>() {
+                .rejects(new TypeLiteral<ArrayList<? extends String>>() {
                 });
         return Stream.of(
                 tester.test(Stubbers.collection(List.class, ArrayList::new, context -> 0)),
@@ -52,22 +52,22 @@ class CollectionStubberTest {
     Stream<DynamicTest> testNonEmptyCollectionStubber() {
         StubberTester tester = new StubberTester()
                 .provideStub(String.class, "foo", "bar", "baz")
-                .reject(List.class)
-                .accepts(new TypeLiteral<List<String>>() {
+                .rejects(List.class)
+                .acceptsAndStubs(new TypeLiteral<List<String>>() {
                 }, newArrayList("foo", "bar", "baz"))
-                .reject(Collection.class)
-                .reject(new TypeLiteral<Collection<String>>() {
+                .rejects(Collection.class)
+                .rejects(new TypeLiteral<Collection<String>>() {
                 })
-                .reject(new TypeLiteral<Collection<? super String>>() {
+                .rejects(new TypeLiteral<Collection<? super String>>() {
                 })
-                .reject(new TypeLiteral<Collection<? extends String>>() {
+                .rejects(new TypeLiteral<Collection<? extends String>>() {
                 })
-                .reject(ArrayList.class)
-                .reject(new TypeLiteral<ArrayList<String>>() {
+                .rejects(ArrayList.class)
+                .rejects(new TypeLiteral<ArrayList<String>>() {
                 })
-                .reject(new TypeLiteral<ArrayList<? super String>>() {
+                .rejects(new TypeLiteral<ArrayList<? super String>>() {
                 })
-                .reject(new TypeLiteral<ArrayList<? extends String>>() {
+                .rejects(new TypeLiteral<ArrayList<? extends String>>() {
                 });
         return Stream.of(
                 tester.test(Stubbers.collection(List.class, ArrayList::new, context -> 3)),
@@ -78,7 +78,7 @@ class CollectionStubberTest {
     @TestFactory
     Stream<DynamicTest> testUnsupportedParameterization() {
         return new StubberTester()
-                .reject(new TypeLiteral<WeirdList<String, Integer>>() {
+                .rejects(new TypeLiteral<WeirdList<String, Integer>>() {
                 })
                 .test(Stubbers.collection(WeirdList.class, values -> new WeirdList(), context -> 3));
     }

@@ -49,27 +49,27 @@ public final class StubberTester {
         return doNotStub(typeLiteral.getType());
     }
 
-    public StubberTester accepts(Type type, Object expectedValue) {
+    public StubberTester acceptsAndStubs(Type type, Object expectedValue) {
         tests.add(new StubberAcceptsType(type));
         tests.add(new StubberProvidesStub(type, expectedValue));
         return this;
     }
 
-    public <T> StubberTester accepts(Class<T> type, T expectedValue) {
-        return accepts((Type) type, expectedValue);
+    public <T> StubberTester acceptsAndStubs(Class<T> type, T expectedValue) {
+        return acceptsAndStubs((Type) type, expectedValue);
     }
 
-    public <T> StubberTester accepts(TypeLiteral<T> typeLiteral, T expectedValue) {
-        return accepts(typeLiteral.getType(), expectedValue);
+    public <T> StubberTester acceptsAndStubs(TypeLiteral<T> typeLiteral, T expectedValue) {
+        return acceptsAndStubs(typeLiteral.getType(), expectedValue);
     }
 
-    public StubberTester reject(Type type) {
+    public StubberTester rejects(Type type) {
         tests.add(new StubberRejectsType(type));
         return this;
     }
 
-    public StubberTester reject(TypeLiteral<?> typeLiteral) {
-        return reject(typeLiteral.getType());
+    public StubberTester rejects(TypeLiteral<?> typeLiteral) {
+        return rejects(typeLiteral.getType());
     }
 
     public Stream<DynamicTest> test(Stubber stubber) {

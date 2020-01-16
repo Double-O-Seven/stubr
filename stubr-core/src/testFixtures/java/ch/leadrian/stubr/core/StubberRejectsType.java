@@ -19,7 +19,7 @@ final class StubberRejectsType implements StubberTest {
 
     @Override
     public DynamicTest toDynamicTest(Stubber stubber, StubbingContext context) {
-        String displayName = String.format("%s should reject %s", stubber.getClass().getSimpleName(), acceptedType);
+        String displayName = String.format("%s should rejects %s", stubber.getClass().getSimpleName(), acceptedType);
         return dynamicTest(displayName, () -> {
             boolean accepts = stubber.accepts(context, acceptedType);
 
