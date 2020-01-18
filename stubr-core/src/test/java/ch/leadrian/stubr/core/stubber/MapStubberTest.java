@@ -58,7 +58,7 @@ class MapStubberTest {
                 .rejects(Map.class)
                 .accepts(mapOfStrings)
                 .andStubs(new HashMap<>(ImmutableMap.of("foo", 123, "bar", 456, "baz", 789)))
-                .atSite(
+                .at(
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 0),
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 1),
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 0),

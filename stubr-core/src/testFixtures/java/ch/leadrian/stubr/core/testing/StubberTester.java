@@ -36,13 +36,13 @@ public interface StubberTester {
         return doNotStub(typeLiteral.getType());
     }
 
-    <T> AndStubsStep<T> accepts(Type type);
+    <T> StubValueTester<T> accepts(Type type);
 
-    default <T> AndStubsStep<T> accepts(Class<T> type) {
+    default <T> StubValueTester<T> accepts(Class<T> type) {
         return accepts((Type) type);
     }
 
-    default <T> AndStubsStep<T> accepts(TypeLiteral<T> typeLiteral) {
+    default <T> StubValueTester<T> accepts(TypeLiteral<T> typeLiteral) {
         return accepts(typeLiteral.getType());
     }
 
@@ -58,15 +58,15 @@ public interface StubberTester {
         return Stream.of(stubbers).flatMap(this::test);
     }
 
-    interface AndStubsStep<T> extends StubberTester {
+    interface StubValueTester<T> extends StubberTester {
 
-        AtSiteStep andStubs(T expectedValue);
+        SiteTester andStubs(T expectedValue);
 
     }
 
-    interface AtSiteStep extends StubberTester {
+    interface SiteTester extends StubberTester {
 
-        StubberTester atSite(StubbingSite... expectedSites);
+        StubberTester at(StubbingSite... expectedSites);
 
     }
 }

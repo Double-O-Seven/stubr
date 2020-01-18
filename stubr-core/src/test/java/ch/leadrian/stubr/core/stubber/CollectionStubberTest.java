@@ -64,7 +64,7 @@ class CollectionStubberTest {
                 .rejects(List.class)
                 .accepts(listOfStrings)
                 .andStubs(newArrayList("foo", "bar", "baz"))
-                .atSite(
+                .at(
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0)

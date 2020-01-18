@@ -20,19 +20,19 @@ class ConstructorStubberTest {
                 .provideStub(int.class, 1337)
                 .accepts(UnambiguousPublicConstructor.class)
                 .andStubs(new UnambiguousPublicConstructor("test", 1337))
-                .atSite(
+                .at(
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPublicConstructor.class.getDeclaredConstructor(String.class, int.class), 0),
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPublicConstructor.class.getDeclaredConstructor(String.class, int.class), 1)
                 )
                 .accepts(UnambiguousProtectedConstructor.class)
                 .andStubs(new UnambiguousProtectedConstructor("test", 1337))
-                .atSite(
+                .at(
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousProtectedConstructor.class.getDeclaredConstructor(String.class, int.class), 0),
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousProtectedConstructor.class.getDeclaredConstructor(String.class, int.class), 1)
                 )
                 .accepts(UnambiguousPackagePrivateConstructor.class)
                 .andStubs(new UnambiguousPackagePrivateConstructor("test", 1337))
-                .atSite(
+                .at(
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPackagePrivateConstructor.class.getDeclaredConstructor(String.class, int.class), 0),
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPackagePrivateConstructor.class.getDeclaredConstructor(String.class, int.class), 1)
                 )

@@ -39,9 +39,9 @@ final class StubberTesterImpl implements StubberTester {
     }
 
     @Override
-    public <T> AndStubsStep<T> accepts(Type type) {
+    public <T> StubValueTester<T> accepts(Type type) {
         tests.add(new StubberAcceptsType(type));
-        return new AndStubStepImpl<>(type);
+        return new StubValueTesterImpl<>(type);
     }
 
     @Override
@@ -80,7 +80,7 @@ final class StubberTesterImpl implements StubberTester {
         }
 
         @Override
-        public <T> AndStubsStep<T> accepts(Type type) {
+        public <T> StubValueTester<T> accepts(Type type) {
             return StubberTesterImpl.this.accepts(type);
         }
 
@@ -95,31 +95,31 @@ final class StubberTesterImpl implements StubberTester {
         }
     }
 
-    private final class AndStubStepImpl<T> extends DelegatingStubberTester implements AndStubsStep<T> {
+    private final class StubValueTesterImpl<T> extends DelegatingStubberTester implements StubValueTester<T> {
 
         private final Type type;
 
-        private AndStubStepImpl(Type type) {
+        private StubValueTesterImpl(Type type) {
             this.type = type;
         }
 
         @Override
-        public AtSiteStep andStubs(T expectedValue) {
+        public SiteTester andStubs(T expectedValue) {
             tests.add(new StubberProvidesStub(type, expectedValue));
-            return new AtSiteStepImpl(type);
+            return new SiteTesterImpl(type);
         }
     }
 
-    private final class AtSiteStepImpl extends DelegatingStubberTester implements AtSiteStep {
+    private final class SiteTesterImpl extends DelegatingStubberTester implements SiteTester {
 
         private final Type type;
 
-        private AtSiteStepImpl(Type type) {
+        private SiteTesterImpl(Type type) {
             this.type = type;
         }
 
         @Override
-        public StubberTester atSite(StubbingSite... expectedSites) {
+        public StubberTester at(StubbingSite... expectedSites) {
             tests.add(new StubberStubsAtSite(type, asList(expectedSites)));
             return StubberTesterImpl.this;
         }

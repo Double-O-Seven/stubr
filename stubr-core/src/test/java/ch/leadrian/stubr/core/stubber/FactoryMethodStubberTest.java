@@ -20,19 +20,19 @@ class FactoryMethodStubberTest {
                 .provideStub(int.class, 1337)
                 .accepts(UnambiguousPublicFactoryMethod.class)
                 .andStubs(new UnambiguousPublicFactoryMethod("test", 1337))
-                .atSite(
+                .at(
                         StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousPublicFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 0),
                         StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousPublicFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 1)
                 )
                 .accepts(UnambiguousProtectedFactoryMethod.class)
                 .andStubs(new UnambiguousProtectedFactoryMethod("test", 1337))
-                .atSite(
+                .at(
                         StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousProtectedFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 0),
                         StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousProtectedFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 1)
                 )
                 .accepts(UnambiguousPackagePrivateFactoryMethod.class)
                 .andStubs(new UnambiguousPackagePrivateFactoryMethod("test", 1337))
-                .atSite(
+                .at(
                         StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousPackagePrivateFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 0),
                         StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousPackagePrivateFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 1)
                 )
