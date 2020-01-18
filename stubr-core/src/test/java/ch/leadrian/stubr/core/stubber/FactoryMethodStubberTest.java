@@ -1,15 +1,15 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.equalizer.Equals;
-import ch.leadrian.stubr.core.TestStubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsBuilder;
-import static ch.leadrian.stubr.core.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
 
 class FactoryMethodStubberTest {
 

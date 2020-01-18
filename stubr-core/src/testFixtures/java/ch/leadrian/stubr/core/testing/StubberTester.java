@@ -1,5 +1,7 @@
-package ch.leadrian.stubr.core;
+package ch.leadrian.stubr.core.testing;
 
+import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 

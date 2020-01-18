@@ -1,4 +1,8 @@
-package ch.leadrian.stubr.core;
+package ch.leadrian.stubr.core.testing;
+
+import ch.leadrian.stubr.core.Result;
+import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.StubbingContext;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

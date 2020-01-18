@@ -1,4 +1,6 @@
-package ch.leadrian.stubr.core;
+package ch.leadrian.stubr.core.testing;
+
+import ch.leadrian.stubr.core.StubbingSite;
 
 import java.util.Optional;
 

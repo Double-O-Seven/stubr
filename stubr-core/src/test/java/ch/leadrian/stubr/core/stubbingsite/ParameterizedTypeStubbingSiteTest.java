@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.stubbingsite;
 
-import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.testing.ParameterizedTypeLiteral;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 

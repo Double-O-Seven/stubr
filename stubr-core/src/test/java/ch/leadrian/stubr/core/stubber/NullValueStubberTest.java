@@ -7,7 +7,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
 
 class NullValueStubberTest {
 

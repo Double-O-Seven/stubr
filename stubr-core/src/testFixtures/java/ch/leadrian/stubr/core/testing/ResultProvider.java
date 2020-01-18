@@ -1,4 +1,6 @@
-package ch.leadrian.stubr.core;
+package ch.leadrian.stubr.core.testing;
+
+import ch.leadrian.stubr.core.Result;
 
 import java.util.ArrayList;
 import java.util.Collection;

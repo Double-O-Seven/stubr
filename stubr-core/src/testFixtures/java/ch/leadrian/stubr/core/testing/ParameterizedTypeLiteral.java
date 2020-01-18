@@ -1,4 +1,4 @@
-package ch.leadrian.stubr.core;
+package ch.leadrian.stubr.core.testing;
 
 import ch.leadrian.stubr.core.type.TypeLiteral;
 
