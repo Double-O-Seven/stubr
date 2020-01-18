@@ -14,7 +14,7 @@ import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
 class FactoryMethodStubberTest {
 
     @TestFactory
-    Stream<DynamicTest> testFactoryMethodStubber() throws Exception {
+    Stream<DynamicTest> testFactoryMethodStubberWithFilter() throws Exception {
         return stubberTester()
                 .provideStub("test")
                 .provideStub(int.class, 1337)
@@ -47,6 +47,33 @@ class FactoryMethodStubberTest {
                 .test(Stubbers.factoryMethod(factoryMethod -> factoryMethod.getParameterCount() == 2));
     }
 
+    @TestFactory
+    Stream<DynamicTest> testFactoryMethodStubberAcceptingAnyConstructor() throws Throwable {
+        return stubberTester()
+                .provideStub("test")
+                .provideStub(int.class, 1337)
+                .accepts(UnambiguousPublicFactoryMethod.class)
+                .andStubs(new UnambiguousPublicFactoryMethod("test", 1337))
+                .at(
+                        StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousPublicFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 0),
+                        StubbingSites.methodParameter(TestStubbingSite.INSTANCE, UnambiguousPublicFactoryMethod.class.getDeclaredMethod("get", String.class, int.class), 1)
+                )
+                .rejects(MultiplePublicFactoryMethods.class)
+                .test(Stubbers.factoryMethod());
+    }
+
+    @SuppressWarnings("unused")
+    private static class MultiplePublicFactoryMethods {
+
+        public static MultiplePublicFactoryMethods get(String stringValue, int intValue) {
+            return null;
+        }
+
+        public static MultiplePublicFactoryMethods get(String stringValue, long longValue) {
+            return null;
+        }
+    }
+
     @SuppressWarnings("unused")
     private static class UnambiguousPublicFactoryMethod {
 
@@ -65,14 +92,6 @@ class FactoryMethodStubberTest {
 
         public static UnambiguousPublicFactoryMethod get(String stringValue, int intValue) {
             return new UnambiguousPublicFactoryMethod(stringValue, intValue);
-        }
-
-        public static UnambiguousPublicFactoryMethod get(String stringValue) {
-            return get(stringValue, 0);
-        }
-
-        public static UnambiguousPublicFactoryMethod get() {
-            return get("", 0);
         }
 
         @Override

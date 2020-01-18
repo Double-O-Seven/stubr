@@ -14,7 +14,7 @@ import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
 class ConstructorStubberTest {
 
     @TestFactory
-    Stream<DynamicTest> testConstructorStubber() throws Exception {
+    Stream<DynamicTest> testConstructorStubberWithFilter() throws Exception {
         return stubberTester()
                 .provideStub("test")
                 .provideStub(int.class, 1337)
@@ -44,6 +44,33 @@ class ConstructorStubberTest {
                 .test(Stubbers.constructor(constructor -> constructor.getParameterCount() == 2));
     }
 
+    @TestFactory
+    Stream<DynamicTest> testConstructorStubberAcceptingAnyMethod() throws Exception {
+        return stubberTester()
+                .provideStub("test")
+                .provideStub(int.class, 1337)
+                .accepts(UnambiguousPublicConstructor.class)
+                .andStubs(new UnambiguousPublicConstructor("test", 1337))
+                .at(
+                        StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPublicConstructor.class.getDeclaredConstructor(String.class, int.class), 0),
+                        StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPublicConstructor.class.getDeclaredConstructor(String.class, int.class), 1)
+                )
+                .rejects(MultiplePublicConstructors.class)
+                .test(Stubbers.constructor());
+    }
+
+    @SuppressWarnings("unused")
+    private static class MultiplePublicConstructors {
+
+        public static MultiplePublicConstructors get(String stringValue, int intValue) {
+            return null;
+        }
+
+        public static MultiplePublicConstructors get(String stringValue, long longValue) {
+            return null;
+        }
+    }
+
     @SuppressWarnings("unused")
     private static class UnambiguousPublicConstructor {
 
@@ -58,14 +85,6 @@ class ConstructorStubberTest {
         public UnambiguousPublicConstructor(String stringValue, int intValue) {
             this.stringValue = stringValue;
             this.intValue = intValue;
-        }
-
-        public UnambiguousPublicConstructor(String stringValue) {
-            this(stringValue, 0);
-        }
-
-        public UnambiguousPublicConstructor() {
-            this("", 0);
         }
 
         @Override
