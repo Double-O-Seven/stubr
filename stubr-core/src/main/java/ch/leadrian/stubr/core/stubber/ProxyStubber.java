@@ -71,20 +71,20 @@ enum ProxyStubber implements Stubber {
             this.context = context;
         }
 
-        protected Object stub(Method method) {
-            Type returnType = method.getGenericReturnType();
-            if (returnType == void.class || returnType == Void.class || returnType == null) {
-                return null;
-            }
-            return context.getStubber().stub(returnType, StubbingSites.methodReturnValue(context.getSite(), method));
-        }
-
         @Override
         public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (method.isDefault()) {
                 return DEFAULT_METHOD_INVOCATION_HANDLER.invoke(proxy, method, args);
             }
             return getReturnValue(method);
+        }
+
+        protected final Object stub(Method method) {
+            Type returnType = method.getGenericReturnType();
+            if (returnType == void.class || returnType == Void.class || returnType == null) {
+                return null;
+            }
+            return context.getStubber().stub(returnType, StubbingSites.methodReturnValue(context.getSite(), method));
         }
 
         protected abstract Object getReturnValue(Method method);
