@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
@@ -106,6 +107,12 @@ final class StubberTesterImpl implements StubberTester {
         @Override
         public SiteTester andStubs(T expectedValue) {
             tests.add(new StubberProvidesStub(type, expectedValue));
+            return new SiteTesterImpl(type);
+        }
+
+        @Override
+        public SiteTester andStubSatisfies(Consumer<Object> assertion) {
+            tests.add(new StubberProvidesStubSatisfying(type, assertion));
             return new SiteTesterImpl(type);
         }
     }

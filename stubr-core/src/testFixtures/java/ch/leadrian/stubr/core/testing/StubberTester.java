@@ -6,6 +6,7 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public interface StubberTester {
@@ -61,6 +62,8 @@ public interface StubberTester {
     interface StubValueTester<T> extends StubberTester {
 
         SiteTester andStubs(T expectedValue);
+
+        SiteTester andStubSatisfies(Consumer<Object> assertion);
 
     }
 
