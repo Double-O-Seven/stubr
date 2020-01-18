@@ -45,11 +45,15 @@ class OptionalStubberTest {
     Stream<DynamicTest> testPresentIfPossibleOptionalStubber() {
         return stubberTester()
                 .provideStub("Test")
+                .doNotStub(Integer.class)
                 .accepts(Optional.class)
                 .andStubs(Optional.empty())
                 .accepts(new TypeLiteral<Optional<String>>() {
                 })
                 .andStubs(Optional.of("Test"))
+                .accepts(new TypeLiteral<Optional<Integer>>() {
+                })
+                .andStubs(Optional.empty())
                 .rejects(String.class)
                 .test(Stubbers.optional(OptionalStubbingMode.PRESENT_IF_POSSIBLE));
     }
