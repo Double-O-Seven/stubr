@@ -62,6 +62,16 @@ enum ProxyStubber implements Stubber {
             return context.getStubber().stub(returnType, StubbingSites.methodReturnValue(context.getSite(), method));
         }
 
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (method.isDefault()) {
+                return method.invoke(proxy, args);
+            }
+            return getReturnValue(method);
+        }
+
+        protected abstract Object getReturnValue(Method method);
+
     }
 
     private static final class SimpleInvocationHandler extends StubbingInvocationHandler {
@@ -71,7 +81,7 @@ enum ProxyStubber implements Stubber {
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) {
+        protected Object getReturnValue(Method method) {
             return stub(method);
         }
 
@@ -86,7 +96,7 @@ enum ProxyStubber implements Stubber {
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) {
+        protected Object getReturnValue(Method method) {
             return stubbedValues.computeIfAbsent(method, this::stub);
         }
     }
