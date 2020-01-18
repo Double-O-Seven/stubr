@@ -63,7 +63,7 @@ enum ProxyStubber implements Stubber {
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (method.isDefault()) {
                 return method.invoke(proxy, args);
             }
