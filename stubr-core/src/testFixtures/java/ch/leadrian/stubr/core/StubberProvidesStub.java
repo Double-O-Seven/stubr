@@ -25,9 +25,13 @@ final class StubberProvidesStub implements StubberTest {
         return dynamicTest(displayName, () -> {
             Object value = stubber.stub(context, acceptedType);
 
-            assertThat(value)
-                    .hasSameClassAs(expectedValue)
-                    .isEqualTo(expectedValue);
+            if (expectedValue == null) {
+                assertThat(value).isNull();
+            } else {
+                assertThat(value)
+                        .hasSameClassAs(expectedValue)
+                        .isEqualTo(expectedValue);
+            }
         });
     }
 }

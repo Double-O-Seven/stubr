@@ -1,34 +1,35 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import org.junit.jupiter.api.Test;
+import ch.leadrian.stubr.core.type.TypeLiteral;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static ch.leadrian.stubr.core.StubberTester.stubberTester;
 
 class NullValueStubberTest {
 
-    private StubbingContext context = new StubbingContext(mock(RootStubber.class), StubbingSites.unknown());
-
-    @Test
-    void shouldAcceptAnything() {
-        boolean accepts = NullValueStubber.INSTANCE.accepts(context, Foo.class);
-
-        assertThat(accepts)
-                .isTrue();
-    }
-
-    @Test
-    void shouldReturnNullAsStub() {
-        Object stub = NullValueStubber.INSTANCE.stub(context, Foo.class);
-
-        assertThat(stub)
-                .isNull();
-    }
-
-    private static final class Foo {
+    @TestFactory
+    Stream<DynamicTest> testNullValueStubber() {
+        return stubberTester()
+                .accepts(Object.class)
+                .andStubs(null)
+                .accepts(String.class)
+                .andStubs(null)
+                .accepts(new TypeLiteral<List<String>>() {
+                })
+                .andStubs(null)
+                .rejects(boolean.class)
+                .rejects(byte.class)
+                .rejects(short.class)
+                .rejects(char.class)
+                .rejects(int.class)
+                .rejects(long.class)
+                .rejects(float.class)
+                .rejects(double.class)
+                .test(Stubbers.nullValue());
     }
 
 }
