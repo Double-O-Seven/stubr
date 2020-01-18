@@ -4,7 +4,11 @@ import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import com.google.common.base.StandardSystemProperty;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -13,6 +17,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
+import static java.lang.Float.parseFloat;
+import static java.lang.invoke.MethodHandles.Lookup.PACKAGE;
+import static java.lang.invoke.MethodHandles.Lookup.PRIVATE;
+import static java.lang.invoke.MethodHandles.Lookup.PROTECTED;
+import static java.lang.invoke.MethodHandles.Lookup.PUBLIC;
 
 enum ProxyStubber implements Stubber {
     CACHING(true),
@@ -48,6 +57,14 @@ enum ProxyStubber implements Stubber {
 
     private static abstract class StubbingInvocationHandler implements InvocationHandler {
 
+        private static final InvocationHandler DEFAULT_METHOD_INVOCATION_HANDLER;
+
+        static {
+            float version = parseFloat(System.getProperty(StandardSystemProperty.JAVA_CLASS_VERSION.key()));
+            boolean isJava8 = version <= 52;
+            DEFAULT_METHOD_INVOCATION_HANDLER = isJava8 ? Java8DefaultMethodInvocationHandler.INSTANCE : Java9PlusDefaultMethodInvocationHandler.INSTANCE;
+        }
+
         private final StubbingContext context;
 
         StubbingInvocationHandler(StubbingContext context) {
@@ -65,7 +82,7 @@ enum ProxyStubber implements Stubber {
         @Override
         public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (method.isDefault()) {
-                return method.invoke(proxy, args);
+                return DEFAULT_METHOD_INVOCATION_HANDLER.invoke(proxy, method, args);
             }
             return getReturnValue(method);
         }
@@ -98,6 +115,39 @@ enum ProxyStubber implements Stubber {
         @Override
         protected Object getReturnValue(Method method) {
             return stubbedValues.computeIfAbsent(method, this::stub);
+        }
+    }
+
+    private enum Java8DefaultMethodInvocationHandler implements InvocationHandler {
+        INSTANCE;
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            Class<?> declaringClass = method.getDeclaringClass();
+            Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
+            constructor.setAccessible(true);
+            MethodHandles.Lookup lookup = constructor.newInstance(declaringClass, PUBLIC | PROTECTED | PACKAGE | PRIVATE);
+            return lookup
+                    .unreflectSpecial(method, declaringClass)
+                    .bindTo(proxy)
+                    .invokeWithArguments(args);
+        }
+    }
+
+    private enum Java9PlusDefaultMethodInvocationHandler implements InvocationHandler {
+        INSTANCE;
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            return MethodHandles.lookup()
+                    .findSpecial(
+                            method.getDeclaringClass(),
+                            method.getName(),
+                            MethodType.methodType(method.getReturnType(), new Class[0]),
+                            method.getDeclaringClass()
+                    )
+                    .bindTo(proxy)
+                    .invokeWithArguments(args);
         }
     }
 
