@@ -8,8 +8,8 @@ import static java.util.Objects.requireNonNull;
 public final class StubbingContext {
 
     private static final EqualsAndHashCode<StubbingContext> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(StubbingContext.class)
-            .compare(StubbingContext::getStubber)
-            .compare(StubbingContext::getSite)
+            .compareAndHash(StubbingContext::getStubber)
+            .compareAndHash(StubbingContext::getSite)
             .build();
 
     private final RootStubber stubber;
