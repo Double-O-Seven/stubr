@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static java.util.Collections.singletonList;
 
 class ConstantValueStubberTest {
 
@@ -33,6 +34,18 @@ class ConstantValueStubberTest {
                         Stubbers.constantValue(new TypeLiteral<BigDecimal>() {
                         }, new BigDecimal(1337))
                 );
+    }
+
+    @TestFactory
+    Stream<DynamicTest> testConstantValueStubberWithParameterizedType() {
+        TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {
+        };
+        return stubberTester()
+                .accepts(listOfStrings)
+                .andStubs(singletonList("Test"))
+                .rejects(new TypeLiteral<List<Integer>>() {
+                })
+                .test(Stubbers.constantValue(listOfStrings, singletonList("Test")));
     }
 
 }
