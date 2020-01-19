@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -69,6 +70,33 @@ class TypeLiteralTest {
 
         assertThat(string)
                 .isEqualTo("TypeLiteral{type=class java.lang.String}");
+    }
+
+    @Test
+    void givenSuperclassIsNotParameterizedItShouldThrowException() {
+        Throwable caughtThrowable = catchThrowable(() -> new UnparameterizedTypeLiteral() {
+        });
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Superclass must be parameterized");
+    }
+
+    @Test
+    void givenSuperclassHasMultipleTypeArgumentsItShouldThrowException() {
+        Throwable caughtThrowable = catchThrowable(() -> new MultipleParametersTypeLiteral<String, Integer>() {
+        });
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Expected exactly one type argument");
+    }
+
+    private static abstract class UnparameterizedTypeLiteral extends TypeLiteral<Object> {
+    }
+
+    @SuppressWarnings("unused")
+    private static abstract class MultipleParametersTypeLiteral<T, U> extends TypeLiteral<T> {
     }
 
 }
