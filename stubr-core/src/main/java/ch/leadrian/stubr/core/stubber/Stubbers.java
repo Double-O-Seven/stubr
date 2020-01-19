@@ -76,6 +76,10 @@ public final class Stubbers {
         return DefaultValueStubber.INSTANCE;
     }
 
+    public static Stubber enumValue() {
+        return EnumValueStubber.INSTANCE;
+    }
+
     public static Stubber factoryMethod(MethodMatcher matcher) {
         return new FactoryMethodStubber(matcher);
     }
