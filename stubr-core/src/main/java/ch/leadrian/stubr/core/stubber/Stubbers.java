@@ -9,10 +9,12 @@ import ch.leadrian.stubr.core.matcher.ConstructorMatchers;
 import ch.leadrian.stubr.core.matcher.MethodMatchers;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
@@ -123,5 +125,29 @@ public final class Stubbers {
 
     public static Stubber rootStubber() {
         return RootStubberStubber.INSTANCE;
+    }
+
+    public static Stubber suppliedValue(Type type, IntFunction<?> valueSupplier) {
+        return new SuppliedValueStubber(type, valueSupplier);
+    }
+
+    public static Stubber suppliedValue(Type type, Supplier<?> valueSupplier) {
+        return suppliedValue(type, sequenceNumber -> valueSupplier.get());
+    }
+
+    public static <T> Stubber suppliedValue(Class<T> type, IntFunction<? extends T> valueSupplier) {
+        return new SuppliedValueStubber(type, valueSupplier);
+    }
+
+    public static <T> Stubber suppliedValue(Class<T> type, Supplier<? extends T> valueSupplier) {
+        return suppliedValue(type, sequenceNumber -> valueSupplier.get());
+    }
+
+    public static <T> Stubber suppliedValue(TypeLiteral<T> typeLiteral, IntFunction<? extends T> valueSupplier) {
+        return suppliedValue(typeLiteral.getType(), valueSupplier);
+    }
+
+    public static <T> Stubber suppliedValue(TypeLiteral<T> typeLiteral, Supplier<? extends T> valueSupplier) {
+        return suppliedValue(typeLiteral.getType(), sequenceNumber -> valueSupplier.get());
     }
 }
