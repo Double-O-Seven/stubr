@@ -12,6 +12,10 @@ public final class StubbingSites {
     private StubbingSites() {
     }
 
+    public static ArrayStubbingSite array(StubbingSite parent, Class<?> componentType) {
+        return new ArrayStubbingSite(parent, componentType);
+    }
+
     public static ConstructorParameterStubbingSite constructorParameter(StubbingSite parent, Constructor<?> constructor, Parameter parameter) {
         return new ConstructorParameterStubbingSite(parent, constructor, parameter);
     }

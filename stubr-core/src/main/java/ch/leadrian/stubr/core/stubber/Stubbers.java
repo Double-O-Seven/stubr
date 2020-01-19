@@ -23,6 +23,18 @@ public final class Stubbers {
     private Stubbers() {
     }
 
+    public static Stubber array(ToIntFunction<? super StubbingContext> arraySize) {
+        return new ArrayStubber(arraySize);
+    }
+
+    public static Stubber array(int arraySize) {
+        return array(context -> arraySize);
+    }
+
+    public static Stubber array() {
+        return array(0);
+    }
+
     public static <T extends Collection> Stubber collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
         return new CollectionStubber<>(collectionClass, collectionFactory, collectionSize);
     }
