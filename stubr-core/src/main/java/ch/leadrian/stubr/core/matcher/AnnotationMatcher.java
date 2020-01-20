@@ -68,7 +68,7 @@ abstract class AnnotationMatcher {
         private final Class<? extends Annotation> annotationType;
 
         ByType(Class<? extends Annotation> annotationType) {
-            requireNonNull(annotationType, "annotation");
+            requireNonNull(annotationType, "annotationType");
             this.annotationType = annotationType;
         }
 
