@@ -37,7 +37,7 @@ public abstract class RootStubber {
     public final Object stub(Type type, StubbingSite site) {
         Result<?> result = tryToStub(type, site);
         if (result.isFailure()) {
-            throw new IllegalStateException(String.format("Failed to stub instance of %s", type));
+            throw new StubbingException(String.format("Failed to stub instance of %s", type));
         }
         return result.getValue();
     }

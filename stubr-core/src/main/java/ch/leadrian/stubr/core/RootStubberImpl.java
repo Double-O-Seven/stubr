@@ -1,13 +1,13 @@
 package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.stubber.Stubbers;
 import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.addAll;
+import static ch.leadrian.stubr.core.stubber.Stubbers.conditional;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 final class RootStubberImpl extends RootStubber {
@@ -50,7 +50,7 @@ final class RootStubberImpl extends RootStubber {
         public RootStubberBuilder stubWith(Stubber stubber, TypeMatcher matcher) {
             requireNonNull(stubber, "stubber");
             requireNonNull(matcher, "matcher");
-            return stubWith(Stubbers.conditional(stubber, matcher));
+            return stubWith(conditional(stubber, matcher));
         }
 
         @Override
@@ -71,7 +71,7 @@ final class RootStubberImpl extends RootStubber {
         @Override
         public RootStubberBuilder stubWith(Stubber... stubbers) {
             requireNonNull(stubbers, "stubbers");
-            addAll(this.stubbers, stubbers);
+            stubWith(asList(stubbers));
             return this;
         }
 
@@ -83,7 +83,7 @@ final class RootStubberImpl extends RootStubber {
             } else {
                 List<RootStubber> includedRootStubbers = new ArrayList<>(this.rootStubbers);
                 includedRootStubbers.add(0, builtRootStubber);
-                return RootStubber.compose(includedRootStubbers);
+                return compose(includedRootStubbers);
             }
         }
     }
