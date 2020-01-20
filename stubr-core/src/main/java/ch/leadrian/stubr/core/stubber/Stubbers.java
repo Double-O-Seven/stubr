@@ -132,6 +132,7 @@ public final class Stubbers {
     }
 
     public static Stubber suppliedValue(Type type, Supplier<?> valueSupplier) {
+        requireNonNull(valueSupplier, "valueSupplier");
         return suppliedValue(type, sequenceNumber -> valueSupplier.get());
     }
 
