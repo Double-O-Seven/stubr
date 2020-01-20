@@ -21,7 +21,7 @@ public final class StubbingSites {
     }
 
     public static ConstructorParameterStubbingSite constructorParameter(StubbingSite parent, Constructor<?> constructor, int parameterIndex) {
-        return new ConstructorParameterStubbingSite(parent, constructor, constructor.getParameters()[parameterIndex]);
+        return constructorParameter(parent, constructor, constructor.getParameters()[parameterIndex]);
     }
 
     public static MethodParameterStubbingSite methodParameter(StubbingSite parent, Method method, Parameter parameter) {
@@ -29,7 +29,7 @@ public final class StubbingSites {
     }
 
     public static MethodParameterStubbingSite methodParameter(StubbingSite parent, Method method, int parameterIndex) {
-        return new MethodParameterStubbingSite(parent, method, method.getParameters()[parameterIndex]);
+        return methodParameter(parent, method, method.getParameters()[parameterIndex]);
     }
 
     public static MethodReturnValueStubbingSite methodReturnValue(StubbingSite parent, Method method) {
