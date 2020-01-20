@@ -3,9 +3,11 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
 import ch.leadrian.stubr.core.testing.StubberTester;
 import ch.leadrian.stubr.core.testing.TestStubbingSite;
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 class ArrayStubberTest {
@@ -19,6 +21,8 @@ class ArrayStubberTest {
                 .andStubs(new String[0])
                 .rejects(Object.class)
                 .rejects(String.class)
+                .rejects(new TypeLiteral<List<String[]>>() {
+                })
                 .test(
                         Stubbers.array(context -> 0),
                         Stubbers.array(0),
@@ -47,6 +51,8 @@ class ArrayStubberTest {
                 )
                 .rejects(Object.class)
                 .rejects(String.class)
+                .rejects(new TypeLiteral<List<String[]>>() {
+                })
                 .test(
                         Stubbers.array(context -> 3),
                         Stubbers.array(3)
