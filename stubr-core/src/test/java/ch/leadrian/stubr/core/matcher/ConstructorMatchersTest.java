@@ -21,6 +21,12 @@ class ConstructorMatchersTest {
     }
 
     @Test
+    void shouldReturnIsPublicConstructorMatcher() {
+        assertThat(ConstructorMatchers.isPublic())
+                .isEqualTo(IsPublicConstructorMatcher.INSTANCE);
+    }
+
+    @Test
     void shouldReturnAcceptingConstructorMatcher() {
         assertThat(ConstructorMatchers.accepting(String.class, int.class))
                 .isEqualTo(new AcceptingConstructorMatcher(String.class, int.class));

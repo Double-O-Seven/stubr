@@ -17,6 +17,10 @@ public final class ConstructorMatchers {
         return IsDefaultConstructorMatcher.INSTANCE;
     }
 
+    public static ConstructorMatcher isPublic() {
+        return IsPublicConstructorMatcher.INSTANCE;
+    }
+
     public static ConstructorMatcher accepting(Class<?>... parameterTypes) {
         return new AcceptingConstructorMatcher(parameterTypes);
     }
