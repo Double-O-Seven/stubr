@@ -1,137 +1,59 @@
 package ch.leadrian.stubr.core.matcher;
 
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
+import java.lang.annotation.Annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ConstructorMatchersTest {
 
-    @Nested
-    class AnyTest {
-
-        @Test
-        void shouldReturnTrueForConstructorWithoutArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor();
-
-            boolean matches = ConstructorMatchers.any().matches(constructor);
-
-            assertThat(matches)
-                    .isTrue();
-        }
-
-        @Test
-        void shouldReturnTrueForConstructorWithArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class, int.class);
-
-            boolean matches = ConstructorMatchers.any().matches(constructor);
-
-            assertThat(matches)
-                    .isTrue();
-        }
-
+    @Test
+    void shouldReturnAnyConstructorMatcherInstance() {
+        assertThat(ConstructorMatchers.any())
+                .isEqualTo(AnyConstructorMatcher.INSTANCE);
     }
 
-    @Nested
-    class IsDefaultTest {
-
-        @Test
-        void shouldReturnTrueForConstructorWithoutArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor();
-
-            boolean matches = ConstructorMatchers.isDefault().matches(constructor);
-
-            assertThat(matches)
-                    .isTrue();
-        }
-
-        @Test
-        void shouldReturnFalseForConstructorWithArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class, int.class);
-
-            boolean matches = ConstructorMatchers.isDefault().matches(constructor);
-
-            assertThat(matches)
-                    .isFalse();
-        }
-
+    @Test
+    void shouldReturnIsDefaultConstructorMatcher() {
+        assertThat(ConstructorMatchers.isDefault())
+                .isEqualTo(IsDefaultConstructorMatcher.INSTANCE);
     }
 
-    @Nested
-    class AcceptingTest {
-
-        @Test
-        void shouldReturnTrueForConstructorWithExactlyMatchingArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(CharSequence.class, long.class);
-
-            boolean matches = ConstructorMatchers.accepting(CharSequence.class, long.class).matches(constructor);
-
-            assertThat(matches)
-                    .isTrue();
-        }
-
-        @Test
-        void shouldReturnTrueForConstructorWithMatchingArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(CharSequence.class, long.class);
-
-            boolean matches = ConstructorMatchers.accepting(String.class, long.class).matches(constructor);
-
-            assertThat(matches)
-                    .isTrue();
-        }
-
-        @Test
-        void shouldReturnFalseForConstructorWithoutMatchingArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class, int.class);
-
-            boolean matches = ConstructorMatchers.accepting(String.class, long.class).matches(constructor);
-
-            assertThat(matches)
-                    .isFalse();
-        }
-
-        @Test
-        void shouldReturnFalseForConstructorWithoutArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor();
-
-            boolean matches = ConstructorMatchers.accepting(String.class, long.class).matches(constructor);
-
-            assertThat(matches)
-                    .isFalse();
-        }
-
-        @Test
-        void shouldReturnFalseForConstructorWithoutNumberOfArguments() throws Exception {
-            Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class);
-
-            boolean matches = ConstructorMatchers.accepting(String.class, long.class).matches(constructor);
-
-            assertThat(matches)
-                    .isFalse();
-        }
-
+    @Test
+    void shouldReturnAcceptingConstructorMatcher() {
+        assertThat(ConstructorMatchers.accepting(String.class, int.class))
+                .isEqualTo(new AcceptingConstructorMatcher(String.class, int.class));
     }
 
-    @SuppressWarnings("unused")
-    private static class Foo {
+    @Test
+    void shouldReturnAnnotatedWithConstructorMatcherByAnnotationName() {
+        assertThat(ConstructorMatchers.annotatedWith("Test"))
+                .isEqualTo(new AnnotatedWithConstructorMatcher(AnnotationMatcher.by("Test")));
+    }
 
-        Foo(String param1) {
+    @Test
+    void shouldReturnAnnotatedWithConstructorMatcherByAnnotationType() {
+        assertThat(ConstructorMatchers.annotatedWith(Foo.class))
+                .isEqualTo(new AnnotatedWithConstructorMatcher(AnnotationMatcher.by(Foo.class)));
+    }
+
+    @Test
+    void shouldReturnAnnotatedWithConstructorMatcherByAnnotationInstance() {
+        Foo annotation = new FooImpl();
+        assertThat(ConstructorMatchers.annotatedWith(annotation))
+                .isEqualTo(new AnnotatedWithConstructorMatcher(AnnotationMatcher.by(annotation)));
+    }
+
+    @interface Foo {
+    }
+
+    private static final class FooImpl implements Foo {
+
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return Foo.class;
         }
-
-        Foo(String param1, int param2) {
-        }
-
-        Foo(String param1, float param2) {
-        }
-
-        Foo(CharSequence param1, long param2) {
-        }
-
-        Foo() {
-        }
-
     }
 
 }
