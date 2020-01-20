@@ -1,23 +1,22 @@
 package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.ConstructorMatcher;
+import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
-import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 final class AcceptingConstructorMatcher implements ConstructorMatcher {
 
     private final List<Class<?>> parameterTypes;
 
-    AcceptingConstructorMatcher(Class<?>... parameterTypes) {
+    AcceptingConstructorMatcher(List<Class<?>> parameterTypes) {
         requireNonNull(parameterTypes, "parameterTypes");
-        this.parameterTypes = new ArrayList<>(asList(parameterTypes));
+        this.parameterTypes = ImmutableList.copyOf(parameterTypes);
     }
 
     @Override
