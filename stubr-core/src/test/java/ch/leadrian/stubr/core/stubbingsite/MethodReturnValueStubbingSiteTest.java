@@ -4,6 +4,7 @@ import ch.leadrian.stubr.core.StubbingSite;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -34,6 +35,18 @@ class MethodReturnValueStubbingSiteTest {
         Method method = site.getMethod();
 
         assertThat(method)
+                .isEqualTo(expectedMethod);
+    }
+
+    @Test
+    void shouldReturnMethodAsAnnotatedElement() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Method expectedMethod = Foo.class.getMethod("foo", int.class);
+        MethodReturnValueStubbingSite site = StubbingSites.methodReturnValue(parent, expectedMethod);
+
+        AnnotatedElement annotatedElement = site.getAnnotatedElement();
+
+        assertThat(annotatedElement)
                 .isEqualTo(expectedMethod);
     }
 

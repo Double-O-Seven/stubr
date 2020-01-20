@@ -4,6 +4,7 @@ import ch.leadrian.stubr.core.StubbingSite;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
@@ -50,6 +51,19 @@ class MethodParameterStubbingSiteTest {
         Parameter parameter = site.getParameter();
 
         assertThat(parameter)
+                .isEqualTo(expectedParameter);
+    }
+
+    @Test
+    void shouldReturnParameterAsAnnotatedElement() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Method method = Foo.class.getMethod("foo", int.class);
+        Parameter expectedParameter = method.getParameters()[0];
+        MethodParameterStubbingSite site = StubbingSites.methodParameter(parent, method, expectedParameter);
+
+        AnnotatedElement annotatedElement = site.getAnnotatedElement();
+
+        assertThat(annotatedElement)
                 .isEqualTo(expectedParameter);
     }
 

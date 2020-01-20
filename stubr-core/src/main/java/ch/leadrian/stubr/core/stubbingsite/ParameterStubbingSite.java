@@ -1,11 +1,14 @@
 package ch.leadrian.stubr.core.stubbingsite;
 
-import ch.leadrian.stubr.core.StubbingSite;
-
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Parameter;
 
-public interface ParameterStubbingSite extends StubbingSite {
+public interface ParameterStubbingSite extends AnnotatedStubbingSite {
 
     Parameter getParameter();
 
+    @Override
+    default AnnotatedElement getAnnotatedElement() {
+        return getParameter();
+    }
 }

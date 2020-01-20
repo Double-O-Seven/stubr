@@ -3,6 +3,7 @@ package ch.leadrian.stubr.core.stubbingsite;
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -10,7 +11,7 @@ import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
-public final class MethodReturnValueStubbingSite implements MethodStubbingSite {
+public final class MethodReturnValueStubbingSite implements MethodStubbingSite, AnnotatedStubbingSite {
 
     private static final EqualsAndHashCode<MethodReturnValueStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(MethodReturnValueStubbingSite.class)
             .compareAndHash(MethodReturnValueStubbingSite::getParent)
@@ -35,6 +36,11 @@ public final class MethodReturnValueStubbingSite implements MethodStubbingSite {
     @Override
     public Method getMethod() {
         return method;
+    }
+
+    @Override
+    public AnnotatedElement getAnnotatedElement() {
+        return getMethod();
     }
 
     @Override

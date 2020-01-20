@@ -4,6 +4,7 @@ import ch.leadrian.stubr.core.StubbingSite;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
@@ -50,6 +51,19 @@ class ConstructorParameterStubbingSiteTest {
         Parameter parameter = site.getParameter();
 
         assertThat(parameter)
+                .isEqualTo(expectedParameter);
+    }
+
+    @Test
+    void shouldReturnParameterAsAnnotatedElement() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Constructor<Foo> constructor = Foo.class.getConstructor(int.class);
+        Parameter expectedParameter = constructor.getParameters()[0];
+        ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(parent, constructor, expectedParameter);
+
+        AnnotatedElement annotatedElement = site.getAnnotatedElement();
+
+        assertThat(annotatedElement)
                 .isEqualTo(expectedParameter);
     }
 
