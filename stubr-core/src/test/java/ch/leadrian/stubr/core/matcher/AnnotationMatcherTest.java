@@ -1,6 +1,5 @@
 package ch.leadrian.stubr.core.matcher;
 
-import ch.leadrian.equalizer.Equalizer;
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
@@ -8,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -137,7 +137,7 @@ class AnnotationMatcherTest {
 
     private static final class FooImpl implements Foo {
 
-        private static final EqualsAndHashCode<Foo> EQUALS_AND_HASH_CODE = Equalizer.equalsAndHashCodeBuilder(Foo.class)
+        private static final EqualsAndHashCode<Foo> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Foo.class)
                 .compareAndHash(Foo::value)
                 .build();
 
