@@ -30,6 +30,10 @@ public final class Matchers {
         return AnnotationMatcher.by(annotation);
     }
 
+    public static <T> Matcher<T> annotatedSiteIs(Matcher<? super AnnotatedElement> delegate) {
+        return new AnnotatedElementMatcher<>(delegate);
+    }
+
     public static <T> Matcher<T> any() {
         return (context, value) -> true;
     }
