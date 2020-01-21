@@ -1,21 +1,24 @@
 package ch.leadrian.stubr.core.matcher;
 
+import ch.leadrian.stubr.core.StubbingContext;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("UnstableApiUsage")
-class AcceptingConstructorMatcherTest {
+class ExecutableParameterMatcherTest {
 
     @Test
     void shouldReturnTrueForConstructorWithExactlyMatchingArguments() throws Exception {
+        StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(CharSequence.class, long.class);
-        AcceptingConstructorMatcher matcher = new AcceptingConstructorMatcher(CharSequence.class, long.class);
+        ExecutableParameterMatcher<Constructor<?>> matcher = new ExecutableParameterMatcher<>(CharSequence.class, long.class);
 
-        boolean matches = matcher.matches(constructor);
+        boolean matches = matcher.matches(context, constructor);
 
         assertThat(matches)
                 .isTrue();
@@ -23,10 +26,11 @@ class AcceptingConstructorMatcherTest {
 
     @Test
     void shouldReturnTrueForConstructorWithMatchingArguments() throws Exception {
+        StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(CharSequence.class, long.class);
-        AcceptingConstructorMatcher matcher = new AcceptingConstructorMatcher(String.class, long.class);
+        ExecutableParameterMatcher<Constructor<?>> matcher = new ExecutableParameterMatcher<>(String.class, long.class);
 
-        boolean matches = matcher.matches(constructor);
+        boolean matches = matcher.matches(context, constructor);
 
         assertThat(matches)
                 .isTrue();
@@ -34,10 +38,11 @@ class AcceptingConstructorMatcherTest {
 
     @Test
     void shouldReturnFalseForConstructorWithoutMatchingArguments() throws Exception {
+        StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class, int.class);
-        AcceptingConstructorMatcher matcher = new AcceptingConstructorMatcher(String.class, long.class);
+        ExecutableParameterMatcher<Constructor<?>> matcher = new ExecutableParameterMatcher<>(String.class, long.class);
 
-        boolean matches = matcher.matches(constructor);
+        boolean matches = matcher.matches(context, constructor);
 
         assertThat(matches)
                 .isFalse();
@@ -45,10 +50,11 @@ class AcceptingConstructorMatcherTest {
 
     @Test
     void shouldReturnFalseForConstructorWithoutArguments() throws Exception {
+        StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor();
-        AcceptingConstructorMatcher matcher = new AcceptingConstructorMatcher(String.class, long.class);
+        ExecutableParameterMatcher<Constructor<?>> matcher = new ExecutableParameterMatcher<>(String.class, long.class);
 
-        boolean matches = matcher.matches(constructor);
+        boolean matches = matcher.matches(context, constructor);
 
         assertThat(matches)
                 .isFalse();
@@ -56,10 +62,11 @@ class AcceptingConstructorMatcherTest {
 
     @Test
     void shouldReturnFalseForConstructorWithoutNumberOfArguments() throws Exception {
+        StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class);
-        AcceptingConstructorMatcher matcher = new AcceptingConstructorMatcher(String.class, long.class);
+        ExecutableParameterMatcher<Constructor<?>> matcher = new ExecutableParameterMatcher<>(String.class, long.class);
 
-        boolean matches = matcher.matches(constructor);
+        boolean matches = matcher.matches(context, constructor);
 
         assertThat(matches)
                 .isFalse();
@@ -68,9 +75,9 @@ class AcceptingConstructorMatcherTest {
     @Test
     void testEquals() {
         new EqualsTester()
-                .addEqualityGroup(new AcceptingConstructorMatcher(String.class, long.class), new AcceptingConstructorMatcher(String.class, long.class))
-                .addEqualityGroup(new AcceptingConstructorMatcher(long.class, String.class), new AcceptingConstructorMatcher(long.class, String.class))
-                .addEqualityGroup(new AcceptingConstructorMatcher(Object.class), new AcceptingConstructorMatcher(Object.class))
+                .addEqualityGroup(new ExecutableParameterMatcher<>(String.class, long.class), new ExecutableParameterMatcher<>(String.class, long.class))
+                .addEqualityGroup(new ExecutableParameterMatcher<>(long.class, String.class), new ExecutableParameterMatcher<>(long.class, String.class))
+                .addEqualityGroup(new ExecutableParameterMatcher<>(Object.class), new ExecutableParameterMatcher<>(Object.class))
                 .addEqualityGroup("test")
                 .testEquals();
     }

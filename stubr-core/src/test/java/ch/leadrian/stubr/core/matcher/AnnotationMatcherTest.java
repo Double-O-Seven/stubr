@@ -1,6 +1,7 @@
 package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
+import ch.leadrian.stubr.core.StubbingContext;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
@@ -9,15 +10,17 @@ import java.lang.annotation.RetentionPolicy;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("UnstableApiUsage")
 class AnnotationMatcherTest {
 
     @Test
     void givenAnnotationWithSimpleNameIsPresentItShouldReturnTrue() {
-        AnnotationMatcher matcher = AnnotationMatcher.by("Foo");
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by("Foo");
 
-        boolean result = matcher.matches(Bar.class);
+        boolean result = matcher.matches(context, Bar.class);
 
         assertThat(result)
                 .isTrue();
@@ -25,9 +28,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenAnnotationWithQualifiedNameIsPresentItShouldReturnTrue() {
-        AnnotationMatcher matcher = AnnotationMatcher.by("ch.leadrian.stubr.core.matcher.AnnotationMatcherTest$Foo");
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by("ch.leadrian.stubr.core.matcher.AnnotationMatcherTest$Foo");
 
-        boolean result = matcher.matches(Bar.class);
+        boolean result = matcher.matches(context, Bar.class);
 
         assertThat(result)
                 .isTrue();
@@ -35,9 +39,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenNoAnnotationWithSimpleNameIsPresentItShouldReturnFalse() {
-        AnnotationMatcher matcher = AnnotationMatcher.by("Foo");
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by("Foo");
 
-        boolean result = matcher.matches(Qux.class);
+        boolean result = matcher.matches(context, Qux.class);
 
         assertThat(result)
                 .isFalse();
@@ -45,9 +50,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenNoAnnotationWithQualifiedNameIsPresentItShouldReturnFalse() {
-        AnnotationMatcher matcher = AnnotationMatcher.by("ch.leadrian.stubr.core.matcher.AnnotationMatcherTest$Foo");
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by("ch.leadrian.stubr.core.matcher.AnnotationMatcherTest$Foo");
 
-        boolean result = matcher.matches(Qux.class);
+        boolean result = matcher.matches(context, Qux.class);
 
         assertThat(result)
                 .isFalse();
@@ -55,9 +61,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenAnnotationIsPresentItShouldReturnTrue() {
-        AnnotationMatcher matcher = AnnotationMatcher.by(Foo.class);
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by(Foo.class);
 
-        boolean result = matcher.matches(Bar.class);
+        boolean result = matcher.matches(context, Bar.class);
 
         assertThat(result)
                 .isTrue();
@@ -65,9 +72,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenAnnotationIsNotPresentItShouldReturnFalse() {
-        AnnotationMatcher matcher = AnnotationMatcher.by(Foo.class);
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by(Foo.class);
 
-        boolean result = matcher.matches(Qux.class);
+        boolean result = matcher.matches(context, Qux.class);
 
         assertThat(result)
                 .isFalse();
@@ -75,9 +83,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenEqualAnnotationIsPresentItShouldReturnTrue() {
-        AnnotationMatcher matcher = AnnotationMatcher.by(new FooImpl("test"));
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by(new FooImpl("test"));
 
-        boolean result = matcher.matches(Bar.class);
+        boolean result = matcher.matches(context, Bar.class);
 
         assertThat(result)
                 .isTrue();
@@ -85,9 +94,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenAnnotationWithDifferentValueIsPresentItShouldReturnFalse() {
-        AnnotationMatcher matcher = AnnotationMatcher.by(new FooImpl("bla"));
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by(new FooImpl("bla"));
 
-        boolean result = matcher.matches(Bar.class);
+        boolean result = matcher.matches(context, Bar.class);
 
         assertThat(result)
                 .isFalse();
@@ -95,9 +105,10 @@ class AnnotationMatcherTest {
 
     @Test
     void givenEqualAnnotationIsNotPresentItShouldReturnFalse() {
-        AnnotationMatcher matcher = AnnotationMatcher.by(new FooImpl("test"));
+        StubbingContext context = mock(StubbingContext.class);
+        AnnotationMatcher<Class<?>> matcher = AnnotationMatcher.by(new FooImpl("test"));
 
-        boolean result = matcher.matches(Qux.class);
+        boolean result = matcher.matches(context, Qux.class);
 
         assertThat(result)
                 .isFalse();
