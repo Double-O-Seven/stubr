@@ -13,9 +13,9 @@ final class ParameterMatcher<T> implements Matcher<T> {
 
     private final Matcher<? super Parameter> delegate;
 
-    ParameterMatcher(Matcher<? super Parameter> matcher) {
-        requireNonNull(matcher, "delegate");
-        this.delegate = matcher;
+    ParameterMatcher(Matcher<? super Parameter> delegate) {
+        requireNonNull(delegate, "delegate");
+        this.delegate = delegate;
     }
 
     @Override
