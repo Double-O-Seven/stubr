@@ -11,7 +11,7 @@ import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
-public final class ConstructorParameterStubbingSite implements ParameterStubbingSite {
+public final class ConstructorParameterStubbingSite implements ConstructorStubbingSite, ParameterStubbingSite {
 
     private static final EqualsAndHashCode<ConstructorParameterStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ConstructorParameterStubbingSite.class)
             .compareAndHash(ConstructorParameterStubbingSite::getParent)
@@ -37,6 +37,7 @@ public final class ConstructorParameterStubbingSite implements ParameterStubbing
         return Optional.of(parent);
     }
 
+    @Override
     public Constructor<?> getConstructor() {
         return constructor;
     }
