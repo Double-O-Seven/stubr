@@ -1,6 +1,5 @@
 package ch.leadrian.stubr.core.matcher;
 
-import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
 import com.google.common.collect.ImmutableList;
@@ -9,19 +8,14 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.util.List;
 
-import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static java.util.Objects.requireNonNull;
 
-final class ExecutableParameterMatcher<T extends Executable> implements Matcher<T> {
-
-    private static final EqualsAndHashCode<ExecutableParameterMatcher> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ExecutableParameterMatcher.class)
-            .compareAndHash(matcher -> matcher.parameterTypes)
-            .build();
+final class ParameterTypesMatcher<T extends Executable> implements Matcher<T> {
 
     private final List<Class<?>> parameterTypes;
 
-    ExecutableParameterMatcher(Class<?>... parameterTypes) {
+    ParameterTypesMatcher(Class<?>... parameterTypes) {
         requireNonNull(parameterTypes, "parameterTypes");
         this.parameterTypes = ImmutableList.copyOf(parameterTypes);
     }
@@ -46,13 +40,4 @@ final class ExecutableParameterMatcher<T extends Executable> implements Matcher<
                 .isPresent();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return EQUALS_AND_HASH_CODE.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return EQUALS_AND_HASH_CODE.hashCode(this);
-    }
 }

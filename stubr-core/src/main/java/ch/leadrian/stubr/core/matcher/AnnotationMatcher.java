@@ -1,6 +1,5 @@
 package ch.leadrian.stubr.core.matcher;
 
-import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
 
@@ -8,7 +7,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Arrays;
 
-import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static java.util.Objects.requireNonNull;
 
 abstract class AnnotationMatcher<T extends AnnotatedElement> implements Matcher<T> {
@@ -30,10 +28,6 @@ abstract class AnnotationMatcher<T extends AnnotatedElement> implements Matcher<
 
     private static final class ByName<T extends AnnotatedElement> extends AnnotationMatcher<T> {
 
-        private static final EqualsAndHashCode<ByName> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ByName.class)
-                .compareAndHash(matcher -> matcher.annotationName)
-                .build();
-
         private final String annotationName;
 
         ByName(String annotationName) {
@@ -48,22 +42,9 @@ abstract class AnnotationMatcher<T extends AnnotatedElement> implements Matcher<
                     .anyMatch(type -> annotationName.equals(type.getName()) || annotationName.equals(type.getSimpleName()));
         }
 
-        @Override
-        public boolean equals(Object obj) {
-            return EQUALS_AND_HASH_CODE.equals(this, obj);
-        }
-
-        @Override
-        public int hashCode() {
-            return EQUALS_AND_HASH_CODE.hashCode(this);
-        }
     }
 
     private static final class ByType<T extends AnnotatedElement> extends AnnotationMatcher<T> {
-
-        private static final EqualsAndHashCode<ByType> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ByType.class)
-                .compareAndHash(matcher -> matcher.annotationType)
-                .build();
 
         private final Class<? extends Annotation> annotationType;
 
@@ -77,23 +58,9 @@ abstract class AnnotationMatcher<T extends AnnotatedElement> implements Matcher<
             return value.isAnnotationPresent(annotationType);
         }
 
-        @Override
-        public boolean equals(Object obj) {
-            return EQUALS_AND_HASH_CODE.equals(this, obj);
-        }
-
-        @Override
-        public int hashCode() {
-            return EQUALS_AND_HASH_CODE.hashCode(this);
-        }
-
     }
 
     private static final class ByEquality<T extends AnnotatedElement> extends AnnotationMatcher<T> {
-
-        private static final EqualsAndHashCode<ByEquality> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ByEquality.class)
-                .compareAndHash(matcher -> matcher.annotation)
-                .build();
 
         private final Annotation annotation;
 
@@ -106,16 +73,6 @@ abstract class AnnotationMatcher<T extends AnnotatedElement> implements Matcher<
         public boolean matches(StubbingContext context, T value) {
             Annotation annotationOnElement = value.getAnnotation(annotation.annotationType());
             return annotation.equals(annotationOnElement);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return EQUALS_AND_HASH_CODE.equals(this, obj);
-        }
-
-        @Override
-        public int hashCode() {
-            return EQUALS_AND_HASH_CODE.hashCode(this);
         }
 
     }
