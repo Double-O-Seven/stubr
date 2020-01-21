@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.ConstructorMatcher;
+import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
@@ -24,22 +24,22 @@ import static java.util.stream.Collectors.toList;
 
 final class ConstructorStubber implements Stubber {
 
-    private final ConstructorMatcher constructorMatcher;
+    private final Matcher<? super Constructor<?>> constructorMatcher;
     private final Map<Class<?>, Constructor<?>> constructorsByClass = new ConcurrentHashMap<>();
 
-    ConstructorStubber(ConstructorMatcher constructorMatcher) {
+    ConstructorStubber(Matcher<? super Constructor<?>> constructorMatcher) {
         requireNonNull(constructorMatcher, "constructorMatcher");
         this.constructorMatcher = constructorMatcher;
     }
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return getConstructor(type).isPresent();
+        return getConstructor(context, type).isPresent();
     }
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        Constructor<?> constructor = getConstructor(type)
+        Constructor<?> constructor = getConstructor(context, type)
                 .orElseThrow(() -> new StubbingException("No matching constructor found", context.getSite(), type));
         Object[] parameterValues = stub(context, constructor);
         try {
@@ -60,13 +60,13 @@ final class ConstructorStubber implements Stubber {
         return context.getStubber().stub(parameter.getParameterizedType(), site);
     }
 
-    private Optional<Constructor<?>> getConstructor(Type type) {
-        return getRawType(type).flatMap(this::getConstructor);
+    private Optional<Constructor<?>> getConstructor(StubbingContext context, Type type) {
+        return getRawType(type).flatMap(rawType -> getConstructor(context, rawType));
     }
 
-    private Optional<Constructor<?>> getConstructor(Class<?> type) {
+    private Optional<Constructor<?>> getConstructor(StubbingContext context, Class<?> type) {
         Constructor<?> constructor = constructorsByClass.computeIfAbsent(type, clazz -> {
-            List<Constructor<?>> constructors = getConstructors(clazz);
+            List<Constructor<?>> constructors = getConstructors(context, clazz);
             if (constructors.size() == 1) {
                 return constructors.get(0);
             }
@@ -75,10 +75,10 @@ final class ConstructorStubber implements Stubber {
         return Optional.ofNullable(constructor);
     }
 
-    private List<Constructor<?>> getConstructors(Class<?> type) {
+    private List<Constructor<?>> getConstructors(StubbingContext context, Class<?> type) {
         return stream(type.getDeclaredConstructors())
-                .filter(c -> !c.isSynthetic() && !isPrivate(c.getModifiers()))
-                .filter(constructorMatcher::matches)
+                .filter(constructor -> !constructor.isSynthetic() && !isPrivate(constructor.getModifiers()))
+                .filter(constructor -> constructorMatcher.matches(context, constructor))
                 .collect(toList());
     }
 

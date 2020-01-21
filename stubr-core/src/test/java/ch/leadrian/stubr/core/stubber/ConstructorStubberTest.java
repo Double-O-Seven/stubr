@@ -41,7 +41,7 @@ class ConstructorStubberTest {
                 .rejects(AmbiguousProtectedConstructor.class)
                 .rejects(AmbiguousPackagePrivateConstructor.class)
                 .rejects(NotMatchingConstructor.class)
-                .test(Stubbers.constructor(constructor -> constructor.getParameterCount() == 2));
+                .test(Stubbers.constructor((context, constructor) -> constructor.getParameterCount() == 2));
     }
 
     @TestFactory

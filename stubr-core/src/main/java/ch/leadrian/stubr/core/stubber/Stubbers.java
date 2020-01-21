@@ -1,14 +1,15 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.ConstructorMatcher;
+import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.MethodMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
-import ch.leadrian.stubr.core.matcher.ConstructorMatchers;
+import ch.leadrian.stubr.core.matcher.Matchers;
 import ch.leadrian.stubr.core.matcher.MethodMatchers;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
@@ -66,12 +67,12 @@ public final class Stubbers {
         return new ConstantValueStubber(type.getType(), value);
     }
 
-    public static Stubber constructor(ConstructorMatcher matcher) {
+    public static Stubber constructor(Matcher<? super Constructor<?>> matcher) {
         return new ConstructorStubber(matcher);
     }
 
     public static Stubber constructor() {
-        return constructor(ConstructorMatchers.any());
+        return constructor(Matchers.any());
     }
 
     public static Stubber defaultValue() {
