@@ -1,15 +1,13 @@
 package ch.leadrian.stubr.core.stubber;
 
 import ch.leadrian.stubr.core.Matcher;
-import ch.leadrian.stubr.core.MethodMatcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.TypeMatcher;
-import ch.leadrian.stubr.core.matcher.Matchers;
-import ch.leadrian.stubr.core.matcher.MethodMatchers;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +17,7 @@ import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
+import static ch.leadrian.stubr.core.matcher.Matchers.any;
 import static java.util.Objects.requireNonNull;
 
 public final class Stubbers {
@@ -72,7 +71,7 @@ public final class Stubbers {
     }
 
     public static Stubber constructor() {
-        return constructor(Matchers.any());
+        return constructor(any());
     }
 
     public static Stubber defaultValue() {
@@ -83,12 +82,12 @@ public final class Stubbers {
         return EnumValueStubber.INSTANCE;
     }
 
-    public static Stubber factoryMethod(MethodMatcher matcher) {
+    public static Stubber factoryMethod(Matcher<? super Method> matcher) {
         return new FactoryMethodStubber(matcher);
     }
 
     public static Stubber factoryMethod() {
-        return factoryMethod(MethodMatchers.any());
+        return factoryMethod(any());
     }
 
     public static <T extends Map> Stubber map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {

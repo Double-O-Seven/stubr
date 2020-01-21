@@ -44,7 +44,7 @@ class FactoryMethodStubberTest {
                 .rejects(UnambiguousProtectedNonStaticMethod.class)
                 .rejects(UnambiguousPackagePrivateNonStaticMethod.class)
                 .rejects(NotMatchingFactoryMethod.class)
-                .test(Stubbers.factoryMethod(factoryMethod -> factoryMethod.getParameterCount() == 2));
+                .test(Stubbers.factoryMethod((context, factoryMethod) -> factoryMethod.getParameterCount() == 2));
     }
 
     @TestFactory

@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core.stubber;
 
-import ch.leadrian.stubr.core.MethodMatcher;
+import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
@@ -25,22 +25,22 @@ import static java.util.stream.Collectors.toList;
 
 final class FactoryMethodStubber implements Stubber {
 
-    private final MethodMatcher methodMatcher;
+    private final Matcher<? super Method> methodMatcher;
     private final Map<Class<?>, Method> factoryMethodsByClass = new ConcurrentHashMap<>();
 
-    FactoryMethodStubber(MethodMatcher methodMatcher) {
+    FactoryMethodStubber(Matcher<? super Method> methodMatcher) {
         requireNonNull(methodMatcher, "methodMatcher");
         this.methodMatcher = methodMatcher;
     }
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        return getFactoryMethod(type).isPresent();
+        return getFactoryMethod(context, type).isPresent();
     }
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        Method method = getFactoryMethod(type)
+        Method method = getFactoryMethod(context, type)
                 .orElseThrow(() -> new StubbingException("No matching factory method found", context.getSite(), type));
         Object[] parameterValues = stub(context, method);
         try {
@@ -61,14 +61,13 @@ final class FactoryMethodStubber implements Stubber {
         return context.getStubber().stub(parameter.getParameterizedType(), site);
     }
 
-    private Optional<Method> getFactoryMethod(Type type) {
-        Optional<Class<?>> targetClass = getRawType(type);
-        return targetClass.flatMap(this::getFactoryMethod);
+    private Optional<Method> getFactoryMethod(StubbingContext context, Type type) {
+        return getRawType(type).flatMap(rawType -> getFactoryMethod(context, rawType));
     }
 
-    private Optional<Method> getFactoryMethod(Class<?> targetClass) {
+    private Optional<Method> getFactoryMethod(StubbingContext context, Class<?> targetClass) {
         Method method = factoryMethodsByClass.computeIfAbsent(targetClass, c -> {
-            List<Method> constructors = getFactoryMethods(targetClass);
+            List<Method> constructors = getFactoryMethods(context, targetClass);
             if (constructors.size() == 1) {
                 return constructors.get(0);
             }
@@ -77,11 +76,11 @@ final class FactoryMethodStubber implements Stubber {
         return Optional.ofNullable(method);
     }
 
-    private List<Method> getFactoryMethods(Class<?> targetClass) {
+    private List<Method> getFactoryMethods(StubbingContext context, Class<?> targetClass) {
         return stream(targetClass.getDeclaredMethods())
                 .filter(method -> !method.isSynthetic() && !isPrivate(method.getModifiers()) && isStatic(method.getModifiers()))
                 .filter(method -> canReturn(method, targetClass))
-                .filter(methodMatcher::matches)
+                .filter(method -> methodMatcher.matches(context, method))
                 .collect(toList());
     }
 
