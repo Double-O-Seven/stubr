@@ -6,6 +6,7 @@ plugins {
 }
 
 val assertJVersion by extra { "3.12.1" }
+val equalizerVersion by extra { "1.1.0" }
 val guavaVersion by extra { "28.2-jre" }
 val junitVersion by extra { "5.5.1" }
 
