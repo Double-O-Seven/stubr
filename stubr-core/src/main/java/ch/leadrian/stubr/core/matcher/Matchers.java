@@ -4,6 +4,7 @@ import ch.leadrian.stubr.core.Matcher;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 
@@ -30,6 +31,10 @@ public final class Matchers {
 
     public static <T> Matcher<T> any() {
         return (context, value) -> true;
+    }
+
+    public static <T> Matcher<T> constructorIs(Matcher<? super Constructor<?>> delegate) {
+        return new ConstructorMatcher<>(delegate);
     }
 
     public static <T> Matcher<T> not(Matcher<T> matcher) {
