@@ -47,7 +47,7 @@ final class RootStubberImpl extends RootStubber {
         }
 
         @Override
-        public RootStubberBuilder stubWith(Stubber stubber, TypeMatcher matcher) {
+        public RootStubberBuilder stubWith(Stubber stubber, Matcher<? super Type> matcher) {
             requireNonNull(stubber, "stubber");
             requireNonNull(matcher, "matcher");
             return stubWith(conditional(stubber, matcher));
@@ -61,7 +61,7 @@ final class RootStubberImpl extends RootStubber {
         }
 
         @Override
-        public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers, TypeMatcher matcher) {
+        public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers, Matcher<? super Type> matcher) {
             requireNonNull(stubbers, "stubbers");
             requireNonNull(matcher, "matcher");
             stubbers.forEach(stubber -> stubWith(stubber, matcher));

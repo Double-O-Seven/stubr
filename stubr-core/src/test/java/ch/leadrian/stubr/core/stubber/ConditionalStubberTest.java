@@ -1,8 +1,8 @@
 package ch.leadrian.stubr.core.stubber;
 
+import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.TypeMatcher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -28,7 +28,7 @@ class ConditionalStubberTest {
         Stubber delegate = mock(Stubber.class);
         when(delegate.accepts(context, type))
                 .thenReturn(delegateMatch);
-        TypeMatcher matcher = (c, t) -> matcherMatch;
+        Matcher<? super Type> matcher = (c, t) -> matcherMatch;
         ConditionalStubber stubber = new ConditionalStubber(delegate, matcher);
 
         boolean result = stubber.accepts(context, type);

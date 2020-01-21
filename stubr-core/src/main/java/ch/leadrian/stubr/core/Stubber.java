@@ -10,7 +10,7 @@ public interface Stubber {
 
     Object stub(StubbingContext context, Type type);
 
-    default Stubber when(TypeMatcher typeMatcher) {
+    default Stubber when(Matcher<? super Type> typeMatcher) {
         return Stubbers.conditional(this, typeMatcher);
     }
 

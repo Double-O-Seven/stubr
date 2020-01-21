@@ -3,7 +3,6 @@ package ch.leadrian.stubr.core.stubber;
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.TypeMatcher;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 
 import java.lang.reflect.Constructor;
@@ -50,7 +49,7 @@ public final class Stubbers {
         return collection(collectionClass, values -> collectionFactory.get(), 0);
     }
 
-    public static Stubber conditional(Stubber delegate, TypeMatcher typeMatcher) {
+    public static Stubber conditional(Stubber delegate, Matcher<? super Type> typeMatcher) {
         return new ConditionalStubber(delegate, typeMatcher);
     }
 
