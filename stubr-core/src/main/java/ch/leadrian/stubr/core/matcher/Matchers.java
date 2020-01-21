@@ -6,6 +6,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 public final class Matchers {
@@ -35,6 +36,10 @@ public final class Matchers {
 
     public static <T> Matcher<T> constructorIs(Matcher<? super Constructor<?>> delegate) {
         return new ConstructorMatcher<>(delegate);
+    }
+
+    public static <T> Matcher<T> methodIs(Matcher<? super Method> delegate) {
+        return new MethodMatcher<>(delegate);
     }
 
     public static <T> Matcher<T> not(Matcher<T> matcher) {
