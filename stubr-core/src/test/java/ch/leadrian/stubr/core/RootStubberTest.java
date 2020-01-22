@@ -17,6 +17,7 @@ class RootStubberTest {
 
     @Nested
     class BuilderTest {
+
         @Test
         void shouldUseMatchingStubber() {
             RootStubber rootStubber = RootStubber.builder()
@@ -266,12 +267,36 @@ class RootStubberTest {
         }
 
         @Test
+        void givenMatchingPrimitiveValueForClassItShouldReturnSuccess() {
+            RootStubber rootStubber = RootStubber.builder()
+                    .stubWith(testStubber(int.class, 1337))
+                    .build();
+
+            Result<Integer> result = rootStubber.tryToStub(int.class);
+
+            assertThat(result)
+                    .isEqualTo(Result.success(1337));
+        }
+
+        @Test
         void givenMatchingValueForClassAndSiteItShouldReturnSuccess() {
             RootStubber rootStubber = RootStubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
             Result<Integer> result = rootStubber.tryToStub(Integer.class, TestStubbingSite.FOO);
+
+            assertThat(result)
+                    .isEqualTo(Result.success(1337));
+        }
+
+        @Test
+        void givenMatchingPrimitiveValueForClassAndSiteItShouldReturnSuccess() {
+            RootStubber rootStubber = RootStubber.builder()
+                    .stubWith(testStubber(int.class, 1337))
+                    .build();
+
+            Result<Integer> result = rootStubber.tryToStub(int.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -499,12 +524,36 @@ class RootStubberTest {
         }
 
         @Test
+        void givenMatchingPrimitiveValueForClassItShouldReturnSuccess() {
+            RootStubber rootStubber = RootStubber.builder()
+                    .stubWith(testStubber(int.class, 1337))
+                    .build();
+
+            int result = rootStubber.stub(int.class);
+
+            assertThat(result)
+                    .isEqualTo(1337);
+        }
+
+        @Test
         void givenMatchingValueForClassAndSiteItShouldReturnSuccess() {
             RootStubber rootStubber = RootStubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
             Integer result = rootStubber.stub(Integer.class, TestStubbingSite.FOO);
+
+            assertThat(result)
+                    .isEqualTo(1337);
+        }
+
+        @Test
+        void givenMatchingPrimitiveValueForClassAndSiteItShouldReturnSuccess() {
+            RootStubber rootStubber = RootStubber.builder()
+                    .stubWith(testStubber(int.class, 1337))
+                    .build();
+
+            int result = rootStubber.stub(int.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(1337);

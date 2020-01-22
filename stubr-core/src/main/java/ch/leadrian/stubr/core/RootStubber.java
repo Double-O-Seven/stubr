@@ -7,6 +7,7 @@ import ch.leadrian.stubr.core.type.Types;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static com.google.common.primitives.Primitives.wrap;
 import static java.util.Arrays.asList;
 
 public abstract class RootStubber {
@@ -47,7 +48,7 @@ public abstract class RootStubber {
     }
 
     public final <T> Result<T> tryToStub(Class<T> type, StubbingSite site) {
-        return tryToStub((Type) type, site).map(type::cast);
+        return tryToStub((Type) type, site).map(value -> wrap(type).cast(value));
     }
 
     public final <T> Result<T> tryToStub(Class<T> type) {
@@ -55,7 +56,7 @@ public abstract class RootStubber {
     }
 
     public final <T> T stub(Class<T> type, StubbingSite site) {
-        return type.cast(stub((Type) type, site));
+        return wrap(type).cast(stub((Type) type, site));
     }
 
     public final <T> T stub(Class<T> type) {
@@ -63,7 +64,7 @@ public abstract class RootStubber {
     }
 
     public final <T> Result<T> tryToStub(TypeLiteral<T> typeLiteral, StubbingSite site) {
-        Class<T> rawType = getRawType(typeLiteral);
+        Class<T> rawType = wrap(getRawType(typeLiteral));
         return tryToStub(typeLiteral.getType(), site).map(rawType::cast);
     }
 
@@ -72,7 +73,7 @@ public abstract class RootStubber {
     }
 
     public final <T> T stub(TypeLiteral<T> typeLiteral, StubbingSite site) {
-        Class<T> rawType = getRawType(typeLiteral);
+        Class<T> rawType = wrap(getRawType(typeLiteral));
         return rawType.cast(stub(typeLiteral.getType(), site));
     }
 
