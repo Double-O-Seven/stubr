@@ -192,15 +192,6 @@ public final class Stubbers {
         return RootStubberStubber.INSTANCE;
     }
 
-    public static Stubber suppliedValue(Type type, IntFunction<?> valueSupplier) {
-        return new SuppliedValueStubber(type, valueSupplier);
-    }
-
-    public static Stubber suppliedValue(Type type, Supplier<?> valueSupplier) {
-        requireNonNull(valueSupplier, "valueSupplier");
-        return suppliedValue(type, sequenceNumber -> valueSupplier.get());
-    }
-
     public static <T> Stubber suppliedValue(Class<T> type, IntFunction<? extends T> valueSupplier) {
         return new SuppliedValueStubber(type, valueSupplier);
     }
@@ -210,11 +201,11 @@ public final class Stubbers {
     }
 
     public static <T> Stubber suppliedValue(TypeLiteral<T> typeLiteral, IntFunction<? extends T> valueSupplier) {
-        return suppliedValue(typeLiteral.getType(), valueSupplier);
+        return new SuppliedValueStubber(typeLiteral.getType(), valueSupplier);
     }
 
     public static <T> Stubber suppliedValue(TypeLiteral<T> typeLiteral, Supplier<? extends T> valueSupplier) {
-        return suppliedValue(typeLiteral.getType(), sequenceNumber -> valueSupplier.get());
+        return suppliedValue(typeLiteral, (IntFunction<? extends T>) sequenceNumber -> valueSupplier.get());
     }
 
     public static List<Stubber> defaultCollections(int size) {

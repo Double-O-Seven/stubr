@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -27,8 +26,6 @@ class SuppliedValueStubberTest {
                 .andStubs("Test")
                 .rejects(Object.class)
                 .test(
-                        Stubbers.suppliedValue((Type) String.class, () -> "Test"),
-                        Stubbers.suppliedValue((Type) String.class, sequenceNumber -> "Test"),
                         Stubbers.suppliedValue(String.class, () -> "Test"),
                         Stubbers.suppliedValue(String.class, sequenceNumber -> "Test")
                 );
