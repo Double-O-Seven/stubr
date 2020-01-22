@@ -119,6 +119,42 @@ public final class Stubbers {
         return new ConditionalStubber(delegate, typeMatcher);
     }
 
+    public static List<Stubber> defaultCollections(int size) {
+        return ImmutableList.<Stubber>builder()
+                .add(collection(Collection.class, ArrayList::new, size))
+                .add(collection(List.class, ArrayList::new, size))
+                .add(collection(ArrayList.class, ArrayList::new, size))
+                .add(collection(Vector.class, Vector::new, size))
+                .add(collection(Queue.class, LinkedList::new, size))
+                .add(collection(LinkedList.class, LinkedList::new, size))
+                .add(collection(Deque.class, ArrayDeque::new, size))
+                .add(collection(Set.class, HashSet::new, size))
+                .add(collection(HashSet.class, HashSet::new, size))
+                .add(collection(LinkedHashSet.class, LinkedHashSet::new, size))
+                .add(collection(SortedSet.class, TreeSet::new, size))
+                .add(collection(NavigableSet.class, TreeSet::new, size))
+                .add(collection(TreeSet.class, TreeSet::new, size))
+                .add(collection(ConcurrentLinkedQueue.class, ConcurrentLinkedQueue::new, size))
+                .add(collection(ConcurrentLinkedDeque.class, ConcurrentLinkedDeque::new, size))
+                .add(collection(ConcurrentSkipListSet.class, ConcurrentSkipListSet::new, size))
+                .add(map(Map.class, HashMap::new, size))
+                .add(map(HashMap.class, HashMap::new, size))
+                .add(map(LinkedHashMap.class, LinkedHashMap::new, size))
+                .add(map(Hashtable.class, Hashtable::new, size))
+                .add(map(SortedMap.class, TreeMap::new, size))
+                .add(map(NavigableMap.class, TreeMap::new, size))
+                .add(map(TreeMap.class, TreeMap::new, size))
+                .add(map(ConcurrentMap.class, ConcurrentHashMap::new, size))
+                .add(map(ConcurrentHashMap.class, ConcurrentHashMap::new, size))
+                .add(map(ConcurrentNavigableMap.class, ConcurrentSkipListMap::new, size))
+                .add(array(size))
+                .build();
+    }
+
+    public static List<Stubber> emptyDefaultCollections() {
+        return EMPTY_DEFAULT_COLLECTIONS;
+    }
+
     public static Stubber constantValue(Object value) {
         return new ConstantValueStubber(value.getClass(), value);
     }
@@ -131,12 +167,24 @@ public final class Stubbers {
         return new ConstantValueStubber(type.getType(), value);
     }
 
+    public static List<Stubber> commonConstantValues() {
+        return COMMON_DEFAULT_VALUES;
+    }
+
     public static Stubber constructor(Matcher<? super Constructor<?>> matcher) {
         return new ConstructorStubber(matcher);
     }
 
     public static Stubber constructor() {
         return constructor(any());
+    }
+
+    public static Stubber defaultConstructor() {
+        return constructor(((context, value) -> value.getParameterCount() == 0));
+    }
+
+    public static Stubber nonDefaultConstructor() {
+        return constructor(((context, value) -> value.getParameterCount() > 0));
     }
 
     public static Stubber defaultValue() {
@@ -185,7 +233,7 @@ public final class Stubbers {
     }
 
     public static Stubber proxy() {
-        return proxy(false);
+        return proxy(true);
     }
 
     public static Stubber rootStubber() {
@@ -206,46 +254,6 @@ public final class Stubbers {
 
     public static <T> Stubber suppliedValue(TypeLiteral<T> typeLiteral, Supplier<? extends T> valueSupplier) {
         return suppliedValue(typeLiteral, (IntFunction<? extends T>) sequenceNumber -> valueSupplier.get());
-    }
-
-    public static List<Stubber> defaultCollections(int size) {
-        return ImmutableList.<Stubber>builder()
-                .add(collection(Collection.class, ArrayList::new, size))
-                .add(collection(List.class, ArrayList::new, size))
-                .add(collection(ArrayList.class, ArrayList::new, size))
-                .add(collection(Vector.class, Vector::new, size))
-                .add(collection(Queue.class, LinkedList::new, size))
-                .add(collection(LinkedList.class, LinkedList::new, size))
-                .add(collection(Deque.class, ArrayDeque::new, size))
-                .add(collection(Set.class, HashSet::new, size))
-                .add(collection(HashSet.class, HashSet::new, size))
-                .add(collection(LinkedHashSet.class, LinkedHashSet::new, size))
-                .add(collection(SortedSet.class, TreeSet::new, size))
-                .add(collection(NavigableSet.class, TreeSet::new, size))
-                .add(collection(TreeSet.class, TreeSet::new, size))
-                .add(collection(ConcurrentLinkedQueue.class, ConcurrentLinkedQueue::new, size))
-                .add(collection(ConcurrentLinkedDeque.class, ConcurrentLinkedDeque::new, size))
-                .add(collection(ConcurrentSkipListSet.class, ConcurrentSkipListSet::new, size))
-                .add(map(Map.class, HashMap::new, size))
-                .add(map(HashMap.class, HashMap::new, size))
-                .add(map(LinkedHashMap.class, LinkedHashMap::new, size))
-                .add(map(Hashtable.class, Hashtable::new, size))
-                .add(map(SortedMap.class, TreeMap::new, size))
-                .add(map(NavigableMap.class, TreeMap::new, size))
-                .add(map(TreeMap.class, TreeMap::new, size))
-                .add(map(ConcurrentMap.class, ConcurrentHashMap::new, size))
-                .add(map(ConcurrentHashMap.class, ConcurrentHashMap::new, size))
-                .add(map(ConcurrentNavigableMap.class, ConcurrentSkipListMap::new, size))
-                .add(array(size))
-                .build();
-    }
-
-    public static List<Stubber> emptyDefaultCollections() {
-        return EMPTY_DEFAULT_COLLECTIONS;
-    }
-
-    public static List<Stubber> commonConstantValues() {
-        return COMMON_DEFAULT_VALUES;
     }
 
     public static List<Stubber> commonSuppliedValues() {
