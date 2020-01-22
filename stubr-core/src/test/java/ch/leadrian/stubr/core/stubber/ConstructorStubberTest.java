@@ -41,6 +41,7 @@ class ConstructorStubberTest {
                 .rejects(AmbiguousProtectedConstructor.class)
                 .rejects(AmbiguousPackagePrivateConstructor.class)
                 .rejects(NotMatchingConstructor.class)
+                .rejects(UnambiguousConstructorOfAbstractClass.class)
                 .test(Stubbers.constructor((context, constructor) -> constructor.getParameterCount() == 2));
     }
 
@@ -62,12 +63,10 @@ class ConstructorStubberTest {
     @SuppressWarnings("unused")
     private static class MultiplePublicConstructors {
 
-        public static MultiplePublicConstructors get(String stringValue, int intValue) {
-            return null;
+        public MultiplePublicConstructors(String stringValue, int intValue) {
         }
 
-        public static MultiplePublicConstructors get(String stringValue, long longValue) {
-            return null;
+        public MultiplePublicConstructors(String stringValue, long longValue) {
         }
     }
 
@@ -182,6 +181,14 @@ class ConstructorStubberTest {
     private static class NotMatchingConstructor {
 
         NotMatchingConstructor(String stringValue, int intValue, Object objectValue) {
+        }
+
+    }
+
+    @SuppressWarnings("unused")
+    private static abstract class UnambiguousConstructorOfAbstractClass {
+
+        public UnambiguousConstructorOfAbstractClass(String stringValue, int intValue) {
         }
 
     }

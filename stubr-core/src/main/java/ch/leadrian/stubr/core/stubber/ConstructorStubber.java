@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
+import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
@@ -61,7 +62,9 @@ final class ConstructorStubber implements Stubber {
     }
 
     private Optional<Constructor<?>> getConstructor(StubbingContext context, Type type) {
-        return getRawType(type).flatMap(rawType -> getConstructor(context, rawType));
+        return getRawType(type)
+                .filter(rawType -> !isAbstract(rawType.getModifiers()))
+                .flatMap(rawType -> getConstructor(context, rawType));
     }
 
     private Optional<Constructor<?>> getConstructor(StubbingContext context, Class<?> type) {
