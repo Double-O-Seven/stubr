@@ -21,7 +21,7 @@ import static ch.leadrian.stubr.core.stubber.Stubbers.rootStubber;
 
 public final class RootStubbers {
 
-    private static final RootStubber DEFAULT = RootStubber.builder()
+    private static final RootStubber DEFAULT_ROOT_STUBBER = RootStubber.builder()
             .stubWith(defaultValue())
             .stubWith(enumValue())
             .stubWith(array(0))
@@ -36,8 +36,8 @@ public final class RootStubbers {
             .stubWith(commonSuppliedValues())
             .build();
 
-    private static final RootStubber MINIMAL = RootStubber.builder()
-            .include(getDefault())
+    private static final RootStubber MINIMAL_ROOT_STUBBER = RootStubber.builder()
+            .include(defaultRootStubber())
             .stubWith(nullValue().when(annotatedSiteIs(nullable())))
             .stubWith(emptyDefaultCollections())
             .stubWith(optional(OptionalStubbingMode.EMPTY))
@@ -46,12 +46,12 @@ public final class RootStubbers {
     private RootStubbers() {
     }
 
-    public static RootStubber getDefault() {
-        return DEFAULT;
+    public static RootStubber defaultRootStubber() {
+        return DEFAULT_ROOT_STUBBER;
     }
 
-    public static RootStubber minimal() {
-        return MINIMAL;
+    public static RootStubber minimalRootStubber() {
+        return MINIMAL_ROOT_STUBBER;
     }
 
 }
