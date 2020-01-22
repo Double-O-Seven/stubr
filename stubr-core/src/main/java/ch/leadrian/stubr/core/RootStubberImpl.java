@@ -81,9 +81,9 @@ final class RootStubberImpl extends RootStubber {
             if (rootStubbers.isEmpty()) {
                 return builtRootStubber;
             } else {
-                List<RootStubber> includedRootStubbers = new ArrayList<>(this.rootStubbers);
-                includedRootStubbers.add(0, builtRootStubber);
-                return compose(includedRootStubbers);
+                List<RootStubber> rootStubberComposition = new ArrayList<>(this.rootStubbers);
+                rootStubberComposition.add(0, builtRootStubber);
+                return compose(rootStubberComposition);
             }
         }
     }
