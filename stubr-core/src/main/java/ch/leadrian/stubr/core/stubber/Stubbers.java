@@ -4,13 +4,57 @@ import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.type.TypeLiteral;
+import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.UUID;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
@@ -20,6 +64,28 @@ import static ch.leadrian.stubr.core.matcher.Matchers.any;
 import static java.util.Objects.requireNonNull;
 
 public final class Stubbers {
+
+    private static final List<Stubber> EMPTY_DEFAULT_COLLECTIONS = defaultCollections(0);
+
+    private static final List<Stubber> COMMON_DEFAULT_VALUES = ImmutableList.<Stubber>builder()
+            .add(constantValue(new Object()))
+            .add(constantValue(""))
+            .add(constantValue(CharSequence.class, ""))
+            .add(constantValue(Number.class, 0))
+            .add(constantValue(BigDecimal.ZERO))
+            .add(constantValue(BigInteger.ZERO))
+            .add(constantValue(LocalDate.of(1970, 1, 1)))
+            .add(constantValue(LocalTime.of(0, 0, 0)))
+            .add(constantValue(LocalDateTime.of(1970, 1, 1, 0, 0, 0)))
+            .add(constantValue(OffsetDateTime.of(1970, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)))
+            .add(constantValue(ZonedDateTime.of(1970, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)))
+            .add(constantValue(Instant.EPOCH))
+            .add(constantValue(Locale.GERMANY))
+            .add(constantValue(OptionalDouble.empty()))
+            .add(constantValue(OptionalInt.empty()))
+            .add(constantValue(OptionalLong.empty()))
+            .add(constantValue(UUID.fromString("123e4567-e89b-12d3-a456-556642440000")))
+            .build();
 
     private Stubbers() {
     }
@@ -149,5 +215,55 @@ public final class Stubbers {
 
     public static <T> Stubber suppliedValue(TypeLiteral<T> typeLiteral, Supplier<? extends T> valueSupplier) {
         return suppliedValue(typeLiteral.getType(), sequenceNumber -> valueSupplier.get());
+    }
+
+    public static List<Stubber> defaultCollections(int size) {
+        return ImmutableList.<Stubber>builder()
+                .add(collection(Collection.class, ArrayList::new, size))
+                .add(collection(List.class, ArrayList::new, size))
+                .add(collection(ArrayList.class, ArrayList::new, size))
+                .add(collection(Vector.class, Vector::new, size))
+                .add(collection(Queue.class, LinkedList::new, size))
+                .add(collection(LinkedList.class, LinkedList::new, size))
+                .add(collection(Deque.class, ArrayDeque::new, size))
+                .add(collection(Set.class, HashSet::new, size))
+                .add(collection(HashSet.class, HashSet::new, size))
+                .add(collection(LinkedHashSet.class, LinkedHashSet::new, size))
+                .add(collection(SortedSet.class, TreeSet::new, size))
+                .add(collection(NavigableSet.class, TreeSet::new, size))
+                .add(collection(TreeSet.class, TreeSet::new, size))
+                .add(collection(ConcurrentLinkedQueue.class, ConcurrentLinkedQueue::new, size))
+                .add(collection(ConcurrentLinkedDeque.class, ConcurrentLinkedDeque::new, size))
+                .add(collection(ConcurrentSkipListSet.class, ConcurrentSkipListSet::new, size))
+                .add(map(Map.class, HashMap::new, size))
+                .add(map(HashMap.class, HashMap::new, size))
+                .add(map(LinkedHashMap.class, LinkedHashMap::new, size))
+                .add(map(Hashtable.class, Hashtable::new, size))
+                .add(map(SortedMap.class, TreeMap::new, size))
+                .add(map(NavigableMap.class, TreeMap::new, size))
+                .add(map(TreeMap.class, TreeMap::new, size))
+                .add(map(ConcurrentMap.class, ConcurrentHashMap::new, size))
+                .add(map(ConcurrentHashMap.class, ConcurrentHashMap::new, size))
+                .add(map(ConcurrentNavigableMap.class, ConcurrentSkipListMap::new, size))
+                .add(array(size))
+                .build();
+    }
+
+    public static List<Stubber> emptyDefaultCollections() {
+        return EMPTY_DEFAULT_COLLECTIONS;
+    }
+
+    public static List<Stubber> commonConstantValues() {
+        return COMMON_DEFAULT_VALUES;
+    }
+
+    public static List<Stubber> commonSuppliedValues() {
+        return ImmutableList.<Stubber>builder()
+                .add(suppliedValue(AtomicInteger.class, () -> new AtomicInteger(0)))
+                .add(suppliedValue(AtomicBoolean.class, () -> new AtomicBoolean(false)))
+                .add(suppliedValue(AtomicLong.class, () -> new AtomicLong(0L)))
+                .add(suppliedValue(Date.class, () -> new Date(0)))
+                .add(suppliedValue(java.sql.Date.class, () -> new java.sql.Date(0)))
+                .build();
     }
 }
