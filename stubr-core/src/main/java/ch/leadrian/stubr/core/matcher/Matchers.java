@@ -50,6 +50,16 @@ public final class Matchers {
         return matcher.negate();
     }
 
+    public static <T extends AnnotatedElement> Matcher<T> nullable() {
+        return annotatedWith("Nullable");
+    }
+
+    public static <T extends AnnotatedElement> Matcher<T> nonNull() {
+        return Matchers.<T>annotatedWith("NotNull")
+                .or(annotatedWith("NonNull"))
+                .or(annotatedWith("Nonnull"));
+    }
+
     public static <T> Matcher<T> parameterIs(Matcher<? super Parameter> delegate) {
         return new ParameterMatcher<>(delegate);
     }

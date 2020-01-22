@@ -2,11 +2,20 @@ package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.matcher.MatchersTest.Wrapper.Nonnull;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.AnnotatedElement;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.Mockito.mock;
 
 class MatchersTest {
@@ -33,5 +42,94 @@ class MatchersTest {
 
         assertThat(matches)
                 .isEqualTo(expectedValue);
+    }
+
+    @Test
+    void givenTargetIsAnnotatedWithNullableNullableMatcherShouldMatch() {
+        Matcher<AnnotatedElement> matcher = Matchers.nullable();
+
+        boolean matches = matcher.matches(mock(StubbingContext.class), Foo.class);
+
+        assertThat(matches)
+                .isTrue();
+    }
+
+    @TestFactory
+    Stream<DynamicTest> givenTargetIsNotAnnotatedWithNullableNullableMatcherShouldNotMatch() {
+        return Stream.of(Bar.class, Baz.class, Qux.class, Bla.class)
+                .map(clazz -> dynamicTest(String.format("%s should not match", clazz), () -> {
+                    Matcher<AnnotatedElement> matcher = Matchers.nullable();
+
+                    boolean matches = matcher.matches(mock(StubbingContext.class), clazz);
+
+                    assertThat(matches)
+                            .isFalse();
+                }));
+    }
+
+    @TestFactory
+    Stream<DynamicTest> givenTargetIsAnnotatedWithNonNullNonNullMatcherShouldMatch() {
+        return Stream.of(Bar.class, Baz.class, Qux.class)
+                .map(clazz -> dynamicTest(String.format("%s should match", clazz), () -> {
+                    Matcher<AnnotatedElement> matcher = Matchers.nonNull();
+
+                    boolean matches = matcher.matches(mock(StubbingContext.class), clazz);
+
+                    assertThat(matches)
+                            .isTrue();
+                }));
+    }
+
+    @TestFactory
+    Stream<DynamicTest> givenTargetIsNotAnnotatedWithNonNullNonNullMatcherShouldNotMatch() {
+        return Stream.of(Foo.class, Bla.class)
+                .map(clazz -> dynamicTest(String.format("%s should not match", clazz), () -> {
+                    Matcher<AnnotatedElement> matcher = Matchers.nonNull();
+
+                    boolean matches = matcher.matches(mock(StubbingContext.class), clazz);
+
+                    assertThat(matches)
+                            .isFalse();
+                }));
+    }
+
+    @Nullable
+    static class Foo {
+    }
+
+    @NotNull
+    static class Bar {
+    }
+
+    @NonNull
+    static class Baz {
+    }
+
+    @Nonnull
+    static class Qux {
+    }
+
+    static class Bla {
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Nullable {
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface NotNull {
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface NonNull {
+    }
+
+    @SuppressWarnings("unused")
+    static class Wrapper {
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Nonnull {
+        }
+
     }
 }
