@@ -4,7 +4,6 @@ import ch.leadrian.stubr.core.stubber.OptionalStubbingMode;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
 import static ch.leadrian.stubr.core.matcher.Matchers.nullable;
-import static ch.leadrian.stubr.core.stubber.Stubbers.array;
 import static ch.leadrian.stubr.core.stubber.Stubbers.commonConstantValues;
 import static ch.leadrian.stubr.core.stubber.Stubbers.commonSuppliedValues;
 import static ch.leadrian.stubr.core.stubber.Stubbers.defaultCollections;
@@ -24,7 +23,6 @@ public final class RootStubbers {
     private static final RootStubber DEFAULT_ROOT_STUBBER = RootStubber.builder()
             .stubWith(defaultValue())
             .stubWith(enumValue())
-            .stubWith(array(0))
             .stubWith(optional(OptionalStubbingMode.PRESENT))
             .stubWith(defaultCollections(1))
             .stubWith(defaultConstructor())
