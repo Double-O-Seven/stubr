@@ -24,7 +24,7 @@ public abstract class Result<T> {
 
     public abstract T getValue();
 
-    public boolean isSuccess() {
+    public final boolean isSuccess() {
         return !isFailure();
     }
 
