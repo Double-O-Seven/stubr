@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.SortedSet;
 
 public interface Collections {
 
@@ -15,7 +15,7 @@ public interface Collections {
 
     Set<String> getSet();
 
-    SortedSet<String> getSortedSet();
+    NavigableSet<String> getNavigableSet();
 
     Map<Integer, String> getMap();
 

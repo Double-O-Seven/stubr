@@ -10,6 +10,7 @@ import static ch.leadrian.stubr.core.RootStubbers.defaultRootStubber;
 import static ch.leadrian.stubr.core.stubber.Stubbers.defaultCollections;
 import static ch.leadrian.stubr.core.stubber.Stubbers.suppliedValue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CoreIntegrationTest {
@@ -39,6 +40,41 @@ class CoreIntegrationTest {
                     () -> assertThat(testData.getCollections()).isNotNull(),
                     () -> assertThat(testData.getCommonDefaults()).isNotNull()
             );
+        }
+
+        @Nested
+        class CollectionsTest {
+
+            @Test
+            void shouldStubCollection() {
+                assertThat(testData.getCollections().getCollection()).containsExactly("value0", "value1", "value2");
+            }
+
+            @Test
+            void shouldStubList() {
+                assertThat(testData.getCollections().getList()).containsExactly("value0", "value1", "value2");
+            }
+
+            @Test
+            void shouldStubSet() {
+                assertThat(testData.getCollections().getSet()).containsExactlyInAnyOrder("value0", "value1", "value2");
+            }
+
+            @Test
+            void shouldStubNavigableSet() {
+                assertThat(testData.getCollections().getNavigableSet()).containsExactly("value0", "value1", "value2");
+            }
+
+            @Test
+            void shouldStubMap() {
+                assertThat(testData.getCollections().getMap()).containsOnly(entry(0, "value0"), entry(1, "value1"), entry(2, "value2"));
+            }
+
+            @Test
+            void shouldStubNavigableMap() {
+                assertThat(testData.getCollections().getNavigableMap()).containsExactly(entry(0, "value0"), entry(1, "value1"), entry(2, "value2"));
+            }
+
         }
 
         @Nested
