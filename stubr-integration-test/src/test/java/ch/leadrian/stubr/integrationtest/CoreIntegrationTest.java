@@ -57,6 +57,56 @@ class CoreIntegrationTest {
         }
 
         @Nested
+        class ArraysTest {
+
+            @Test
+            void shouldStubBooleanArray() {
+                assertThat(testData.getArrays().getBooleanArray()).containsExactly(false, false, false);
+            }
+
+            @Test
+            void shouldStubByteArray() {
+                assertThat(testData.getArrays().getByteArray()).containsExactly(0, 0, 0);
+            }
+
+            @Test
+            void shouldStubShortArray() {
+                assertThat(testData.getArrays().getShortArray()).containsExactly((short) 0, (short) 0, (short) 0);
+            }
+
+            @Test
+            void shouldStubCharArray() {
+                assertThat(testData.getArrays().getCharArray()).containsExactly('\0', '\0', '\0');
+            }
+
+            @Test
+            void shouldStubIntArray() {
+                assertThat(testData.getArrays().getIntArray()).containsExactly(0, 0, 0);
+            }
+
+            @Test
+            void shouldStubLongArray() {
+                assertThat(testData.getArrays().getLongArray()).containsExactly(0L, 0L, 0L);
+            }
+
+            @Test
+            void shouldStubFloatArray() {
+                assertThat(testData.getArrays().getFloatArray()).containsExactly(0f, 0f, 0f);
+            }
+
+            @Test
+            void shouldStubDoubleArray() {
+                assertThat(testData.getArrays().getDoubleArray()).containsExactly(0.0, 0.0, 0.0);
+            }
+
+            @Test
+            void shouldStubStringArray() {
+                assertThat(testData.getArrays().getStringArray()).containsExactly("value0", "value1", "value2");
+            }
+
+        }
+
+        @Nested
         class AnnotationsTest {
 
             @Test
@@ -197,56 +247,6 @@ class CoreIntegrationTest {
             @Test
             void shouldStubDoubleWrapper() {
                 assertThat(testData.getPrimitiveWrappers().getDouble()).isZero();
-            }
-
-        }
-
-        @Nested
-        class ArraysTest {
-
-            @Test
-            void shouldStubBooleanArray() {
-                assertThat(testData.getArrays().getBooleanArray()).containsExactly(false, false, false);
-            }
-
-            @Test
-            void shouldStubByteArray() {
-                assertThat(testData.getArrays().getByteArray()).containsExactly(0, 0, 0);
-            }
-
-            @Test
-            void shouldStubShortArray() {
-                assertThat(testData.getArrays().getShortArray()).containsExactly((short) 0, (short) 0, (short) 0);
-            }
-
-            @Test
-            void shouldStubCharArray() {
-                assertThat(testData.getArrays().getCharArray()).containsExactly('\0', '\0', '\0');
-            }
-
-            @Test
-            void shouldStubIntArray() {
-                assertThat(testData.getArrays().getIntArray()).containsExactly(0, 0, 0);
-            }
-
-            @Test
-            void shouldStubLongArray() {
-                assertThat(testData.getArrays().getLongArray()).containsExactly(0L, 0L, 0L);
-            }
-
-            @Test
-            void shouldStubFloatArray() {
-                assertThat(testData.getArrays().getFloatArray()).containsExactly(0f, 0f, 0f);
-            }
-
-            @Test
-            void shouldStubDoubleArray() {
-                assertThat(testData.getArrays().getDoubleArray()).containsExactly(0.0, 0.0, 0.0);
-            }
-
-            @Test
-            void shouldStubStringArray() {
-                assertThat(testData.getArrays().getStringArray()).containsExactly("value0", "value1", "value2");
             }
 
         }
