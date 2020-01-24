@@ -1,7 +1,9 @@
 import groovy.lang.Closure
+import org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
 
 plugins {
     `java-library`
+    jacoco
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
@@ -13,6 +15,23 @@ val mockitoVersion by extra { "3.2.4" }
 
 val gitVersion: Closure<String> by extra
 
+repositories {
+    jcenter()
+}
+
+tasks {
+    jacocoTestReport {
+        subprojects.forEach { dependsOn(it.tasks.test) }
+        executionData.setFrom(subprojects.map { file("${it.buildDir}/jacoco/test.exec") })
+        additionalSourceDirs.setFrom(subprojects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].allSource.sourceDirectories })
+        sourceDirectories.setFrom(subprojects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].allSource.sourceDirectories })
+        classDirectories.setFrom(subprojects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].output })
+        reports {
+            xml.isEnabled = true
+        }
+    }
+}
+
 allprojects {
     group = "ch.leadrian.stubr"
 
@@ -21,6 +40,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "java-library")
+    apply(plugin = "jacoco")
 
     repositories {
         jcenter()
@@ -39,6 +59,13 @@ subprojects {
     tasks {
         test {
             useJUnitPlatform()
+        }
+
+        jacocoTestReport {
+            dependsOn(test)
+            reports {
+                xml.isEnabled = true
+            }
         }
     }
 }
