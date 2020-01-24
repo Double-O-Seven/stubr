@@ -81,7 +81,7 @@ enum ProxyStubber implements Stubber {
 
         protected final Object stub(Method method) {
             Type returnType = method.getGenericReturnType();
-            if (returnType == void.class || returnType == Void.class || returnType == null) {
+            if (returnType == void.class || returnType == Void.class) {
                 return null;
             }
             return context.getStubber().stub(returnType, StubbingSites.methodReturnValue(context.getSite(), method));
