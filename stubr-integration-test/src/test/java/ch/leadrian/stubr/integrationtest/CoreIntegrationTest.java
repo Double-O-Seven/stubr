@@ -46,10 +46,11 @@ class CoreIntegrationTest {
     @Test
     void shouldStubTestData() {
         assertAll(
-                () -> assertThat(testData.getPrimitives()).isNotNull(),
-                () -> assertThat(testData.getPrimitiveWrappers()).isNotNull(),
+                () -> assertThat(testData.getAnnotations()).isNotNull(),
                 () -> assertThat(testData.getArrays()).isNotNull(),
-                () -> assertThat(testData.getCollections()).isNotNull()
+                () -> assertThat(testData.getCollections()).isNotNull(),
+                () -> assertThat(testData.getPrimitives()).isNotNull(),
+                () -> assertThat(testData.getPrimitiveWrappers()).isNotNull()
         );
     }
 
