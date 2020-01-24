@@ -2,18 +2,22 @@ package ch.leadrian.stubr.integrationtest.testdata;
 
 public final class TestData {
 
+    private final Annotations annotations;
     private final Arrays arrays;
     private final Collections collections;
-    private final CommonDefaults commonDefaults;
     private final Primitives primitives;
     private final PrimitiveWrappers primitiveWrappers;
 
-    public TestData(Arrays arrays, Collections collections, CommonDefaults commonDefaults, Primitives primitives, PrimitiveWrappers primitiveWrappers) {
+    public TestData(Annotations annotations, Arrays arrays, Collections collections, Primitives primitives, PrimitiveWrappers primitiveWrappers) {
+        this.annotations = annotations;
         this.arrays = arrays;
         this.collections = collections;
-        this.commonDefaults = commonDefaults;
         this.primitives = primitives;
         this.primitiveWrappers = primitiveWrappers;
+    }
+
+    public Annotations getAnnotations() {
+        return annotations;
     }
 
     public Arrays getArrays() {
@@ -22,10 +26,6 @@ public final class TestData {
 
     public Collections getCollections() {
         return collections;
-    }
-
-    public CommonDefaults getCommonDefaults() {
-        return commonDefaults;
     }
 
     public Primitives getPrimitives() {

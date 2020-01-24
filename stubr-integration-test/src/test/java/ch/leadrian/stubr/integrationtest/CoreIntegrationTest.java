@@ -1,12 +1,21 @@
 package ch.leadrian.stubr.integrationtest;
 
 import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.stubbingsite.AnnotatedStubbingSite;
+import ch.leadrian.stubr.integrationtest.annotation.CollectionSize;
 import ch.leadrian.stubr.integrationtest.testdata.TestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static ch.leadrian.stubr.core.RootStubbers.defaultRootStubber;
+import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
+import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
+import static ch.leadrian.stubr.core.stubber.Stubbers.collection;
 import static ch.leadrian.stubr.core.stubber.Stubbers.defaultCollections;
 import static ch.leadrian.stubr.core.stubber.Stubbers.suppliedValue;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,8 +36,14 @@ class CoreIntegrationTest {
                     .stubWith(defaultCollections(3))
                     .stubWith(suppliedValue(String.class, sequenceNumber -> String.format("value%d", sequenceNumber)))
                     .stubWith(suppliedValue(Integer.class, sequenceNumber -> sequenceNumber))
+                    .stubWith(collection(List.class, ArrayList::new, this::getCollectionSize).when(annotatedSiteIs(annotatedWith(CollectionSize.class))))
                     .build();
             testData = rootStubber.stub(TestData.class);
+        }
+
+        private int getCollectionSize(StubbingContext context) {
+            AnnotatedStubbingSite annotatedSite = (AnnotatedStubbingSite) context.getSite();
+            return annotatedSite.getAnnotatedElement().getAnnotation(CollectionSize.class).value();
         }
 
         @Test
@@ -37,9 +52,28 @@ class CoreIntegrationTest {
                     () -> assertThat(testData.getPrimitives()).isNotNull(),
                     () -> assertThat(testData.getPrimitiveWrappers()).isNotNull(),
                     () -> assertThat(testData.getArrays()).isNotNull(),
-                    () -> assertThat(testData.getCollections()).isNotNull(),
-                    () -> assertThat(testData.getCommonDefaults()).isNotNull()
+                    () -> assertThat(testData.getCollections()).isNotNull()
             );
+        }
+
+        @Nested
+        class AnnotationsTest {
+
+            @Test
+            void shouldReturnEmptyList() {
+                assertThat(testData.getAnnotations().getEmptyList()).isEmpty();
+            }
+
+            @Test
+            void shouldReturnListOfFiveStrings() {
+                assertThat(testData.getAnnotations().getListOfFiveStrings()).containsExactly("value0", "value1", "value2", "value3", "value4");
+            }
+
+            @Test
+            void shouldReturnListOfTwoStrings() {
+                assertThat(testData.getAnnotations().getListOfTwoStrings()).containsExactly("value0", "value1");
+            }
+
         }
 
         @Nested
