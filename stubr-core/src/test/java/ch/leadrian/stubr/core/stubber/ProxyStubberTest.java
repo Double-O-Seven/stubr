@@ -27,10 +27,7 @@ class ProxyStubberTest {
                 }))
                 .rejects(Bar.class)
                 .rejects(Qux.class)
-                .test(
-                        Stubbers.proxy(false),
-                        Stubbers.proxy()
-                );
+                .test(Stubbers.proxy(false));
     }
 
     @TestFactory
@@ -48,7 +45,10 @@ class ProxyStubberTest {
                 }))
                 .rejects(Bar.class)
                 .rejects(Qux.class)
-                .test(Stubbers.proxy(true));
+                .test(
+                        Stubbers.proxy(true),
+                        Stubbers.proxy()
+                );
     }
 
     private interface Foo {
