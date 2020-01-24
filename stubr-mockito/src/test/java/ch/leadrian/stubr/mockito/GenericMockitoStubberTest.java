@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.mockito;
 
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -22,6 +23,14 @@ class GenericMockitoStubberTest {
                         assertAll(
                                 () -> assertThat(foo.getInt()).isEqualTo(1337),
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
+                        )
+                ))
+                .accepts(new TypeLiteral<Bla<String>>() {
+                })
+                .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bla.class, bla ->
+                        assertAll(
+                                () -> assertThat(bla.getInt()).isEqualTo(1337),
+                                () -> assertThat(bla.getString()).isEqualTo("Test")
                         )
                 ))
                 .accepts(Bar.class)
@@ -58,6 +67,14 @@ class GenericMockitoStubberTest {
     }
 
     interface Foo {
+
+        int getInt();
+
+        String getString();
+
+    }
+
+    interface Bla<T> {
 
         int getInt();
 

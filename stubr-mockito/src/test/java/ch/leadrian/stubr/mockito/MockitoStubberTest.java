@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.mockito;
 
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -24,9 +25,30 @@ class MockitoStubberTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
+                .rejects(new TypeLiteral<Bar<String>>() {
+                })
                 .rejects(int.class)
                 .rejects(String.class)
                 .test(MockitoStubbers.mock(Foo.class));
+    }
+
+    @TestFactory
+    Stream<DynamicTest> testMockitoStubberWithParameterizedType() {
+        return stubberTester()
+                .provideStub(int.class, 1337)
+                .provideStub("Test")
+                .accepts(new TypeLiteral<Bar<String>>() {
+                })
+                .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bar.class, bar ->
+                        assertAll(
+                                () -> assertThat(bar.getInt()).isEqualTo(1337),
+                                () -> assertThat(bar.getString()).isEqualTo("Test")
+                        )
+                ))
+                .rejects(Foo.class)
+                .rejects(int.class)
+                .rejects(String.class)
+                .test(MockitoStubbers.mock(Bar.class));
     }
 
     @TestFactory
@@ -50,6 +72,18 @@ class MockitoStubberTest {
     }
 
     class Foo {
+
+        int getInt() {
+            throw new UnsupportedOperationException();
+        }
+
+        String getString() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    class Bar<T> {
 
         int getInt() {
             throw new UnsupportedOperationException();
