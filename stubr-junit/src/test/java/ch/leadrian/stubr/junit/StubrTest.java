@@ -42,6 +42,12 @@ class StubrTest {
     }
 
     @Test
+    void shouldStubListValueFromStubber(@Stub List<String> value) {
+        assertThat(value)
+                .containsExactly("int-value");
+    }
+
+    @Test
     void shouldStubValueFromRootStubber(@Stub long value) {
         assertThat(value)
                 .isEqualTo(1234L);
