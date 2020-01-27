@@ -56,6 +56,11 @@ subprojects {
         testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = junitVersion)
     }
 
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
     tasks {
         test {
             useJUnitPlatform()
