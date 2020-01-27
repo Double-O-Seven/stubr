@@ -42,6 +42,9 @@ class ConstructorStubberTest {
                 .rejects(AmbiguousPackagePrivateConstructor.class)
                 .rejects(NotMatchingConstructor.class)
                 .rejects(UnambiguousConstructorOfAbstractClass.class)
+                .rejects(Foo.class)
+                .rejects(Bar.class)
+                .rejects(int.class)
                 .test(Stubbers.constructor((context, constructor) -> constructor.getParameterCount() == 2));
     }
 
@@ -191,6 +194,12 @@ class ConstructorStubberTest {
         public UnambiguousConstructorOfAbstractClass(String stringValue, int intValue) {
         }
 
+    }
+
+    private enum Foo {
+    }
+
+    private interface Bar {
     }
 
 }

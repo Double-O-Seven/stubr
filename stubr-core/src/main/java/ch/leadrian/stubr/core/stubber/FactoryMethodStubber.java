@@ -62,14 +62,22 @@ final class FactoryMethodStubber implements Stubber {
     }
 
     private Optional<Method> getFactoryMethod(StubbingContext context, Type type) {
-        return getRawType(type).flatMap(rawType -> getFactoryMethod(context, rawType));
+        return getRawType(type)
+                .filter(this::isInstantiable)
+                .flatMap(rawType -> getFactoryMethod(context, rawType));
+    }
+
+    private boolean isInstantiable(Class<?> clazz) {
+        return !clazz.isPrimitive()
+                && !clazz.isEnum()
+                && !clazz.isInterface();
     }
 
     private Optional<Method> getFactoryMethod(StubbingContext context, Class<?> targetClass) {
         Method method = factoryMethodsByClass.computeIfAbsent(targetClass, c -> {
-            List<Method> constructors = getFactoryMethods(context, targetClass);
-            if (constructors.size() == 1) {
-                return constructors.get(0);
+            List<Method> methods = getFactoryMethods(context, targetClass);
+            if (methods.size() == 1) {
+                return methods.get(0);
             }
             return null;
         });

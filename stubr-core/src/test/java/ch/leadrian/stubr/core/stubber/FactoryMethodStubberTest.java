@@ -44,6 +44,9 @@ class FactoryMethodStubberTest {
                 .rejects(UnambiguousProtectedNonStaticMethod.class)
                 .rejects(UnambiguousPackagePrivateNonStaticMethod.class)
                 .rejects(NotMatchingFactoryMethod.class)
+                .rejects(Foo.class)
+                .rejects(Bar.class)
+                .rejects(int.class)
                 .test(Stubbers.factoryMethod((context, factoryMethod) -> factoryMethod.getParameterCount() == 2));
     }
 
@@ -234,6 +237,12 @@ class FactoryMethodStubberTest {
             return null;
         }
 
+    }
+
+    private enum Foo {
+    }
+
+    private interface Bar {
     }
 
 }

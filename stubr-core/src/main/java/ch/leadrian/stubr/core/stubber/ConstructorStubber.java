@@ -63,8 +63,15 @@ final class ConstructorStubber implements Stubber {
 
     private Optional<Constructor<?>> getConstructor(StubbingContext context, Type type) {
         return getRawType(type)
-                .filter(rawType -> !isAbstract(rawType.getModifiers()))
+                .filter(this::isInstantiable)
                 .flatMap(rawType -> getConstructor(context, rawType));
+    }
+
+    private boolean isInstantiable(Class<?> clazz) {
+        return !isAbstract(clazz.getModifiers())
+                && !clazz.isPrimitive()
+                && !clazz.isEnum()
+                && !clazz.isInterface();
     }
 
     private Optional<Constructor<?>> getConstructor(StubbingContext context, Class<?> type) {
