@@ -8,7 +8,6 @@ import ch.leadrian.stubr.junit.annotation.RootStubberBaseline;
 import ch.leadrian.stubr.junit.annotation.StubWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -54,8 +53,8 @@ final class RootStubberFactory {
 
     private <T> T newInstance(Class<T> clazz) {
         try {
-            return clazz.getConstructor().newInstance();
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            return clazz.newInstance();
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
