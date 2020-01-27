@@ -21,7 +21,7 @@ object KotlinStubbers {
     inline fun <reified T : Collection<*>> collection(
             collectionSize: Int,
             crossinline collectionFactory: (List<*>) -> T
-    ): Stubber = Stubbers.collection(T::class.java, { collectionFactory(it) }, { collectionSize })
+    ): Stubber = collection(collectionFactory) { collectionSize }
 
     inline fun <reified T : Map<*, *>> map(
             crossinline mapFactory: (Map<*, *>) -> T,
