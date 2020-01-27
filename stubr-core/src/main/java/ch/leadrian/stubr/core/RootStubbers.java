@@ -22,13 +22,13 @@ public final class RootStubbers {
 
     private static final RootStubber DEFAULT_ROOT_STUBBER = RootStubber.builder()
             .stubWith(defaultValue())
+            .stubWith(proxy())
             .stubWith(enumValue())
             .stubWith(optional(OptionalStubbingMode.PRESENT))
-            .stubWith(defaultCollections(1))
             .stubWith(defaultConstructor())
             .stubWith(nonDefaultConstructor())
             .stubWith(factoryMethod())
-            .stubWith(proxy())
+            .stubWith(defaultCollections(1))
             .stubWith(rootStubber())
             .stubWith(commonConstantValues())
             .stubWith(commonSuppliedValues())
@@ -37,8 +37,8 @@ public final class RootStubbers {
     private static final RootStubber MINIMAL_ROOT_STUBBER = RootStubber.builder()
             .include(defaultRootStubber())
             .stubWith(nullValue().when(annotatedSiteIs(nullable())))
-            .stubWith(emptyDefaultCollections())
             .stubWith(optional(OptionalStubbingMode.EMPTY))
+            .stubWith(emptyDefaultCollections())
             .build();
 
     private RootStubbers() {
