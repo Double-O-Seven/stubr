@@ -8,6 +8,7 @@ import java.util.function.IntFunction
 @Suppress("UNCHECKED_CAST")
 object KotlinStubbers {
 
+    @JvmStatic
     fun objectInstance(): Stubber = ObjectInstanceStubber
 
     inline fun <reified T> constantValue(value: T): Stubber = Stubbers.constantValue(typeLiteral<T>(), value)
