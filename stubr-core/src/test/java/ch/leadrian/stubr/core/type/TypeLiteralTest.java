@@ -40,16 +40,20 @@ class TypeLiteralTest {
         new EqualsTester()
                 .addEqualityGroup(
                         new TypeLiteral<String>() {},
-                        new TypeLiteral<String>() {})
+                        new TypeLiteral<String>() {}
+                )
                 .addEqualityGroup(
                         new TypeLiteral<Integer>() {},
-                        new TypeLiteral<Integer>() {})
+                        new TypeLiteral<Integer>() {}
+                )
                 .addEqualityGroup(
                         new TypeLiteral<List<String>>() {},
-                        new TypeLiteral<List<String>>() {})
+                        new TypeLiteral<List<String>>() {}
+                )
                 .addEqualityGroup(
                         new TypeLiteral<T>() {},
-                        new TypeLiteral<T>() {})
+                        new TypeLiteral<T>() {}
+                )
                 .testEquals();
     }
 
