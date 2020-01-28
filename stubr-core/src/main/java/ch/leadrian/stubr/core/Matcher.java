@@ -3,9 +3,9 @@ package ch.leadrian.stubr.core;
 import java.lang.reflect.Type;
 
 /**
- * An interface used to determine whether a stubber can be used to stub an instance of a certain type.
- * A matcher may be used to extend the conditions under which a stubber can be applied.
- * A matcher may also be used to determine a suitable constructor or factory method to instantiate a stubbed instance.
+ * An interface used to determine whether a stubber can be used to stub an instance of a certain type. A matcher may be
+ * used to extend the conditions under which a stubber can be applied. A matcher may also be used to determine a
+ * suitable constructor or factory method to instantiate a stubbed instance.
  * <p>
  * Various implementations can be found in {@link ch.leadrian.stubr.core.matcher.Matchers}.
  *
@@ -21,8 +21,9 @@ public interface Matcher<T> {
 
     /**
      * A matcher may match depending on the given {@link StubbingContext} or the given {@code value} of type {@link T}.
-     * If the {@code context} is evaluated, most likely only it's {@link StubbingSite} is relevant, as the referenced {@link RootStubber}
-     * does not contain any publicly available state. However, the full context is being passed for sake of extensibility.
+     * If the {@code context} is evaluated, most likely only it's {@link StubbingSite} is relevant, as the referenced
+     * {@link RootStubber} does not contain any publicly available state. However, the full context is being passed for
+     * sake of extensibility.
      *
      * @param context {@link StubbingContext} in which a {@link Stubber} is applied.
      * @param value   value that may be evaluated by the matcher.

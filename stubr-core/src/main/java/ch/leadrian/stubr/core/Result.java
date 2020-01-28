@@ -9,12 +9,12 @@ import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 
 /**
- * Class representing the result of a stubbing attempt using {@link RootStubber#tryToStub}.
- * Instances of {@link Result} can be either a success or a failure.
+ * Class representing the result of a stubbing attempt using {@link RootStubber#tryToStub}. Instances of {@link Result}
+ * can be either a success or a failure.
  * <p>
- * The behaviour is similar to {@link java.util.Optional} with the key difference that {@code null}
- * is a valid value for success. While mapping success values to other values is supported for convenience,
- * filtering is not, as {@link Result} represents the outcome of a {@link RootStubber#tryToStub} to stub call.
+ * The behaviour is similar to {@link java.util.Optional} with the key difference that {@code null} is a valid value for
+ * success. While mapping success values to other values is supported for convenience, filtering is not, as {@link
+ * Result} represents the outcome of a {@link RootStubber#tryToStub} to stub call.
  *
  * @param <T> type of the stub value
  * @see RootStubber#tryToStub
@@ -69,14 +69,15 @@ public abstract class Result<T> {
     public abstract boolean isFailure();
 
     /**
-     * Maps the stub value of a successful {@link Result} to to another value. In case of a failure result,
-     * the {@code mappingFunction} is not applied.
+     * Maps the stub value of a successful {@link Result} to to another value. In case of a failure result, the {@code
+     * mappingFunction} is not applied.
      * <p>
      * The behaviour is analogous to the behaviour of {@link java.util.Optional#map}
      *
      * @param mappingFunction function applied to the stub value of a successful result
      * @param <U>             the resulting type of the mapping function
-     * @return a successful {@link Result} containing a value of type {@link U}, else a failure {@link Result} in case of a failure
+     * @return a successful {@link Result} containing a value of type {@link U}, else a failure {@link Result} in case
+     * of a failure
      */
     public abstract <U> Result<U> map(Function<T, U> mappingFunction);
 
