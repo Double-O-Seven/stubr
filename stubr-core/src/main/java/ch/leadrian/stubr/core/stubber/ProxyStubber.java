@@ -116,6 +116,7 @@ enum ProxyStubber implements Stubber {
         protected Object getReturnValue(Method method) {
             return stubbedValues.computeIfAbsent(method, this::stub);
         }
+
     }
 
     private enum Java8DefaultMethodInvocationHandler implements InvocationHandler {

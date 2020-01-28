@@ -28,4 +28,5 @@ final class StubberAcceptsType implements StubberTest {
             assertThat(accepts).isTrue();
         });
     }
+
 }

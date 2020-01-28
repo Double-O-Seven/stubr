@@ -61,4 +61,5 @@ public final class ParameterizedTypeStubbingSite implements StubbingSite {
                 .add("parameterIndex", parameterIndex)
                 .toString();
     }
+
 }

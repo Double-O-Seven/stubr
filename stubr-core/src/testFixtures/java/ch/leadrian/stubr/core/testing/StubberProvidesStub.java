@@ -36,4 +36,5 @@ final class StubberProvidesStub implements StubberTest {
             }
         });
     }
+
 }

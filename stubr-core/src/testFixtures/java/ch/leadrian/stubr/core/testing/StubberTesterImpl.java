@@ -94,6 +94,7 @@ final class StubberTesterImpl implements StubberTester {
         public Stream<DynamicTest> test(Stubber stubber) {
             return StubberTesterImpl.this.test(stubber);
         }
+
     }
 
     private final class StubValueTesterImpl<T> extends DelegatingStubberTester implements StubValueTester<T> {
@@ -115,6 +116,7 @@ final class StubberTesterImpl implements StubberTester {
             tests.add(new StubberProvidesStubSatisfying(type, assertion));
             return new SiteTesterImpl(type);
         }
+
     }
 
     private final class SiteTesterImpl extends DelegatingStubberTester implements SiteTester {
@@ -130,6 +132,7 @@ final class StubberTesterImpl implements StubberTester {
             tests.add(new StubberStubsAtSite(type, asList(expectedSites)));
             return StubberTesterImpl.this;
         }
+
     }
 
 }

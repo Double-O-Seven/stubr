@@ -18,8 +18,7 @@ class NullValueStubberTest {
                 .andStubs(null)
                 .accepts(String.class)
                 .andStubs(null)
-                .accepts(new TypeLiteral<List<String>>() {
-                })
+                .accepts(new TypeLiteral<List<String>>() {})
                 .andStubs(null)
                 .rejects(boolean.class)
                 .rejects(byte.class)

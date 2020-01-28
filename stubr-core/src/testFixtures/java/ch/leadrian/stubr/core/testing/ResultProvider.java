@@ -43,6 +43,7 @@ abstract class ResultProvider {
         ResultProvider getUntouchedInstance() {
             return this;
         }
+
     }
 
     private static class ConstantValue extends ResultProvider {
@@ -62,6 +63,7 @@ abstract class ResultProvider {
         ResultProvider getUntouchedInstance() {
             return this;
         }
+
     }
 
     private static class ValueSequence extends ResultProvider {
@@ -88,6 +90,7 @@ abstract class ResultProvider {
         ResultProvider getUntouchedInstance() {
             return new ValueSequence(originalValues);
         }
+
     }
 
 }

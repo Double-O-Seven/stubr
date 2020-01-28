@@ -33,13 +33,11 @@ class SuppliedValueStubberTest {
 
     @TestFactory
     Stream<DynamicTest> testFixedSuppliedValueOfParameterizedType() {
-        TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {
-        };
+        TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {};
         return stubberTester()
                 .accepts(listOfStrings)
                 .andStubs(singletonList("Test"))
-                .rejects(new TypeLiteral<List<Integer>>() {
-                })
+                .rejects(new TypeLiteral<List<Integer>>() {})
                 .test(
                         Stubbers.suppliedValue(listOfStrings, () -> singletonList("Test")),
                         Stubbers.suppliedValue(listOfStrings, sequenceNumber -> singletonList("Test"))

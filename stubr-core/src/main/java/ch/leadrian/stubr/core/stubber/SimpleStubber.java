@@ -89,4 +89,5 @@ public abstract class SimpleStubber<T> implements Stubber {
     protected abstract T stubClass(StubbingContext context, Class<?> type);
 
     protected abstract T stubParameterizedType(StubbingContext context, ParameterizedType type);
+
 }

@@ -25,8 +25,7 @@ class GenericMockitoStubberTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .accepts(new TypeLiteral<Bla<String>>() {
-                })
+                .accepts(new TypeLiteral<Bla<String>>() {})
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bla.class, bla ->
                         assertAll(
                                 () -> assertThat(bla.getInt()).isEqualTo(1337),

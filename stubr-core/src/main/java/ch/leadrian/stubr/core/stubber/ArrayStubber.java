@@ -94,4 +94,5 @@ final class ArrayStubber extends SimpleStubber<Object> {
             throw new StubbingException(String.format("Not an array: %s", array));
         }
     }
+
 }

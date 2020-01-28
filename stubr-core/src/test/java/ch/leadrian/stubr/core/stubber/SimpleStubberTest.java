@@ -30,34 +30,23 @@ class SimpleStubberTest {
         return stubberTester()
                 .accepts(String.class)
                 .andStubs("ABC")
-                .accepts(new TypeLiteral<List<String>>() {
-                })
+                .accepts(new TypeLiteral<List<String>>() {})
                 .andStubs(singletonList("DEF"))
-                .accepts(new ParameterizedTypeLiteral<List<? extends String>>() {
-                }.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? extends String>>() {}.getActualTypeArgument(0))
                 .andStubs("ABC")
-                .accepts(new ParameterizedTypeLiteral<List<? super String>>() {
-                }.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? super String>>() {}.getActualTypeArgument(0))
                 .andStubs("ABC")
-                .accepts(new ParameterizedTypeLiteral<List<? extends List<String>>>() {
-                }.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? extends List<String>>>() {}.getActualTypeArgument(0))
                 .andStubs(singletonList("DEF"))
-                .accepts(new ParameterizedTypeLiteral<List<? super List<String>>>() {
-                }.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? super List<String>>>() {}.getActualTypeArgument(0))
                 .andStubs(singletonList("DEF"))
                 .rejects(Object.class)
-                .rejects(new TypeLiteral<List<Object>>() {
-                })
-                .rejects(new TypeLiteral<T>() {
-                })
-                .rejects(new TypeLiteral<T[]>() {
-                })
-                .rejects(new ParameterizedTypeLiteral<List<?>>() {
-                }.getActualTypeArgument(0))
-                .rejects(new ParameterizedTypeLiteral<List<? extends T>>() {
-                }.getActualTypeArgument(0))
-                .rejects(new ParameterizedTypeLiteral<List<? super T>>() {
-                }.getActualTypeArgument(0))
+                .rejects(new TypeLiteral<List<Object>>() {})
+                .rejects(new TypeLiteral<T>() {})
+                .rejects(new TypeLiteral<T[]>() {})
+                .rejects(new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0))
+                .rejects(new ParameterizedTypeLiteral<List<? extends T>>() {}.getActualTypeArgument(0))
+                .rejects(new ParameterizedTypeLiteral<List<? super T>>() {}.getActualTypeArgument(0))
                 .test(new SimpleStubber<Object>() {
 
                     @Override
@@ -67,8 +56,7 @@ class SimpleStubberTest {
 
                     @Override
                     protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
-                        return new TypeLiteral<List<String>>() {
-                        }.getType().equals(type);
+                        return new TypeLiteral<List<String>>() {}.getType().equals(type);
                     }
 
                     @Override
@@ -89,9 +77,9 @@ class SimpleStubberTest {
         StubbingContext context = mock(StubbingContext.class);
         when(context.getSite())
                 .thenReturn(site);
-        Type type = new TypeLiteral<T>() {
-        }.getType();
+        Type type = new TypeLiteral<T>() {}.getType();
         Stubber stubber = new SimpleStubber<Object>() {
+
             @Override
             protected boolean acceptsClass(StubbingContext context, Class<?> type) {
                 return false;
@@ -128,9 +116,9 @@ class SimpleStubberTest {
         StubbingContext context = mock(StubbingContext.class);
         when(context.getSite())
                 .thenReturn(site);
-        Type type = new TypeLiteral<T[]>() {
-        }.getType();
+        Type type = new TypeLiteral<T[]>() {}.getType();
         Stubber stubber = new SimpleStubber<Object>() {
+
             @Override
             protected boolean acceptsClass(StubbingContext context, Class<?> type) {
                 return false;

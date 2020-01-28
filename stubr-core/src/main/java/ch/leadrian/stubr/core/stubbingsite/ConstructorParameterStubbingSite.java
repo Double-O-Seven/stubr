@@ -65,4 +65,5 @@ public final class ConstructorParameterStubbingSite implements ConstructorStubbi
                 .add("parameter", parameter)
                 .toString();
     }
+
 }

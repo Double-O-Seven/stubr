@@ -58,4 +58,5 @@ public final class MockitoStubbingSite implements MethodStubbingSite, AnnotatedS
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
     }
+
 }

@@ -52,4 +52,5 @@ public final class ArrayStubbingSite implements StubbingSite {
                 .add("componentType", componentType)
                 .toString();
     }
+
 }

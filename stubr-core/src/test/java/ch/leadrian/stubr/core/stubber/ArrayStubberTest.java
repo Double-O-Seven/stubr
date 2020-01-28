@@ -21,8 +21,7 @@ class ArrayStubberTest {
                 .andStubs(new String[0])
                 .rejects(Object.class)
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String[]>>() {
-                })
+                .rejects(new TypeLiteral<List<String[]>>() {})
                 .test(
                         Stubbers.array(context -> 0),
                         Stubbers.array(0),
@@ -51,8 +50,7 @@ class ArrayStubberTest {
                 )
                 .rejects(Object.class)
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String[]>>() {
-                })
+                .rejects(new TypeLiteral<List<String[]>>() {})
                 .test(
                         Stubbers.array(context -> 3),
                         Stubbers.array(3)

@@ -265,4 +265,5 @@ public final class Stubbers {
                 .add(suppliedValue(java.sql.Date.class, () -> new java.sql.Date(0)))
                 .build();
     }
+
 }

@@ -43,4 +43,5 @@ public final class StubbingSites {
     public static UnknownStubbingSite unknown() {
         return UnknownStubbingSite.INSTANCE;
     }
+
 }

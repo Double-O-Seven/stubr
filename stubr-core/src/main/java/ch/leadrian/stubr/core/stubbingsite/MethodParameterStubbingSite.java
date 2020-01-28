@@ -65,4 +65,5 @@ public final class MethodParameterStubbingSite implements ParameterStubbingSite,
                 .add("parameter", parameter)
                 .toString();
     }
+
 }

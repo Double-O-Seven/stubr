@@ -48,4 +48,5 @@ class DefaultValueStubberTest {
                 .rejects(Object.class)
                 .test(Stubbers.defaultValue());
     }
+
 }

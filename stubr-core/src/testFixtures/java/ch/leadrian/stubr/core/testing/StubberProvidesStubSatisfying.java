@@ -30,4 +30,5 @@ final class StubberProvidesStubSatisfying implements StubberTest {
             assertion.accept(value);
         });
     }
+
 }

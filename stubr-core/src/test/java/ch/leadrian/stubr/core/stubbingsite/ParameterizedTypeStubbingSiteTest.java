@@ -19,8 +19,7 @@ class ParameterizedTypeStubbingSiteTest {
     @Test
     void shouldReturnParent() {
         StubbingSite expectedParent = mock(StubbingSite.class);
-        ParameterizedType type = new ParameterizedTypeLiteral<List<String>>() {
-        }.getType();
+        ParameterizedType type = new ParameterizedTypeLiteral<List<String>>() {}.getType();
         ParameterizedTypeStubbingSite site = StubbingSites.parameterizedType(expectedParent, type, 0);
 
         Optional<StubbingSite> parent = site.getParent();
@@ -32,8 +31,7 @@ class ParameterizedTypeStubbingSiteTest {
     @Test
     void shouldReturnType() {
         StubbingSite parent = mock(StubbingSite.class);
-        ParameterizedType expectedType = new ParameterizedTypeLiteral<List<String>>() {
-        }.getType();
+        ParameterizedType expectedType = new ParameterizedTypeLiteral<List<String>>() {}.getType();
         ParameterizedTypeStubbingSite site = StubbingSites.parameterizedType(parent, expectedType, 0);
 
         ParameterizedType type = site.getType();
@@ -45,8 +43,7 @@ class ParameterizedTypeStubbingSiteTest {
     @Test
     void shouldReturnParameterIndex() {
         StubbingSite parent = mock(StubbingSite.class);
-        ParameterizedType type = new ParameterizedTypeLiteral<List<String>>() {
-        }.getType();
+        ParameterizedType type = new ParameterizedTypeLiteral<List<String>>() {}.getType();
         ParameterizedTypeStubbingSite site = StubbingSites.parameterizedType(parent, type, 0);
 
         int parameterIndex = site.getParameterIndex();
@@ -58,11 +55,9 @@ class ParameterizedTypeStubbingSiteTest {
     @Test
     void equalsShouldReturnTrueIfAndOnlyIfBothSitesAreEqual() {
         StubbingSite parent1 = mock(StubbingSite.class);
-        ParameterizedType type1 = new ParameterizedTypeLiteral<List<String>>() {
-        }.getType();
+        ParameterizedType type1 = new ParameterizedTypeLiteral<List<String>>() {}.getType();
         StubbingSite parent2 = mock(StubbingSite.class);
-        ParameterizedType type2 = new ParameterizedTypeLiteral<Set<Integer>>() {
-        }.getType();
+        ParameterizedType type2 = new ParameterizedTypeLiteral<Set<Integer>>() {}.getType();
 
         new EqualsTester()
                 .addEqualityGroup(StubbingSites.parameterizedType(parent1, type1, 0), StubbingSites.parameterizedType(parent1, type1, 0))

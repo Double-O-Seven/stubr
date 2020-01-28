@@ -75,6 +75,7 @@ class FactoryMethodStubberTest {
         public static MultiplePublicFactoryMethods get(String stringValue, long longValue) {
             return null;
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -101,6 +102,7 @@ class FactoryMethodStubberTest {
         public boolean equals(Object obj) {
             return EQUALS.equals(this, obj);
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -127,6 +129,7 @@ class FactoryMethodStubberTest {
         public boolean equals(Object obj) {
             return EQUALS.equals(this, obj);
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -153,6 +156,7 @@ class FactoryMethodStubberTest {
         public boolean equals(Object obj) {
             return EQUALS.equals(this, obj);
         }
+
     }
 
     @SuppressWarnings("unused")

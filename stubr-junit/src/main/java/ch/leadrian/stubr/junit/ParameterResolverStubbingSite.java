@@ -53,4 +53,5 @@ public final class ParameterResolverStubbingSite implements ParameterStubbingSit
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
     }
+
 }

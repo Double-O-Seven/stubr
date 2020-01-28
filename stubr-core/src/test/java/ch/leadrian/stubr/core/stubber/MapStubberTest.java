@@ -22,25 +22,18 @@ class MapStubberTest {
         return stubberTester()
                 .accepts(Map.class)
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<String, Integer>>() {
-                })
+                .accepts(new TypeLiteral<Map<String, Integer>>() {})
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<? super String, ? super Integer>>() {
-                })
+                .accepts(new TypeLiteral<Map<? super String, ? super Integer>>() {})
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<?, ?>>() {
-                })
+                .accepts(new TypeLiteral<Map<?, ?>>() {})
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<? extends String, ? extends Integer>>() {
-                })
+                .accepts(new TypeLiteral<Map<? extends String, ? extends Integer>>() {})
                 .andStubs(new HashMap<>())
                 .rejects(HashMap.class)
-                .rejects(new TypeLiteral<HashMap<String, String>>() {
-                })
-                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {
-                })
-                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {
-                })
+                .rejects(new TypeLiteral<HashMap<String, String>>() {})
+                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {})
+                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {})
                 .test(
                         Stubbers.map(Map.class, HashMap::new, context -> 0),
                         Stubbers.map(Map.class, HashMap::new, 0),
@@ -50,8 +43,7 @@ class MapStubberTest {
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyMapStubber() {
-        ParameterizedTypeLiteral<Map<String, Integer>> mapOfStrings = new ParameterizedTypeLiteral<Map<String, Integer>>() {
-        };
+        ParameterizedTypeLiteral<Map<String, Integer>> mapOfStrings = new ParameterizedTypeLiteral<Map<String, Integer>>() {};
         return stubberTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .provideStub(Integer.class, 123, 456, 789)
@@ -67,20 +59,16 @@ class MapStubberTest {
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 1)
                 )
                 .rejects(HashMap.class)
-                .rejects(new TypeLiteral<HashMap<String, Integer>>() {
-                })
-                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {
-                })
-                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {
-                })
+                .rejects(new TypeLiteral<HashMap<String, Integer>>() {})
+                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {})
+                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {})
                 .test(Stubbers.map(Map.class, HashMap::new, context -> 3), Stubbers.map(Map.class, HashMap::new, 3));
     }
 
     @TestFactory
     Stream<DynamicTest> testUnsupportedParameterization() {
         return stubberTester()
-                .rejects(new TypeLiteral<WeirdMap<String, Integer, BigDecimal>>() {
-                })
+                .rejects(new TypeLiteral<WeirdMap<String, Integer, BigDecimal>>() {})
                 .test(Stubbers.map(WeirdMap.class, values -> new WeirdMap(), context -> 3));
     }
 

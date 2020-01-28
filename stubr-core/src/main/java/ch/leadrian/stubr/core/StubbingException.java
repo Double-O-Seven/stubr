@@ -35,4 +35,5 @@ public class StubbingException extends IllegalStateException {
     public Optional<Type> getType() {
         return Optional.ofNullable(type);
     }
+
 }

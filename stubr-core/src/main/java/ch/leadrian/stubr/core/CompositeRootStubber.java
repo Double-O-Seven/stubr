@@ -24,4 +24,5 @@ final class CompositeRootStubber extends RootStubber {
                 .findFirst()
                 .orElse(Result.failure());
     }
+
 }

@@ -115,6 +115,7 @@ class StubrTest {
                     Stubbers.enumValue()
             );
         }
+
     }
 
     static final class Level0StubberProvider implements StubberProvider {
@@ -123,6 +124,7 @@ class StubrTest {
         public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
             return singletonList(Stubbers.constantValue("int-value"));
         }
+
     }
 
     static final class Level0RootStubberProvider implements RootStubberProvider {
@@ -134,6 +136,7 @@ class StubrTest {
                     .stubWith(Stubbers.constantValue(Locale.GERMANY))
                     .build());
         }
+
     }
 
     static final class Level1StubberProvider implements StubberProvider {
@@ -142,6 +145,7 @@ class StubrTest {
         public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
             return singletonList(Stubbers.constantValue("overridden-int-value"));
         }
+
     }
 
     static final class Level1RootStubberProvider implements RootStubberProvider {
@@ -152,6 +156,7 @@ class StubrTest {
                     .stubWith(Stubbers.constantValue(long.class, 65536L))
                     .build());
         }
+
     }
 
     @Retention(RetentionPolicy.RUNTIME)

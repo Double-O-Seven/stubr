@@ -33,8 +33,7 @@ class RootStubbersTest {
 
         @Test
         void shouldStubListOfStrings() {
-            List<Integer> value = rootStubber.stub(new TypeLiteral<List<Integer>>() {
-            });
+            List<Integer> value = rootStubber.stub(new TypeLiteral<List<Integer>>() {});
 
             assertThat(value)
                     .containsExactly(0);
@@ -85,6 +84,7 @@ class RootStubbersTest {
         public boolean isCreatedWithFactoryMethod() {
             return createdWithFactoryMethod;
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -102,6 +102,7 @@ class RootStubbersTest {
         public boolean isCreatedWithNonDefaultConstructor() {
             return createdWithNonDefaultConstructor;
         }
+
     }
 
 }

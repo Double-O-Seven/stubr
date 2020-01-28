@@ -16,8 +16,7 @@ class TypeLiteralTest {
 
     @Test
     void shouldReturnClass() {
-        Type type = new TypeLiteral<String>() {
-        }.getType();
+        Type type = new TypeLiteral<String>() {}.getType();
 
         assertThat(type)
                 .isEqualTo(String.class);
@@ -25,8 +24,7 @@ class TypeLiteralTest {
 
     @Test
     void shouldReturnParameterizedType() {
-        Type type = new TypeLiteral<List<String>>() {
-        }.getType();
+        Type type = new TypeLiteral<List<String>>() {}.getType();
 
         assertThat(type)
                 .isInstanceOfSatisfying(ParameterizedType.class, parameterizedType ->
@@ -41,32 +39,23 @@ class TypeLiteralTest {
     <T> void testEquals() {
         new EqualsTester()
                 .addEqualityGroup(
-                        new TypeLiteral<String>() {
-                        },
-                        new TypeLiteral<String>() {
-                        })
+                        new TypeLiteral<String>() {},
+                        new TypeLiteral<String>() {})
                 .addEqualityGroup(
-                        new TypeLiteral<Integer>() {
-                        },
-                        new TypeLiteral<Integer>() {
-                        })
+                        new TypeLiteral<Integer>() {},
+                        new TypeLiteral<Integer>() {})
                 .addEqualityGroup(
-                        new TypeLiteral<List<String>>() {
-                        },
-                        new TypeLiteral<List<String>>() {
-                        })
+                        new TypeLiteral<List<String>>() {},
+                        new TypeLiteral<List<String>>() {})
                 .addEqualityGroup(
-                        new TypeLiteral<T>() {
-                        },
-                        new TypeLiteral<T>() {
-                        })
+                        new TypeLiteral<T>() {},
+                        new TypeLiteral<T>() {})
                 .testEquals();
     }
 
     @Test
     void shouldReturnStringRepresentation() {
-        String string = new TypeLiteral<String>() {
-        }.toString();
+        String string = new TypeLiteral<String>() {}.toString();
 
         assertThat(string)
                 .isEqualTo("TypeLiteral{type=class java.lang.String}");
@@ -74,8 +63,7 @@ class TypeLiteralTest {
 
     @Test
     void givenSuperclassIsNotParameterizedItShouldThrowException() {
-        Throwable caughtThrowable = catchThrowable(() -> new UnparameterizedTypeLiteral() {
-        });
+        Throwable caughtThrowable = catchThrowable(() -> new UnparameterizedTypeLiteral() {});
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException.class)

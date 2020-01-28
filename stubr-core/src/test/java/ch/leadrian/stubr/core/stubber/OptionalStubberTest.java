@@ -17,18 +17,14 @@ class OptionalStubberTest {
         return stubberTester()
                 .accepts(Optional.class)
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<String>>() {
-                })
+                .accepts(new TypeLiteral<Optional<String>>() {})
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<? super String>>() {
-                })
+                .accepts(new TypeLiteral<Optional<? super String>>() {})
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<? extends String>>() {
-                })
+                .accepts(new TypeLiteral<Optional<? extends String>>() {})
                 .andStubs(Optional.empty())
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String>>() {
-                })
+                .rejects(new TypeLiteral<List<String>>() {})
                 .test(Stubbers.optional(OptionalStubbingMode.EMPTY));
     }
 
@@ -36,13 +32,11 @@ class OptionalStubberTest {
     Stream<DynamicTest> testPresentOptionalStubber() {
         return stubberTester()
                 .provideStub("Test")
-                .accepts(new TypeLiteral<Optional<String>>() {
-                })
+                .accepts(new TypeLiteral<Optional<String>>() {})
                 .andStubs(Optional.of("Test"))
                 .rejects(Optional.class)
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String>>() {
-                })
+                .rejects(new TypeLiteral<List<String>>() {})
                 .test(Stubbers.optional(OptionalStubbingMode.PRESENT));
     }
 
@@ -53,15 +47,12 @@ class OptionalStubberTest {
                 .doNotStub(Integer.class)
                 .accepts(Optional.class)
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<String>>() {
-                })
+                .accepts(new TypeLiteral<Optional<String>>() {})
                 .andStubs(Optional.of("Test"))
-                .accepts(new TypeLiteral<Optional<Integer>>() {
-                })
+                .accepts(new TypeLiteral<Optional<Integer>>() {})
                 .andStubs(Optional.empty())
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String>>() {
-                })
+                .rejects(new TypeLiteral<List<String>>() {})
                 .test(Stubbers.optional(OptionalStubbingMode.PRESENT_IF_POSSIBLE));
     }
 

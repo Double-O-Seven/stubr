@@ -69,5 +69,7 @@ final class StubberStubsAtSite implements StubberTest {
         public List<StubbingSite> getCapturedSites() {
             return capturedSites;
         }
+
     }
+
 }

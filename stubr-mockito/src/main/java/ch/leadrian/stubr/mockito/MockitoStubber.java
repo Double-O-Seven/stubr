@@ -48,4 +48,5 @@ final class MockitoStubber<T> extends SimpleStubber<T> {
         }
         return mock;
     }
+
 }

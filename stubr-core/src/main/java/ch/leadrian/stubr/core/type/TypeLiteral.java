@@ -49,4 +49,5 @@ public abstract class TypeLiteral<T> {
                 .add("type", type)
                 .toString();
     }
+
 }

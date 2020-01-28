@@ -73,6 +73,7 @@ final class OptionalStubber extends SimpleStubber<Optional<Object>> {
         }
 
         protected abstract Optional<Object> stub(StubbingContext context, StubbingSite site, Type valueType);
+
     }
 
     private static final class PresentStubbingStrategy extends AbstractStubbingStrategy {
@@ -86,6 +87,7 @@ final class OptionalStubber extends SimpleStubber<Optional<Object>> {
         public boolean isEmptyAllowed() {
             return false;
         }
+
     }
 
     private static final class PresentIfPossibleStubbingStrategy extends AbstractStubbingStrategy {
@@ -103,5 +105,7 @@ final class OptionalStubber extends SimpleStubber<Optional<Object>> {
         public boolean isEmptyAllowed() {
             return true;
         }
+
     }
+
 }

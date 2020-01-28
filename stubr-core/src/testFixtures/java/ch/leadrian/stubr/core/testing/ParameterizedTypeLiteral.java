@@ -21,4 +21,5 @@ public abstract class ParameterizedTypeLiteral<T> extends TypeLiteral<T> {
     public Type getActualTypeArgument(int index) {
         return getType().getActualTypeArguments()[index];
     }
+
 }

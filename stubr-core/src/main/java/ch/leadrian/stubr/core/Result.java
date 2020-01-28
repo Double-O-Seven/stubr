@@ -130,6 +130,7 @@ public abstract class Result<T> {
                     .add("value", value)
                     .toString();
         }
+
     }
 
     private static final class Failure<T> extends Result<T> {
@@ -158,5 +159,7 @@ public abstract class Result<T> {
         public String toString() {
             return getClass().getSimpleName();
         }
+
     }
+
 }

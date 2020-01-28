@@ -11,4 +11,5 @@ public interface ParameterStubbingSite extends AnnotatedStubbingSite {
     default AnnotatedElement getAnnotatedElement() {
         return getParameter();
     }
+
 }

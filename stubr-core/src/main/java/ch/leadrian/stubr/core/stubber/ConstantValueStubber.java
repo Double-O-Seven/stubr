@@ -38,4 +38,5 @@ final class ConstantValueStubber extends SimpleStubber<Object> {
     protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
         return value;
     }
+
 }

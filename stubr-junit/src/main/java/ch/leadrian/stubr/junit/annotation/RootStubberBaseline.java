@@ -40,4 +40,5 @@ public @interface RootStubberBaseline {
 
         public abstract RootStubberBuilder getBuilder();
     }
+
 }

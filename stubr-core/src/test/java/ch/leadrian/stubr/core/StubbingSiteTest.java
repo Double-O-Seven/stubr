@@ -47,6 +47,7 @@ class StubbingSiteTest {
         public Optional<? extends StubbingSite> getParent() {
             return Optional.ofNullable(parent);
         }
+
     }
 
 }

@@ -23,4 +23,5 @@ final class StubbingAnswer implements Answer<Object> {
         MockitoStubbingSite site = new MockitoStubbingSite(context.getSite(), invocation);
         return context.getStubber().stub(returnType, site);
     }
+
 }

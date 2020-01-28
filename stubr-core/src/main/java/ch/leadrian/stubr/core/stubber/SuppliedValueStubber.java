@@ -45,4 +45,5 @@ final class SuppliedValueStubber extends SimpleStubber<Object> {
     private Object getNextValue() {
         return valueSupplier.apply(sequenceNumber.getAndIncrement());
     }
+
 }

@@ -25,8 +25,7 @@ class MockitoStubberTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .rejects(new TypeLiteral<Bar<String>>() {
-                })
+                .rejects(new TypeLiteral<Bar<String>>() {})
                 .rejects(int.class)
                 .rejects(String.class)
                 .test(MockitoStubbers.mock(Foo.class));
@@ -37,8 +36,7 @@ class MockitoStubberTest {
         return stubberTester()
                 .provideStub(int.class, 1337)
                 .provideStub("Test")
-                .accepts(new TypeLiteral<Bar<String>>() {
-                })
+                .accepts(new TypeLiteral<Bar<String>>() {})
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bar.class, bar ->
                         assertAll(
                                 () -> assertThat(bar.getInt()).isEqualTo(1337),

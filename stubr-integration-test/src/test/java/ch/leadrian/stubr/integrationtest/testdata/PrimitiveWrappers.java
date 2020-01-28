@@ -17,4 +17,5 @@ public interface PrimitiveWrappers {
     Float getFloat();
 
     Double getDouble();
+
 }

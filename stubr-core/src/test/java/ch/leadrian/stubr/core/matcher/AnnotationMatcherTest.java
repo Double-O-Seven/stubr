@@ -163,6 +163,7 @@ class AnnotationMatcherTest {
         public int hashCode() {
             return EQUALS_AND_HASH_CODE.hashCode(this);
         }
+
     }
 
 }

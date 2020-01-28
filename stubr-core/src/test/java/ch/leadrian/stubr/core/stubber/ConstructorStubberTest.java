@@ -71,6 +71,7 @@ class ConstructorStubberTest {
 
         public MultiplePublicConstructors(String stringValue, long longValue) {
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -93,6 +94,7 @@ class ConstructorStubberTest {
         public boolean equals(Object obj) {
             return EQUALS.equals(this, obj);
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -115,6 +117,7 @@ class ConstructorStubberTest {
         public boolean equals(Object obj) {
             return EQUALS.equals(this, obj);
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -137,6 +140,7 @@ class ConstructorStubberTest {
         public boolean equals(Object obj) {
             return EQUALS.equals(this, obj);
         }
+
     }
 
     @SuppressWarnings("unused")

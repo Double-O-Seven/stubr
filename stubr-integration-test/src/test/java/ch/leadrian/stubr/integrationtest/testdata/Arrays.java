@@ -19,4 +19,5 @@ public interface Arrays {
     double[] getDoubleArray();
 
     String[] getStringArray();
+
 }

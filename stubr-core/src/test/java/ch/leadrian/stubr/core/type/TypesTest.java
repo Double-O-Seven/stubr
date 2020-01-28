@@ -27,8 +27,7 @@ class TypesTest {
 
         @Test
         void givenParameterizedTypeItShouldReturnRawType() {
-            Type type = new TypeLiteral<List<String>>() {
-            }.getType();
+            Type type = new TypeLiteral<List<String>>() {}.getType();
             Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
@@ -37,8 +36,7 @@ class TypesTest {
 
         @Test
         void givenWildcardTypeWithLowerBoundItShouldReturnLowerBound() {
-            Type type = new ParameterizedTypeLiteral<List<? super Number>>() {
-            }.getActualTypeArgument(0);
+            Type type = new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
             Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
@@ -47,8 +45,7 @@ class TypesTest {
 
         @Test
         void givenWildcardTypeWithUpperBoundItShouldReturnUpperBound() {
-            Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {
-            }.getActualTypeArgument(0);
+            Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
             Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
@@ -57,8 +54,7 @@ class TypesTest {
 
         @Test
         void givenWildcardTypeWithoutExplicitBoundItShouldReturnObject() {
-            Type type = new ParameterizedTypeLiteral<List<?>>() {
-            }.getActualTypeArgument(0);
+            Type type = new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
             Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
@@ -67,8 +63,7 @@ class TypesTest {
 
         @Test
         <T> void givenTypeVariableItShouldReturnEmpty() {
-            Type type = new TypeLiteral<T>() {
-            }.getType();
+            Type type = new TypeLiteral<T>() {}.getType();
             Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
@@ -77,13 +72,13 @@ class TypesTest {
 
         @Test
         <T> void givenGenericArrayItShouldReturnEmpty() {
-            Type type = new TypeLiteral<T[]>() {
-            }.getType();
+            Type type = new TypeLiteral<T[]>() {}.getType();
             Optional<Class<?>> clazz = Types.getRawType(type);
 
             assertThat(clazz)
                     .isEmpty();
         }
+
     }
 
     @Nested
@@ -91,8 +86,7 @@ class TypesTest {
 
         @Test
         void shouldReturnLowerBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -102,8 +96,7 @@ class TypesTest {
 
         @Test
         void givenOnlyUpperBoundItShouldReturnEmpty() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -113,8 +106,7 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnEmpty() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -129,8 +121,7 @@ class TypesTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnObject() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -140,8 +131,7 @@ class TypesTest {
 
         @Test
         void shouldReturnUpperBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -151,8 +141,7 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnObject() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -167,8 +156,7 @@ class TypesTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnLowerBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getExplicitBound(type);
 
@@ -178,8 +166,7 @@ class TypesTest {
 
         @Test
         void shouldReturnUpperBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getExplicitBound(type);
 
@@ -189,8 +176,7 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnObject() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {
-            }.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getExplicitBound(type);
 
