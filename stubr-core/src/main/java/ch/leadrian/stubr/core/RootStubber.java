@@ -36,6 +36,7 @@ public abstract class RootStubber {
      * first successful {@link Result} returned by a {@code RootStubber}. If no {@code RootStubber} returns a successful
      * result, a failure {@link Result} will be returned.
      *
+     * @param rootStubbers {@code RootStubber}s to be composed into a single {@code RootStubber}
      * @return the first successful {@link Result} of the given {@code rootStubbers}, or a failure {@link Result}
      * @see Result
      */
@@ -46,6 +47,7 @@ public abstract class RootStubber {
     /**
      * The behaviour is the same as for {@link RootStubber#compose(List)}.
      *
+     * @param rootStubbers {@code RootStubber}s to be composed into a single {@code RootStubber}
      * @return the first successful {@link Result} of the given {@code rootStubbers}, or a failure {@link Result}
      * @see Result
      * @see RootStubber#compose(List)
