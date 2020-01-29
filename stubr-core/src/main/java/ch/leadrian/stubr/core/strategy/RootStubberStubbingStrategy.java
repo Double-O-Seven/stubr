@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core.strategy;
 
-import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingStrategy;
 
@@ -14,12 +14,12 @@ enum RootStubberStubbingStrategy implements StubbingStrategy {
     @Override
     public boolean accepts(StubbingContext context, Type type) {
         return getRawType(type)
-                .filter(RootStubber.class::equals)
+                .filter(Stubber.class::equals)
                 .isPresent();
     }
 
     @Override
-    public RootStubber stub(StubbingContext context, Type type) {
+    public Stubber stub(StubbingContext context, Type type) {
         return context.getStubber();
     }
 }

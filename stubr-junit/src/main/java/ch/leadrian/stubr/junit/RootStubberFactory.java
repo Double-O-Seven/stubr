@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.junit;
 
-import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.RootStubberBuilder;
+import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubberBuilder;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.junit.annotation.Include;
 import ch.leadrian.stubr.junit.annotation.RootStubberBaseline;
@@ -19,15 +19,15 @@ import static java.util.stream.Collectors.toList;
 
 final class RootStubberFactory {
 
-    RootStubber create(ExtensionContext context) {
+    Stubber create(ExtensionContext context) {
         List<ExtensionContext> contexts = walk(context).collect(toList());
-        RootStubberBuilder builder = getRootStubberBuilder(contexts);
+        StubberBuilder builder = getRootStubberBuilder(contexts);
         getRootStubbers(context, contexts).forEach(builder::include);
         getStubbers(context, contexts).forEach(builder::stubWith);
         return builder.build();
     }
 
-    private RootStubberBuilder getRootStubberBuilder(List<ExtensionContext> contexts) {
+    private StubberBuilder getRootStubberBuilder(List<ExtensionContext> contexts) {
         return getAnnotations(RootStubberBaseline.class, contexts)
                 .findFirst()
                 .map(RootStubberBaseline::value)
@@ -35,7 +35,7 @@ final class RootStubberFactory {
                 .getBuilder();
     }
 
-    private Stream<RootStubber> getRootStubbers(ExtensionContext context, List<ExtensionContext> contexts) {
+    private Stream<Stubber> getRootStubbers(ExtensionContext context, List<ExtensionContext> contexts) {
         return getAnnotations(Include.class, reverse(contexts))
                 .map(Include::value)
                 .flatMap(Arrays::stream)

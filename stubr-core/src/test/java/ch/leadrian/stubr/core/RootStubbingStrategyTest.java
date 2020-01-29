@@ -20,14 +20,14 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseMatchingStubber() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(testStubber(Float.class, 1f))
                     .stubWith(testStubber(Integer.class, 2))
                     .stubWith(testStubber(String.class, "Test"))
                     .build();
 
-            Object value = rootStubber.stub(Integer.class);
+            Object value = stubber.stub(Integer.class);
 
             assertThat(value)
                     .isEqualTo(2);
@@ -35,14 +35,14 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseLastConfiguredMatchingStubber() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(testStubber(Integer.class, 1))
                     .stubWith(testStubber(Integer.class, 2))
                     .stubWith(testStubber(Integer.class, 3))
                     .build();
 
-            Object value = rootStubber.stub(Integer.class);
+            Object value = stubber.stub(Integer.class);
 
             assertThat(value)
                     .isEqualTo(3);
@@ -50,7 +50,7 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseLastConfiguredMatchingStubberFromVarargs() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(
                             testStubber(Integer.class, 1),
@@ -59,7 +59,7 @@ class RootStubbingStrategyTest {
                     )
                     .build();
 
-            Object value = rootStubber.stub(Integer.class);
+            Object value = stubber.stub(Integer.class);
 
             assertThat(value)
                     .isEqualTo(3);
@@ -67,7 +67,7 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseLastConfiguredMatchingStubberFromIterable() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(asList(
                             testStubber(Integer.class, 1),
@@ -76,7 +76,7 @@ class RootStubbingStrategyTest {
                     ))
                     .build();
 
-            Object value = rootStubber.stub(Integer.class);
+            Object value = stubber.stub(Integer.class);
 
             assertThat(value)
                     .isEqualTo(3);
@@ -84,14 +84,14 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseLastConfiguredConditionalMatchingStubber() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(testStubber(Integer.class, 1), (context, type) -> context.getSite() == TestStubbingSite.FOO)
                     .stubWith(testStubber(Integer.class, 2), (context, type) -> context.getSite() == TestStubbingSite.FOO)
                     .stubWith(testStubber(Integer.class, 3), (context, type) -> context.getSite() == TestStubbingSite.BAR)
                     .build();
 
-            Object value = rootStubber.stub(Integer.class, TestStubbingSite.FOO);
+            Object value = stubber.stub(Integer.class, TestStubbingSite.FOO);
 
             assertThat(value)
                     .isEqualTo(2);
@@ -99,7 +99,7 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseLastConfiguredConditionalMatchingStubberFromVarargs() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(
                             testStubber(Integer.class, 1).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
@@ -108,7 +108,7 @@ class RootStubbingStrategyTest {
                     )
                     .build();
 
-            Object value = rootStubber.stub(Integer.class, TestStubbingSite.FOO);
+            Object value = stubber.stub(Integer.class, TestStubbingSite.FOO);
 
             assertThat(value)
                     .isEqualTo(2);
@@ -116,7 +116,7 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseLastConfiguredConditionalMatchingStubberFromIterable() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(asList(
                             testStubber(Integer.class, 1).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
@@ -125,7 +125,7 @@ class RootStubbingStrategyTest {
                     ))
                     .build();
 
-            Object value = rootStubber.stub(Integer.class, TestStubbingSite.FOO);
+            Object value = stubber.stub(Integer.class, TestStubbingSite.FOO);
 
             assertThat(value)
                     .isEqualTo(2);
@@ -137,7 +137,7 @@ class RootStubbingStrategyTest {
                 "BAR, 4"
         })
         void shouldUseLastConfiguredConditionalMatchingStubberFromMultipleIterables(TestStubbingSite site, int expectedValue) {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(
                             asList(testStubber(Integer.class, 1), testStubber(Integer.class, 2)),
@@ -149,7 +149,7 @@ class RootStubbingStrategyTest {
                     )
                     .build();
 
-            Object value = rootStubber.stub(Integer.class, site);
+            Object value = stubber.stub(Integer.class, site);
 
             assertThat(value)
                     .isEqualTo(expectedValue);
@@ -157,13 +157,13 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldStubValueWithIncludedRootStubber() {
-            RootStubber rootStubber = RootStubber.builder()
-                    .include(RootStubber.builder()
+            Stubber stubber = Stubber.builder()
+                    .include(Stubber.builder()
                             .stubWith(testStubber(Integer.class, 1337))
                             .build())
                     .build();
 
-            Object value = rootStubber.stub(Integer.class);
+            Object value = stubber.stub(Integer.class);
 
             assertThat(value)
                     .isEqualTo(1337);
@@ -171,16 +171,16 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldUseValueOfLastConfiguredIncludedRootStubber() {
-            RootStubber rootStubber = RootStubber.builder()
-                    .include(RootStubber.builder()
+            Stubber stubber = Stubber.builder()
+                    .include(Stubber.builder()
                             .stubWith(testStubber(Integer.class, 1337))
                             .build())
-                    .include(RootStubber.builder()
+                    .include(Stubber.builder()
                             .stubWith(testStubber(Integer.class, 1234))
                             .build())
                     .build();
 
-            Object value = rootStubber.stub(Integer.class);
+            Object value = stubber.stub(Integer.class);
 
             assertThat(value)
                     .isEqualTo(1234);
@@ -188,14 +188,14 @@ class RootStubbingStrategyTest {
 
         @Test
         void shouldOverrideStubValueOfRootStubber() {
-            RootStubber rootStubber = RootStubber.builder()
-                    .include(RootStubber.builder()
+            Stubber stubber = Stubber.builder()
+                    .include(Stubber.builder()
                             .stubWith(testStubber(Integer.class, 1337))
                             .build())
                     .stubWith(testStubber(Integer.class, 1234))
                     .build();
 
-            Object value = rootStubber.stub(Integer.class);
+            Object value = stubber.stub(Integer.class);
 
             assertThat(value)
                     .isEqualTo(1234);
@@ -208,11 +208,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForTypeAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<?> result = rootStubber.tryToStub((Type) Integer.class, TestStubbingSite.FOO);
+            Result<?> result = stubber.tryToStub((Type) Integer.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -220,11 +220,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForTypeAndSiteItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<?> result = rootStubber.tryToStub((Type) Float.class, TestStubbingSite.FOO);
+            Result<?> result = stubber.tryToStub((Type) Float.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.failure());
@@ -232,11 +232,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForClassItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Integer> result = rootStubber.tryToStub(Integer.class);
+            Result<Integer> result = stubber.tryToStub(Integer.class);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -244,11 +244,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingPrimitiveValueForClassItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(int.class, 1337))
                     .build();
 
-            Result<Integer> result = rootStubber.tryToStub(int.class);
+            Result<Integer> result = stubber.tryToStub(int.class);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -256,11 +256,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForClassAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Integer> result = rootStubber.tryToStub(Integer.class, TestStubbingSite.FOO);
+            Result<Integer> result = stubber.tryToStub(Integer.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -268,11 +268,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingPrimitiveValueForClassAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(int.class, 1337))
                     .build();
 
-            Result<Integer> result = rootStubber.tryToStub(int.class, TestStubbingSite.FOO);
+            Result<Integer> result = stubber.tryToStub(int.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -280,11 +280,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForClassItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(Integer.class));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -292,11 +292,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForClassAndSiteItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(Integer.class, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -304,11 +304,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForClassItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Float> result = rootStubber.tryToStub(Float.class);
+            Result<Float> result = stubber.tryToStub(Float.class);
 
             assertThat(result)
                     .isEqualTo(Result.failure());
@@ -316,11 +316,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForClassAndSiteItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Float> result = rootStubber.tryToStub(Float.class, TestStubbingSite.FOO);
+            Result<Float> result = stubber.tryToStub(Float.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.failure());
@@ -328,11 +328,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForTypeLiteralItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Integer> result = rootStubber.tryToStub(new TypeLiteral<Integer>() {});
+            Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {});
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -340,11 +340,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForTypeLiteralAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Integer> result = rootStubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
+            Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -352,11 +352,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForTypeLiteralItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<Integer>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -364,11 +364,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForTypeLiteralAndSiteItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -376,11 +376,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForTypeLiteralItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Float> result = rootStubber.tryToStub(new TypeLiteral<Float>() {});
+            Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {});
 
             assertThat(result)
                     .isEqualTo(Result.failure());
@@ -388,11 +388,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForTypeLiteralAndSiteItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Result<Float> result = rootStubber.tryToStub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO);
+            Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.failure());
@@ -400,11 +400,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoRawTypeForTypeLiteralItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<T>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)
@@ -413,11 +413,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoRawTypeForTypeLiteralAndSiteItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)
@@ -431,11 +431,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForTypeAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Object result = rootStubber.stub((Type) Integer.class, TestStubbingSite.FOO);
+            Object result = stubber.stub((Type) Integer.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -443,11 +443,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForTypeAndSiteItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.stub((Type) Float.class, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.stub((Type) Float.class, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
@@ -456,11 +456,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForClassItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Integer result = rootStubber.stub(Integer.class);
+            Integer result = stubber.stub(Integer.class);
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -468,11 +468,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingPrimitiveValueForClassItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(int.class, 1337))
                     .build();
 
-            int result = rootStubber.stub(int.class);
+            int result = stubber.stub(int.class);
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -480,11 +480,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForClassAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Integer result = rootStubber.stub(Integer.class, TestStubbingSite.FOO);
+            Integer result = stubber.stub(Integer.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -492,11 +492,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingPrimitiveValueForClassAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(int.class, 1337))
                     .build();
 
-            int result = rootStubber.stub(int.class, TestStubbingSite.FOO);
+            int result = stubber.stub(int.class, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -504,11 +504,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForClassItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(Integer.class));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -516,11 +516,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForClassAndSiteItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(Integer.class, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -528,11 +528,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForClassItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.stub(Float.class));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(Float.class));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
@@ -541,11 +541,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForClassAndSiteItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.stub(Float.class, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(Float.class, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
@@ -554,11 +554,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForTypeLiteralItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Integer result = rootStubber.stub(new TypeLiteral<Integer>() {});
+            Integer result = stubber.stub(new TypeLiteral<Integer>() {});
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -566,11 +566,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenMatchingValueForTypeLiteralAndSiteItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Integer result = rootStubber.stub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
+            Integer result = stubber.stub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -578,11 +578,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForTypeLiteralItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<Integer>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -590,11 +590,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenClassMismatchForTypeLiteralAndSiteItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -602,11 +602,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForTypeLiteralItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.stub(new TypeLiteral<Float>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {}));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
@@ -615,11 +615,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoMatchingValueForTypeLiteralAndSiteItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.stub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
@@ -628,11 +628,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoRawTypeForTypeLiteralItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<T>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)
@@ -641,11 +641,11 @@ class RootStubbingStrategyTest {
 
         @Test
         void givenNoRawTypeForTypeLiteralAndSiteItShouldThrowException() {
-            RootStubber rootStubber = RootStubber.builder()
+            Stubber stubber = Stubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)

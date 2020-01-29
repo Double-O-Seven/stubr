@@ -1,10 +1,10 @@
 package ch.leadrian.stubr.kotlin
 
 import ch.leadrian.stubr.core.Result
-import ch.leadrian.stubr.core.RootStubber
+import ch.leadrian.stubr.core.Stubber
 import ch.leadrian.stubr.core.StubbingSite
 
-inline fun <reified T> RootStubber.tryToStub(site: StubbingSite? = null): Result<T> {
+inline fun <reified T> Stubber.tryToStub(site: StubbingSite? = null): Result<T> {
     val typeLiteral = typeLiteral<T>()
     return if (site != null) {
         tryToStub(typeLiteral, site)
@@ -13,7 +13,7 @@ inline fun <reified T> RootStubber.tryToStub(site: StubbingSite? = null): Result
     }
 }
 
-inline fun <reified T> RootStubber.stub(site: StubbingSite? = null): T {
+inline fun <reified T> Stubber.stub(site: StubbingSite? = null): T {
     val typeLiteral = typeLiteral<T>()
     return if (site != null) {
         stub(typeLiteral, site)

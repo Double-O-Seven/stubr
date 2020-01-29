@@ -9,25 +9,25 @@ import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 
 /**
- * Class representing the result of a stubbing attempt using {@link RootStubber#tryToStub}. Instances of {@link Result}
- * can be either a success or a failure.
+ * Class representing the result of a stubbing attempt using {@link Stubber#tryToStub}. Instances of {@link Result} can
+ * be either a success or a failure.
  * <p>
  * The behaviour is similar to {@link java.util.Optional} with the key difference that {@code null} is a valid value for
  * success. While mapping success values to other values is supported for convenience, filtering is not, as {@link
- * Result} represents the outcome of a {@link RootStubber#tryToStub} to stub call.
+ * Result} represents the outcome of a {@link Stubber#tryToStub} to stub call.
  *
  * @param <T> type of the stub value
- * @see RootStubber#tryToStub
+ * @see Stubber#tryToStub
  */
 public abstract class Result<T> {
 
     /**
      * Creates an {@link Result} representing a successful stubbing.
      *
-     * @param value stub value returned by a {@link RootStubber#tryToStub} call
+     * @param value stub value returned by a {@link Stubber#tryToStub} call
      * @param <T>   type of the stubbed {@code value}
      * @return a success instance of {@link Result} containing the stub {@code value}
-     * @see RootStubber#tryToStub
+     * @see Stubber#tryToStub
      */
     public static <T> Result<T> success(T value) {
         return new Success<>(value);
@@ -38,7 +38,7 @@ public abstract class Result<T> {
      *
      * @param <T> type of the stubbed {@code value}
      * @return a failure instance of {@link Result} containing no stub value
-     * @see RootStubber#tryToStub
+     * @see Stubber#tryToStub
      */
     @SuppressWarnings("unchecked")
     public static <T> Result<T> failure() {

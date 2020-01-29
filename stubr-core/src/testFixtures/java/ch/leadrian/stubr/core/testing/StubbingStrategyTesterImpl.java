@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core.testing;
 
-import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.StubbingStrategy;
@@ -56,16 +56,16 @@ final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
         return new ArrayList<>(tests)
                 .stream()
                 .map(test -> {
-                    RootStubber rootStubber = createRootStubber();
-                    StubbingContext context = new StubbingContext(rootStubber, TestStubbingSite.INSTANCE);
+                    Stubber stubber = createRootStubber();
+                    StubbingContext context = new StubbingContext(stubber, TestStubbingSite.INSTANCE);
                     return test.toDynamicTest(stubbingStrategy, context);
                 });
     }
 
-    private RootStubber createRootStubber() {
+    private Stubber createRootStubber() {
         Map<Type, ResultProvider> untouchedResultProvidersByType = new HashMap<>(resultProvidersByType);
         untouchedResultProvidersByType.replaceAll((type, resultProvider) -> resultProvider.getUntouchedInstance());
-        return new TestRootStubber(untouchedResultProvidersByType);
+        return new TestStubber(untouchedResultProvidersByType);
     }
 
     private abstract class DelegatingStubbingStrategyTester implements StubbingStrategyTester {

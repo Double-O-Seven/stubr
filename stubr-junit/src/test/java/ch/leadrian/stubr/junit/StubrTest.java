@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.junit;
 
-import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 import ch.leadrian.stubr.junit.StubrTest.Level0RootStubberProvider;
@@ -130,8 +130,8 @@ class StubrTest {
     static final class Level0RootStubberProvider implements RootStubberProvider {
 
         @Override
-        public List<? extends RootStubber> getRootStubbers(ExtensionContext extensionContext) {
-            return singletonList(RootStubber.builder()
+        public List<? extends Stubber> getRootStubbers(ExtensionContext extensionContext) {
+            return singletonList(Stubber.builder()
                     .stubWith(StubbingStrategies.constantValue(long.class, 1234L))
                     .stubWith(StubbingStrategies.constantValue(Locale.GERMANY))
                     .build());
@@ -151,8 +151,8 @@ class StubrTest {
     static final class Level1RootStubberProvider implements RootStubberProvider {
 
         @Override
-        public List<? extends RootStubber> getRootStubbers(ExtensionContext extensionContext) {
-            return singletonList(RootStubber.builder()
+        public List<? extends Stubber> getRootStubbers(ExtensionContext extensionContext) {
+            return singletonList(Stubber.builder()
                     .stubWith(StubbingStrategies.constantValue(long.class, 65536L))
                     .build());
         }

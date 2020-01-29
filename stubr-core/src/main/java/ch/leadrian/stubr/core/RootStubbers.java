@@ -17,14 +17,14 @@ import static ch.leadrian.stubr.core.strategy.StubbingStrategies.nonDefaultConst
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.nullValue;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.optional;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.proxy;
-import static ch.leadrian.stubr.core.strategy.StubbingStrategies.rootStubber;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.stubber;
 
 /**
- * Class containing factory methods for basic {@link RootStubber}s.
+ * Class containing factory methods for basic {@link Stubber}s.
  */
 public final class RootStubbers {
 
-    private static final RootStubber DEFAULT_ROOT_STUBBER = RootStubber.builder()
+    private static final Stubber DEFAULT_ROOT_STUBBER = Stubber.builder()
             .stubWith(defaultValue())
             .stubWith(proxy())
             .stubWith(enumValue())
@@ -33,12 +33,12 @@ public final class RootStubbers {
             .stubWith(nonDefaultConstructor())
             .stubWith(factoryMethod())
             .stubWith(defaultCollections(1))
-            .stubWith(rootStubber())
+            .stubWith(stubber())
             .stubWith(commonConstantValues())
             .stubWith(commonSuppliedValues())
             .build();
 
-    private static final RootStubber MINIMAL_ROOT_STUBBER = RootStubber.builder()
+    private static final Stubber MINIMAL_ROOT_STUBBER = Stubber.builder()
             .include(defaultRootStubber())
             .stubWith(nullValue().when(annotatedSiteIs(nullable())))
             .stubWith(optional(OptionalStubbingMode.EMPTY))
@@ -49,7 +49,7 @@ public final class RootStubbers {
     }
 
     /**
-     * Provides a stateless {@link RootStubber} that will stub the following stub values:
+     * Provides a stateless {@link Stubber} that will stub the following stub values:
      * <ul>
      * <li>Default values for primitives and their wrappers</li>
      * <li>{@link java.lang.reflect.Proxy} instances for interfaces that return stub values for non-void method
@@ -64,22 +64,22 @@ public final class RootStubbers {
      * <li>Reasonable constant values for commonly used mutable classes such as {@link java.util.Date}</li>
      * </ul>
      *
-     * @return a {@link RootStubber} stubbing non-null, non-empty default values.
+     * @return a {@link Stubber} stubbing non-null, non-empty default values.
      * @see StubbingStrategies
      */
-    public static RootStubber defaultRootStubber() {
+    public static Stubber defaultRootStubber() {
         return DEFAULT_ROOT_STUBBER;
     }
 
     /**
-     * Provides a stateless {@link RootStubber} that uses {@link RootStubbers#defaultRootStubber()} as a baseline.
-     * However, default collections, {@link java.util.Optional}s and arrays are kept empty and nullable sites will
-     * receive {@code null} as stub value.
+     * Provides a stateless {@link Stubber} that uses {@link RootStubbers#defaultRootStubber()} as a baseline. However,
+     * default collections, {@link java.util.Optional}s and arrays are kept empty and nullable sites will receive {@code
+     * null} as stub value.
      *
-     * @return a {@link RootStubber} stubbing nullable, empty default values.
+     * @return a {@link Stubber} stubbing nullable, empty default values.
      * @see StubbingStrategies
      */
-    public static RootStubber minimalRootStubber() {
+    public static Stubber minimalRootStubber() {
         return MINIMAL_ROOT_STUBBER;
     }
 

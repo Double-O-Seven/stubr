@@ -24,8 +24,8 @@ public interface Matcher<T> {
     /**
      * A matcher may match depending on the given {@link StubbingContext} or the given {@code value} of type {@link T}.
      * If the {@code context} is evaluated, most likely only it's {@link StubbingSite} is relevant, as the referenced
-     * {@link RootStubber} does not contain any publicly available state. However, the full context is being passed for
-     * sake of extensibility.
+     * {@link Stubber} does not contain any publicly available state. However, the full context is being passed for sake
+     * of extensibility.
      *
      * @param context {@link StubbingContext} in which a {@link StubbingStrategy} is applied.
      * @param value   value that may be evaluated by the matcher.

@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.testing;
 
 import ch.leadrian.stubr.core.Result;
-import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.StubbingStrategy;
@@ -32,7 +32,7 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
     public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
         String displayName = getDisplayName(stubbingStrategy);
         return dynamicTest(displayName, () -> {
-            CapturingRootStubber capturingRootStubber = new CapturingRootStubber(context.getStubber());
+            CapturingStubber capturingRootStubber = new CapturingStubber(context.getStubber());
             StubbingContext capturingContext = new StubbingContext(capturingRootStubber, context.getSite());
 
             stubbingStrategy.stub(capturingContext, acceptedType);
@@ -50,12 +50,12 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
         return String.format("%s should stub %s at %s", stubbingStrategy.getClass().getSimpleName(), acceptedType, sites);
     }
 
-    private static final class CapturingRootStubber extends RootStubber {
+    private static final class CapturingStubber extends Stubber {
 
         private final List<StubbingSite> capturedSites = new ArrayList<>();
-        private final RootStubber delegate;
+        private final Stubber delegate;
 
-        CapturingRootStubber(RootStubber delegate) {
+        CapturingStubber(Stubber delegate) {
             this.delegate = delegate;
         }
 

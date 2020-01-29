@@ -7,19 +7,19 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-final class CompositeRootStubber extends RootStubber {
+final class CompositeStubber extends Stubber {
 
-    private final List<RootStubber> rootStubbers;
+    private final List<Stubber> stubbers;
 
-    CompositeRootStubber(List<? extends RootStubber> rootStubbers) {
-        requireNonNull(rootStubbers, "rootStubbers");
-        this.rootStubbers = ImmutableList.copyOf(rootStubbers);
+    CompositeStubber(List<? extends Stubber> rootStubbers) {
+        requireNonNull(rootStubbers, "stubbers");
+        this.stubbers = ImmutableList.copyOf(rootStubbers);
     }
 
     @Override
     protected Result<?> tryToStub(Type type, StubbingContext context) {
-        return rootStubbers.stream()
-                .map(rootStubber -> rootStubber.tryToStub(type, context))
+        return stubbers.stream()
+                .map(stubber -> stubber.tryToStub(type, context))
                 .filter(Result::isSuccess)
                 .findFirst()
                 .orElse(Result.failure());

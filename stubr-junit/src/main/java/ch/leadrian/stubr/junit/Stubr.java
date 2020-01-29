@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.junit;
 
-import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.junit.annotation.Stub;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -14,16 +14,16 @@ import java.lang.reflect.Type;
 public final class Stubr implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     private final RootStubberFactory rootStubberFactory = new RootStubberFactory();
-    private RootStubber rootStubber;
+    private Stubber stubber;
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        rootStubber = rootStubberFactory.create(context);
+        stubber = rootStubberFactory.create(context);
     }
 
     @Override
     public void afterEach(ExtensionContext context) {
-        rootStubber = null;
+        stubber = null;
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class Stubr implements BeforeEachCallback, AfterEachCallback, Param
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Type parameterizedType = parameterContext.getParameter().getParameterizedType();
         ParameterResolverStubbingSite site = new ParameterResolverStubbingSite(parameterContext, extensionContext);
-        return rootStubber.stub(parameterizedType, site);
+        return stubber.stub(parameterizedType, site);
     }
 
 }

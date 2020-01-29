@@ -3,14 +3,14 @@ package ch.leadrian.stubr.core;
 import java.lang.reflect.Type;
 
 /**
- * A builder interface for {@link RootStubber}.
+ * A builder interface for {@link Stubber}.
  * <p>
- * A {@link RootStubber} can be built by including other {@link RootStubber}s as base and/or adding various {@link
+ * A {@link Stubber} can be built by including other {@link Stubber}s as base and/or adding various {@link
  * StubbingStrategy} to stub specific types.
  * <p>
- * An included {@link RootStubber} will be overridden by any other {@link RootStubber} that is added later, assuming the
- * latter {@link RootStubber} provides a conflicting stubbing strategy to stub a certain type. Any {@link RootStubber}
- * will be overridden by any configured {@link StubbingStrategy}.
+ * An included {@link Stubber} will be overridden by any other {@link Stubber} that is added later, assuming the latter
+ * {@link Stubber} provides a conflicting stubbing strategy to stub a certain type. Any {@link Stubber} will be
+ * overridden by any configured {@link StubbingStrategy}.
  * <p>
  * An added {@link StubbingStrategy} will be overridden by any other {@link StubbingStrategy} that is added later,
  * assuming the latter {@link StubbingStrategy} accepts a types that is also accepted by the former {@link
@@ -21,20 +21,20 @@ import java.lang.reflect.Type;
  * been created using {@link StubbingStrategy#when(Matcher)}.
  *
  * @see StubbingStrategy
- * @see RootStubber
+ * @see Stubber
  */
-public interface RootStubberBuilder {
+public interface StubberBuilder {
 
     /**
-     * Adds an existing {@link RootStubber} as baseline for the {@link RootStubber} that is to be built. An included
-     * {@link RootStubber} will be overridden by any other {@link RootStubber} that is added later, assuming the latter
-     * {@link RootStubber} provides a conflicting stubbing strategy to stub a certain type. Any {@link RootStubber} will
-     * be overridden by any configured {@link StubbingStrategy}.
+     * Adds an existing {@link Stubber} as baseline for the {@link Stubber} that is to be built. An included {@link
+     * Stubber} will be overridden by any other {@link Stubber} that is added later, assuming the latter {@link Stubber}
+     * provides a conflicting stubbing strategy to stub a certain type. Any {@link Stubber} will be overridden by any
+     * configured {@link StubbingStrategy}.
      *
-     * @param stubber a baseline {@link RootStubber}
+     * @param stubber a baseline {@link Stubber}
      * @return this
      */
-    RootStubberBuilder include(RootStubber stubber);
+    StubberBuilder include(Stubber stubber);
 
     /**
      * Adds a {@link StubbingStrategy}. An added {@link StubbingStrategy} will be overridden by any other {@link
@@ -44,7 +44,7 @@ public interface RootStubberBuilder {
      * @param strategy {@link StubbingStrategy} used to stub instances of matching types
      * @return {@code this}
      */
-    RootStubberBuilder stubWith(StubbingStrategy strategy);
+    StubberBuilder stubWith(StubbingStrategy strategy);
 
     /**
      * Adds a {@link StubbingStrategy} that will only be applied, if the given {@link Matcher} matches the type to be
@@ -54,46 +54,46 @@ public interface RootStubberBuilder {
      * @param matcher  {@link Matcher} used as a prerequisite for applying the given {@link StubbingStrategy}
      * @return {@code this}
      */
-    RootStubberBuilder stubWith(StubbingStrategy strategy, Matcher<? super Type> matcher);
+    StubberBuilder stubWith(StubbingStrategy strategy, Matcher<? super Type> matcher);
 
     /**
      * Adds multiple {@link StubbingStrategy}s in iteration order according to the behaviour defined for {@link
-     * RootStubberBuilder#stubWith(StubbingStrategy)}.
+     * StubberBuilder#stubWith(StubbingStrategy)}.
      *
      * @param strategies {@link StubbingStrategy}s used to stub instances of matching types
      * @return {@code this}
-     * @see RootStubberBuilder#stubWith(StubbingStrategy)
+     * @see StubberBuilder#stubWith(StubbingStrategy)
      */
-    RootStubberBuilder stubWith(Iterable<? extends StubbingStrategy> strategies);
+    StubberBuilder stubWith(Iterable<? extends StubbingStrategy> strategies);
 
     /**
      * Adds multiple conditional {@link StubbingStrategy}s in iteration order according to the behaviour defined for
-     * {@link RootStubberBuilder#stubWith(StubbingStrategy)} and {@link RootStubberBuilder#stubWith(StubbingStrategy,
+     * {@link StubberBuilder#stubWith(StubbingStrategy)} and {@link StubberBuilder#stubWith(StubbingStrategy,
      * Matcher)}.
      *
      * @param strategies {@link StubbingStrategy}s used to stub instances of matching types
      * @return {@code this}
-     * @see RootStubberBuilder#stubWith(Iterable)
-     * @see RootStubberBuilder#stubWith(StubbingStrategy, Matcher)
+     * @see StubberBuilder#stubWith(Iterable)
+     * @see StubberBuilder#stubWith(StubbingStrategy, Matcher)
      */
-    RootStubberBuilder stubWith(Iterable<? extends StubbingStrategy> strategies, Matcher<? super Type> matcher);
+    StubberBuilder stubWith(Iterable<? extends StubbingStrategy> strategies, Matcher<? super Type> matcher);
 
     /**
      * Adds multiple {@link StubbingStrategy}s in iteration order according to the behaviour defined for {@link
-     * RootStubberBuilder#stubWith(StubbingStrategy)}.
+     * StubberBuilder#stubWith(StubbingStrategy)}.
      *
      * @param strategies {@link StubbingStrategy}s used to stub instances of matching types
      * @return {@code this}
-     * @see RootStubberBuilder#stubWith(StubbingStrategy)
+     * @see StubberBuilder#stubWith(StubbingStrategy)
      */
-    RootStubberBuilder stubWith(StubbingStrategy... strategies);
+    StubberBuilder stubWith(StubbingStrategy... strategies);
 
     /**
-     * Builds a {@link RootStubber} instance that will attempt to stub an instance for a certain type using the
-     * configured {@link RootStubber} baselines and {@link StubbingStrategy}s.
+     * Builds a {@link Stubber} instance that will attempt to stub an instance for a certain type using the configured
+     * {@link Stubber} baselines and {@link StubbingStrategy}s.
      *
-     * @return a concrete {@link RootStubber} instance
+     * @return a concrete {@link Stubber} instance
      */
-    RootStubber build();
+    Stubber build();
 
 }

@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.integrationtest;
 
-import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.stubbingsite.AnnotatedStubbingSite;
 import ch.leadrian.stubr.integrationtest.annotation.CollectionSize;
@@ -28,14 +28,14 @@ class CoreIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        RootStubber rootStubber = RootStubber.builder()
+        Stubber stubber = Stubber.builder()
                 .include(defaultRootStubber())
                 .stubWith(defaultCollections(3))
                 .stubWith(suppliedValue(String.class, sequenceNumber -> String.format("value%d", sequenceNumber)))
                 .stubWith(suppliedValue(Integer.class, sequenceNumber -> sequenceNumber))
                 .stubWith(collection(List.class, ArrayList::new, this::getCollectionSize).when(annotatedSiteIs(annotatedWith(CollectionSize.class))))
                 .build();
-        testData = rootStubber.stub(TestData.class);
+        testData = stubber.stub(TestData.class);
     }
 
     private int getCollectionSize(StubbingContext context) {

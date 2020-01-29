@@ -12,7 +12,7 @@ class StubbingContextTest {
 
     @Test
     void shouldCreateContextWithArguments() {
-        RootStubber stubber = mock(RootStubber.class);
+        Stubber stubber = mock(Stubber.class);
         StubbingSite site = mock(StubbingSite.class);
 
         StubbingContext context = new StubbingContext(stubber, site);
@@ -25,9 +25,9 @@ class StubbingContextTest {
 
     @Test
     void testEquals() {
-        RootStubber stubber1 = mock(RootStubber.class);
+        Stubber stubber1 = mock(Stubber.class);
         StubbingSite site1 = mock(StubbingSite.class);
-        RootStubber stubber2 = mock(RootStubber.class);
+        Stubber stubber2 = mock(Stubber.class);
         StubbingSite site2 = mock(StubbingSite.class);
 
         new EqualsTester()

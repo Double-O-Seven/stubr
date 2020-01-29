@@ -17,27 +17,27 @@ class CompositeRootStubbingStrategyTest {
     void shouldReturnResultOfFirstSuccessfulRootStubber() {
         Class<String> type = String.class;
         StubbingContext context = mock(StubbingContext.class);
-        RootStubber rootStubber1 = mock(RootStubber.class);
-        when(rootStubber1.tryToStub(type, context))
+        Stubber stubber1 = mock(Stubber.class);
+        when(stubber1.tryToStub(type, context))
                 .thenReturn(Result.failure());
-        RootStubber rootStubber2 = mock(RootStubber.class);
-        when(rootStubber2.tryToStub(type, context))
+        Stubber stubber2 = mock(Stubber.class);
+        when(stubber2.tryToStub(type, context))
                 .thenReturn((Result) Result.success("Test"));
-        RootStubber rootStubber3 = mock(RootStubber.class);
-        when(rootStubber3.tryToStub(type, context))
+        Stubber stubber3 = mock(Stubber.class);
+        when(stubber3.tryToStub(type, context))
                 .thenReturn((Result) Result.success("Foo"));
-        RootStubber compositeRootStubber = RootStubber.compose(rootStubber1, rootStubber2, rootStubber3);
+        Stubber compositeStubber = Stubber.compose(stubber1, stubber2, stubber3);
 
-        Result<?> result = compositeRootStubber.tryToStub(type, context);
+        Result<?> result = compositeStubber.tryToStub(type, context);
 
         assertAll(
                 () -> assertThat(result.getValue()).isEqualTo("Test"),
                 () -> {
-                    InOrder inOrder = inOrder(rootStubber1, rootStubber2);
-                    inOrder.verify(rootStubber1).tryToStub(type, context);
-                    inOrder.verify(rootStubber2).tryToStub(type, context);
+                    InOrder inOrder = inOrder(stubber1, stubber2);
+                    inOrder.verify(stubber1).tryToStub(type, context);
+                    inOrder.verify(stubber2).tryToStub(type, context);
                 },
-                () -> verifyNoInteractions(rootStubber3)
+                () -> verifyNoInteractions(stubber3)
         );
     }
 

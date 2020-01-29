@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.junit.annotation;
 
-import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.RootStubberBuilder;
+import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubberBuilder;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,25 +20,25 @@ public @interface RootStubberBaseline {
     enum Variant {
         DEFAULT {
             @Override
-            public RootStubberBuilder getBuilder() {
-                return RootStubber.builder().include(defaultRootStubber());
+            public StubberBuilder getBuilder() {
+                return Stubber.builder().include(defaultRootStubber());
             }
 
         },
         MINIMAL {
             @Override
-            public RootStubberBuilder getBuilder() {
-                return RootStubber.builder().include(minimalRootStubber());
+            public StubberBuilder getBuilder() {
+                return Stubber.builder().include(minimalRootStubber());
             }
         },
         EMPTY {
             @Override
-            public RootStubberBuilder getBuilder() {
-                return RootStubber.builder();
+            public StubberBuilder getBuilder() {
+                return Stubber.builder();
             }
         };
 
-        public abstract RootStubberBuilder getBuilder();
+        public abstract StubberBuilder getBuilder();
     }
 
 }

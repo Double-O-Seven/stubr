@@ -12,48 +12,48 @@ import static com.google.common.primitives.Primitives.wrap;
 import static java.util.Arrays.asList;
 
 /**
- * Class {@code RootStubber} represents the main API used to stub a specific type. A {@code RootStubber} may be a
- * composition of several other {@code RootStubber}s or it may be a composition of several {@link StubbingStrategy}s and
- * optionally other {@code RootStubber}s
+ * Class {@code Stubber} represents the main API used to stub a specific type. A {@code Stubber} may be a composition of
+ * several other {@code Stubber}s or it may be a composition of several {@link StubbingStrategy}s and optionally other
+ * {@code Stubber}s
  *
  * @see StubbingStrategy
  */
-public abstract class RootStubber {
+public abstract class Stubber {
 
     /**
-     * Creates a new {@link RootStubberBuilder} that can be used to configure a {@code RootStubber} instance.
+     * Creates a new {@link StubberBuilder} that can be used to configure a {@code Stubber} instance.
      *
-     * @return a new {@link RootStubberBuilder}
-     * @see RootStubberBuilder
+     * @return a new {@link StubberBuilder}
+     * @see StubberBuilder
      */
-    public static RootStubberBuilder builder() {
-        return new RootStubberImpl.Builder();
+    public static StubberBuilder builder() {
+        return new StubberImpl.Builder();
     }
 
     /**
-     * Creates a new composite {@code RootStubber} composed from multiple {@code RootStubber}s. The resulting {@code
-     * RootStubber} will iterate through the given {@code rootStubbers} in list order and return the stub value of the
-     * first successful {@link Result} returned by a {@code RootStubber}. If no {@code RootStubber} returns a successful
-     * result, a failure {@link Result} will be returned.
+     * Creates a new composite {@code Stubber} composed from multiple {@code Stubber}s. The resulting {@code Stubber}
+     * will iterate through the given {@code rootStubbers} in list order and return the stub value of the first
+     * successful {@link Result} returned by a {@code Stubber}. If no {@code Stubber} returns a successful result, a
+     * failure {@link Result} will be returned.
      *
-     * @param rootStubbers {@code RootStubber}s to be composed into a single {@code RootStubber}
+     * @param rootStubbers {@code Stubber}s to be composed into a single {@code Stubber}
      * @return the first successful {@link Result} of the given {@code rootStubbers}, or a failure {@link Result}
      * @see Result
      */
-    public static RootStubber compose(List<? extends RootStubber> rootStubbers) {
-        return new CompositeRootStubber(rootStubbers);
+    public static Stubber compose(List<? extends Stubber> rootStubbers) {
+        return new CompositeStubber(rootStubbers);
     }
 
     /**
-     * The behaviour is the same as for {@link RootStubber#compose(List)}.
+     * The behaviour is the same as for {@link Stubber#compose(List)}.
      *
-     * @param rootStubbers {@code RootStubber}s to be composed into a single {@code RootStubber}
-     * @return the first successful {@link Result} of the given {@code rootStubbers}, or a failure {@link Result}
+     * @param stubbers {@code Stubber}s to be composed into a single {@code Stubber}
+     * @return the first successful {@link Result} of the given {@code stubbers}, or a failure {@link Result}
      * @see Result
-     * @see RootStubber#compose(List)
+     * @see Stubber#compose(List)
      */
-    public static RootStubber compose(RootStubber... rootStubbers) {
-        return compose(asList(rootStubbers));
+    public static Stubber compose(Stubber... stubbers) {
+        return compose(asList(stubbers));
     }
 
     /**
@@ -62,11 +62,11 @@ public abstract class RootStubber {
      * failure {@link Result} provided by {@link Result#failure()} should be returned.
      * <p>
      * The implementation may replace the given {@link StubbingContext} {@code context} by replacing the encapsulated
-     * {@link RootStubber} which an enhanced {@link RootStubber}. However, it must not replace the encapsulated {@link
+     * {@link Stubber} which an enhanced {@link Stubber}. However, it must not replace the encapsulated {@link
      * StubbingSite}.
      * <p>
      * This method is not intended to be used directly by any API consumer, it is only meant to provide concrete
-     * implementations of the stubbing process to be used in the public API methods of {@code RootStubber}.
+     * implementations of the stubbing process to be used in the public API methods of {@code Stubber}.
      *
      * @param type    the type which should be stubbed
      * @param context {@link StubbingContext} in which a value of type {@code type} should be stubbed
@@ -75,9 +75,9 @@ public abstract class RootStubber {
     protected abstract Result<?> tryToStub(Type type, StubbingContext context);
 
     /**
-     * Public type-unsafe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     * Public type-unsafe wrapper for {@link Stubber#tryToStub(Type, StubbingContext)}.
      * <p>
-     * This method should not be used by the end user of a {@code RootStubber} and is only meant to be used by
+     * This method should not be used by the end user of a {@code Stubber} and is only meant to be used by
      * implementations of {@link StubbingStrategy} where the type is not directly known and would require additional
      * instance checking and casting to a {@code Class} for example.
      * <p>
@@ -87,7 +87,7 @@ public abstract class RootStubber {
      * @param type the type which should be stubbed
      * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
      * @return a successful {@link Result} containing the stub value, or a failure result
-     * @see RootStubber#tryToStub(Type, StubbingContext)
+     * @see Stubber#tryToStub(Type, StubbingContext)
      */
     public final Result<?> tryToStub(Type type, StubbingSite site) {
         StubbingContext context = new StubbingContext(this, site);
@@ -95,12 +95,12 @@ public abstract class RootStubber {
     }
 
     /**
-     * Public type-unsafe wrapper for {@link RootStubber#tryToStub(Type, StubbingSite)}.
+     * Public type-unsafe wrapper for {@link Stubber#tryToStub(Type, StubbingSite)}.
      * <p>
-     * If {@link RootStubber#tryToStub(Type, StubbingContext)} returns a failure {@link Result}, a {@link
-     * StubbingException} is thrown.
+     * If {@link Stubber#tryToStub(Type, StubbingContext)} returns a failure {@link Result}, a {@link StubbingException}
+     * is thrown.
      * <p>
-     * This method should not be used by the end user of a {@code RootStubber} and is only meant to be used by
+     * This method should not be used by the end user of a {@code Stubber} and is only meant to be used by
      * implementations of {@link StubbingStrategy} where the type is not directly known and would require additional
      * instance checking and casting to a {@code Class} for example.
      * <p>
@@ -111,7 +111,7 @@ public abstract class RootStubber {
      * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
      * @return a stub value
      * @throws StubbingException if no stub value for the given {@code type} could be provided
-     * @see RootStubber#tryToStub(Type, StubbingSite)
+     * @see Stubber#tryToStub(Type, StubbingSite)
      */
     public final Object stub(Type type, StubbingSite site) {
         Result<?> result = tryToStub(type, site);
@@ -122,48 +122,48 @@ public abstract class RootStubber {
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     * Public type-safe wrapper for {@link Stubber#tryToStub(Type, StubbingContext)}.
      *
      * @param type the class representing the generic type {@link T}
      * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
      * @param <T>  the type which should be stubbed
      * @return a successful {@link Result} containing the stub value, or a failure result
-     * @see RootStubber#tryToStub(Type, StubbingContext)
+     * @see Stubber#tryToStub(Type, StubbingContext)
      */
     public final <T> Result<T> tryToStub(Class<T> type, StubbingSite site) {
         return tryToStub((Type) type, site).map(value -> wrap(type).cast(value));
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingSite)}.
+     * Public type-safe wrapper for {@link Stubber#tryToStub(Type, StubbingSite)}.
      * <p>
      * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
      *
      * @param type the class representing the generic type {@link T}
      * @param <T>  the type which should be stubbed
      * @return a successful {@link Result} containing the stub value, or a failure result
-     * @see RootStubber#tryToStub(Type, StubbingSite)
+     * @see Stubber#tryToStub(Type, StubbingSite)
      */
     public final <T> Result<T> tryToStub(Class<T> type) {
         return tryToStub(type, StubbingSites.unknown());
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#stub(Type, StubbingSite)}.
+     * Public type-safe wrapper for {@link Stubber#stub(Type, StubbingSite)}.
      *
      * @param type the class representing the generic type {@link T}
      * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
      * @param <T>  the type which should be stubbed
      * @return a stub value
      * @throws StubbingException if no stub value for the given {@code type} could be provided
-     * @see RootStubber#stub(Type, StubbingSite)
+     * @see Stubber#stub(Type, StubbingSite)
      */
     public final <T> T stub(Class<T> type, StubbingSite site) {
         return wrap(type).cast(stub((Type) type, site));
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#stub(Class, StubbingSite)}.
+     * Public type-safe wrapper for {@link Stubber#stub(Class, StubbingSite)}.
      * <p>
      * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
      *
@@ -171,20 +171,20 @@ public abstract class RootStubber {
      * @param <T>  the type which should be stubbed
      * @return a stub value
      * @throws StubbingException if no stub value for the given {@code type} could be provided
-     * @see RootStubber#stub(Type, StubbingSite)
+     * @see Stubber#stub(Type, StubbingSite)
      */
     public final <T> T stub(Class<T> type) {
         return stub(type, StubbingSites.unknown());
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     * Public type-safe wrapper for {@link Stubber#tryToStub(Type, StubbingContext)}.
      *
      * @param typeLiteral the {@link TypeLiteral} representing the generic type {@link T}
      * @param site        {@link StubbingSite} at which a value of type {@code type} should be stubbed
      * @param <T>         the type which should be stubbed
      * @return a successful {@link Result} containing the stub value, or a failure result
-     * @see RootStubber#tryToStub(Type, StubbingContext)
+     * @see Stubber#tryToStub(Type, StubbingContext)
      * @see TypeLiteral
      */
     public final <T> Result<T> tryToStub(TypeLiteral<T> typeLiteral, StubbingSite site) {
@@ -193,14 +193,14 @@ public abstract class RootStubber {
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     * Public type-safe wrapper for {@link Stubber#tryToStub(Type, StubbingContext)}.
      * <p>
      * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
      *
      * @param typeLiteral the {@link TypeLiteral} representing the generic type {@link T}
      * @param <T>         the type which should be stubbed
      * @return a successful {@link Result} containing the stub value, or a failure result
-     * @see RootStubber#tryToStub(Type, StubbingContext)
+     * @see Stubber#tryToStub(Type, StubbingContext)
      * @see TypeLiteral
      */
     public final <T> Result<T> tryToStub(TypeLiteral<T> typeLiteral) {
@@ -208,14 +208,14 @@ public abstract class RootStubber {
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#stub(Type, StubbingSite)}.
+     * Public type-safe wrapper for {@link Stubber#stub(Type, StubbingSite)}.
      *
      * @param typeLiteral the {@link TypeLiteral} representing the generic type {@link T}
      * @param site        {@link StubbingSite} at which a value of type {@code type} should be stubbed
      * @param <T>         the type which should be stubbed
      * @return a stub value
      * @throws StubbingException if no stub value for the given {@code type} could be provided
-     * @see RootStubber#stub(Type, StubbingSite)
+     * @see Stubber#stub(Type, StubbingSite)
      * @see TypeLiteral
      */
     public final <T> T stub(TypeLiteral<T> typeLiteral, StubbingSite site) {
@@ -224,7 +224,7 @@ public abstract class RootStubber {
     }
 
     /**
-     * Public type-safe wrapper for {@link RootStubber#stub(Type, StubbingSite)}.
+     * Public type-safe wrapper for {@link Stubber#stub(Type, StubbingSite)}.
      * <p>
      * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
      *
@@ -232,7 +232,7 @@ public abstract class RootStubber {
      * @param <T>         the type which should be stubbed
      * @return a stub value
      * @throws StubbingException if no stub value for the given {@code type} could be provided
-     * @see RootStubber#stub(Type, StubbingSite)
+     * @see Stubber#stub(Type, StubbingSite)
      * @see TypeLiteral
      */
     public final <T> T stub(TypeLiteral<T> typeLiteral) {

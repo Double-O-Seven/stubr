@@ -236,7 +236,7 @@ public final class StubbingStrategies {
         return proxy(true);
     }
 
-    public static StubbingStrategy rootStubber() {
+    public static StubbingStrategy stubber() {
         return RootStubberStubbingStrategy.INSTANCE;
     }
 

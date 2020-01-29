@@ -8,16 +8,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RootStubbersTest {
+class StubbersTest {
 
     @Nested
     class DefaultRootStubbingStrategyTest {
 
-        private RootStubber rootStubber = RootStubbers.defaultRootStubber();
+        private Stubber stubber = RootStubbers.defaultRootStubber();
 
         @Test
         void shouldStubEnum() {
-            Foo value = rootStubber.stub(Foo.class);
+            Foo value = stubber.stub(Foo.class);
 
             assertThat(value)
                     .isEqualTo(Foo.INSTANCE);
@@ -25,7 +25,7 @@ class RootStubbersTest {
 
         @Test
         void shouldStubInterface() {
-            Bar value = rootStubber.stub(Bar.class);
+            Bar value = stubber.stub(Bar.class);
 
             assertThat(value.getInt())
                     .isZero();
@@ -33,7 +33,7 @@ class RootStubbersTest {
 
         @Test
         void shouldStubListOfStrings() {
-            List<Integer> value = rootStubber.stub(new TypeLiteral<List<Integer>>() {});
+            List<Integer> value = stubber.stub(new TypeLiteral<List<Integer>>() {});
 
             assertThat(value)
                     .containsExactly(0);
@@ -41,7 +41,7 @@ class RootStubbersTest {
 
         @Test
         void shouldStubWithFactoryMethod() {
-            CreatedWithFactoryMethod value = rootStubber.stub(CreatedWithFactoryMethod.class);
+            CreatedWithFactoryMethod value = stubber.stub(CreatedWithFactoryMethod.class);
 
             assertThat(value.isCreatedWithFactoryMethod())
                     .isTrue();
@@ -49,7 +49,7 @@ class RootStubbersTest {
 
         @Test
         void shouldStubWithNonDefaultConstructor() {
-            CreatedWithNonDefaultConstructor value = rootStubber.stub(CreatedWithNonDefaultConstructor.class);
+            CreatedWithNonDefaultConstructor value = stubber.stub(CreatedWithNonDefaultConstructor.class);
 
             assertThat(value.isCreatedWithNonDefaultConstructor())
                     .isTrue();

@@ -12,17 +12,17 @@ public final class StubbingContext {
             .compareAndHash(StubbingContext::getSite)
             .build();
 
-    private final RootStubber stubber;
+    private final Stubber stubber;
     private final StubbingSite site;
 
-    public StubbingContext(RootStubber stubber, StubbingSite site) {
+    public StubbingContext(Stubber stubber, StubbingSite site) {
         requireNonNull(stubber, "stubber");
         requireNonNull(site, "site");
         this.stubber = stubber;
         this.site = site;
     }
 
-    public RootStubber getStubber() {
+    public Stubber getStubber() {
         return stubber;
     }
 

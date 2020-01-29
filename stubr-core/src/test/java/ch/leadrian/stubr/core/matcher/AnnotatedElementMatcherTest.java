@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.Matcher;
-import ch.leadrian.stubr.core.RootStubber;
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.stubbingsite.AnnotatedStubbingSite;
@@ -16,7 +16,7 @@ class AnnotatedElementMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenAnnotatedElementStubbingSiteItShouldReturnTrueIfAndOnlyIfDelegateMatches(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(RootStubber.class), mock(AnnotatedStubbingSite.class));
+        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(AnnotatedStubbingSite.class));
         Matcher<Object> matcher = Matchers.annotatedSiteIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());
@@ -28,7 +28,7 @@ class AnnotatedElementMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenNoAnnotatedElementStubbingSiteItShouldReturnFalse(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(RootStubber.class), mock(StubbingSite.class));
+        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(StubbingSite.class));
         Matcher<Object> matcher = Matchers.annotatedSiteIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());
