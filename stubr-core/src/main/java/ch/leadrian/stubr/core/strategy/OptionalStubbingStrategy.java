@@ -11,9 +11,9 @@ import java.util.Optional;
 
 abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<Object>> {
 
-    static final OptionalStubbingStrategy EMPTY = new EmptyStubbingStrategy();
-    static final OptionalStubbingStrategy PRESENT = new PresentStubbingStrategy();
-    static final OptionalStubbingStrategy PRESENT_IF_POSSIBLE = new PresentIfPossibleStubbingStrategy();
+    static final OptionalStubbingStrategy EMPTY = new Empty();
+    static final OptionalStubbingStrategy PRESENT = new Present();
+    static final OptionalStubbingStrategy PRESENT_IF_POSSIBLE = new PresentIfPossible();
 
     private OptionalStubbingStrategy() {
     }
@@ -42,7 +42,7 @@ abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<
 
     protected abstract boolean isEmptyAllowed();
 
-    private static final class EmptyStubbingStrategy extends OptionalStubbingStrategy {
+    private static final class Empty extends OptionalStubbingStrategy {
 
         @Override
         protected Optional<Object> stubOptional(StubbingContext context, ParameterizedType type) {
@@ -56,7 +56,7 @@ abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<
 
     }
 
-    private static abstract class AbstractPresentStubbingStrategy extends OptionalStubbingStrategy {
+    private static abstract class AbstractPresent extends OptionalStubbingStrategy {
 
         @Override
         protected final Optional<Object> stubOptional(StubbingContext context, ParameterizedType type) {
@@ -69,7 +69,7 @@ abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<
 
     }
 
-    private static final class PresentStubbingStrategy extends AbstractPresentStubbingStrategy {
+    private static final class Present extends AbstractPresent {
 
         @Override
         protected Optional<Object> stubOptional(StubbingContext context, StubbingSite site, Type valueType) {
@@ -83,7 +83,7 @@ abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<
 
     }
 
-    private static final class PresentIfPossibleStubbingStrategy extends AbstractPresentStubbingStrategy {
+    private static final class PresentIfPossible extends AbstractPresent {
 
         @Override
         protected Optional<Object> stubOptional(StubbingContext context, StubbingSite site, Type valueType) {
