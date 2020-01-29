@@ -40,4 +40,13 @@ internal class KotlinStubbersTest {
                 .test(KotlinStubbers.suppliedValue { listOf("foo") })
     }
 
+    @TestFactory
+    fun `test implementation`(): Stream<DynamicTest> {
+        return stubberTester()
+                .provideStub(typeLiteral<List<String>>(), listOf("foo"))
+                .accepts(typeLiteral<Collection<CharSequence>>())
+                .andStubs(listOf("foo"))
+                .test(KotlinStubbers.implementation<Collection<CharSequence>, List<String>>())
+    }
+
 }

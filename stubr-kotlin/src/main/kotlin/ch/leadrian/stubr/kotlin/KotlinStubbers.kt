@@ -36,4 +36,6 @@ object KotlinStubbers {
     inline fun <reified T> suppliedValue(crossinline supplier: (Int) -> T): Stubber =
             Stubbers.suppliedValue(typeLiteral<T>(), IntFunction { supplier(it) })
 
+    inline fun <reified T, reified U : T> implementation(): Stubber = Stubbers.implementation(typeLiteral<T>(), typeLiteral<U>())
+
 }
