@@ -4,8 +4,8 @@ import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubberBuilder;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.junit.annotation.Include;
-import ch.leadrian.stubr.junit.annotation.RootStubberBaseline;
 import ch.leadrian.stubr.junit.annotation.StubWith;
+import ch.leadrian.stubr.junit.annotation.StubberBaseline;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.util.Arrays;
@@ -17,38 +17,38 @@ import static ch.leadrian.stubr.junit.ExtensionContexts.walk;
 import static com.google.common.collect.Lists.reverse;
 import static java.util.stream.Collectors.toList;
 
-final class RootStubberFactory {
+final class StubberFactory {
 
     Stubber create(ExtensionContext context) {
         List<ExtensionContext> contexts = walk(context).collect(toList());
-        StubberBuilder builder = getRootStubberBuilder(contexts);
-        getRootStubbers(context, contexts).forEach(builder::include);
-        getStubbers(context, contexts).forEach(builder::stubWith);
+        StubberBuilder builder = getStubberBuilder(contexts);
+        getStubbers(context, contexts).forEach(builder::include);
+        getStubbingStrategies(context, contexts).forEach(builder::stubWith);
         return builder.build();
     }
 
-    private StubberBuilder getRootStubberBuilder(List<ExtensionContext> contexts) {
-        return getAnnotations(RootStubberBaseline.class, contexts)
+    private StubberBuilder getStubberBuilder(List<ExtensionContext> contexts) {
+        return getAnnotations(StubberBaseline.class, contexts)
                 .findFirst()
-                .map(RootStubberBaseline::value)
-                .orElse(RootStubberBaseline.Variant.DEFAULT)
+                .map(StubberBaseline::value)
+                .orElse(StubberBaseline.Variant.DEFAULT)
                 .getBuilder();
     }
 
-    private Stream<Stubber> getRootStubbers(ExtensionContext context, List<ExtensionContext> contexts) {
+    private Stream<Stubber> getStubbers(ExtensionContext context, List<ExtensionContext> contexts) {
         return getAnnotations(Include.class, reverse(contexts))
                 .map(Include::value)
                 .flatMap(Arrays::stream)
                 .map(this::newInstance)
-                .flatMap(provider -> provider.getRootStubbers(context).stream());
+                .flatMap(provider -> provider.getStubbers(context).stream());
     }
 
-    private Stream<? extends StubbingStrategy> getStubbers(ExtensionContext context, List<ExtensionContext> contexts) {
+    private Stream<? extends StubbingStrategy> getStubbingStrategies(ExtensionContext context, List<ExtensionContext> contexts) {
         return getAnnotations(StubWith.class, reverse(contexts))
                 .map(StubWith::value)
                 .flatMap(Arrays::stream)
                 .map(this::newInstance)
-                .flatMap(provider -> provider.getStubbers(context).stream());
+                .flatMap(provider -> provider.getStubbingStrategies(context).stream());
     }
 
     private <T> T newInstance(Class<T> clazz) {

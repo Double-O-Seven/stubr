@@ -56,13 +56,13 @@ final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
         return new ArrayList<>(tests)
                 .stream()
                 .map(test -> {
-                    Stubber stubber = createRootStubber();
+                    Stubber stubber = createStubber();
                     StubbingContext context = new StubbingContext(stubber, TestStubbingSite.INSTANCE);
                     return test.toDynamicTest(stubbingStrategy, context);
                 });
     }
 
-    private Stubber createRootStubber() {
+    private Stubber createStubber() {
         Map<Type, ResultProvider> untouchedResultProvidersByType = new HashMap<>(resultProvidersByType);
         untouchedResultProvidersByType.replaceAll((type, resultProvider) -> resultProvider.getUntouchedInstance());
         return new TestStubber(untouchedResultProvidersByType);

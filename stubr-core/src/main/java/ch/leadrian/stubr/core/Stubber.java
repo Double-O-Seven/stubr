@@ -32,16 +32,16 @@ public abstract class Stubber {
 
     /**
      * Creates a new composite {@code Stubber} composed from multiple {@code Stubber}s. The resulting {@code Stubber}
-     * will iterate through the given {@code rootStubbers} in list order and return the stub value of the first
-     * successful {@link Result} returned by a {@code Stubber}. If no {@code Stubber} returns a successful result, a
-     * failure {@link Result} will be returned.
+     * will iterate through the given {@code stubbers} in list order and return the stub value of the first successful
+     * {@link Result} returned by a {@code Stubber}. If no {@code Stubber} returns a successful result, a failure {@link
+     * Result} will be returned.
      *
-     * @param rootStubbers {@code Stubber}s to be composed into a single {@code Stubber}
-     * @return the first successful {@link Result} of the given {@code rootStubbers}, or a failure {@link Result}
+     * @param stubbers {@code Stubber}s to be composed into a single {@code Stubber}
+     * @return the first successful {@link Result} of the given {@code stubbers}, or a failure {@link Result}
      * @see Result
      */
-    public static Stubber compose(List<? extends Stubber> rootStubbers) {
-        return new CompositeStubber(rootStubbers);
+    public static Stubber compose(List<? extends Stubber> stubbers) {
+        return new CompositeStubber(stubbers);
     }
 
     /**

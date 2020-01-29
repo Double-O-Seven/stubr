@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.RootStubbers.defaultRootStubber;
+import static ch.leadrian.stubr.core.Stubbers.defaultStubber;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.collection;
@@ -29,7 +29,7 @@ class CoreIntegrationTest {
     @BeforeEach
     void setUp() {
         Stubber stubber = Stubber.builder()
-                .include(defaultRootStubber())
+                .include(defaultStubber())
                 .stubWith(defaultCollections(3))
                 .stubWith(suppliedValue(String.class, sequenceNumber -> String.format("value%d", sequenceNumber)))
                 .stubWith(suppliedValue(Integer.class, sequenceNumber -> sequenceNumber))

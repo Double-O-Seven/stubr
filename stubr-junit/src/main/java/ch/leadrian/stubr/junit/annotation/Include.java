@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.junit.annotation;
 
-import ch.leadrian.stubr.junit.RootStubberProvider;
+import ch.leadrian.stubr.junit.StubberProvider;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface Include {
 
-    Class<? extends RootStubberProvider>[] value();
+    Class<? extends StubberProvider>[] value();
 
 }

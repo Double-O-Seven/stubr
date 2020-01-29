@@ -237,7 +237,7 @@ public final class StubbingStrategies {
     }
 
     public static StubbingStrategy stubber() {
-        return RootStubberStubbingStrategy.INSTANCE;
+        return StubberStubbingStrategy.INSTANCE;
     }
 
     public static <T> StubbingStrategy suppliedValue(Class<T> type, IntFunction<? extends T> valueSupplier) {

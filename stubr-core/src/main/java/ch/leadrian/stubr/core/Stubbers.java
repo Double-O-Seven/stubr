@@ -22,9 +22,9 @@ import static ch.leadrian.stubr.core.strategy.StubbingStrategies.stubber;
 /**
  * Class containing factory methods for basic {@link Stubber}s.
  */
-public final class RootStubbers {
+public final class Stubbers {
 
-    private static final Stubber DEFAULT_ROOT_STUBBER = Stubber.builder()
+    private static final Stubber DEFAULT_STUBBER = Stubber.builder()
             .stubWith(defaultValue())
             .stubWith(proxy())
             .stubWith(enumValue())
@@ -38,14 +38,14 @@ public final class RootStubbers {
             .stubWith(commonSuppliedValues())
             .build();
 
-    private static final Stubber MINIMAL_ROOT_STUBBER = Stubber.builder()
-            .include(defaultRootStubber())
+    private static final Stubber MINIMAL_STUBBER = Stubber.builder()
+            .include(defaultStubber())
             .stubWith(nullValue().when(annotatedSiteIs(nullable())))
             .stubWith(optional(OptionalStubbingMode.EMPTY))
             .stubWith(emptyDefaultCollections())
             .build();
 
-    private RootStubbers() {
+    private Stubbers() {
     }
 
     /**
@@ -67,20 +67,20 @@ public final class RootStubbers {
      * @return a {@link Stubber} stubbing non-null, non-empty default values.
      * @see StubbingStrategies
      */
-    public static Stubber defaultRootStubber() {
-        return DEFAULT_ROOT_STUBBER;
+    public static Stubber defaultStubber() {
+        return DEFAULT_STUBBER;
     }
 
     /**
-     * Provides a stateless {@link Stubber} that uses {@link RootStubbers#defaultRootStubber()} as a baseline. However,
-     * default collections, {@link java.util.Optional}s and arrays are kept empty and nullable sites will receive {@code
-     * null} as stub value.
+     * Provides a stateless {@link Stubber} that uses {@link Stubbers#defaultStubber()} as a baseline. However, default
+     * collections, {@link java.util.Optional}s and arrays are kept empty and nullable sites will receive {@code null}
+     * as stub value.
      *
      * @return a {@link Stubber} stubbing nullable, empty default values.
      * @see StubbingStrategies
      */
-    public static Stubber minimalRootStubber() {
-        return MINIMAL_ROOT_STUBBER;
+    public static Stubber minimalStubber() {
+        return MINIMAL_STUBBER;
     }
 
 }

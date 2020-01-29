@@ -13,7 +13,7 @@ class StubbersTest {
     @Nested
     class DefaultRootStubbingStrategyTest {
 
-        private Stubber stubber = RootStubbers.defaultRootStubber();
+        private Stubber stubber = Stubbers.defaultStubber();
 
         @Test
         void shouldStubEnum() {

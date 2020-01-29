@@ -11,9 +11,9 @@ final class CompositeStubber extends Stubber {
 
     private final List<Stubber> stubbers;
 
-    CompositeStubber(List<? extends Stubber> rootStubbers) {
-        requireNonNull(rootStubbers, "stubbers");
-        this.stubbers = ImmutableList.copyOf(rootStubbers);
+    CompositeStubber(List<? extends Stubber> stubbers) {
+        requireNonNull(stubbers, "stubbers");
+        this.stubbers = ImmutableList.copyOf(stubbers);
     }
 
     @Override

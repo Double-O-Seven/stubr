@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
 
-enum RootStubberStubbingStrategy implements StubbingStrategy {
+enum StubberStubbingStrategy implements StubbingStrategy {
     INSTANCE;
 
     @Override

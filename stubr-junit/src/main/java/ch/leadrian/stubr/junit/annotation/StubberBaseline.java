@@ -8,12 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static ch.leadrian.stubr.core.RootStubbers.defaultRootStubber;
-import static ch.leadrian.stubr.core.RootStubbers.minimalRootStubber;
+import static ch.leadrian.stubr.core.Stubbers.defaultStubber;
+import static ch.leadrian.stubr.core.Stubbers.minimalStubber;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-public @interface RootStubberBaseline {
+public @interface StubberBaseline {
 
     Variant value() default Variant.DEFAULT;
 
@@ -21,14 +21,14 @@ public @interface RootStubberBaseline {
         DEFAULT {
             @Override
             public StubberBuilder getBuilder() {
-                return Stubber.builder().include(defaultRootStubber());
+                return Stubber.builder().include(defaultStubber());
             }
 
         },
         MINIMAL {
             @Override
             public StubberBuilder getBuilder() {
-                return Stubber.builder().include(minimalRootStubber());
+                return Stubber.builder().include(minimalStubber());
             }
         },
         EMPTY {

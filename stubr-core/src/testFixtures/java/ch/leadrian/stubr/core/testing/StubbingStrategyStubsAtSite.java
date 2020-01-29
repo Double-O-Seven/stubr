@@ -32,12 +32,12 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
     public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
         String displayName = getDisplayName(stubbingStrategy);
         return dynamicTest(displayName, () -> {
-            CapturingStubber capturingRootStubber = new CapturingStubber(context.getStubber());
-            StubbingContext capturingContext = new StubbingContext(capturingRootStubber, context.getSite());
+            CapturingStubber capturingStubber = new CapturingStubber(context.getStubber());
+            StubbingContext capturingContext = new StubbingContext(capturingStubber, context.getSite());
 
             stubbingStrategy.stub(capturingContext, acceptedType);
 
-            assertThat(capturingRootStubber.getCapturedSites())
+            assertThat(capturingStubber.getCapturedSites())
                     .containsExactlyElementsOf(expectedSites);
         });
     }

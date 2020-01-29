@@ -13,12 +13,12 @@ import java.lang.reflect.Type;
 
 public final class Stubr implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-    private final RootStubberFactory rootStubberFactory = new RootStubberFactory();
+    private final StubberFactory stubberFactory = new StubberFactory();
     private Stubber stubber;
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        stubber = rootStubberFactory.create(context);
+        stubber = stubberFactory.create(context);
     }
 
     @Override

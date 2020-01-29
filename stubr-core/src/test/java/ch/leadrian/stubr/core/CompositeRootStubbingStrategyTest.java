@@ -14,7 +14,7 @@ class CompositeRootStubbingStrategyTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void shouldReturnResultOfFirstSuccessfulRootStubber() {
+    void shouldReturnResultOfFirstSuccessfulStubber() {
         Class<String> type = String.class;
         StubbingContext context = mock(StubbingContext.class);
         Stubber stubber1 = mock(Stubber.class);

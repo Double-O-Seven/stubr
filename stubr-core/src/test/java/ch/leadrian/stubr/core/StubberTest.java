@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-class RootStubbingStrategyTest {
+class StubberTest {
 
     @Nested
     class BuilderTest {
@@ -156,7 +156,7 @@ class RootStubbingStrategyTest {
         }
 
         @Test
-        void shouldStubValueWithIncludedRootStubber() {
+        void shouldStubValueWithIncludedStubber() {
             Stubber stubber = Stubber.builder()
                     .include(Stubber.builder()
                             .stubWith(testStubber(Integer.class, 1337))
@@ -170,7 +170,7 @@ class RootStubbingStrategyTest {
         }
 
         @Test
-        void shouldUseValueOfLastConfiguredIncludedRootStubber() {
+        void shouldUseValueOfLastConfiguredIncludedStubber() {
             Stubber stubber = Stubber.builder()
                     .include(Stubber.builder()
                             .stubWith(testStubber(Integer.class, 1337))
@@ -187,7 +187,7 @@ class RootStubbingStrategyTest {
         }
 
         @Test
-        void shouldOverrideStubValueOfRootStubber() {
+        void shouldOverrideStubValueOfStubber() {
             Stubber stubber = Stubber.builder()
                     .include(Stubber.builder()
                             .stubWith(testStubber(Integer.class, 1337))

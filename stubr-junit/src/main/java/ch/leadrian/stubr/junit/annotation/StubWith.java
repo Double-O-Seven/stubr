@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.junit.annotation;
 
-import ch.leadrian.stubr.junit.StubberProvider;
+import ch.leadrian.stubr.junit.StubbingStrategyProvider;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface StubWith {
 
-    Class<? extends StubberProvider>[] value();
+    Class<? extends StubbingStrategyProvider>[] value();
 
 }
