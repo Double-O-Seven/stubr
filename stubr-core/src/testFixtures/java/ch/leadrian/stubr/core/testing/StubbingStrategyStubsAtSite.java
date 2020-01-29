@@ -16,12 +16,12 @@ import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubberStubsAtSite implements StubberTest {
+final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
 
     private final Type acceptedType;
     private final List<StubbingSite> expectedSites;
 
-    StubberStubsAtSite(Type acceptedType, List<StubbingSite> expectedSites) {
+    StubbingStrategyStubsAtSite(Type acceptedType, List<StubbingSite> expectedSites) {
         requireNonNull(acceptedType, "acceptedType");
         requireNonNull(expectedSites, "expectedSites");
         this.acceptedType = acceptedType;

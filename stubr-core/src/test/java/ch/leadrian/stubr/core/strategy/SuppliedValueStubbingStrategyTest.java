@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +21,7 @@ class SuppliedValueStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testFixedSuppliedValue() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(String.class)
                 .andStubs("Test")
                 .rejects(Object.class)
@@ -34,7 +34,7 @@ class SuppliedValueStubbingStrategyTest {
     @TestFactory
     Stream<DynamicTest> testFixedSuppliedValueOfParameterizedType() {
         TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {};
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(listOfStrings)
                 .andStubs(singletonList("Test"))
                 .rejects(new TypeLiteral<List<Integer>>() {})

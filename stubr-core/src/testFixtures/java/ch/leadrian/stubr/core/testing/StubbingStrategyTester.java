@@ -9,31 +9,31 @@ import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public interface StubberTester {
+public interface StubbingStrategyTester {
 
-    static StubberTester stubberTester() {
-        return new StubberTesterImpl();
+    static StubbingStrategyTester stubbingStrategyTester() {
+        return new StubbingStrategyTesterImpl();
     }
 
-    StubberTester provideStub(Type type, Object... values);
+    StubbingStrategyTester provideStub(Type type, Object... values);
 
-    default StubberTester provideStub(Object value) {
+    default StubbingStrategyTester provideStub(Object value) {
         return provideStub(value.getClass(), value);
     }
 
     @SuppressWarnings("unchecked")
-    default <T> StubberTester provideStub(Class<T> type, T... values) {
+    default <T> StubbingStrategyTester provideStub(Class<T> type, T... values) {
         return provideStub(type, (Object[]) values);
     }
 
     @SuppressWarnings("unchecked")
-    default <T> StubberTester provideStub(TypeLiteral<T> typeLiteral, T... values) {
+    default <T> StubbingStrategyTester provideStub(TypeLiteral<T> typeLiteral, T... values) {
         return provideStub(typeLiteral.getType(), (Object[]) values);
     }
 
-    StubberTester doNotStub(Type type);
+    StubbingStrategyTester doNotStub(Type type);
 
-    default StubberTester doNotStub(TypeLiteral<?> typeLiteral) {
+    default StubbingStrategyTester doNotStub(TypeLiteral<?> typeLiteral) {
         return doNotStub(typeLiteral.getType());
     }
 
@@ -47,9 +47,9 @@ public interface StubberTester {
         return accepts(typeLiteral.getType());
     }
 
-    StubberTester rejects(Type type);
+    StubbingStrategyTester rejects(Type type);
 
-    default StubberTester rejects(TypeLiteral<?> typeLiteral) {
+    default StubbingStrategyTester rejects(TypeLiteral<?> typeLiteral) {
         return rejects(typeLiteral.getType());
     }
 
@@ -59,7 +59,7 @@ public interface StubberTester {
         return Stream.of(stubbingStrategies).flatMap(this::test);
     }
 
-    interface StubValueTester<T> extends StubberTester {
+    interface StubValueTester<T> extends StubbingStrategyTester {
 
         SiteTester andStubs(T expectedValue);
 
@@ -67,9 +67,9 @@ public interface StubberTester {
 
     }
 
-    interface SiteTester extends StubberTester {
+    interface SiteTester extends StubbingStrategyTester {
 
-        StubberTester at(StubbingSite... expectedSites);
+        StubbingStrategyTester at(StubbingSite... expectedSites);
 
     }
 

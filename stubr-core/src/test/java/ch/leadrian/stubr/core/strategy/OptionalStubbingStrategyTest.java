@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 
 class OptionalStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testEmptyOptionalStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(Optional.class)
                 .andStubs(Optional.empty())
                 .accepts(new TypeLiteral<Optional<String>>() {})
@@ -30,7 +30,7 @@ class OptionalStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testPresentOptionalStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub("Test")
                 .accepts(new TypeLiteral<Optional<String>>() {})
                 .andStubs(Optional.of("Test"))
@@ -42,7 +42,7 @@ class OptionalStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testPresentIfPossibleOptionalStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub("Test")
                 .doNotStub(Integer.class)
                 .accepts(Optional.class)

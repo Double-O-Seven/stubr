@@ -7,13 +7,13 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 
 class NullValueStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testNullValueStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(Object.class)
                 .andStubs(null)
                 .accepts(String.class)

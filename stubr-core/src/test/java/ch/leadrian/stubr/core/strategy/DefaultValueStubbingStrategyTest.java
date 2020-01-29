@@ -5,13 +5,13 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 
 class DefaultValueStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testDefaultValueStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(byte.class)
                 .andStubs((byte) 0)
                 .accepts(Byte.class)

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -15,7 +15,7 @@ class GenericMockitoStubbingStrategyTest {
     @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testFinalStubbingGenericMockitoStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(int.class, 1337)
                 .provideStub("Test")
                 .accepts(Foo.class)
@@ -54,7 +54,7 @@ class GenericMockitoStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testOpenOnlyStubbingGenericMockitoStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .rejects(int.class)
                 .rejects(FinalClass.class)
                 .rejects(Object[].class)

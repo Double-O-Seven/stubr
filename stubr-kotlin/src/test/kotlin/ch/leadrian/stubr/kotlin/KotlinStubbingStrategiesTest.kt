@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.kotlin
 
-import ch.leadrian.stubr.core.testing.StubberTester.stubberTester
+import ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.util.stream.Stream
@@ -9,7 +9,7 @@ internal class KotlinStubbingStrategiesTest {
 
     @TestFactory
     fun `test collection`(): Stream<DynamicTest> {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub("foo")
                 .accepts(typeLiteral<ArrayList<String>>())
                 .andStubs(ArrayList(listOf("foo", "foo", "foo")))
@@ -21,7 +21,7 @@ internal class KotlinStubbingStrategiesTest {
 
     @TestFactory
     fun `test map`(): Stream<DynamicTest> {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(Int::class.javaObjectType, 1, 2, 3)
                 .provideStub(String::class.java, "foo", "bar", "baz")
                 .accepts(typeLiteral<HashMap<Int, String>>())
@@ -34,7 +34,7 @@ internal class KotlinStubbingStrategiesTest {
 
     @TestFactory
     fun `test suppliedValue`(): Stream<DynamicTest> {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(typeLiteral<List<String>>())
                 .andStubs(listOf("foo"))
                 .test(KotlinStubbingStrategies.suppliedValue { listOf("foo") })
@@ -42,7 +42,7 @@ internal class KotlinStubbingStrategiesTest {
 
     @TestFactory
     fun `test implementation`(): Stream<DynamicTest> {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(typeLiteral<List<String>>(), listOf("foo"))
                 .accepts(typeLiteral<Collection<CharSequence>>())
                 .andStubs(listOf("foo"))

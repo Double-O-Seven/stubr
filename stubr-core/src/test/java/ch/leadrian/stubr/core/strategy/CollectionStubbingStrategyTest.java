@@ -12,14 +12,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 import static org.assertj.core.util.Lists.newArrayList;
 
 class CollectionStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testEmptyCollectionStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(List.class)
                 .andStubs(new ArrayList<>())
                 .accepts(new TypeLiteral<List<String>>() {})
@@ -48,7 +48,7 @@ class CollectionStubbingStrategyTest {
     @TestFactory
     Stream<DynamicTest> testNonEmptyCollectionStubber() {
         ParameterizedTypeLiteral<List<String>> listOfStrings = new ParameterizedTypeLiteral<List<String>>() {};
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .rejects(List.class)
                 .accepts(listOfStrings)
@@ -71,7 +71,7 @@ class CollectionStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testUnsupportedParameterization() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .rejects(new TypeLiteral<WeirdList<String, Integer>>() {})
                 .test(StubbingStrategies.collection(WeirdList.class, values -> new WeirdList(), context -> 3));
     }

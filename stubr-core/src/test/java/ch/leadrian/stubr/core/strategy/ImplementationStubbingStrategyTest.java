@@ -9,14 +9,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 import static java.util.Collections.singletonList;
 
 class ImplementationStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testImplementationStubberWithNonParameterizedClass() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub("Test")
                 .accepts(CharSequence.class)
                 .andStubs("Test")
@@ -34,7 +34,7 @@ class ImplementationStubbingStrategyTest {
     @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testImplementationStubberWithParameterizedClass() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(new TypeLiteral<List<String>>() {}, singletonList("Test"))
                 .accepts(new TypeLiteral<Collection<? extends CharSequence>>() {})
                 .andStubs(singletonList("Test"))

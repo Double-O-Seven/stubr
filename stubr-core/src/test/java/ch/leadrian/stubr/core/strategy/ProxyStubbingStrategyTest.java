@@ -5,7 +5,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -14,7 +14,7 @@ class ProxyStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testNonCachingProxyStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(int.class, 1, 2, 3)
                 .provideStub("Test")
                 .accepts(Foo.class)
@@ -32,7 +32,7 @@ class ProxyStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testCachingProxyStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(int.class, 1, 2, 3)
                 .provideStub("Test")
                 .accepts(Foo.class)

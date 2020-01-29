@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
-import ch.leadrian.stubr.core.testing.StubberTester;
+import ch.leadrian.stubr.core.testing.StubbingStrategyTester;
 import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
@@ -14,7 +14,7 @@ class ArrayStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testEmptyArray() {
-        return StubberTester.stubberTester()
+        return StubbingStrategyTester.stubbingStrategyTester()
                 .accepts(Object[].class)
                 .andStubs(new Object[0])
                 .accepts(String[].class)
@@ -31,7 +31,7 @@ class ArrayStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyArray() {
-        return StubberTester.stubberTester()
+        return StubbingStrategyTester.stubbingStrategyTester()
                 .provideStub(Object.class, 1, 2, 3)
                 .provideStub(String.class, "Foo", "Bar", "Baz")
                 .accepts(Object[].class)
@@ -59,7 +59,7 @@ class ArrayStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testPrimitiveArray() {
-        return StubberTester.stubberTester()
+        return StubbingStrategyTester.stubbingStrategyTester()
                 .provideStub(boolean.class, true, false)
                 .provideStub(byte.class, (byte) 1, (byte) 2)
                 .provideStub(short.class, (short) 3, (short) 4)

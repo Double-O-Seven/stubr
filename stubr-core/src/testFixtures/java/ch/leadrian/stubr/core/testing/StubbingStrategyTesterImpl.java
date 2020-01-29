@@ -16,12 +16,12 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 
-final class StubberTesterImpl implements StubberTester {
+final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
 
-    private final List<StubberTest> tests = new ArrayList<>();
+    private final List<StubbingStrategyTest> tests = new ArrayList<>();
     private final Map<Type, ResultProvider> resultProvidersByType = new HashMap<>();
 
-    private StubberTester addResultProvider(Type type, ResultProvider resultProvider) {
+    private StubbingStrategyTester addResultProvider(Type type, ResultProvider resultProvider) {
         if (resultProvidersByType.containsKey(type)) {
             throw new IllegalArgumentException(String.format("Value for %s is already provided", type));
         }
@@ -30,24 +30,24 @@ final class StubberTesterImpl implements StubberTester {
     }
 
     @Override
-    public StubberTester provideStub(Type type, Object... values) {
+    public StubbingStrategyTester provideStub(Type type, Object... values) {
         return addResultProvider(type, ResultProvider.of(values));
     }
 
     @Override
-    public StubberTester doNotStub(Type type) {
+    public StubbingStrategyTester doNotStub(Type type) {
         return addResultProvider(type, ResultProvider.of());
     }
 
     @Override
     public <T> StubValueTester<T> accepts(Type type) {
-        tests.add(new StubberAcceptsType(type));
+        tests.add(new StubbingStrategyAcceptsType(type));
         return new StubValueTesterImpl<>(type);
     }
 
     @Override
-    public StubberTester rejects(Type type) {
-        tests.add(new StubberRejectsType(type));
+    public StubbingStrategyTester rejects(Type type) {
+        tests.add(new StubbingStrategyRejectsType(type));
         return this;
     }
 
@@ -68,36 +68,36 @@ final class StubberTesterImpl implements StubberTester {
         return new TestRootStubber(untouchedResultProvidersByType);
     }
 
-    private abstract class DelegatingStubberTester implements StubberTester {
+    private abstract class DelegatingStubbingStrategyTester implements StubbingStrategyTester {
 
         @Override
-        public StubberTester provideStub(Type type, Object... values) {
-            return StubberTesterImpl.this.provideStub(type, values);
+        public StubbingStrategyTester provideStub(Type type, Object... values) {
+            return StubbingStrategyTesterImpl.this.provideStub(type, values);
         }
 
         @Override
-        public StubberTester doNotStub(Type type) {
-            return StubberTesterImpl.this.doNotStub(type);
+        public StubbingStrategyTester doNotStub(Type type) {
+            return StubbingStrategyTesterImpl.this.doNotStub(type);
         }
 
         @Override
         public <T> StubValueTester<T> accepts(Type type) {
-            return StubberTesterImpl.this.accepts(type);
+            return StubbingStrategyTesterImpl.this.accepts(type);
         }
 
         @Override
-        public StubberTester rejects(Type type) {
-            return StubberTesterImpl.this.rejects(type);
+        public StubbingStrategyTester rejects(Type type) {
+            return StubbingStrategyTesterImpl.this.rejects(type);
         }
 
         @Override
         public Stream<DynamicTest> test(StubbingStrategy stubbingStrategy) {
-            return StubberTesterImpl.this.test(stubbingStrategy);
+            return StubbingStrategyTesterImpl.this.test(stubbingStrategy);
         }
 
     }
 
-    private final class StubValueTesterImpl<T> extends DelegatingStubberTester implements StubValueTester<T> {
+    private final class StubValueTesterImpl<T> extends DelegatingStubbingStrategyTester implements StubValueTester<T> {
 
         private final Type type;
 
@@ -107,19 +107,19 @@ final class StubberTesterImpl implements StubberTester {
 
         @Override
         public SiteTester andStubs(T expectedValue) {
-            tests.add(new StubberProvidesStub(type, expectedValue));
+            tests.add(new StubbingStrategyProvidesStub(type, expectedValue));
             return new SiteTesterImpl(type);
         }
 
         @Override
         public SiteTester andStubSatisfies(Consumer<Object> assertion) {
-            tests.add(new StubberProvidesStubSatisfying(type, assertion));
+            tests.add(new StubbingStrategyProvidesStubSatisfying(type, assertion));
             return new SiteTesterImpl(type);
         }
 
     }
 
-    private final class SiteTesterImpl extends DelegatingStubberTester implements SiteTester {
+    private final class SiteTesterImpl extends DelegatingStubbingStrategyTester implements SiteTester {
 
         private final Type type;
 
@@ -128,9 +128,9 @@ final class StubberTesterImpl implements StubberTester {
         }
 
         @Override
-        public StubberTester at(StubbingSite... expectedSites) {
-            tests.add(new StubberStubsAtSite(type, asList(expectedSites)));
-            return StubberTesterImpl.this;
+        public StubbingStrategyTester at(StubbingSite... expectedSites) {
+            tests.add(new StubbingStrategyStubsAtSite(type, asList(expectedSites)));
+            return StubbingStrategyTesterImpl.this;
         }
 
     }

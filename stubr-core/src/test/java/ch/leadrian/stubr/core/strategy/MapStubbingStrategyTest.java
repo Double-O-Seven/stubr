@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 
 class MapStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testEmptyMapStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(Map.class)
                 .andStubs(new HashMap<>())
                 .accepts(new TypeLiteral<Map<String, Integer>>() {})
@@ -44,7 +44,7 @@ class MapStubbingStrategyTest {
     @TestFactory
     Stream<DynamicTest> testNonEmptyMapStubber() {
         ParameterizedTypeLiteral<Map<String, Integer>> mapOfStrings = new ParameterizedTypeLiteral<Map<String, Integer>>() {};
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .provideStub(Integer.class, 123, 456, 789)
                 .rejects(Map.class)
@@ -67,7 +67,7 @@ class MapStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testUnsupportedParameterization() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .rejects(new TypeLiteral<WeirdMap<String, Integer, BigDecimal>>() {})
                 .test(StubbingStrategies.map(WeirdMap.class, values -> new WeirdMap(), context -> 3));
     }

@@ -9,13 +9,13 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsBuilder;
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 
 class ConstructorStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testConstructorStubberWithFilter() throws Exception {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub("test")
                 .provideStub(int.class, 1337)
                 .accepts(UnambiguousPublicConstructor.class)
@@ -50,7 +50,7 @@ class ConstructorStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testConstructorStubberAcceptingAnyMethod() throws Exception {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .provideStub("test")
                 .provideStub(int.class, 1337)
                 .accepts(UnambiguousPublicConstructor.class)

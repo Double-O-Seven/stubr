@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubberTester.stubberTester;
+import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -27,7 +27,7 @@ class SimpleStubbingStrategyTest {
 
     @TestFactory
     <T> Stream<DynamicTest> testSimpleStubber() {
-        return stubberTester()
+        return stubbingStrategyTester()
                 .accepts(String.class)
                 .andStubs("ABC")
                 .accepts(new TypeLiteral<List<String>>() {})

@@ -5,27 +5,29 @@ import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
+import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubberAcceptsType implements StubberTest {
+final class StubbingStrategyProvidesStubSatisfying implements StubbingStrategyTest {
 
     private final Type acceptedType;
+    private final Consumer<Object> assertion;
 
-    StubberAcceptsType(Type acceptedType) {
+    StubbingStrategyProvidesStubSatisfying(Type acceptedType, Consumer<Object> assertion) {
         requireNonNull(acceptedType, "acceptedType");
         this.acceptedType = acceptedType;
+        this.assertion = assertion;
     }
 
     @Override
     public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
-        String displayName = String.format("%s should accept %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
+        String displayName = String.format("%s should provide stub for %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
         return dynamicTest(displayName, () -> {
-            boolean accepts = stubbingStrategy.accepts(context, acceptedType);
+            Object value = stubbingStrategy.stub(context, acceptedType);
 
-            assertThat(accepts).isTrue();
+            assertion.accept(value);
         });
     }
 

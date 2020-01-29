@@ -10,30 +10,22 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubberProvidesStub implements StubberTest {
+final class StubbingStrategyRejectsType implements StubbingStrategyTest {
 
     private final Type acceptedType;
-    private final Object expectedValue;
 
-    StubberProvidesStub(Type acceptedType, Object expectedValue) {
+    StubbingStrategyRejectsType(Type acceptedType) {
         requireNonNull(acceptedType, "acceptedType");
         this.acceptedType = acceptedType;
-        this.expectedValue = expectedValue;
     }
 
     @Override
     public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
-        String displayName = String.format("%s should provide %s as stub for %s", stubbingStrategy.getClass().getSimpleName(), expectedValue, acceptedType);
+        String displayName = String.format("%s should rejects %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
         return dynamicTest(displayName, () -> {
-            Object value = stubbingStrategy.stub(context, acceptedType);
+            boolean accepts = stubbingStrategy.accepts(context, acceptedType);
 
-            if (expectedValue == null) {
-                assertThat(value).isNull();
-            } else {
-                assertThat(value)
-                        .hasSameClassAs(expectedValue)
-                        .isEqualTo(expectedValue);
-            }
+            assertThat(accepts).isFalse();
         });
     }
 
