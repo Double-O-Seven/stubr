@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core.strategy;
 
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.site.StubbingSites;
 import ch.leadrian.stubr.core.testing.StubbingStrategyTester;
 import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import ch.leadrian.stubr.core.type.TypeLiteral;

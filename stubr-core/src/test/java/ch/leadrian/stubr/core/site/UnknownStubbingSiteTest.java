@@ -1,4 +1,4 @@
-package ch.leadrian.stubr.core.stubbingsite;
+package ch.leadrian.stubr.core.site;
 
 import ch.leadrian.stubr.core.StubbingSite;
 import org.junit.jupiter.api.Test;

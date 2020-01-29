@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.site.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import com.google.common.primitives.Primitives;
 

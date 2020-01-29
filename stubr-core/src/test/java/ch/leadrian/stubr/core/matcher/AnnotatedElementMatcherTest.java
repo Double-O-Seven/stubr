@@ -4,7 +4,7 @@ import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.AnnotatedStubbingSite;
+import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 

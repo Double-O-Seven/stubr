@@ -3,7 +3,7 @@ package ch.leadrian.stubr.core.strategy;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.site.StubbingSites;
 import com.google.common.base.StandardSystemProperty;
 
 import java.lang.invoke.MethodHandles;

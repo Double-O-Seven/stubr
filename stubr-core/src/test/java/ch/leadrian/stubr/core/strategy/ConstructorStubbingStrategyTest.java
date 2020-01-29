@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.equalizer.Equals;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.site.StubbingSites;
 import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

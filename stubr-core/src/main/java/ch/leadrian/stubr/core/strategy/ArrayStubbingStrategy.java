@@ -2,8 +2,8 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
-import ch.leadrian.stubr.core.stubbingsite.ArrayStubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.site.ArrayStubbingSite;
+import ch.leadrian.stubr.core.site.StubbingSites;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;

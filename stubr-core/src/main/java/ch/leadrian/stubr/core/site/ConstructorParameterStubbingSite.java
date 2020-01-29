@@ -1,9 +1,9 @@
-package ch.leadrian.stubr.core.stubbingsite;
+package ch.leadrian.stubr.core.site;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
@@ -11,24 +11,24 @@ import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
-public final class MethodParameterStubbingSite implements ParameterStubbingSite, MethodStubbingSite {
+public final class ConstructorParameterStubbingSite implements ConstructorStubbingSite, ParameterStubbingSite {
 
-    private static final EqualsAndHashCode<MethodParameterStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(MethodParameterStubbingSite.class)
-            .compareAndHash(MethodParameterStubbingSite::getParent)
-            .compareAndHash(MethodParameterStubbingSite::getMethod)
-            .compareAndHash(MethodParameterStubbingSite::getParameter)
+    private static final EqualsAndHashCode<ConstructorParameterStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ConstructorParameterStubbingSite.class)
+            .compareAndHash(ConstructorParameterStubbingSite::getParent)
+            .compareAndHash(ConstructorParameterStubbingSite::getConstructor)
+            .compareAndHash(ConstructorParameterStubbingSite::getParameter)
             .build();
 
     private final StubbingSite parent;
-    private final Method method;
+    private final Constructor<?> constructor;
     private final Parameter parameter;
 
-    MethodParameterStubbingSite(StubbingSite parent, Method method, Parameter parameter) {
+    ConstructorParameterStubbingSite(StubbingSite parent, Constructor<?> constructor, Parameter parameter) {
         requireNonNull(parent, "parent");
-        requireNonNull(method, "method");
+        requireNonNull(constructor, "constructor");
         requireNonNull(parameter, "parameter");
         this.parent = parent;
-        this.method = method;
+        this.constructor = constructor;
         this.parameter = parameter;
     }
 
@@ -38,8 +38,8 @@ public final class MethodParameterStubbingSite implements ParameterStubbingSite,
     }
 
     @Override
-    public Method getMethod() {
-        return method;
+    public Constructor<?> getConstructor() {
+        return constructor;
     }
 
     @Override
@@ -61,7 +61,7 @@ public final class MethodParameterStubbingSite implements ParameterStubbingSite,
     public String toString() {
         return toStringHelper(this)
                 .add("parent", parent)
-                .add("method", method)
+                .add("constructor", constructor)
                 .add("parameter", parameter)
                 .toString();
     }

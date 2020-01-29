@@ -3,7 +3,7 @@ package ch.leadrian.stubr.core.matcher;
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.MethodStubbingSite;
+import ch.leadrian.stubr.core.site.MethodStubbingSite;
 
 import java.lang.reflect.Method;
 

@@ -2,7 +2,7 @@ package ch.leadrian.stubr.integrationtest;
 
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.stubbingsite.AnnotatedStubbingSite;
+import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import ch.leadrian.stubr.integrationtest.annotation.CollectionSize;
 import ch.leadrian.stubr.integrationtest.testdata.TestData;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,7 +2,7 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.site.StubbingSites;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

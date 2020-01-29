@@ -4,8 +4,8 @@ import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
-import ch.leadrian.stubr.core.stubbingsite.ConstructorParameterStubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites;
+import ch.leadrian.stubr.core.site.ConstructorParameterStubbingSite;
+import ch.leadrian.stubr.core.site.StubbingSites;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

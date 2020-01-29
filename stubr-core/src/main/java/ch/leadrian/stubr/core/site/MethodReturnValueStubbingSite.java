@@ -1,29 +1,31 @@
-package ch.leadrian.stubr.core.stubbingsite;
+package ch.leadrian.stubr.core.site;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
 
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
-public final class ArrayStubbingSite implements StubbingSite {
+public final class MethodReturnValueStubbingSite implements MethodStubbingSite, AnnotatedStubbingSite {
 
-    private static final EqualsAndHashCode<ArrayStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ArrayStubbingSite.class)
-            .compareAndHash(ArrayStubbingSite::getParent)
-            .compareAndHash(ArrayStubbingSite::getComponentType)
+    private static final EqualsAndHashCode<MethodReturnValueStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(MethodReturnValueStubbingSite.class)
+            .compareAndHash(MethodReturnValueStubbingSite::getParent)
+            .compareAndHash(MethodReturnValueStubbingSite::getMethod)
             .build();
 
     private final StubbingSite parent;
-    private final Class<?> componentType;
+    private final Method method;
 
-    ArrayStubbingSite(StubbingSite parent, Class<?> componentType) {
+    MethodReturnValueStubbingSite(StubbingSite parent, Method method) {
         requireNonNull(parent, "parent");
-        requireNonNull(componentType, "type");
+        requireNonNull(method, "method");
         this.parent = parent;
-        this.componentType = componentType;
+        this.method = method;
     }
 
     @Override
@@ -31,8 +33,14 @@ public final class ArrayStubbingSite implements StubbingSite {
         return Optional.of(parent);
     }
 
-    public Class<?> getComponentType() {
-        return componentType;
+    @Override
+    public Method getMethod() {
+        return method;
+    }
+
+    @Override
+    public AnnotatedElement getAnnotatedElement() {
+        return getMethod();
     }
 
     @Override
@@ -49,7 +57,7 @@ public final class ArrayStubbingSite implements StubbingSite {
     public String toString() {
         return toStringHelper(this)
                 .add("parent", parent)
-                .add("componentType", componentType)
+                .add("method", method)
                 .toString();
     }
 

@@ -2,7 +2,7 @@ package ch.leadrian.stubr.kotlin
 
 import ch.leadrian.stubr.core.Result
 import ch.leadrian.stubr.core.Stubber
-import ch.leadrian.stubr.core.stubbingsite.StubbingSites
+import ch.leadrian.stubr.core.site.StubbingSites
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe

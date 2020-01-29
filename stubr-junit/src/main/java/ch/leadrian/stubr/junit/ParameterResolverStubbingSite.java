@@ -2,7 +2,7 @@ package ch.leadrian.stubr.junit;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.ParameterStubbingSite;
+import ch.leadrian.stubr.core.site.ParameterStubbingSite;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 

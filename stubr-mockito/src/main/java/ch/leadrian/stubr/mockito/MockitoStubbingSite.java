@@ -2,8 +2,8 @@ package ch.leadrian.stubr.mockito;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.AnnotatedStubbingSite;
-import ch.leadrian.stubr.core.stubbingsite.MethodStubbingSite;
+import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
+import ch.leadrian.stubr.core.site.MethodStubbingSite;
 import org.mockito.invocation.InvocationOnMock;
 
 import java.lang.reflect.AnnotatedElement;
