@@ -207,18 +207,6 @@ class RootStubberTest {
     class TryToStubTest<T> {
 
         @Test
-        void givenMatchingValueForTypeItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
-                    .build();
-
-            Result<?> result = rootStubber.tryToStub((Type) Integer.class);
-
-            assertThat(result)
-                    .isEqualTo(Result.success(1337));
-        }
-
-        @Test
         void givenMatchingValueForTypeAndSiteItShouldReturnSuccess() {
             RootStubber rootStubber = RootStubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
@@ -228,18 +216,6 @@ class RootStubberTest {
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
-        }
-
-        @Test
-        void givenNoMatchingValueForTypeItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
-                    .build();
-
-            Result<?> result = rootStubber.tryToStub((Type) Float.class);
-
-            assertThat(result)
-                    .isEqualTo(Result.failure());
         }
 
         @Test
@@ -454,18 +430,6 @@ class RootStubberTest {
     class StubTest<T> {
 
         @Test
-        void givenMatchingValueForTypeItShouldReturnSuccess() {
-            RootStubber rootStubber = RootStubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
-                    .build();
-
-            Object result = rootStubber.stub((Type) Integer.class);
-
-            assertThat(result)
-                    .isEqualTo(1337);
-        }
-
-        @Test
         void givenMatchingValueForTypeAndSiteItShouldReturnSuccess() {
             RootStubber rootStubber = RootStubber.builder()
                     .stubWith(testStubber(Integer.class, 1337))
@@ -475,19 +439,6 @@ class RootStubberTest {
 
             assertThat(result)
                     .isEqualTo(1337);
-        }
-
-        @Test
-        void givenNoMatchingValueForTypeItShouldReturnFailure() {
-            RootStubber rootStubber = RootStubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
-                    .build();
-
-            Throwable caughtThrowable = catchThrowable(() -> rootStubber.stub((Type) Float.class));
-
-            assertThat(caughtThrowable)
-                    .isInstanceOf(StubbingException.class)
-                    .hasMessage("Failed to stub instance of class java.lang.Float");
         }
 
         @Test

@@ -74,15 +74,45 @@ public abstract class RootStubber {
      */
     protected abstract Result<?> tryToStub(Type type, StubbingContext context);
 
+    /**
+     * Public type-unsafe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     * <p>
+     * This method should not be used by the end user of a {@code RootStubber} and is only meant to be used by
+     * implementations of {@link Stubber} where the type is not directly known and would require additional instance
+     * checking and casting to a {@code Class} for example.
+     * <p>
+     * Since any implementation of {@link Stubber} is supposed pass down or wrap the given {@link StubbingSite}, a
+     * {@link StubbingSite} must always be provided.
+     *
+     * @param type the type which should be stubbed
+     * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
+     * @return a successful {@link Result} containing the stub value, or a failure result
+     * @see RootStubber#tryToStub(Type, StubbingContext)
+     */
     public final Result<?> tryToStub(Type type, StubbingSite site) {
         StubbingContext context = new StubbingContext(this, site);
         return tryToStub(type, context);
     }
 
-    public final Result<?> tryToStub(Type type) {
-        return tryToStub(type, StubbingSites.unknown());
-    }
-
+    /**
+     * Public type-unsafe wrapper for {@link RootStubber#tryToStub(Type, StubbingSite)}.
+     * <p>
+     * If {@link RootStubber#tryToStub(Type, StubbingContext)} returns a failure {@link Result}, a {@link
+     * StubbingException} is thrown.
+     * <p>
+     * This method should not be used by the end user of a {@code RootStubber} and is only meant to be used by
+     * implementations of {@link Stubber} where the type is not directly known and would require additional instance
+     * checking and casting to a {@code Class} for example.
+     * <p>
+     * Since any implementation of {@link Stubber} is supposed pass down or wrap the given {@link StubbingSite}, a
+     * {@link StubbingSite} must always be provided.
+     *
+     * @param type the type which should be stubbed
+     * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
+     * @return a stub value
+     * @throws StubbingException if no stub value for the given {@code type} could be provided
+     * @see RootStubber#tryToStub(Type, StubbingSite)
+     */
     public final Object stub(Type type, StubbingSite site) {
         Result<?> result = tryToStub(type, site);
         if (result.isFailure()) {
@@ -91,40 +121,120 @@ public abstract class RootStubber {
         return result.getValue();
     }
 
-    public final Object stub(Type type) {
-        return stub(type, StubbingSites.unknown());
-    }
-
+    /**
+     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     *
+     * @param type the class representing the generic type {@link T}
+     * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
+     * @param <T>  the type which should be stubbed
+     * @return a successful {@link Result} containing the stub value, or a failure result
+     * @see RootStubber#tryToStub(Type, StubbingContext)
+     */
     public final <T> Result<T> tryToStub(Class<T> type, StubbingSite site) {
         return tryToStub((Type) type, site).map(value -> wrap(type).cast(value));
     }
 
+    /**
+     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingSite)}.
+     * <p>
+     * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
+     *
+     * @param type the class representing the generic type {@link T}
+     * @param <T>  the type which should be stubbed
+     * @return a successful {@link Result} containing the stub value, or a failure result
+     * @see RootStubber#tryToStub(Type, StubbingSite)
+     */
     public final <T> Result<T> tryToStub(Class<T> type) {
         return tryToStub(type, StubbingSites.unknown());
     }
 
+    /**
+     * Public type-safe wrapper for {@link RootStubber#stub(Type, StubbingSite)}.
+     *
+     * @param type the class representing the generic type {@link T}
+     * @param site {@link StubbingSite} at which a value of type {@code type} should be stubbed
+     * @param <T>  the type which should be stubbed
+     * @return a stub value
+     * @throws StubbingException if no stub value for the given {@code type} could be provided
+     * @see RootStubber#stub(Type, StubbingSite)
+     */
     public final <T> T stub(Class<T> type, StubbingSite site) {
         return wrap(type).cast(stub((Type) type, site));
     }
 
+    /**
+     * Public type-safe wrapper for {@link RootStubber#stub(Class, StubbingSite)}.
+     * <p>
+     * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
+     *
+     * @param type the class representing the generic type {@link T}
+     * @param <T>  the type which should be stubbed
+     * @return a stub value
+     * @throws StubbingException if no stub value for the given {@code type} could be provided
+     * @see RootStubber#stub(Type, StubbingSite)
+     */
     public final <T> T stub(Class<T> type) {
         return stub(type, StubbingSites.unknown());
     }
 
+    /**
+     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     *
+     * @param typeLiteral the {@link TypeLiteral} representing the generic type {@link T}
+     * @param site        {@link StubbingSite} at which a value of type {@code type} should be stubbed
+     * @param <T>         the type which should be stubbed
+     * @return a successful {@link Result} containing the stub value, or a failure result
+     * @see RootStubber#tryToStub(Type, StubbingContext)
+     * @see TypeLiteral
+     */
     public final <T> Result<T> tryToStub(TypeLiteral<T> typeLiteral, StubbingSite site) {
         Class<T> rawType = getWrappedRawType(typeLiteral);
         return tryToStub(typeLiteral.getType(), site).map(rawType::cast);
     }
 
+    /**
+     * Public type-safe wrapper for {@link RootStubber#tryToStub(Type, StubbingContext)}.
+     * <p>
+     * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
+     *
+     * @param typeLiteral the {@link TypeLiteral} representing the generic type {@link T}
+     * @param <T>         the type which should be stubbed
+     * @return a successful {@link Result} containing the stub value, or a failure result
+     * @see RootStubber#tryToStub(Type, StubbingContext)
+     * @see TypeLiteral
+     */
     public final <T> Result<T> tryToStub(TypeLiteral<T> typeLiteral) {
         return tryToStub(typeLiteral, StubbingSites.unknown());
     }
 
+    /**
+     * Public type-safe wrapper for {@link RootStubber#stub(Type, StubbingSite)}.
+     *
+     * @param typeLiteral the {@link TypeLiteral} representing the generic type {@link T}
+     * @param site        {@link StubbingSite} at which a value of type {@code type} should be stubbed
+     * @param <T>         the type which should be stubbed
+     * @return a stub value
+     * @throws StubbingException if no stub value for the given {@code type} could be provided
+     * @see RootStubber#stub(Type, StubbingSite)
+     * @see TypeLiteral
+     */
     public final <T> T stub(TypeLiteral<T> typeLiteral, StubbingSite site) {
         Class<T> rawType = getWrappedRawType(typeLiteral);
         return rawType.cast(stub(typeLiteral.getType(), site));
     }
 
+    /**
+     * Public type-safe wrapper for {@link RootStubber#stub(Type, StubbingSite)}.
+     * <p>
+     * Since no {@link StubbingSite} is provided, {@link StubbingSites#unknown()} will be used as site.
+     *
+     * @param typeLiteral the {@link TypeLiteral} representing the generic type {@link T}
+     * @param <T>         the type which should be stubbed
+     * @return a stub value
+     * @throws StubbingException if no stub value for the given {@code type} could be provided
+     * @see RootStubber#stub(Type, StubbingSite)
+     * @see TypeLiteral
+     */
     public final <T> T stub(TypeLiteral<T> typeLiteral) {
         return stub(typeLiteral, StubbingSites.unknown());
     }
