@@ -50,7 +50,7 @@ final class StubberStubsAtSite implements StubberTest {
         return String.format("%s should stub %s at %s", stubber.getClass().getSimpleName(), acceptedType, sites);
     }
 
-    static final class CapturingRootStubber extends RootStubber {
+    private static final class CapturingRootStubber extends RootStubber {
 
         private final List<StubbingSite> capturedSites = new ArrayList<>();
         private final RootStubber delegate;
