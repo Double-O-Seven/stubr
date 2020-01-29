@@ -266,4 +266,20 @@ public final class Stubbers {
                 .build();
     }
 
+    public static <T, U extends T> Stubber implementation(Class<T> targetClass, Class<U> implementationClass) {
+        return new ImplementationStubber(targetClass, implementationClass);
+    }
+
+    public static <T, U extends T> Stubber implementation(TypeLiteral<T> targetTypeLiteral, TypeLiteral<U> implementationTypeLiteral) {
+        return new ImplementationStubber(targetTypeLiteral.getType(), implementationTypeLiteral.getType());
+    }
+
+    public static <T, U extends T> Stubber implementation(TypeLiteral<T> targetTypeLiteral, Class<U> implementationClass) {
+        return new ImplementationStubber(targetTypeLiteral.getType(), implementationClass);
+    }
+
+    public static <T, U extends T> Stubber implementation(Class<T> targetClass, TypeLiteral<U> implementationTypeLiteral) {
+        return new ImplementationStubber(targetClass, implementationTypeLiteral.getType());
+    }
+
 }
