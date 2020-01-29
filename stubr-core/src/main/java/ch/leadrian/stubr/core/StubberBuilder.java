@@ -72,6 +72,7 @@ public interface StubberBuilder {
      * Matcher)}.
      *
      * @param strategies {@link StubbingStrategy}s used to stub instances of matching types
+     * @param matcher    {@link Matcher} used as a prerequisite for applying the given {@link StubbingStrategy}
      * @return {@code this}
      * @see StubberBuilder#stubWith(Iterable)
      * @see StubberBuilder#stubWith(StubbingStrategy, Matcher)
