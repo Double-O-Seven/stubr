@@ -1,22 +1,23 @@
 package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.stubber.OptionalStubbingMode;
+import ch.leadrian.stubr.core.strategy.OptionalStubbingMode;
+import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
 import static ch.leadrian.stubr.core.matcher.Matchers.nullable;
-import static ch.leadrian.stubr.core.stubber.Stubbers.commonConstantValues;
-import static ch.leadrian.stubr.core.stubber.Stubbers.commonSuppliedValues;
-import static ch.leadrian.stubr.core.stubber.Stubbers.defaultCollections;
-import static ch.leadrian.stubr.core.stubber.Stubbers.defaultConstructor;
-import static ch.leadrian.stubr.core.stubber.Stubbers.defaultValue;
-import static ch.leadrian.stubr.core.stubber.Stubbers.emptyDefaultCollections;
-import static ch.leadrian.stubr.core.stubber.Stubbers.enumValue;
-import static ch.leadrian.stubr.core.stubber.Stubbers.factoryMethod;
-import static ch.leadrian.stubr.core.stubber.Stubbers.nonDefaultConstructor;
-import static ch.leadrian.stubr.core.stubber.Stubbers.nullValue;
-import static ch.leadrian.stubr.core.stubber.Stubbers.optional;
-import static ch.leadrian.stubr.core.stubber.Stubbers.proxy;
-import static ch.leadrian.stubr.core.stubber.Stubbers.rootStubber;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.commonConstantValues;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.commonSuppliedValues;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultCollections;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultConstructor;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultValue;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.emptyDefaultCollections;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.enumValue;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.factoryMethod;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.nonDefaultConstructor;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.nullValue;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.optional;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.proxy;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.rootStubber;
 
 /**
  * Class containing factory methods for basic {@link RootStubber}s.
@@ -64,7 +65,7 @@ public final class RootStubbers {
      * </ul>
      *
      * @return a {@link RootStubber} stubbing non-null, non-empty default values.
-     * @see ch.leadrian.stubr.core.stubber.Stubbers
+     * @see StubbingStrategies
      */
     public static RootStubber defaultRootStubber() {
         return DEFAULT_ROOT_STUBBER;
@@ -76,7 +77,7 @@ public final class RootStubbers {
      * receive {@code null} as stub value.
      *
      * @return a {@link RootStubber} stubbing nullable, empty default values.
-     * @see ch.leadrian.stubr.core.stubber.Stubbers
+     * @see StubbingStrategies
      */
     public static RootStubber minimalRootStubber() {
         return MINIMAL_ROOT_STUBBER;

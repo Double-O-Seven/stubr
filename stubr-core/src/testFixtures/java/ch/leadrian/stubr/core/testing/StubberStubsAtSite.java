@@ -2,9 +2,9 @@ package ch.leadrian.stubr.core.testing;
 
 import ch.leadrian.stubr.core.Result;
 import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -29,25 +29,25 @@ final class StubberStubsAtSite implements StubberTest {
     }
 
     @Override
-    public DynamicTest toDynamicTest(Stubber stubber, StubbingContext context) {
-        String displayName = getDisplayName(stubber);
+    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
+        String displayName = getDisplayName(stubbingStrategy);
         return dynamicTest(displayName, () -> {
             CapturingRootStubber capturingRootStubber = new CapturingRootStubber(context.getStubber());
             StubbingContext capturingContext = new StubbingContext(capturingRootStubber, context.getSite());
 
-            stubber.stub(capturingContext, acceptedType);
+            stubbingStrategy.stub(capturingContext, acceptedType);
 
             assertThat(capturingRootStubber.getCapturedSites())
                     .containsExactlyElementsOf(expectedSites);
         });
     }
 
-    private String getDisplayName(Stubber stubber) {
+    private String getDisplayName(StubbingStrategy stubbingStrategy) {
         String sites = expectedSites
                 .stream()
                 .map(Object::toString)
                 .collect(joining(", "));
-        return String.format("%s should stub %s at %s", stubber.getClass().getSimpleName(), acceptedType, sites);
+        return String.format("%s should stub %s at %s", stubbingStrategy.getClass().getSimpleName(), acceptedType, sites);
     }
 
     private static final class CapturingRootStubber extends RootStubber {

@@ -1,8 +1,8 @@
 package ch.leadrian.stubr.junit;
 
 import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.Stubber;
-import ch.leadrian.stubr.core.stubber.Stubbers;
+import ch.leadrian.stubr.core.StubbingStrategy;
+import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 import ch.leadrian.stubr.junit.StubrTest.Level0RootStubberProvider;
 import ch.leadrian.stubr.junit.StubrTest.Level0StubberProvider;
 import ch.leadrian.stubr.junit.StubrTest.SequenceStubberProvider;
@@ -108,11 +108,11 @@ class StubrTest {
     static final class SequenceStubberProvider implements StubberProvider {
 
         @Override
-        public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
+        public List<? extends StubbingStrategy> getStubbers(ExtensionContext extensionContext) {
             return asList(
-                    Stubbers.constantValue(int.class, 1337),
-                    Stubbers.suppliedValue(int.class, sequenceNumber -> sequenceNumber).when(annotatedSiteIs(annotatedWith(Sequence.class))),
-                    Stubbers.enumValue()
+                    StubbingStrategies.constantValue(int.class, 1337),
+                    StubbingStrategies.suppliedValue(int.class, sequenceNumber -> sequenceNumber).when(annotatedSiteIs(annotatedWith(Sequence.class))),
+                    StubbingStrategies.enumValue()
             );
         }
 
@@ -121,8 +121,8 @@ class StubrTest {
     static final class Level0StubberProvider implements StubberProvider {
 
         @Override
-        public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
-            return singletonList(Stubbers.constantValue("int-value"));
+        public List<? extends StubbingStrategy> getStubbers(ExtensionContext extensionContext) {
+            return singletonList(StubbingStrategies.constantValue("int-value"));
         }
 
     }
@@ -132,8 +132,8 @@ class StubrTest {
         @Override
         public List<? extends RootStubber> getRootStubbers(ExtensionContext extensionContext) {
             return singletonList(RootStubber.builder()
-                    .stubWith(Stubbers.constantValue(long.class, 1234L))
-                    .stubWith(Stubbers.constantValue(Locale.GERMANY))
+                    .stubWith(StubbingStrategies.constantValue(long.class, 1234L))
+                    .stubWith(StubbingStrategies.constantValue(Locale.GERMANY))
                     .build());
         }
 
@@ -142,8 +142,8 @@ class StubrTest {
     static final class Level1StubberProvider implements StubberProvider {
 
         @Override
-        public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
-            return singletonList(Stubbers.constantValue("overridden-int-value"));
+        public List<? extends StubbingStrategy> getStubbers(ExtensionContext extensionContext) {
+            return singletonList(StubbingStrategies.constantValue("overridden-int-value"));
         }
 
     }
@@ -153,7 +153,7 @@ class StubrTest {
         @Override
         public List<? extends RootStubber> getRootStubbers(ExtensionContext extensionContext) {
             return singletonList(RootStubber.builder()
-                    .stubWith(Stubbers.constantValue(long.class, 65536L))
+                    .stubWith(StubbingStrategies.constantValue(long.class, 65536L))
                     .build());
         }
 

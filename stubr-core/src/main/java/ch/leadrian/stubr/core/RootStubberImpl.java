@@ -6,84 +6,84 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.stubber.Stubbers.conditional;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.conditional;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 final class RootStubberImpl extends RootStubber {
 
-    private final List<Stubber> stubbers;
+    private final List<StubbingStrategy> strategies;
 
-    private RootStubberImpl(List<Stubber> stubbers) {
-        this.stubbers = ImmutableList.copyOf(stubbers);
+    private RootStubberImpl(List<StubbingStrategy> strategies) {
+        this.strategies = ImmutableList.copyOf(strategies);
     }
 
     @Override
     protected Result<?> tryToStub(Type type, StubbingContext context) {
-        return stubbers.stream()
-                .filter(stubber -> stubber.accepts(context, type))
-                .map(stubber -> Result.success(stubber.stub(context, type)))
+        return strategies.stream()
+                .filter(strategy -> strategy.accepts(context, type))
+                .map(strategy -> Result.success(strategy.stub(context, type)))
                 .findFirst()
                 .orElse(Result.failure());
     }
 
     static final class Builder implements RootStubberBuilder {
 
-        private final List<RootStubber> rootStubbers = new ArrayList<>();
-        private final List<Stubber> stubbers = new ArrayList<>();
+        private final List<RootStubber> stubbers = new ArrayList<>();
+        private final List<StubbingStrategy> strategies = new ArrayList<>();
 
         @Override
-        public RootStubberBuilder include(RootStubber rootStubber) {
-            requireNonNull(rootStubber, "rootStubber");
-            rootStubbers.add(0, rootStubber);
-            return this;
-        }
-
-        @Override
-        public RootStubberBuilder stubWith(Stubber stubber) {
+        public RootStubberBuilder include(RootStubber stubber) {
             requireNonNull(stubber, "stubber");
             stubbers.add(0, stubber);
             return this;
         }
 
         @Override
-        public RootStubberBuilder stubWith(Stubber stubber, Matcher<? super Type> matcher) {
-            requireNonNull(stubber, "stubber");
-            requireNonNull(matcher, "matcher");
-            return stubWith(conditional(stubber, matcher));
-        }
-
-        @Override
-        public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers) {
-            requireNonNull(stubbers, "stubbers");
-            stubbers.forEach(this::stubWith);
+        public RootStubberBuilder stubWith(StubbingStrategy strategy) {
+            requireNonNull(strategy, "strategy");
+            strategies.add(0, strategy);
             return this;
         }
 
         @Override
-        public RootStubberBuilder stubWith(Iterable<? extends Stubber> stubbers, Matcher<? super Type> matcher) {
-            requireNonNull(stubbers, "stubbers");
+        public RootStubberBuilder stubWith(StubbingStrategy strategy, Matcher<? super Type> matcher) {
+            requireNonNull(strategy, "strategy");
             requireNonNull(matcher, "matcher");
-            stubbers.forEach(stubber -> stubWith(stubber, matcher));
+            return stubWith(conditional(strategy, matcher));
+        }
+
+        @Override
+        public RootStubberBuilder stubWith(Iterable<? extends StubbingStrategy> strategies) {
+            requireNonNull(strategies, "strategies");
+            strategies.forEach(this::stubWith);
             return this;
         }
 
         @Override
-        public RootStubberBuilder stubWith(Stubber... stubbers) {
-            requireNonNull(stubbers, "stubbers");
-            stubWith(asList(stubbers));
+        public RootStubberBuilder stubWith(Iterable<? extends StubbingStrategy> strategies, Matcher<? super Type> matcher) {
+            requireNonNull(strategies, "strategies");
+            requireNonNull(matcher, "matcher");
+            strategies.forEach(strategy -> stubWith(strategy, matcher));
+            return this;
+        }
+
+        @Override
+        public RootStubberBuilder stubWith(StubbingStrategy... strategies) {
+            requireNonNull(strategies, "strategies");
+            stubWith(asList(strategies));
             return this;
         }
 
         @Override
         public RootStubber build() {
-            RootStubber builtRootStubber = new RootStubberImpl(stubbers);
-            if (rootStubbers.isEmpty()) {
-                return builtRootStubber;
+            RootStubber builtStubber = new RootStubberImpl(strategies);
+            if (stubbers.isEmpty()) {
+                return builtStubber;
             } else {
-                List<RootStubber> rootStubberComposition = new ArrayList<>(this.rootStubbers);
-                rootStubberComposition.add(0, builtRootStubber);
-                return compose(rootStubberComposition);
+                List<RootStubber> stubberComposition = new ArrayList<>(this.stubbers);
+                stubberComposition.add(0, builtStubber);
+                return compose(stubberComposition);
             }
         }
 

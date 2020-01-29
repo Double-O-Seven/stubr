@@ -1,9 +1,9 @@
 package ch.leadrian.stubr.core.testing;
 
 import ch.leadrian.stubr.core.RootStubber;
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -52,13 +52,13 @@ final class StubberTesterImpl implements StubberTester {
     }
 
     @Override
-    public Stream<DynamicTest> test(Stubber stubber) {
+    public Stream<DynamicTest> test(StubbingStrategy stubbingStrategy) {
         return new ArrayList<>(tests)
                 .stream()
                 .map(test -> {
                     RootStubber rootStubber = createRootStubber();
                     StubbingContext context = new StubbingContext(rootStubber, TestStubbingSite.INSTANCE);
-                    return test.toDynamicTest(stubber, context);
+                    return test.toDynamicTest(stubbingStrategy, context);
                 });
     }
 
@@ -91,8 +91,8 @@ final class StubberTesterImpl implements StubberTester {
         }
 
         @Override
-        public Stream<DynamicTest> test(Stubber stubber) {
-            return StubberTesterImpl.this.test(stubber);
+        public Stream<DynamicTest> test(StubbingStrategy stubbingStrategy) {
+            return StubberTesterImpl.this.test(stubbingStrategy);
         }
 
     }

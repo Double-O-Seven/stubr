@@ -10,7 +10,7 @@ import org.spekframework.spek2.style.specification.describe
 internal object RootStubberSpec : Spek({
     val rootStubber by memoized {
         RootStubber.builder()
-                .stubWith(KotlinStubbers.constantValue(1337))
+                .stubWith(KotlinStubbingStrategies.constantValue(1337))
                 .build()
     }
 

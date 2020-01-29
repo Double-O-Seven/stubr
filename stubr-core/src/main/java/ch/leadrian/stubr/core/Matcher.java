@@ -1,20 +1,22 @@
 package ch.leadrian.stubr.core;
 
+import ch.leadrian.stubr.core.strategy.StubbingStrategies;
+
 import java.lang.reflect.Type;
 
 /**
- * An interface used to determine whether a stubber can be used to stub an instance of a certain type. A matcher may be
- * used to extend the conditions under which a stubber can be applied. A matcher may also be used to determine a
- * suitable constructor or factory method to instantiate a stubbed instance.
+ * An interface used to determine whether a {@link StubbingStrategy} can be used to stub an instance of a certain type.
+ * A matcher may be used to extend the conditions under which a {@link StubbingStrategy} can be applied. A matcher may
+ * also be used to determine a suitable constructor or factory method to instantiate a stubbed instance.
  * <p>
  * Various implementations can be found in {@link ch.leadrian.stubr.core.matcher.Matchers}.
  *
  * @param <T> type that is accepted by the {@code Matcher}.
  * @see ch.leadrian.stubr.core.matcher.Matchers
- * @see Stubber#accepts(StubbingContext, Type)
- * @see Stubber#when(Matcher)
- * @see ch.leadrian.stubr.core.stubber.Stubbers#constructor(Matcher)
- * @see ch.leadrian.stubr.core.stubber.Stubbers#factoryMethod(Matcher)
+ * @see StubbingStrategy#accepts(StubbingContext, Type)
+ * @see StubbingStrategy#when(Matcher)
+ * @see StubbingStrategies#constructor(Matcher)
+ * @see StubbingStrategies#factoryMethod(Matcher)
  */
 @FunctionalInterface
 public interface Matcher<T> {
@@ -25,7 +27,7 @@ public interface Matcher<T> {
      * {@link RootStubber} does not contain any publicly available state. However, the full context is being passed for
      * sake of extensibility.
      *
-     * @param context {@link StubbingContext} in which a {@link Stubber} is applied.
+     * @param context {@link StubbingContext} in which a {@link StubbingStrategy} is applied.
      * @param value   value that may be evaluated by the matcher.
      * @return {@code true} if the matcher matches the {@code value} of type {@link T}, else {@code false}
      */

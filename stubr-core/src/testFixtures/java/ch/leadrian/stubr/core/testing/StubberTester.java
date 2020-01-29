@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.testing;
 
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 
@@ -53,10 +53,10 @@ public interface StubberTester {
         return rejects(typeLiteral.getType());
     }
 
-    Stream<DynamicTest> test(Stubber stubber);
+    Stream<DynamicTest> test(StubbingStrategy stubbingStrategy);
 
-    default Stream<DynamicTest> test(Stubber... stubbers) {
-        return Stream.of(stubbers).flatMap(this::test);
+    default Stream<DynamicTest> test(StubbingStrategy... stubbingStrategies) {
+        return Stream.of(stubbingStrategies).flatMap(this::test);
     }
 
     interface StubValueTester<T> extends StubberTester {

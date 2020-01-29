@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.testing;
 
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -16,16 +16,16 @@ final class StubberProvidesStub implements StubberTest {
     private final Object expectedValue;
 
     StubberProvidesStub(Type acceptedType, Object expectedValue) {
-        requireNonNull(acceptedType, "stubber");
+        requireNonNull(acceptedType, "acceptedType");
         this.acceptedType = acceptedType;
         this.expectedValue = expectedValue;
     }
 
     @Override
-    public DynamicTest toDynamicTest(Stubber stubber, StubbingContext context) {
-        String displayName = String.format("%s should provide %s as stub for %s", stubber.getClass().getSimpleName(), expectedValue, acceptedType);
+    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
+        String displayName = String.format("%s should provide %s as stub for %s", stubbingStrategy.getClass().getSimpleName(), expectedValue, acceptedType);
         return dynamicTest(displayName, () -> {
-            Object value = stubber.stub(context, acceptedType);
+            Object value = stubbingStrategy.stub(context, acceptedType);
 
             if (expectedValue == null) {
                 assertThat(value).isNull();

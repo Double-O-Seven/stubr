@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RootStubbersTest {
 
     @Nested
-    class DefaultRootStubberTest {
+    class DefaultRootStubbingStrategyTest {
 
         private RootStubber rootStubber = RootStubbers.defaultRootStubber();
 

@@ -1,7 +1,7 @@
 package ch.leadrian.stubr.core.testing;
 
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -15,15 +15,15 @@ final class StubberAcceptsType implements StubberTest {
     private final Type acceptedType;
 
     StubberAcceptsType(Type acceptedType) {
-        requireNonNull(acceptedType, "stubber");
+        requireNonNull(acceptedType, "acceptedType");
         this.acceptedType = acceptedType;
     }
 
     @Override
-    public DynamicTest toDynamicTest(Stubber stubber, StubbingContext context) {
-        String displayName = String.format("%s should accept %s", stubber.getClass().getSimpleName(), acceptedType);
+    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
+        String displayName = String.format("%s should accept %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
         return dynamicTest(displayName, () -> {
-            boolean accepts = stubber.accepts(context, acceptedType);
+            boolean accepts = stubbingStrategy.accepts(context, acceptedType);
 
             assertThat(accepts).isTrue();
         });

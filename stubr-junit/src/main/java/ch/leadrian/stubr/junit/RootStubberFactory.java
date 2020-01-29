@@ -2,7 +2,7 @@ package ch.leadrian.stubr.junit;
 
 import ch.leadrian.stubr.core.RootStubber;
 import ch.leadrian.stubr.core.RootStubberBuilder;
-import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.junit.annotation.Include;
 import ch.leadrian.stubr.junit.annotation.RootStubberBaseline;
 import ch.leadrian.stubr.junit.annotation.StubWith;
@@ -43,7 +43,7 @@ final class RootStubberFactory {
                 .flatMap(provider -> provider.getRootStubbers(context).stream());
     }
 
-    private Stream<? extends Stubber> getStubbers(ExtensionContext context, List<ExtensionContext> contexts) {
+    private Stream<? extends StubbingStrategy> getStubbers(ExtensionContext context, List<ExtensionContext> contexts) {
         return getAnnotations(StubWith.class, reverse(contexts))
                 .map(StubWith::value)
                 .flatMap(Arrays::stream)
