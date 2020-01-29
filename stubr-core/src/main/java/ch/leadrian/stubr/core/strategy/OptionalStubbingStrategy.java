@@ -9,21 +9,18 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-final class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<Object>> {
+abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<Object>> {
 
-    static final OptionalStubbingStrategy EMPTY = new OptionalStubbingStrategy(EmptyStubbingStrategy.INSTANCE);
-    static final OptionalStubbingStrategy PRESENT = new OptionalStubbingStrategy(new PresentStubbingStrategy());
-    static final OptionalStubbingStrategy PRESENT_IF_POSSIBLE = new OptionalStubbingStrategy(new PresentIfPossibleStubbingStrategy());
+    static final OptionalStubbingStrategy EMPTY = new EmptyStubbingStrategy();
+    static final OptionalStubbingStrategy PRESENT = new PresentStubbingStrategy();
+    static final OptionalStubbingStrategy PRESENT_IF_POSSIBLE = new PresentIfPossibleStubbingStrategy();
 
-    private final StubbingStrategy strategy;
-
-    private OptionalStubbingStrategy(StubbingStrategy strategy) {
-        this.strategy = strategy;
+    private OptionalStubbingStrategy() {
     }
 
     @Override
     protected boolean acceptsClass(StubbingContext context, Class<?> type) {
-        return Optional.class == type && strategy.isEmptyAllowed();
+        return Optional.class == type && isEmptyAllowed();
     }
 
     @Override
@@ -38,62 +35,58 @@ final class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<Obj
 
     @Override
     protected Optional<Object> stubParameterizedType(StubbingContext context, ParameterizedType type) {
-        return strategy.stub(context, type);
+        return stubOptional(context, type);
     }
 
-    private interface StubbingStrategy {
+    protected abstract Optional<Object> stubOptional(StubbingContext context, ParameterizedType type);
 
-        Optional<Object> stub(StubbingContext context, ParameterizedType type);
+    protected abstract boolean isEmptyAllowed();
 
-        boolean isEmptyAllowed();
-
-    }
-
-    private enum EmptyStubbingStrategy implements StubbingStrategy {
-        INSTANCE;
+    private static final class EmptyStubbingStrategy extends OptionalStubbingStrategy {
 
         @Override
-        public Optional<Object> stub(StubbingContext context, ParameterizedType type) {
+        protected Optional<Object> stubOptional(StubbingContext context, ParameterizedType type) {
             return Optional.empty();
         }
 
         @Override
-        public boolean isEmptyAllowed() {
+        protected boolean isEmptyAllowed() {
             return true;
         }
+
     }
 
-    private static abstract class AbstractStubbingStrategy implements StubbingStrategy {
+    private static abstract class AbstractPresentStubbingStrategy extends OptionalStubbingStrategy {
 
         @Override
-        public final Optional<Object> stub(StubbingContext context, ParameterizedType type) {
+        protected final Optional<Object> stubOptional(StubbingContext context, ParameterizedType type) {
             StubbingSite site = StubbingSites.parameterizedType(context.getSite(), type, 0);
             Type valueType = type.getActualTypeArguments()[0];
-            return stub(context, site, valueType);
+            return stubOptional(context, site, valueType);
         }
 
-        protected abstract Optional<Object> stub(StubbingContext context, StubbingSite site, Type valueType);
+        protected abstract Optional<Object> stubOptional(StubbingContext context, StubbingSite site, Type valueType);
 
     }
 
-    private static final class PresentStubbingStrategy extends AbstractStubbingStrategy {
+    private static final class PresentStubbingStrategy extends AbstractPresentStubbingStrategy {
 
         @Override
-        protected Optional<Object> stub(StubbingContext context, StubbingSite site, Type valueType) {
+        protected Optional<Object> stubOptional(StubbingContext context, StubbingSite site, Type valueType) {
             return Optional.ofNullable(context.getStubber().stub(valueType, site));
         }
 
         @Override
-        public boolean isEmptyAllowed() {
+        protected boolean isEmptyAllowed() {
             return false;
         }
 
     }
 
-    private static final class PresentIfPossibleStubbingStrategy extends AbstractStubbingStrategy {
+    private static final class PresentIfPossibleStubbingStrategy extends AbstractPresentStubbingStrategy {
 
         @Override
-        protected Optional<Object> stub(StubbingContext context, StubbingSite site, Type valueType) {
+        protected Optional<Object> stubOptional(StubbingContext context, StubbingSite site, Type valueType) {
             Result<?> result = context.getStubber().tryToStub(valueType, site);
             if (result.isSuccess()) {
                 return Optional.ofNullable(result.getValue());
@@ -102,7 +95,7 @@ final class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<Obj
         }
 
         @Override
-        public boolean isEmptyAllowed() {
+        protected boolean isEmptyAllowed() {
             return true;
         }
 
