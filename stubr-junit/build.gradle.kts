@@ -3,7 +3,8 @@ val guavaVersion: String by rootProject.extra
 val junitVersion: String by rootProject.extra
 
 dependencies {
-    implementation(project(":stubr-core"))
+    api(project(":stubr-core"))
+
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core", version = equalizerVersion)
     implementation(group = "com.google.guava", name = "guava", version = guavaVersion)
     implementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = junitVersion)
