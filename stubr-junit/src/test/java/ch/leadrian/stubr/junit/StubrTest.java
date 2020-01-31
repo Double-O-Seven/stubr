@@ -20,7 +20,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
-import java.util.Locale;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
@@ -36,21 +35,39 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class StubrTest {
 
     @Test
-    void shouldStubValueFromStubber(@Stub String value) {
+    void shouldStubValueFromStubbingStrategy(@Stub ValueProvidedByStubbingStrategy value) {
         assertThat(value)
-                .isEqualTo("int-value");
+                .isEqualTo(ValueProvidedByStubbingStrategy.VALUE);
     }
 
     @Test
-    void shouldStubListValueFromStubber(@Stub List<String> value) {
+    void shouldStubValueFromStubber(@Stub ValueProvidedByStubber value) {
         assertThat(value)
-                .containsExactly("int-value");
+                .isEqualTo(ValueProvidedByStubber.VALUE);
     }
 
     @Test
-    void shouldStubValueFromStubber(@Stub long value) {
+    void shouldStubValueFromStubbingStrategy(@Stub NonOverriddenValueProvidedByStubber value) {
         assertThat(value)
-                .isEqualTo(1234L);
+                .isEqualTo(NonOverriddenValueProvidedByStubber.INSTANCE);
+    }
+
+    @Test
+    void shouldStubValueFromStubber(@Stub NonOverriddenValueProvidedByStubber value) {
+        assertThat(value)
+                .isEqualTo(NonOverriddenValueProvidedByStubber.INSTANCE);
+    }
+
+    @Test
+    void shouldStubListValueStubbingStrategy(@Stub List<ValueProvidedByStubbingStrategy> value) {
+        assertThat(value)
+                .containsExactly(ValueProvidedByStubbingStrategy.VALUE);
+    }
+
+    @Test
+    void shouldStubListValueStubber(@Stub List<ValueProvidedByStubber> value) {
+        assertThat(value)
+                .containsExactly(ValueProvidedByStubber.VALUE);
     }
 
     @Test
@@ -68,27 +85,48 @@ class StubrTest {
     class Level1Test {
 
         @Test
-        void shouldOverrideValueFromStubber(@Stub String value) {
+        void shouldOverrideValueFromStubbingStrategy(@Stub ValueProvidedByStubbingStrategy value) {
             assertThat(value)
-                    .isEqualTo("overridden-int-value");
+                    .isEqualTo(ValueProvidedByStubbingStrategy.OVERRIDE_VALUE);
         }
 
         @Test
-        void shouldOverrideValueFromStubber(@Stub long value) {
+        void shouldOverrideValueFromStubber(@Stub ValueProvidedByStubber value) {
             assertThat(value)
-                    .isEqualTo(65536L);
+                    .isEqualTo(ValueProvidedByStubber.OVERRIDE_VALUE);
         }
 
         @Test
-        void shouldNonOverriddenValueFromStubber(@Stub Foo value) {
+        void shouldNotOverrideValueFromStubbingStrategy(@Stub NonOverriddenValueProvidedByStubber value) {
             assertThat(value)
-                    .isEqualTo(Foo.FOO);
+                    .isEqualTo(NonOverriddenValueProvidedByStubber.INSTANCE);
         }
 
         @Test
-        void shouldNonOverriddenValueFromStubber(@Stub Locale value) {
+        void shouldNotOverrideValueFromStubber(@Stub NonOverriddenValueProvidedByStubber value) {
             assertThat(value)
-                    .isEqualTo(Locale.GERMANY);
+                    .isEqualTo(NonOverriddenValueProvidedByStubber.INSTANCE);
+        }
+
+        @Test
+        void shouldOverrideListValueStubbingStrategy(@Stub List<ValueProvidedByStubbingStrategy> value) {
+            assertThat(value)
+                    .containsExactly(ValueProvidedByStubbingStrategy.OVERRIDE_VALUE);
+        }
+
+        @Test
+        void shouldOverrideListValueStubber(@Stub List<ValueProvidedByStubber> value) {
+            assertThat(value)
+                    .containsExactly(ValueProvidedByStubber.OVERRIDE_VALUE);
+        }
+
+        @Test
+        void shouldStubSequenceValues(@Sequence @Stub int value1, @Sequence @Stub int value2, @Stub int value3) {
+            assertAll(
+                    () -> assertThat(value1).isEqualTo(0),
+                    () -> assertThat(value2).isEqualTo(1),
+                    () -> assertThat(value3).isEqualTo(1337)
+            );
         }
 
     }
@@ -98,7 +136,7 @@ class StubrTest {
 
         @Test
         @StubberBaseline(MINIMAL)
-        void shouldStubWithMinimalValue(@Stub List<String> value) {
+        void shouldStubWithMinimalValue(@Stub List<ValueProvidedByStubbingStrategy> value) {
             assertThat(value)
                     .isEmpty();
         }
@@ -111,8 +149,7 @@ class StubrTest {
         public List<? extends StubbingStrategy> getStubbingStrategies(ExtensionContext extensionContext) {
             return asList(
                     StubbingStrategies.constantValue(int.class, 1337),
-                    StubbingStrategies.suppliedValue(int.class, sequenceNumber -> sequenceNumber).when(annotatedSiteIs(annotatedWith(Sequence.class))),
-                    StubbingStrategies.enumValue()
+                    StubbingStrategies.suppliedValue(int.class, sequenceNumber -> sequenceNumber).when(annotatedSiteIs(annotatedWith(Sequence.class)))
             );
         }
 
@@ -122,7 +159,10 @@ class StubrTest {
 
         @Override
         public List<? extends StubbingStrategy> getStubbingStrategies(ExtensionContext extensionContext) {
-            return singletonList(StubbingStrategies.constantValue("int-value"));
+            return asList(
+                    StubbingStrategies.constantValue(ValueProvidedByStubbingStrategy.VALUE),
+                    StubbingStrategies.constantValue(NonOverriddenValueProvidedByStubbingStrategy.INSTANCE)
+            );
         }
 
     }
@@ -132,8 +172,8 @@ class StubrTest {
         @Override
         public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
             return singletonList(Stubber.builder()
-                    .stubWith(StubbingStrategies.constantValue(long.class, 1234L))
-                    .stubWith(StubbingStrategies.constantValue(Locale.GERMANY))
+                    .stubWith(StubbingStrategies.constantValue(ValueProvidedByStubber.VALUE))
+                    .stubWith(StubbingStrategies.constantValue(NonOverriddenValueProvidedByStubber.INSTANCE))
                     .build());
         }
 
@@ -143,7 +183,7 @@ class StubrTest {
 
         @Override
         public List<? extends StubbingStrategy> getStubbingStrategies(ExtensionContext extensionContext) {
-            return singletonList(StubbingStrategies.constantValue("overridden-int-value"));
+            return singletonList(StubbingStrategies.constantValue(ValueProvidedByStubbingStrategy.OVERRIDE_VALUE));
         }
 
     }
@@ -153,7 +193,7 @@ class StubrTest {
         @Override
         public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
             return singletonList(Stubber.builder()
-                    .stubWith(StubbingStrategies.constantValue(long.class, 65536L))
+                    .stubWith(StubbingStrategies.constantValue(ValueProvidedByStubber.OVERRIDE_VALUE))
                     .build());
         }
 
@@ -164,8 +204,30 @@ class StubrTest {
     private @interface Sequence {
     }
 
-    enum Foo {
-        FOO
+    private static class ValueProvidedByStubbingStrategy {
+
+        private static final ValueProvidedByStubbingStrategy VALUE = new ValueProvidedByStubbingStrategy();
+        private static final ValueProvidedByStubbingStrategy OVERRIDE_VALUE = new ValueProvidedByStubbingStrategy();
+
+    }
+
+    private static class ValueProvidedByStubber {
+
+        private static final ValueProvidedByStubber VALUE = new ValueProvidedByStubber();
+        private static final ValueProvidedByStubber OVERRIDE_VALUE = new ValueProvidedByStubber();
+
+    }
+
+    private static class NonOverriddenValueProvidedByStubbingStrategy {
+
+        private static NonOverriddenValueProvidedByStubbingStrategy INSTANCE = new NonOverriddenValueProvidedByStubbingStrategy();
+
+    }
+
+    private static class NonOverriddenValueProvidedByStubber {
+
+        private static NonOverriddenValueProvidedByStubber INSTANCE = new NonOverriddenValueProvidedByStubber();
+
     }
 
 }
