@@ -107,16 +107,16 @@ public final class StubbingSites {
      * Examples for this are {@link StubbingStrategies#optional()} or {@link StubbingStrategies#collection(Class,
      * Supplier)}
      *
-     * @param parent         the parent site, must not be {@code null}
-     * @param type           the parameterized type for which stub values for its type arguments are requested
-     * @param parameterIndex the index of the type argument
+     * @param parent            the parent site, must not be {@code null}
+     * @param type              the parameterized type for which stub values for its type arguments are requested
+     * @param typeArgumentIndex the index of the type argument
      * @return a parameterized type site
      * @see MethodReturnValueStubbingSite
      * @see StubbingStrategies#optional()
      * @see StubbingStrategies#collection(Class, Supplier)
      */
-    public static ParameterizedTypeStubbingSite parameterizedType(StubbingSite parent, ParameterizedType type, int parameterIndex) {
-        return new ParameterizedTypeStubbingSite(parent, type, parameterIndex);
+    public static ParameterizedTypeStubbingSite parameterizedType(StubbingSite parent, ParameterizedType type, int typeArgumentIndex) {
+        return new ParameterizedTypeStubbingSite(parent, type, typeArgumentIndex);
     }
 
     /**

@@ -46,7 +46,7 @@ class ParameterizedTypeStubbingSiteTest {
         ParameterizedType type = new ParameterizedTypeLiteral<List<String>>() {}.getType();
         ParameterizedTypeStubbingSite site = StubbingSites.parameterizedType(parent, type, 0);
 
-        int parameterIndex = site.getParameterIndex();
+        int parameterIndex = site.getTypeArgumentIndex();
 
         assertThat(parameterIndex)
                 .isZero();

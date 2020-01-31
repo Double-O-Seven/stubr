@@ -23,19 +23,19 @@ public final class ParameterizedTypeStubbingSite implements StubbingSite {
     private static final EqualsAndHashCode<ParameterizedTypeStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ParameterizedTypeStubbingSite.class)
             .compareAndHash(ParameterizedTypeStubbingSite::getParent)
             .compareAndHash(ParameterizedTypeStubbingSite::getType)
-            .compareAndHashPrimitive(ParameterizedTypeStubbingSite::getParameterIndex)
+            .compareAndHashPrimitive(ParameterizedTypeStubbingSite::getTypeArgumentIndex)
             .build();
 
     private final StubbingSite parent;
     private final ParameterizedType type;
-    private final int parameterIndex;
+    private final int typeArgumentIndex;
 
-    ParameterizedTypeStubbingSite(StubbingSite parent, ParameterizedType type, int parameterIndex) {
+    ParameterizedTypeStubbingSite(StubbingSite parent, ParameterizedType type, int typeArgumentIndex) {
         requireNonNull(parent, "parent");
         requireNonNull(type, "type");
         this.parent = parent;
         this.type = type;
-        this.parameterIndex = parameterIndex;
+        this.typeArgumentIndex = typeArgumentIndex;
     }
 
     /**
@@ -60,8 +60,8 @@ public final class ParameterizedTypeStubbingSite implements StubbingSite {
      *
      * @return the index of the type argument
      */
-    public int getParameterIndex() {
-        return parameterIndex;
+    public int getTypeArgumentIndex() {
+        return typeArgumentIndex;
     }
 
     /**
@@ -88,7 +88,7 @@ public final class ParameterizedTypeStubbingSite implements StubbingSite {
         return toStringHelper(this)
                 .add("parent", parent)
                 .add("type", type)
-                .add("parameterIndex", parameterIndex)
+                .add("typeArgumentIndex", typeArgumentIndex)
                 .toString();
     }
 
