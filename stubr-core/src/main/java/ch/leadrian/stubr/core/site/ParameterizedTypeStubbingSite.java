@@ -2,14 +2,22 @@ package ch.leadrian.stubr.core.site;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * A {@link StubbingSite} indicating that the current stubbing site is the stubbing of a parameterized type.
+ * <p>
+ * Examples for this are {@link StubbingStrategies#optional()} or {@link StubbingStrategies#collection(Class,
+ * Supplier)}
+ */
 public final class ParameterizedTypeStubbingSite implements StubbingSite {
 
     private static final EqualsAndHashCode<ParameterizedTypeStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ParameterizedTypeStubbingSite.class)
@@ -30,29 +38,51 @@ public final class ParameterizedTypeStubbingSite implements StubbingSite {
         this.parameterIndex = parameterIndex;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<StubbingSite> getParent() {
         return Optional.of(parent);
     }
 
+    /**
+     * Returns the parameterized type of the stub value for which a stub value for a type argument is requested.
+     *
+     * @return the parameterized type
+     */
     public ParameterizedType getType() {
         return type;
     }
 
+    /**
+     * Returns the index of the type argument for which a stub value is requested.
+     *
+     * @return the index of the type argument
+     */
     public int getParameterIndex() {
         return parameterIndex;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         return EQUALS_AND_HASH_CODE.equals(this, obj);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return toStringHelper(this)
