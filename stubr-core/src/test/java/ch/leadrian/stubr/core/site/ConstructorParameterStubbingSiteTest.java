@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
@@ -38,6 +39,19 @@ class ConstructorParameterStubbingSiteTest {
         Constructor<?> constructor = site.getConstructor();
 
         assertThat(constructor)
+                .isEqualTo(expectedConstructor);
+    }
+
+    @Test
+    void shouldReturnConstructorAsExecutable() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Constructor<Foo> expectedConstructor = Foo.class.getConstructor(int.class);
+        Parameter parameter = expectedConstructor.getParameters()[0];
+        ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(parent, expectedConstructor, parameter);
+
+        Executable executable = site.getExecutable();
+
+        assertThat(executable)
                 .isEqualTo(expectedConstructor);
     }
 

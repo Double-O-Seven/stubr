@@ -1,11 +1,17 @@
 package ch.leadrian.stubr.core.site;
 
-import ch.leadrian.stubr.core.StubbingSite;
-
 import java.lang.reflect.Method;
 
-public interface MethodStubbingSite extends StubbingSite {
+public interface MethodStubbingSite extends ExecutableStubbingSite {
 
     Method getMethod();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default Method getExecutable() {
+        return getMethod();
+    }
 
 }

@@ -5,6 +5,7 @@ import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
@@ -38,6 +39,19 @@ class MethodParameterStubbingSiteTest {
         Method method = site.getMethod();
 
         assertThat(method)
+                .isEqualTo(expectedMethod);
+    }
+
+    @Test
+    void shouldReturnMethodAsExecutable() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Method expectedMethod = Foo.class.getMethod("foo", int.class);
+        Parameter parameter = expectedMethod.getParameters()[0];
+        MethodParameterStubbingSite site = StubbingSites.methodParameter(parent, expectedMethod, parameter);
+
+        Executable executable = site.getExecutable();
+
+        assertThat(executable)
                 .isEqualTo(expectedMethod);
     }
 
