@@ -9,6 +9,9 @@ import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Stubbing site indicating that the current stubbing site is an array being filled with elements.
+ */
 public final class ArrayStubbingSite implements StubbingSite {
 
     private static final EqualsAndHashCode<ArrayStubbingSite> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(ArrayStubbingSite.class)
@@ -26,25 +29,42 @@ public final class ArrayStubbingSite implements StubbingSite {
         this.componentType = componentType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<StubbingSite> getParent() {
         return Optional.of(parent);
     }
 
+    /**
+     * Returns the component type of the array being stubbed.
+     *
+     * @return the component type of the array
+     */
     public Class<?> getComponentType() {
         return componentType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         return EQUALS_AND_HASH_CODE.equals(this, obj);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return toStringHelper(this)
