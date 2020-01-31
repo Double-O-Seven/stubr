@@ -3,7 +3,6 @@ package ch.leadrian.stubr.core.site;
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
 
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -39,7 +38,7 @@ public final class MethodReturnValueStubbingSite implements MethodStubbingSite, 
     }
 
     @Override
-    public AnnotatedElement getAnnotatedElement() {
+    public Method getAnnotatedElement() {
         return getMethod();
     }
 

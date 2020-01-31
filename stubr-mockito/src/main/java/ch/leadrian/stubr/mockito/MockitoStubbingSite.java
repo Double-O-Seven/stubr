@@ -6,7 +6,6 @@ import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import ch.leadrian.stubr.core.site.MethodStubbingSite;
 import org.mockito.invocation.InvocationOnMock;
 
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -45,7 +44,7 @@ public final class MockitoStubbingSite implements MethodStubbingSite, AnnotatedS
     }
 
     @Override
-    public AnnotatedElement getAnnotatedElement() {
+    public Method getAnnotatedElement() {
         return getMethod();
     }
 
