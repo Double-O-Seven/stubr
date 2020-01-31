@@ -9,8 +9,12 @@ import java.util.Optional;
  * <p>
  * By default, a {@link ch.leadrian.stubr.core.Stubber} uses this site if none other is given.
  */
-public enum UnknownStubbingSite implements StubbingSite {
-    INSTANCE;
+public final class UnknownStubbingSite implements StubbingSite {
+
+    static final UnknownStubbingSite INSTANCE = new UnknownStubbingSite();
+
+    private UnknownStubbingSite() {
+    }
 
     /**
      * {@inheritDoc}
@@ -27,4 +31,5 @@ public enum UnknownStubbingSite implements StubbingSite {
     public String toString() {
         return getClass().getSimpleName();
     }
+
 }
