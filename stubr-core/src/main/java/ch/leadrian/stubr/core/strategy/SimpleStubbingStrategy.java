@@ -12,7 +12,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
 import static ch.leadrian.stubr.core.type.TypeVisitor.accept;
-import static ch.leadrian.stubr.core.type.Types.getExplicitBound;
+import static ch.leadrian.stubr.core.type.Types.getBound;
 
 public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
 
@@ -32,7 +32,7 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
 
             @Override
             public Boolean visit(WildcardType wildcardType) {
-                return getExplicitBound(wildcardType)
+                return getBound(wildcardType)
                         .filter(t -> accept(t, this))
                         .isPresent();
             }
@@ -69,7 +69,7 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
 
             @Override
             public T visit(WildcardType wildcardType) {
-                return getExplicitBound(wildcardType)
+                return getBound(wildcardType)
                         .map(t -> accept(t, this))
                         .orElseThrow(() -> new StubbingException(context.getSite(), wildcardType));
             }
