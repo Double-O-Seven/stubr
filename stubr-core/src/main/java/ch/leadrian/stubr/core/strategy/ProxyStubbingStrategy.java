@@ -47,11 +47,11 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
                 .orElseThrow(() -> new StubbingException(context.getSite(), type));
     }
 
-    private StubbingInvocationHandler getInvocationHandler(StubbingContext context) {
+    private InvocationHandler getInvocationHandler(StubbingContext context) {
         return cacheStubs ? new CachingInvocationHandler(context) : new SimpleInvocationHandler(context);
     }
 
-    private Object createProxy(Class<?> clazz, StubbingInvocationHandler invocationHandler) {
+    private Object createProxy(Class<?> clazz, InvocationHandler invocationHandler) {
         return Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, invocationHandler);
     }
 
