@@ -55,13 +55,13 @@ public interface StubbingStrategy {
     Object stub(StubbingContext context, Type type);
 
     /**
-     * Creates a {@link Stubber} that is only applied both {@code this} and the given {@link Matcher} accept a given
-     * {@link StubbingContext} and {@link Type}. The created stubber will delegate to {@code this} when stubbing a
-     * value.
+     * Creates a {@link StubbingStrategy} that is only applied both {@code this} and the given {@link Matcher} accept a
+     * given {@link StubbingContext} and {@link Type}. The created stubbing strategy will delegate to {@code this} when
+     * stubbing a value.
      *
-     * @param typeMatcher an additional criteria for the returned {@link Stubber} to accepts a {@link StubbingContext}
-     *                    and {@link Type}
-     * @return a conditional {@link Stubber}
+     * @param typeMatcher an additional criteria for the returned {@link StubbingStrategy} to accepts a {@link
+     *                    StubbingContext} and {@link Type}
+     * @return a conditional {@link StubbingStrategy}
      */
     default StubbingStrategy when(Matcher<? super Type> typeMatcher) {
         return StubbingStrategies.conditional(this, typeMatcher);
