@@ -7,6 +7,7 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -419,59 +420,186 @@ public final class StubbingStrategies {
         return factoryMethod(any());
     }
 
+    /**
+     * Creates a {@link StubbingStrategy} used to stub maps. A {@link ToIntFunction} must be provided to determine the
+     * map size. The map size may be constant, might be derive from annotations present at the stubbing site or it might
+     * be anything else.
+     *
+     * @param mapSize the provided map size
+     * @return a {@link StubbingStrategy} for stubbing maps.
+     */
     public static <T extends Map> StubbingStrategy map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
         return new MapStubbingStrategy<>(mapClass, mapFactory, mapSize);
     }
 
+    /**
+     * Creates a {@link StubbingStrategy} used to stub maps. All maps stubbed with this strategy will have a constant
+     * {@code arraySize}.
+     *
+     * @param mapSize the provided map size
+     * @return a {@link StubbingStrategy} for stubbing maps.
+     */
     public static <T extends Map> StubbingStrategy map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, int mapSize) {
         return map(mapClass, mapFactory, context -> mapSize);
     }
 
+    /**
+     * Creates a {@link StubbingStrategy} used to stub empty maps.
+     *
+     * @return a {@link StubbingStrategy} for stubbing empty maps.
+     */
     public static <T extends Map> StubbingStrategy map(Class<T> mapClass, Supplier<? extends T> mapFactory) {
         requireNonNull(mapFactory, "mapFactory");
         return map(mapClass, values -> mapFactory.get(), 0);
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that always uses {@code null} to provide stubs.
+     *
+     * @return a {@link StubbingStrategy} that always uses {@code null} to provide stubs
+     */
     public static StubbingStrategy nullValue() {
         return NullValueStubbingStrategy.INSTANCE;
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that stubs {@link java.util.Optional}s.
+     * <p>
+     * Depending on the {@link OptionalStubbingMode} {@code code} values will either be always empty, present or present
+     * if a stub value for the wrapped type can be provided.
+     *
+     * @param mode the mode defining how values will be stubbed.
+     * @return a {@link StubbingStrategy} that stubs {@link java.util.Optional}s
+     * @see OptionalStubbingMode
+     */
     public static StubbingStrategy optional(OptionalStubbingMode mode) {
         return mode.getStrategy();
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} always providing {@link java.util.Optional#empty()}.
+     * <p>
+     * The behaviour is the same as using {@link StubbingStrategies#optional(OptionalStubbingMode)} with mode {@link
+     * OptionalStubbingMode#EMPTY}.
+     *
+     * @return a {@link StubbingStrategy} always providing {@link java.util.Optional#empty()}
+     */
     public static StubbingStrategy optional() {
         return optional(OptionalStubbingMode.EMPTY);
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that creates stub values for interfaces using {@link
+     * java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)}. Any non-void method return a
+     * stub value provided by the {@link ch.leadrian.stubr.core.Stubber} of the context used to the created the proxy
+     * instance.
+     * <p>
+     * If {@code cacheStubs} is set to {@code true}, the returned stub values will be cached. If it is set to {@code
+     * false}, a new stub value will be computed every time a method will be invoked.
+     * <p>
+     * If a method has a default implementation, the real method will be invoked.
+     *
+     * @param cacheStubs flag that determines whether method return values will be cached or not
+     * @return a {@link StubbingStrategy} that creates stub values for interfaces using proxies
+     */
     public static StubbingStrategy proxy(boolean cacheStubs) {
         return cacheStubs ? ProxyStubbingStrategy.CACHING : ProxyStubbingStrategy.NON_CACHING;
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that creates stub values for interfaces using {@link
+     * java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)}. Any method return values will
+     * be cached.
+     * <p>
+     * The behaviour is the same as using {@link StubbingStrategies#proxy(boolean)} when {@code true} is passed.
+     *
+     * @return a {@link StubbingStrategy} that creates stub values for interfaces using proxies
+     * @see StubbingStrategies#proxy(boolean)
+     */
     public static StubbingStrategy proxy() {
         return proxy(true);
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} providing the {@link ch.leadrian.stubr.core.Stubber} given by {@link
+     * StubbingContext#getStubber()} passed to {@link StubbingStrategy#stub(StubbingContext, Type)}.
+     *
+     * @return a {@link StubbingStrategy} providing the {@link ch.leadrian.stubr.core.Stubber}
+     */
     public static StubbingStrategy stubber() {
         return StubberStubbingStrategy.INSTANCE;
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
+     * valueSupplier}. The passed {@link IntFunction} is invoked with a sequence number that will be atomically
+     * increased on every call.
+     *
+     * @param type          the type for which a stub value should be supplied
+     * @param valueSupplier the value supplying function
+     * @param <T>           the generic type
+     * @return a {@link StubbingStrategy} providing a stub values using a supplying function
+     */
     public static <T> StubbingStrategy suppliedValue(Class<T> type, IntFunction<? extends T> valueSupplier) {
         return new SuppliedValueStubbingStrategy(type, valueSupplier);
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
+     * valueSupplier}.
+     *
+     * @param type          the type for which a stub value should be supplied
+     * @param valueSupplier the value supplying function
+     * @param <T>           the generic type
+     * @return a {@link StubbingStrategy} providing a stub values using a supplying function
+     */
     public static <T> StubbingStrategy suppliedValue(Class<T> type, Supplier<? extends T> valueSupplier) {
+        requireNonNull(valueSupplier, "valueSupplier");
         return suppliedValue(type, sequenceNumber -> valueSupplier.get());
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
+     * valueSupplier}. The passed {@link IntFunction} is invoked with a sequence number that will be atomically
+     * increased on every call.
+     *
+     * @param typeLiteral   the type for which a stub value should be supplied
+     * @param valueSupplier the value supplying function
+     * @param <T>           the generic type
+     * @return a {@link StubbingStrategy} providing a stub values using a supplying function
+     */
     public static <T> StubbingStrategy suppliedValue(TypeLiteral<T> typeLiteral, IntFunction<? extends T> valueSupplier) {
         return new SuppliedValueStubbingStrategy(typeLiteral.getType(), valueSupplier);
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
+     * valueSupplier}.
+     *
+     * @param typeLiteral   the type for which a stub value should be supplied
+     * @param valueSupplier the value supplying function
+     * @param <T>           the generic type
+     * @return a {@link StubbingStrategy} providing a stub values using a supplying function
+     */
     public static <T> StubbingStrategy suppliedValue(TypeLiteral<T> typeLiteral, Supplier<? extends T> valueSupplier) {
+        requireNonNull(valueSupplier, "valueSupplier");
         return suppliedValue(typeLiteral, (IntFunction<? extends T>) sequenceNumber -> valueSupplier.get());
     }
 
+    /**
+     * Returns a list of {@link StubbingStrategy}s for commonly used mutable objects.
+     * <p>
+     * Supported types are:
+     * <lu>
+     * <li>{@link AtomicInteger}</li>
+     * <li>{@link AtomicBoolean}</li>
+     * <li>{@link AtomicLong}</li>
+     * <li>{@link Date}</li>
+     * <li>{@link java.sql.Date}</li>
+     * </lu>
+     *
+     * @return a list of {@link StubbingStrategy}s for commonly used mutable objects
+     */
     public static List<StubbingStrategy> commonSuppliedValues() {
         return ImmutableList.<StubbingStrategy>builder()
                 .add(suppliedValue(AtomicInteger.class, () -> new AtomicInteger(0)))
@@ -482,18 +610,74 @@ public final class StubbingStrategies {
                 .build();
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that provides a stub value for the given target type {@link T} by looking up a
+     * stub value for the given implementation type {@link U}.
+     * <p>
+     * The actual stub value provided by getting a stub value for {@link U} from the {@link
+     * ch.leadrian.stubr.core.Stubber} given by {@link StubbingContext#getStubber()}.
+     *
+     * @param targetClass         the type to be stubbed
+     * @param implementationClass the actual type of the stub value
+     * @param <T>                 the target type
+     * @param <U>                 the implementation type
+     * @return a {@link StubbingStrategy} that delegates the stubbing of an instance of {@link T} to stubbing a value
+     * for {@link U}
+     */
     public static <T, U extends T> StubbingStrategy implementation(Class<T> targetClass, Class<U> implementationClass) {
         return new ImplementationStubbingStrategy(targetClass, implementationClass);
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that provides a stub value for the given target type {@link T} by looking up a
+     * stub value for the given implementation type {@link U}.
+     * <p>
+     * The actual stub value provided by getting a stub value for {@link U} from the {@link
+     * ch.leadrian.stubr.core.Stubber} given by {@link StubbingContext#getStubber()}.
+     *
+     * @param targetTypeLiteral         the type to be stubbed
+     * @param implementationTypeLiteral the actual type of the stub value
+     * @param <T>                       the target type
+     * @param <U>                       the implementation type
+     * @return a {@link StubbingStrategy} that delegates the stubbing of an instance of {@link T} to stubbing a value
+     * for {@link U}
+     */
     public static <T, U extends T> StubbingStrategy implementation(TypeLiteral<T> targetTypeLiteral, TypeLiteral<U> implementationTypeLiteral) {
         return new ImplementationStubbingStrategy(targetTypeLiteral.getType(), implementationTypeLiteral.getType());
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that provides a stub value for the given target type {@link T} by looking up a
+     * stub value for the given implementation type {@link U}.
+     * <p>
+     * The actual stub value provided by getting a stub value for {@link U} from the {@link
+     * ch.leadrian.stubr.core.Stubber} given by {@link StubbingContext#getStubber()}.
+     *
+     * @param targetTypeLiteral   the type to be stubbed
+     * @param implementationClass the actual type of the stub value
+     * @param <T>                 the target type
+     * @param <U>                 the implementation type
+     * @return a {@link StubbingStrategy} that delegates the stubbing of an instance of {@link T} to stubbing a value
+     * for {@link U}
+     */
     public static <T, U extends T> StubbingStrategy implementation(TypeLiteral<T> targetTypeLiteral, Class<U> implementationClass) {
         return new ImplementationStubbingStrategy(targetTypeLiteral.getType(), implementationClass);
     }
 
+    /**
+     * Returns a {@link StubbingStrategy} that provides a stub value for the given target type {@link T} by looking up a
+     * stub value for the given implementation type {@link U}.
+     * <p>
+     * The actual stub value provided by getting a stub value for {@link U} from the {@link
+     * ch.leadrian.stubr.core.Stubber} given by {@link StubbingContext#getStubber()}.
+     *
+     * @param targetClass               the type to be stubbed
+     * @param implementationTypeLiteral the actual type of the stub value
+     * @param <T>                       the target type
+     * @param <U>                       the implementation type
+     * @return a {@link StubbingStrategy} that delegates the stubbing of an instance of {@link T} to stubbing a value
+     * for {@link U}
+     */
     public static <T, U extends T> StubbingStrategy implementation(Class<T> targetClass, TypeLiteral<U> implementationTypeLiteral) {
         return new ImplementationStubbingStrategy(targetClass, implementationTypeLiteral.getType());
     }
