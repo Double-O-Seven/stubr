@@ -28,7 +28,7 @@ public final class Stubr implements BeforeEachCallback, AfterEachCallback, Param
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().isAnnotationPresent(Stub.class);
+        return stubber != null && parameterContext.getParameter().isAnnotationPresent(Stub.class);
     }
 
     @Override
