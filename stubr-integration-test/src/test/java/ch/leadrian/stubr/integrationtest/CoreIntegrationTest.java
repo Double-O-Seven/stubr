@@ -1,46 +1,46 @@
 package ch.leadrian.stubr.integrationtest;
 
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import ch.leadrian.stubr.integrationtest.annotation.CollectionSize;
 import ch.leadrian.stubr.integrationtest.testdata.TestData;
+import ch.leadrian.stubr.junit.StubbingStrategyProvider;
+import ch.leadrian.stubr.junit.Stubr;
+import ch.leadrian.stubr.junit.annotation.Stub;
+import ch.leadrian.stubr.junit.annotation.StubWith;
+import ch.leadrian.stubr.junit.annotation.StubberBaseline;
+import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.Stubbers.defaultStubber;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.collection;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultCollections;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.suppliedValue;
+import static ch.leadrian.stubr.integrationtest.CoreIntegrationTest.TestStubbingStrategies;
+import static ch.leadrian.stubr.junit.annotation.StubberBaseline.Variant.DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@ExtendWith(Stubr.class)
+@StubberBaseline(DEFAULT)
+@StubWith(TestStubbingStrategies.class)
 class CoreIntegrationTest {
 
     private TestData testData;
 
     @BeforeEach
-    void setUp() {
-        Stubber stubber = Stubber.builder()
-                .include(defaultStubber())
-                .stubWith(defaultCollections(3))
-                .stubWith(suppliedValue(String.class, sequenceNumber -> String.format("value%d", sequenceNumber)))
-                .stubWith(suppliedValue(Integer.class, sequenceNumber -> sequenceNumber))
-                .stubWith(collection(List.class, ArrayList::new, this::getCollectionSize).when(annotatedSiteIs(annotatedWith(CollectionSize.class))))
-                .build();
-        testData = stubber.stub(TestData.class);
-    }
-
-    private int getCollectionSize(StubbingContext context) {
-        AnnotatedStubbingSite annotatedSite = (AnnotatedStubbingSite) context.getSite();
-        return annotatedSite.getAnnotatedElement().getAnnotation(CollectionSize.class).value();
+    void setUp(@Stub TestData testData) {
+        this.testData = testData;
     }
 
     @Test
@@ -245,6 +245,25 @@ class CoreIntegrationTest {
         @Test
         void shouldStubDoubleWrapper() {
             assertThat(testData.getPrimitiveWrappers().getDouble()).isZero();
+        }
+
+    }
+
+    static class TestStubbingStrategies implements StubbingStrategyProvider {
+
+        @Override
+        public List<? extends StubbingStrategy> getStubbingStrategies(ExtensionContext extensionContext) {
+            return ImmutableList.<StubbingStrategy>builder()
+                    .addAll(defaultCollections(3))
+                    .add(suppliedValue(String.class, sequenceNumber -> String.format("value%d", sequenceNumber)))
+                    .add(suppliedValue(Integer.class, sequenceNumber -> sequenceNumber))
+                    .add(collection(List.class, ArrayList::new, this::getCollectionSize).when(annotatedSiteIs(annotatedWith(CollectionSize.class))))
+                    .build();
+        }
+
+        private int getCollectionSize(StubbingContext context) {
+            AnnotatedStubbingSite annotatedSite = (AnnotatedStubbingSite) context.getSite();
+            return annotatedSite.getAnnotatedElement().getAnnotation(CollectionSize.class).value();
         }
 
     }

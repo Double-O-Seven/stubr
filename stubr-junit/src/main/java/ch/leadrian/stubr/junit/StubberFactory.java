@@ -8,6 +8,7 @@ import ch.leadrian.stubr.junit.annotation.StubWith;
 import ch.leadrian.stubr.junit.annotation.StubberBaseline;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -53,7 +54,9 @@ final class StubberFactory {
 
     private <T> T newInstance(Class<T> clazz) {
         try {
-            return clazz.newInstance();
+            Constructor<T> constructor = clazz.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
