@@ -10,6 +10,7 @@ import java.lang.reflect.Parameter;
 import java.util.Optional;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 /**
  * Represent the stubbing site of a {@link org.junit.jupiter.api.extension.ParameterResolver#resolveParameter(ParameterContext,
@@ -80,6 +81,17 @@ public final class ParameterResolverStubbingSite implements ParameterStubbingSit
     @Override
     public int hashCode() {
         return EQUALS_AND_HASH_CODE.hashCode(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return toStringHelper(this)
+                .add("parameterContext", parameterContext)
+                .add("extensionContext", extensionContext)
+                .toString();
     }
 
 }
