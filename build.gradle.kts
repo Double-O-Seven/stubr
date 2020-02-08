@@ -17,8 +17,14 @@ val mockitoVersion by extra { "3.2.4" }
 
 val gitVersion: Closure<String> by extra
 
+val codacyCoverageReport: Configuration by configurations.creating
+
 repositories {
     jcenter()
+}
+
+dependencies {
+    codacyCoverageReport(group = "com.codacy", name = "codacy-coverage-reporter", version = "6.2.0")
 }
 
 tasks {
@@ -32,6 +38,19 @@ tasks {
             xml.isEnabled = true
         }
     }
+}
+
+task<JavaExec>("codacyCoverageReport") {
+    dependsOn(tasks.jacocoTestReport)
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = codacyCoverageReport
+    args(
+            "report",
+            "-l",
+            "Java",
+            "-r",
+            "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+    )
 }
 
 allprojects {
