@@ -40,4 +40,8 @@ tasks {
             includeEngines("spek2", "junit-jupiter")
         }
     }
+
+    withType(Jar::class).named("javadocJar") {
+        from(dokka)
+    }
 }
