@@ -12,8 +12,8 @@ For example:
 
 ```java
 Stubber stubber = Stubber.builder()
-        .stubWith(constantValue("Foo"))
-        .stubWith(suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber))
+        .stubWith(Stubbers.constantValue("Foo"))
+        .stubWith(Stubbers.suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber))
         .build();
 String stringValue = stubber.stub(String.class); // Foo
 int intValue1 = stubber.stub(int.class); // 0
@@ -96,3 +96,148 @@ boolean matches(StubbingContext context, T value)
 Since `Matcher`s are generic, a matcher may be combined using logical _and_, _or_ and _not_ operations, and in addition matcher might delegate to other matches in order to match for example directly the `StubbingSite`.
 
 Various `Matcher` implementations can be found in `ch.leadrian.stubr.core.matcher.Matchers`.
+
+### Download
+
+For Maven:
+```xml
+<dependency>
+  <groupId>ch.leadrian.stubr</groupId>
+  <artifactId>stubr-core</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+For Gradle (Groovy DSL):
+```groovy
+implementation 'ch.leadrian.stubr:stubr-core:1.0.0'
+```
+
+For Gradle (Kotlin DSL):
+```groovy
+implementation("ch.leadrian.stubr:stubr-core:1.0.0")
+```
+
+## 3rd party support
+
+### JUnit 5
+
+Stubr also includes an extension for JUnit Jupiter that allows you to get stub values through parameter injection.
+The only requirement is to extend your test with the extension `ch.leadrian.stubr.junit.Stubr` and to annotated the desired method parameter with `ch.leadrian.stubr.junit.annotation.Stub`.
+
+In addition, the tests might be configured using `ch.leadrian.stubr.junit.Include`, `ch.leadrian.stubr.junit.StubWith` and `ch.leadrian.stubr.junit.StubberBaseline`.
+
+For example:
+
+```java
+@ExtendWith(Stubr.class)
+@StubWith(MyAmazingStubberProvider.class)
+class MyAmazingTest {
+
+    @Test
+    void testSomething(@Stub String value) {
+        // test something
+    }
+
+}
+```
+
+The JUnit 5 extension can be downloaded here:
+
+For Maven:
+```xml
+<dependency>
+  <groupId>ch.leadrian.stubr</groupId>
+  <artifactId>stubr-junit</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+For Gradle (Groovy DSL):
+```groovy
+implementation 'ch.leadrian.stubr:stubr-junit:1.0.0'
+```
+
+For Gradle (Kotlin DSL):
+```groovy
+implementation("ch.leadrian.stubr:stubr-junit:1.0.0")
+```
+
+### Mockito
+
+Stubr also includes a Mockito module that provides `StubbingStrategy` implementations that provide stubs using Mockito mocks.
+All non-void method call on such a mock will return a stub value provided by the `Stubber` that was used to mock the stub.
+
+Concrete instances can be accessed through `ch.leadrian.stubr.mockito.MockitoStubbers`.
+
+A usage example:
+```java
+Stubber stubber = Stubber.builder()
+    .stubWith(Stubbers.constantValue("stubbed"))
+    .stubWith(MockitoStubbers.mock())
+    .stubWith(MockitoStubbers.mock(MyMockedObject.class, mock -> Mockito.when(mock.doSomething()).thenReturn("done")))
+    .build();
+Foo someOtherMock = stubber.stub(Foo.class); // Stubbed using the generic mock stubbing strategy
+MyMockedObject obj = stubber.stub(MyMockedObject.class); // Stubbed using the specific mock stubbing strategy
+String result = obj.doSomething(); // result = "done"
+```
+
+The Mockito extension can be downloaded here:
+
+For Maven:
+```xml
+<dependency>
+  <groupId>ch.leadrian.stubr</groupId>
+  <artifactId>stubr-mockito</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+For Gradle (Groovy DSL):
+```groovy
+implementation 'ch.leadrian.stubr:stubr-mockito:1.0.0'
+```
+
+For Gradle (Kotlin DSL):
+```groovy
+implementation("ch.leadrian.stubr:stubr-mockito:1.0.0")
+```
+
+### Kotlin
+
+Stubr also includes a Kotlin extension to simplify method calls and to stub Kotlin object classes.
+
+```kotlin
+object MyObject {
+
+    fun doSomething() {
+    }
+
+}
+
+var stubber = Stubber.builder()
+    .stubWith(KotlinStubbers.objectInstance())
+    .build()
+val stub: MyObject = stubber.stub()
+```
+
+The Kotlin extension can be downloaded here:
+
+For Maven:
+```xml
+<dependency>
+  <groupId>ch.leadrian.stubr</groupId>
+  <artifactId>stubr-kotlin</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+For Gradle (Groovy DSL):
+```groovy
+implementation 'ch.leadrian.stubr:stubr-kotlin:1.0.0'
+```
+
+For Gradle (Kotlin DSL):
+```groovy
+implementation("ch.leadrian.stubr:stubr-kotlin:1.0.0")
+```
