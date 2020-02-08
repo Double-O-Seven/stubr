@@ -4,6 +4,8 @@ import org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
 plugins {
     `java-library`
     jacoco
+    `maven-publish`
+    signing
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
@@ -41,6 +43,8 @@ allprojects {
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "jacoco")
+    apply(plugin = "maven-publish")
+    apply(plugin = "signing")
 
     repositories {
         jcenter()
@@ -72,5 +76,55 @@ subprojects {
                 xml.isEnabled = true
             }
         }
+    }
+
+    val mavenJava by publishing.publications.creating(MavenPublication::class) {
+        from(components["java"])
+        pom {
+            name.set("Stubr (${this@subprojects.name})")
+            description.set("Library for instantiating stub objects in unit tests")
+            url.set("https://github.com/Double-O-Seven/stubr")
+            licenses {
+                license {
+                    name.set("The Apache License, Version 2.0")
+                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                }
+            }
+            developers {
+                developer {
+                    id.set("Double-O-Seven")
+                    name.set("Adrian-Philipp Leuenberger")
+                    email.set("thewishwithin@gmail.com")
+                }
+            }
+            scm {
+                connection.set("scm:git:git://github.com/Double-O-Seven/stubr.git")
+                developerConnection.set("scm:git:ssh://github.com/Double-O-Seven/stubr.git")
+                url.set("https://github.com/Double-O-Seven/stubr")
+            }
+        }
+    }
+
+    publishing {
+        repositories {
+            maven {
+                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                url = when {
+                    version.toString().endsWith("SNAPSHOT") -> snapshotsRepoUrl
+                    else -> releasesRepoUrl
+                }
+                credentials {
+                    val ossrhUsername: String? by extra
+                    val ossrhPassword: String? by extra
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+    }
+
+    signing {
+        sign(mavenJava)
     }
 }
