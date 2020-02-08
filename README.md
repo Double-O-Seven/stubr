@@ -1,4 +1,5 @@
 [![Actions Status](https://github.com/Double-O-Seven/stubr/workflows/Java%20CI/badge.svg)](https://github.com/Double-O-Seven/stubr/actions)
+[![Release Version](https://img.shields.io/maven-central/v/ch.leadrian.stubr/stubr-core.svg?label=release)](https://search.maven.org/search?q=g:ch.leadrian.stubr%20AND%20a:stubr-core)
 
 # stubr
 
