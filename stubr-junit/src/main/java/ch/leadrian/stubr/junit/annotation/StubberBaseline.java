@@ -18,11 +18,11 @@ import static ch.leadrian.stubr.core.Stubbers.minimalStubber;
  * If a {@link Stubber} is used as a baseline, it will be included using {@link StubberBuilder#include(Stubber)}.
  * <p>
  * There are three different variants that can be selected:
- * <lu>
+ * <ul>
  * <li>{@link Variant#DEFAULT}</li>
  * <li>{@link Variant#MINIMAL}</li>
  * <li>{@link Variant#EMPTY}</li>
- * </lu>
+ * </ul>
  * By default {@link Variant#DEFAULT} will be used.
  */
 @Documented

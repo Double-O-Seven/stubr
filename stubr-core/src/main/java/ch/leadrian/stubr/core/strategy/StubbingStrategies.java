@@ -131,7 +131,10 @@ public final class StubbingStrategies {
      * determine the collection size. The collection size may be constant, might be derive from annotations present at
      * the stubbing site or it might be anything else.
      *
-     * @param collectionSize the provided collection size
+     * @param collectionClass   the collection class that should be stubbed
+     * @param collectionFactory a factory providing a concrete instance of the collection class
+     * @param collectionSize    the provided collection size
+     * @param <T>               the actual type of the collection
      * @return a {@link StubbingStrategy} for stubbing collections.
      */
     public static <T extends Collection> StubbingStrategy collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, ToIntFunction<? super StubbingContext> collectionSize) {
@@ -142,7 +145,10 @@ public final class StubbingStrategies {
      * Creates a {@link StubbingStrategy} used to stub collections. All collections stubbed with this strategy will have
      * a constant {@code arraySize}.
      *
-     * @param collectionSize the provided collection size
+     * @param collectionClass   the collection class that should be stubbed
+     * @param collectionFactory a factory providing a concrete instance of the collection class
+     * @param collectionSize    the collection size
+     * @param <T>               the actual type of the collection
      * @return a {@link StubbingStrategy} for stubbing collections.
      */
     public static <T extends Collection> StubbingStrategy collection(Class<T> collectionClass, Function<List<Object>, ? extends T> collectionFactory, int collectionSize) {
@@ -152,6 +158,9 @@ public final class StubbingStrategies {
     /**
      * Creates a {@link StubbingStrategy} used to stub empty collections.
      *
+     * @param collectionClass   the collection class that should be stubbed
+     * @param collectionFactory a factory providing a concrete instance of the collection class
+     * @param <T>               the actual type of the collection
      * @return a {@link StubbingStrategy} for stubbing empty collections.
      */
     public static <T extends Collection> StubbingStrategy collection(Class<T> collectionClass, Supplier<? extends T> collectionFactory) {
@@ -249,6 +258,7 @@ public final class StubbingStrategies {
      *
      * @param targetClass the type that the stubbing strategy will accept.
      * @param value       the value to be used as stub value
+     * @param <T>         the actual type of the value
      * @return a {@link StubbingStrategy} using the given value every time type {@link T} is encountered
      */
     public static <T> StubbingStrategy constantValue(Class<T> targetClass, T value) {
@@ -263,6 +273,7 @@ public final class StubbingStrategies {
      *
      * @param type  the type that the stubbing strategy will accept.
      * @param value the value to be used as stub value
+     * @param <T>   the actual type of the value
      * @return a {@link StubbingStrategy} using the given value every time type {@link T} is encountered
      */
     public static <T> StubbingStrategy constantValue(TypeLiteral<T> type, T value) {
@@ -425,7 +436,10 @@ public final class StubbingStrategies {
      * map size. The map size may be constant, might be derive from annotations present at the stubbing site or it might
      * be anything else.
      *
-     * @param mapSize the provided map size
+     * @param mapClass   the map class that should be stubbed
+     * @param mapFactory a factory providing a concrete instance of the map class
+     * @param mapSize    the provided map size
+     * @param <T>        the actual type of the map
      * @return a {@link StubbingStrategy} for stubbing maps.
      */
     public static <T extends Map> StubbingStrategy map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, ToIntFunction<? super StubbingContext> mapSize) {
@@ -436,7 +450,10 @@ public final class StubbingStrategies {
      * Creates a {@link StubbingStrategy} used to stub maps. All maps stubbed with this strategy will have a constant
      * {@code arraySize}.
      *
-     * @param mapSize the provided map size
+     * @param mapClass   the map class that should be stubbed
+     * @param mapFactory a factory providing a concrete instance of the map class
+     * @param mapSize    the map size
+     * @param <T>        the actual type of the map
      * @return a {@link StubbingStrategy} for stubbing maps.
      */
     public static <T extends Map> StubbingStrategy map(Class<T> mapClass, Function<Map<Object, Object>, ? extends T> mapFactory, int mapSize) {
@@ -446,6 +463,9 @@ public final class StubbingStrategies {
     /**
      * Creates a {@link StubbingStrategy} used to stub empty maps.
      *
+     * @param mapClass   the map class that should be stubbed
+     * @param mapFactory a factory providing a concrete instance of the map class
+     * @param <T>        the actual type of the map
      * @return a {@link StubbingStrategy} for stubbing empty maps.
      */
     public static <T extends Map> StubbingStrategy map(Class<T> mapClass, Supplier<? extends T> mapFactory) {
@@ -590,13 +610,13 @@ public final class StubbingStrategies {
      * Returns a list of {@link StubbingStrategy}s for commonly used mutable objects.
      * <p>
      * Supported types are:
-     * <lu>
+     * <ul>
      * <li>{@link AtomicInteger}</li>
      * <li>{@link AtomicBoolean}</li>
      * <li>{@link AtomicLong}</li>
      * <li>{@link Date}</li>
      * <li>{@link java.sql.Date}</li>
-     * </lu>
+     * </ul>
      *
      * @return a list of {@link StubbingStrategy}s for commonly used mutable objects
      */

@@ -12,12 +12,12 @@ import static com.google.common.base.MoreObjects.toStringHelper;
  * A class representing a generic type {@link T}. Since only raw class literals are supported out of the box by Java,
  * this class can be used to access a generic {@link Type} during runtime.
  * <p>
- * The class is abstract since a concrete implementation (usually anonynmous class) must be created in order to be able
+ * The class is abstract since a concrete implementation (usually anonymous class) must be created in order to be able
  * to access the actual type {@link T}.
  * <p>
- * To get the actual type of {@code List<String>} for example, an anonymous class may be created for example:
+ * To get the actual type of {@code List&lt;String&gt;} for example, an anonymous class may be created for example:
  * <pre>
- * Type listType = new TypeLiteral<List<String>>() {}.getType();
+ * Type listType = new TypeLiteral&lt;List&lt;String&gt;&gt;() {}.getType();
  * </pre>
  *
  * @param <T> the generic type

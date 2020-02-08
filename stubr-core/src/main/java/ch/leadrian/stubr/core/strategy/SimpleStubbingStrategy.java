@@ -23,14 +23,14 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
 
     /**
      * Accepts a given {@link Type} if one of the following criteria is satisfied:
-     * <lu>
+     * <ul>
      * <li>The given {@code type} is a {@link Class} and the implementation of {@link
      * SimpleStubbingStrategy#acceptsClass(StubbingContext, Class)} returns {@code true}</li>
      * <li>The given {@code type} is a {@link ParameterizedType} and the implementation of {@link
      * SimpleStubbingStrategy#acceptsParameterizedType(StubbingContext, ParameterizedType)} returns {@code true}</li>
      * <li>The given {@code type} is a {@link WildcardType} and the the bound of the wildcard is either a {@link Class}
      * or {@link ParameterizedType} that is accepted.
-     * </lu>
+     * </ul>
      * <p>
      * {@link TypeVariable}s or {@link GenericArrayType}s are not accepted.
      * <p>
