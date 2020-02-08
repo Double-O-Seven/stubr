@@ -43,8 +43,6 @@ allprojects {
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "jacoco")
-    apply(plugin = "maven-publish")
-    apply(plugin = "signing")
 
     repositories {
         jcenter()
@@ -60,11 +58,6 @@ subprojects {
         testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = junitVersion)
     }
 
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
-
     tasks {
         test {
             useJUnitPlatform()
@@ -77,11 +70,21 @@ subprojects {
             }
         }
     }
+}
+
+configure(subprojects - project(":stubr-integration-test")) {
+    apply(plugin = "maven-publish")
+    apply(plugin = "signing")
+
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
 
     val mavenJava by publishing.publications.creating(MavenPublication::class) {
         from(components["java"])
         pom {
-            name.set("Stubr (${this@subprojects.name})")
+            name.set("Stubr (${this@configure.name})")
             description.set("Library for instantiating stub objects in unit tests")
             url.set("https://github.com/Double-O-Seven/stubr")
             licenses {
