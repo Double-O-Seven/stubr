@@ -43,6 +43,11 @@ final class FactoryMethodStubbingStrategy implements StubbingStrategy {
         Method method = getFactoryMethod(context, type)
                 .orElseThrow(() -> new StubbingException("No matching factory method found", context.getSite(), type));
         Object[] parameterValues = stub(context, method);
+        return invokeFactoryMethod(method, parameterValues);
+    }
+
+    private Object invokeFactoryMethod(Method method, Object[] parameterValues) {
+        method.setAccessible(true);
         try {
             return method.invoke(null, parameterValues);
         } catch (IllegalAccessException | InvocationTargetException e) {

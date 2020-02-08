@@ -43,6 +43,11 @@ final class ConstructorStubbingStrategy implements StubbingStrategy {
         Constructor<?> constructor = getConstructor(context, type)
                 .orElseThrow(() -> new StubbingException("No matching constructor found", context.getSite(), type));
         Object[] parameterValues = stub(context, constructor);
+        return invokeConstructor(constructor, parameterValues);
+    }
+
+    private Object invokeConstructor(Constructor<?> constructor, Object[] parameterValues) {
+        constructor.setAccessible(true);
         try {
             return constructor.newInstance(parameterValues);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
