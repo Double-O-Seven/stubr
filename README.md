@@ -1,6 +1,7 @@
 [![Actions Status](https://github.com/Double-O-Seven/stubr/workflows/Java%20CI/badge.svg)](https://github.com/Double-O-Seven/stubr/actions)
 [![Release Version](https://img.shields.io/maven-central/v/ch.leadrian.stubr/stubr-core.svg?label=release)](https://search.maven.org/search?q=g:ch.leadrian.stubr%20AND%20a:stubr-core)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba08c6eccb7045c8a5fa6c9c90d3f5bf)](https://www.codacy.com/manual/Double-O-Seven/stubr?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Double-O-Seven/stubr&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/ba08c6eccb7045c8a5fa6c9c90d3f5bf)](https://www.codacy.com/manual/Double-O-Seven/stubr?utm_source=github.com&utm_medium=referral&utm_content=Double-O-Seven/stubr&utm_campaign=Badge_Coverage)
 
 # stubr
 
