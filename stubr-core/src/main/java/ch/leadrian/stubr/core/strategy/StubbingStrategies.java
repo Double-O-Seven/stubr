@@ -7,7 +7,6 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -510,9 +509,9 @@ public final class StubbingStrategies {
 
     /**
      * Returns a {@link StubbingStrategy} that creates stub values for interfaces using {@link
-     * java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)}. Any non-void method return a
-     * stub value provided by the {@link ch.leadrian.stubr.core.Stubber} of the context used to the created the proxy
-     * instance.
+     * java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], java.lang.reflect.InvocationHandler)}. Any
+     * non-void method return a stub value provided by the {@link ch.leadrian.stubr.core.Stubber} of the context used to
+     * the created the proxy instance.
      * <p>
      * If {@code cacheStubs} is set to {@code true}, the returned stub values will be cached. If it is set to {@code
      * false}, a new stub value will be computed every time a method will be invoked.
@@ -528,8 +527,8 @@ public final class StubbingStrategies {
 
     /**
      * Returns a {@link StubbingStrategy} that creates stub values for interfaces using {@link
-     * java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)}. Any method return values will
-     * be cached.
+     * java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], java.lang.reflect.InvocationHandler)}. Any method
+     * return values will be cached.
      * <p>
      * The behaviour is the same as using {@link StubbingStrategies#proxy(boolean)} when {@code true} is passed.
      *

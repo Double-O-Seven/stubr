@@ -6,7 +6,6 @@ import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static com.google.common.base.MoreObjects.toStringHelper;
@@ -16,7 +15,7 @@ import static java.util.Objects.requireNonNull;
  * A {@link StubbingSite} indicating that the current stubbing site is the stubbing of a parameterized type.
  * <p>
  * Examples for this are {@link StubbingStrategies#optional()} or {@link StubbingStrategies#collection(Class,
- * Supplier)}
+ * java.util.function.Supplier)}
  */
 public final class ParameterizedTypeStubbingSite implements StubbingSite {
 
