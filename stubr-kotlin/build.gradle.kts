@@ -17,10 +17,12 @@ val spekVersion = "2.0.9"
 dependencies {
     api(project(":stubr-core"))
 
-    implementation(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8")
-    implementation(group = "org.jetbrains.kotlin", name = "kotlin-reflect")
+    compileOnly(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8")
+    compileOnly(group = "org.jetbrains.kotlin", name = "kotlin-reflect")
 
     testImplementation(testFixtures(project(":stubr-core")))
+    testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8")
+    testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-reflect")
     testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm", version = spekVersion)
 
     testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5", version = spekVersion)
