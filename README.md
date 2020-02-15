@@ -107,18 +107,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-core</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-core:1.0.0'
+implementation 'ch.leadrian.stubr:stubr-core:1.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-core:1.0.0")
+implementation("ch.leadrian.stubr:stubr-core:1.0.1")
 ```
 
 ## 3rd party support
@@ -152,18 +152,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-junit</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-junit:1.0.0'
+implementation 'ch.leadrian.stubr:stubr-junit:1.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-junit:1.0.0")
+implementation("ch.leadrian.stubr:stubr-junit:1.0.1")
 ```
 
 ### Mockito
@@ -192,18 +192,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-mockito</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-mockito:1.0.0'
+implementation 'ch.leadrian.stubr:stubr-mockito:1.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-mockito:1.0.0")
+implementation("ch.leadrian.stubr:stubr-mockito:1.0.1")
 ```
 
 ### Kotlin
@@ -231,16 +231,16 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-kotlin</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-kotlin:1.0.0'
+implementation 'ch.leadrian.stubr:stubr-kotlin:1.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-kotlin:1.0.0")
+implementation("ch.leadrian.stubr:stubr-kotlin:1.0.1")
 ```
