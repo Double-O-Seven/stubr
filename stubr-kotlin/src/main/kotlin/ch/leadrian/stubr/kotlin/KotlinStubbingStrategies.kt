@@ -3,7 +3,6 @@ package ch.leadrian.stubr.kotlin
 import ch.leadrian.stubr.core.StubbingContext
 import ch.leadrian.stubr.core.StubbingStrategy
 import ch.leadrian.stubr.core.strategy.StubbingStrategies
-import java.util.function.IntFunction
 
 /**
  * Collection of factory methods for [StubbingStrategy] to allow simplified use of Stubr in Kotlin.
@@ -86,8 +85,18 @@ object KotlinStubbingStrategies {
      * @param T reified type of the supplied value
      * @return a [StubbingStrategy] providing a stub values using a supplying function
      */
+    inline fun <reified T> suppliedValue(crossinline supplier: (StubbingContext, Int) -> T): StubbingStrategy =
+            StubbingStrategies.suppliedValue(typeLiteral<T>()) { context, sequenceNumber -> supplier(context, sequenceNumber) }
+
+    /**
+     * Inlined wrapper for [StubbingStrategies.suppliedValue].
+     *
+     * @param supplier the value supplying function
+     * @param T reified type of the supplied value
+     * @return a [StubbingStrategy] providing a stub values using a supplying function
+     */
     inline fun <reified T> suppliedValue(crossinline supplier: (Int) -> T): StubbingStrategy =
-            StubbingStrategies.suppliedValue(typeLiteral<T>(), IntFunction { supplier(it) })
+            StubbingStrategies.suppliedValue(typeLiteral<T>()) { sequenceNumber -> supplier(sequenceNumber) }
 
     /**
      * Inlined wrapper for [StubbingStrategies.implementation].

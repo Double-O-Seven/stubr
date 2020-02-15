@@ -5,17 +5,16 @@ import ch.leadrian.stubr.core.StubbingContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntFunction;
 
 import static java.util.Objects.requireNonNull;
 
 final class SuppliedValueStubbingStrategy extends SimpleStubbingStrategy<Object> {
 
     private final Type valueType;
-    private final IntFunction<?> valueSupplier;
+    private final StubValueSupplier<?> valueSupplier;
     private final AtomicInteger sequenceNumber = new AtomicInteger(0);
 
-    SuppliedValueStubbingStrategy(Type valueType, IntFunction<?> valueSupplier) {
+    SuppliedValueStubbingStrategy(Type valueType, StubValueSupplier<?> valueSupplier) {
         requireNonNull(valueType, "valueType");
         requireNonNull(valueSupplier, "valueSupplier");
         this.valueType = valueType;
@@ -34,16 +33,16 @@ final class SuppliedValueStubbingStrategy extends SimpleStubbingStrategy<Object>
 
     @Override
     protected Object stubClass(StubbingContext context, Class<?> type) {
-        return getNextValue();
+        return getNextValue(context);
     }
 
     @Override
     protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
-        return getNextValue();
+        return getNextValue(context);
     }
 
-    private Object getNextValue() {
-        return valueSupplier.apply(sequenceNumber.getAndIncrement());
+    private Object getNextValue(StubbingContext context) {
+        return valueSupplier.get(context, sequenceNumber.getAndIncrement());
     }
 
 }

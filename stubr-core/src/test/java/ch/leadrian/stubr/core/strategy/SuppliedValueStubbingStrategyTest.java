@@ -27,7 +27,8 @@ class SuppliedValueStubbingStrategyTest {
                 .rejects(Object.class)
                 .test(
                         StubbingStrategies.suppliedValue(String.class, () -> "Test"),
-                        StubbingStrategies.suppliedValue(String.class, sequenceNumber -> "Test")
+                        StubbingStrategies.suppliedValue(String.class, sequenceNumber -> "Test"),
+                        StubbingStrategies.suppliedValue(String.class, (context, sequenceNumber) -> "Test")
                 );
     }
 
@@ -40,7 +41,8 @@ class SuppliedValueStubbingStrategyTest {
                 .rejects(new TypeLiteral<List<Integer>>() {})
                 .test(
                         StubbingStrategies.suppliedValue(listOfStrings, () -> singletonList("Test")),
-                        StubbingStrategies.suppliedValue(listOfStrings, sequenceNumber -> singletonList("Test"))
+                        StubbingStrategies.suppliedValue(listOfStrings, sequenceNumber -> singletonList("Test")),
+                        StubbingStrategies.suppliedValue(listOfStrings, (context, sequenceNumber) -> singletonList("Test"))
                 );
     }
 

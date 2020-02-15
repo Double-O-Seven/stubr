@@ -551,6 +551,20 @@ public final class StubbingStrategies {
 
     /**
      * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
+     * valueSupplier}. The passed {@link StubValueSupplier} is invoked with a {@link StubbingContext} and a sequence
+     * number that will be atomically increased on every call.
+     *
+     * @param type          the type for which a stub value should be supplied
+     * @param valueSupplier the value supplying function
+     * @param <T>           the generic type
+     * @return a {@link StubbingStrategy} providing a stub values using a supplying function
+     */
+    public static <T> StubbingStrategy suppliedValue(Class<T> type, StubValueSupplier<? extends T> valueSupplier) {
+        return new SuppliedValueStubbingStrategy(type, valueSupplier);
+    }
+
+    /**
+     * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
      * valueSupplier}. The passed {@link IntFunction} is invoked with a sequence number that will be atomically
      * increased on every call.
      *
@@ -560,7 +574,8 @@ public final class StubbingStrategies {
      * @return a {@link StubbingStrategy} providing a stub values using a supplying function
      */
     public static <T> StubbingStrategy suppliedValue(Class<T> type, IntFunction<? extends T> valueSupplier) {
-        return new SuppliedValueStubbingStrategy(type, valueSupplier);
+        requireNonNull(valueSupplier, "valueSupplier");
+        return suppliedValue(type, (context, sequenceNumber) -> valueSupplier.apply(sequenceNumber));
     }
 
     /**
@@ -579,6 +594,20 @@ public final class StubbingStrategies {
 
     /**
      * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
+     * valueSupplier}. The passed {@link StubValueSupplier} is invoked with a {@link StubbingContext} and a sequence
+     * number that will be atomically increased on every call.
+     *
+     * @param typeLiteral   the type for which a stub value should be supplied
+     * @param valueSupplier the value supplying function
+     * @param <T>           the generic type
+     * @return a {@link StubbingStrategy} providing a stub values using a supplying function
+     */
+    public static <T> StubbingStrategy suppliedValue(TypeLiteral<T> typeLiteral, StubValueSupplier<? extends T> valueSupplier) {
+        return new SuppliedValueStubbingStrategy(typeLiteral.getType(), valueSupplier);
+    }
+
+    /**
+     * Returns a {@link StubbingStrategy} providing a stub value for the given {@link Class} using the {@code
      * valueSupplier}. The passed {@link IntFunction} is invoked with a sequence number that will be atomically
      * increased on every call.
      *
@@ -588,7 +617,8 @@ public final class StubbingStrategies {
      * @return a {@link StubbingStrategy} providing a stub values using a supplying function
      */
     public static <T> StubbingStrategy suppliedValue(TypeLiteral<T> typeLiteral, IntFunction<? extends T> valueSupplier) {
-        return new SuppliedValueStubbingStrategy(typeLiteral.getType(), valueSupplier);
+        requireNonNull(valueSupplier, "valueSupplier");
+        return suppliedValue(typeLiteral, ((context, sequenceNumber) -> valueSupplier.apply(sequenceNumber)));
     }
 
     /**
@@ -602,7 +632,7 @@ public final class StubbingStrategies {
      */
     public static <T> StubbingStrategy suppliedValue(TypeLiteral<T> typeLiteral, Supplier<? extends T> valueSupplier) {
         requireNonNull(valueSupplier, "valueSupplier");
-        return suppliedValue(typeLiteral, (IntFunction<? extends T>) sequenceNumber -> valueSupplier.get());
+        return suppliedValue(typeLiteral, sequenceNumber -> valueSupplier.get());
     }
 
     /**

@@ -37,7 +37,10 @@ internal class KotlinStubbingStrategiesTest {
         return stubbingStrategyTester()
                 .accepts(typeLiteral<List<String>>())
                 .andStubs(listOf("foo"))
-                .test(KotlinStubbingStrategies.suppliedValue { listOf("foo") })
+                .test(
+                        KotlinStubbingStrategies.suppliedValue { _, _ -> listOf("foo") },
+                        KotlinStubbingStrategies.suppliedValue { _ -> listOf("foo") }
+                )
     }
 
     @TestFactory
