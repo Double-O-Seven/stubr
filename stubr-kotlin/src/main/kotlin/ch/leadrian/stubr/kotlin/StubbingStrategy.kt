@@ -5,9 +5,9 @@ import ch.leadrian.stubr.core.StubbingStrategy
 import java.lang.reflect.Type
 
 /**
- * Wrapper for [StubbingStrategy.when].
+ * Inline wrapper for [StubbingStrategy.when].
  *
- * This wrapper avoid having to use back ticks when invoking [StubbingStrategy.when] from Kotlin.
+ * This wrapper avoids having to use back ticks when invoking [StubbingStrategy.when] from Kotlin.
  *
  * @return the matcher used to match a given [Type]
  * @return a new [StubbingStrategy] that is only applied when the given [matcher] matches
