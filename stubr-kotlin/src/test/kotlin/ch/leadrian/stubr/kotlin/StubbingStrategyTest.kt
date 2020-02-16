@@ -1,5 +1,6 @@
 package ch.leadrian.stubr.kotlin
 
+import ch.leadrian.stubr.core.Matcher
 import ch.leadrian.stubr.core.StubbingContext
 import ch.leadrian.stubr.core.StubbingStrategy
 import ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester
@@ -17,7 +18,10 @@ internal class StubbingStrategyTest {
                 .accepts(Int::class.java)
                 .rejects(Float::class.java)
                 .rejects(Any::class.java)
-                .test(NullStubbingStrategy.applyWhen { _, type -> type == String::class.java || type == Int::class.java })
+                .test(
+                        NullStubbingStrategy.applyWhen(Matcher { _, type -> type == String::class.java || type == Int::class.java }),
+                        NullStubbingStrategy.applyWhen { _, type -> type == String::class.java || type == Int::class.java }
+                )
     }
 
     private object NullStubbingStrategy : StubbingStrategy {
