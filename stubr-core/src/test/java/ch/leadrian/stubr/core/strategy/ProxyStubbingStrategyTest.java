@@ -73,6 +73,17 @@ class ProxyStubbingStrategyTest {
                 .testEquals();
     }
 
+    @Test
+    void toStringShouldNotReturnStubbedString() {
+        StubbingContext context = new StubbingContext(mock(Stubber.class), StubbingSites.unknown());
+        StubbingStrategy stubbingStrategy = StubbingStrategies.proxy();
+
+        Foo foo = (Foo) stubbingStrategy.stub(context, Foo.class);
+
+        assertThat(foo.toString())
+                .startsWith("Stubbed ch.leadrian.stubr.core.strategy.ProxyStubbingStrategyTest$Foo");
+    }
+
     private interface Foo {
 
         int getInt();

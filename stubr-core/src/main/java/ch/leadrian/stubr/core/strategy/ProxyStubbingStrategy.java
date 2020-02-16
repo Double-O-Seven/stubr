@@ -43,12 +43,12 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
     @Override
     public Object stub(StubbingContext context, Type type) {
         return getRawType(type)
-                .map(clazz -> createProxy(clazz, getInvocationHandler(context)))
+                .map(clazz -> createProxy(clazz, getInvocationHandler(context, clazz)))
                 .orElseThrow(() -> new StubbingException(context.getSite(), type));
     }
 
-    private InvocationHandler getInvocationHandler(StubbingContext context) {
-        return cacheStubs ? new CachingInvocationHandler(context) : new SimpleInvocationHandler(context);
+    private InvocationHandler getInvocationHandler(StubbingContext context, Class<?> type) {
+        return cacheStubs ? new CachingInvocationHandler(context, type) : new SimpleInvocationHandler(context, type);
     }
 
     private Object createProxy(Class<?> clazz, InvocationHandler invocationHandler) {
@@ -66,9 +66,11 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
         }
 
         private final StubbingContext context;
+        private final Class<?> type;
 
-        StubbingInvocationHandler(StubbingContext context) {
+        StubbingInvocationHandler(StubbingContext context, Class<?> type) {
             this.context = context;
+            this.type = type;
         }
 
         @Override
@@ -83,7 +85,7 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
                 return proxy == args[0];
             }
             if (isToStringMethod(method)) {
-                return String.format("%s@%s", proxy.getClass().getName(), Integer.toHexString(System.identityHashCode(proxy)));
+                return String.format("Stubbed %s (%s@%s)", type.getName(), proxy.getClass().getName(), Integer.toHexString(System.identityHashCode(proxy)));
             }
             return getReturnValue(method);
         }
@@ -97,7 +99,7 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
         }
 
         private boolean isToStringMethod(Method method) {
-            return "hashCode".equals(method.getName()) && method.getParameterCount() == 0;
+            return "toString".equals(method.getName()) && method.getParameterCount() == 0;
         }
 
         protected final Object stub(Method method) {
@@ -114,8 +116,8 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
 
     private static final class SimpleInvocationHandler extends StubbingInvocationHandler {
 
-        SimpleInvocationHandler(StubbingContext context) {
-            super(context);
+        SimpleInvocationHandler(StubbingContext context, Class<?> type) {
+            super(context, type);
         }
 
         @Override
@@ -129,8 +131,8 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
 
         private final Map<Method, Object> stubbedValues = new ConcurrentHashMap<>();
 
-        CachingInvocationHandler(StubbingContext context) {
-            super(context);
+        CachingInvocationHandler(StubbingContext context, Class<?> type) {
+            super(context, type);
         }
 
         @Override
