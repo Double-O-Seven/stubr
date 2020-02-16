@@ -17,16 +17,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
-import static ch.leadrian.stubr.core.strategy.StubbingStrategies.collection;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultCollections;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.suppliedValue;
 import static ch.leadrian.stubr.integrationtest.CoreIntegrationTest.TestStubbingStrategies;
 import static ch.leadrian.stubr.junit.annotation.StubberBaseline.Variant.DEFAULT;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -257,7 +256,10 @@ class CoreIntegrationTest {
                     .addAll(defaultCollections(3))
                     .add(suppliedValue(String.class, sequenceNumber -> String.format("value%d", sequenceNumber)))
                     .add(suppliedValue(Integer.class, sequenceNumber -> sequenceNumber))
-                    .add(collection(List.class, ArrayList::new, this::getCollectionSize).when(annotatedSiteIs(annotatedWith(CollectionSize.class))))
+                    .addAll(defaultCollections(this::getCollectionSize)
+                            .stream()
+                            .map(strategy -> strategy.when(annotatedSiteIs(annotatedWith(CollectionSize.class))))
+                            .collect(toList()))
                     .build();
         }
 

@@ -185,10 +185,10 @@ public final class StubbingStrategies {
      * Returns a list of {@link StubbingStrategy}s to stub common {@link Collection}s (including {@link Map}s) with size
      * {@code size}.
      *
-     * @param size the collection size
+     * @param size the collection size function
      * @return a list of {@link StubbingStrategy}s for common collections
      */
-    public static List<StubbingStrategy> defaultCollections(int size) {
+    public static List<StubbingStrategy> defaultCollections(ToIntFunction<? super StubbingContext> size) {
         return ImmutableList.<StubbingStrategy>builder()
                 .add(collection(Collection.class, ArrayList::new, size))
                 .add(collection(List.class, ArrayList::new, size))
@@ -218,6 +218,17 @@ public final class StubbingStrategies {
                 .add(map(ConcurrentNavigableMap.class, ConcurrentSkipListMap::new, size))
                 .add(array(size))
                 .build();
+    }
+
+    /**
+     * Returns a list of {@link StubbingStrategy}s to stub common {@link Collection}s (including {@link Map}s) with size
+     * {@code size}.
+     *
+     * @param size the collection size
+     * @return a list of {@link StubbingStrategy}s for common collections
+     */
+    public static List<StubbingStrategy> defaultCollections(int size) {
+        return defaultCollections((ToIntFunction<? super StubbingContext>) context -> size);
     }
 
     /**
