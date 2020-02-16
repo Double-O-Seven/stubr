@@ -95,6 +95,17 @@ public final class Matchers {
     }
 
     /**
+     * Returns a matcher that matches {@link Executable}s using a delegate matcher.
+     *
+     * @param delegate the delegate
+     * @param <T>      the generic type, may be anything
+     * @return a matcher that matches {@link Executable}s using a delegate matcher
+     */
+    public static <T> Matcher<T> executableIs(Matcher<? super Executable> delegate) {
+        return new ExecutableMatcher<>(delegate);
+    }
+
+    /**
      * Returns a matcher that matches {@link Constructor}s using a delegate matcher.
      *
      * @param delegate the delegate
