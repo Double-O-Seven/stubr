@@ -24,27 +24,6 @@ import static ch.leadrian.stubr.core.strategy.StubbingStrategies.stubber;
  */
 public final class Stubbers {
 
-    private static final Stubber DEFAULT_STUBBER = Stubber.builder()
-            .stubWith(defaultValue())
-            .stubWith(proxy())
-            .stubWith(enumValue())
-            .stubWith(optional(OptionalStubbingMode.PRESENT))
-            .stubWith(defaultConstructor())
-            .stubWith(nonDefaultConstructor())
-            .stubWith(factoryMethod())
-            .stubWith(defaultCollections(1))
-            .stubWith(stubber())
-            .stubWith(commonConstantValues())
-            .stubWith(commonSuppliedValues())
-            .build();
-
-    private static final Stubber MINIMAL_STUBBER = Stubber.builder()
-            .include(defaultStubber())
-            .stubWith(nullValue().when(annotatedSiteIs(nullable())))
-            .stubWith(optional(OptionalStubbingMode.EMPTY))
-            .stubWith(emptyDefaultCollections())
-            .build();
-
     private Stubbers() {
     }
 
@@ -68,7 +47,19 @@ public final class Stubbers {
      * @see StubbingStrategies
      */
     public static Stubber defaultStubber() {
-        return DEFAULT_STUBBER;
+        return Stubber.builder()
+                .stubWith(defaultValue())
+                .stubWith(proxy())
+                .stubWith(enumValue())
+                .stubWith(optional(OptionalStubbingMode.PRESENT))
+                .stubWith(defaultConstructor())
+                .stubWith(nonDefaultConstructor())
+                .stubWith(factoryMethod())
+                .stubWith(defaultCollections(1))
+                .stubWith(stubber())
+                .stubWith(commonConstantValues())
+                .stubWith(commonSuppliedValues())
+                .build();
     }
 
     /**
@@ -80,7 +71,12 @@ public final class Stubbers {
      * @see StubbingStrategies
      */
     public static Stubber minimalStubber() {
-        return MINIMAL_STUBBER;
+        return Stubber.builder()
+                .include(defaultStubber())
+                .stubWith(nullValue().when(annotatedSiteIs(nullable())))
+                .stubWith(optional(OptionalStubbingMode.EMPTY))
+                .stubWith(emptyDefaultCollections())
+                .build();
     }
 
 }
