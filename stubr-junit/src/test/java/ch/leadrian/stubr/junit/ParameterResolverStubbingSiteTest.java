@@ -51,6 +51,20 @@ class ParameterResolverStubbingSiteTest {
     }
 
     @Test
+    void shouldReturnParameterIndex() {
+        ParameterContext parameterContext = mock(ParameterContext.class);
+        when(parameterContext.getIndex())
+                .thenReturn(13);
+        ExtensionContext extensionContext = mock(ExtensionContext.class);
+        ParameterResolverStubbingSite site = new ParameterResolverStubbingSite(parameterContext, extensionContext);
+
+        int index = site.getParameterIndex();
+
+        assertThat(index)
+                .isEqualTo(13);
+    }
+
+    @Test
     void shouldReturnParameterContext() throws Exception {
         Method method = Foo.class.getMethod("foo", int.class);
         Parameter parameter = method.getParameters()[0];

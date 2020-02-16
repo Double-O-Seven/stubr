@@ -69,6 +69,19 @@ class ConstructorParameterStubbingSiteTest {
     }
 
     @Test
+    void shouldReturnParameterIndex() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Constructor<Foo> constructor = Foo.class.getConstructor(int.class);
+        Parameter parameter = constructor.getParameters()[0];
+        ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(parent, constructor, parameter);
+
+        int index = site.getParameterIndex();
+
+        assertThat(index)
+                .isZero();
+    }
+
+    @Test
     void shouldReturnParameterAsAnnotatedElement() throws Exception {
         StubbingSite parent = mock(StubbingSite.class);
         Constructor<Foo> constructor = Foo.class.getConstructor(int.class);
@@ -88,7 +101,7 @@ class ConstructorParameterStubbingSiteTest {
         Parameter expectedParameter1 = constructor1.getParameters()[0];
         StubbingSite parent2 = mock(StubbingSite.class);
         Constructor<Foo> constructor2 = Foo.class.getConstructor(String.class);
-        Parameter expectedParameter2 = constructor1.getParameters()[0];
+        Parameter expectedParameter2 = constructor2.getParameters()[0];
 
         new EqualsTester()
                 .addEqualityGroup(StubbingSites.constructorParameter(parent1, constructor1, expectedParameter1), StubbingSites.constructorParameter(parent1, constructor1, expectedParameter1))

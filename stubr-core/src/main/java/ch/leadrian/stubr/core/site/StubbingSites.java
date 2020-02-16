@@ -10,6 +10,8 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.util.function.Supplier;
 
+import static java.util.Arrays.asList;
+
 /**
  * Collection of factory methods for various implementations of default {@link StubbingSite}s.
  */
@@ -42,7 +44,11 @@ public final class StubbingSites {
      * @see StubbingStrategies#constructor()
      */
     public static ConstructorParameterStubbingSite constructorParameter(StubbingSite parent, Constructor<?> constructor, Parameter parameter) {
-        return new ConstructorParameterStubbingSite(parent, constructor, parameter);
+        int index = asList(constructor.getParameters()).indexOf(parameter);
+        if (index == -1) {
+            throw new IllegalArgumentException(String.format("%s is not a parameter of %s", parameter, constructor));
+        }
+        return new ConstructorParameterStubbingSite(parent, constructor, parameter, index);
     }
 
     /**
@@ -56,7 +62,7 @@ public final class StubbingSites {
      * @see StubbingStrategies#constructor()
      */
     public static ConstructorParameterStubbingSite constructorParameter(StubbingSite parent, Constructor<?> constructor, int parameterIndex) {
-        return constructorParameter(parent, constructor, constructor.getParameters()[parameterIndex]);
+        return new ConstructorParameterStubbingSite(parent, constructor, constructor.getParameters()[parameterIndex], parameterIndex);
     }
 
     /**
@@ -70,7 +76,11 @@ public final class StubbingSites {
      * @see StubbingStrategies#factoryMethod()
      */
     public static MethodParameterStubbingSite methodParameter(StubbingSite parent, Method method, Parameter parameter) {
-        return new MethodParameterStubbingSite(parent, method, parameter);
+        int index = asList(method.getParameters()).indexOf(parameter);
+        if (index == -1) {
+            throw new IllegalArgumentException(String.format("%s is not a parameter of %s", parameter, method));
+        }
+        return new MethodParameterStubbingSite(parent, method, parameter, index);
     }
 
     /**
@@ -84,7 +94,7 @@ public final class StubbingSites {
      * @see StubbingStrategies#factoryMethod()
      */
     public static MethodParameterStubbingSite methodParameter(StubbingSite parent, Method method, int parameterIndex) {
-        return methodParameter(parent, method, method.getParameters()[parameterIndex]);
+        return new MethodParameterStubbingSite(parent, method, method.getParameters()[parameterIndex], parameterIndex);
     }
 
     /**

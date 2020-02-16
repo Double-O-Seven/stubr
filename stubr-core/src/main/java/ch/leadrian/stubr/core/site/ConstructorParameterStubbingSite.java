@@ -20,19 +20,22 @@ public final class ConstructorParameterStubbingSite implements ConstructorStubbi
             .compareAndHash(ConstructorParameterStubbingSite::getParent)
             .compareAndHash(ConstructorParameterStubbingSite::getConstructor)
             .compareAndHash(ConstructorParameterStubbingSite::getParameter)
+            .compareAndHashPrimitive(ConstructorParameterStubbingSite::getParameterIndex)
             .build();
 
     private final StubbingSite parent;
     private final Constructor<?> constructor;
     private final Parameter parameter;
+    private final int parameterIndex;
 
-    ConstructorParameterStubbingSite(StubbingSite parent, Constructor<?> constructor, Parameter parameter) {
+    ConstructorParameterStubbingSite(StubbingSite parent, Constructor<?> constructor, Parameter parameter, int parameterIndex) {
         requireNonNull(parent, "parent");
         requireNonNull(constructor, "constructor");
         requireNonNull(parameter, "parameter");
         this.parent = parent;
         this.constructor = constructor;
         this.parameter = parameter;
+        this.parameterIndex = parameterIndex;
     }
 
     /**
@@ -57,6 +60,14 @@ public final class ConstructorParameterStubbingSite implements ConstructorStubbi
     @Override
     public Parameter getParameter() {
         return parameter;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getParameterIndex() {
+        return parameterIndex;
     }
 
     /**

@@ -63,6 +63,14 @@ public final class ParameterResolverStubbingSite implements ParameterStubbingSit
      * {@inheritDoc}
      */
     @Override
+    public int getParameterIndex() {
+        return parameterContext.getIndex();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Optional<StubbingSite> getParent() {
         return Optional.empty();
     }

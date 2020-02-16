@@ -69,6 +69,19 @@ class MethodParameterStubbingSiteTest {
     }
 
     @Test
+    void shouldReturnParameterIndex() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Method method = Foo.class.getMethod("foo", int.class);
+        Parameter parameter = method.getParameters()[0];
+        MethodParameterStubbingSite site = StubbingSites.methodParameter(parent, method, parameter);
+
+        int index = site.getParameterIndex();
+
+        assertThat(index)
+                .isZero();
+    }
+
+    @Test
     void shouldReturnParameterAsAnnotatedElement() throws Exception {
         StubbingSite parent = mock(StubbingSite.class);
         Method method = Foo.class.getMethod("foo", int.class);
@@ -88,7 +101,7 @@ class MethodParameterStubbingSiteTest {
         Parameter expectedParameter1 = method1.getParameters()[0];
         StubbingSite parent2 = mock(StubbingSite.class);
         Method method2 = Foo.class.getMethod("foo", String.class);
-        Parameter expectedParameter2 = method1.getParameters()[0];
+        Parameter expectedParameter2 = method2.getParameters()[0];
 
         new EqualsTester()
                 .addEqualityGroup(StubbingSites.methodParameter(parent1, method1, expectedParameter1), StubbingSites.methodParameter(parent1, method1, expectedParameter1))

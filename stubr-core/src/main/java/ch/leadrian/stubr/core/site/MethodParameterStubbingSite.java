@@ -20,19 +20,22 @@ public final class MethodParameterStubbingSite implements ParameterStubbingSite,
             .compareAndHash(MethodParameterStubbingSite::getParent)
             .compareAndHash(MethodParameterStubbingSite::getMethod)
             .compareAndHash(MethodParameterStubbingSite::getParameter)
+            .compareAndHashPrimitive(MethodParameterStubbingSite::getParameterIndex)
             .build();
 
     private final StubbingSite parent;
     private final Method method;
     private final Parameter parameter;
+    private final int parameterIndex;
 
-    MethodParameterStubbingSite(StubbingSite parent, Method method, Parameter parameter) {
+    MethodParameterStubbingSite(StubbingSite parent, Method method, Parameter parameter, int parameterIndex) {
         requireNonNull(parent, "parent");
         requireNonNull(method, "method");
         requireNonNull(parameter, "parameter");
         this.parent = parent;
         this.method = method;
         this.parameter = parameter;
+        this.parameterIndex = parameterIndex;
     }
 
     /**
@@ -57,6 +60,14 @@ public final class MethodParameterStubbingSite implements ParameterStubbingSite,
     @Override
     public Parameter getParameter() {
         return parameter;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getParameterIndex() {
+        return parameterIndex;
     }
 
     /**
