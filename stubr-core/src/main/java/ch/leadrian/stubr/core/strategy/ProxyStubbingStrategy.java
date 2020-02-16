@@ -76,7 +76,28 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
             if (method.isDefault()) {
                 return DEFAULT_METHOD_INVOCATION_HANDLER.invoke(proxy, method, args);
             }
+            if (isHashCodeMethod(method)) {
+                return System.identityHashCode(proxy);
+            }
+            if (isEqualsMethod(method)) {
+                return proxy == args[0];
+            }
+            if (isToStringMethod(method)) {
+                return String.format("%s@%s", proxy.getClass().getName(), Integer.toHexString(System.identityHashCode(proxy)));
+            }
             return getReturnValue(method);
+        }
+
+        private boolean isHashCodeMethod(Method method) {
+            return "hashCode".equals(method.getName()) && method.getParameterCount() == 0;
+        }
+
+        private boolean isEqualsMethod(Method method) {
+            return "equals".equals(method.getName()) && method.getParameterCount() == 1 && method.getParameterTypes()[0] == Object.class;
+        }
+
+        private boolean isToStringMethod(Method method) {
+            return "hashCode".equals(method.getName()) && method.getParameterCount() == 0;
         }
 
         protected final Object stub(Method method) {
