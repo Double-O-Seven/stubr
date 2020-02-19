@@ -71,7 +71,7 @@ class StubrTest {
     }
 
     @Test
-    void shouldStubSequenceValues(@Sequence @Stub int value1, @Sequence @Stub int value2, @Stub int value3) {
+    void shouldStubSequenceValues(@Sequence int value1, @Sequence int value2, @Stub int value3) {
         assertAll(
                 () -> assertThat(value1).isEqualTo(0),
                 () -> assertThat(value2).isEqualTo(1),
@@ -121,7 +121,7 @@ class StubrTest {
         }
 
         @Test
-        void shouldStubSequenceValues(@Sequence @Stub int value1, @Sequence @Stub int value2, @Stub int value3) {
+        void shouldStubSequenceValues(@Sequence int value1, @Sequence int value2, @Stub int value3) {
             assertAll(
                     () -> assertThat(value1).isEqualTo(0),
                     () -> assertThat(value2).isEqualTo(1),
@@ -201,6 +201,7 @@ class StubrTest {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.PARAMETER)
+    @Stub
     private @interface Sequence {
     }
 

@@ -9,7 +9,11 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
+
+import static java.util.Arrays.stream;
 
 /**
  * A JUnit extension that provides stubs to a test case.
@@ -60,7 +64,16 @@ public final class Stubr implements BeforeEachCallback, AfterEachCallback, Param
      */
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return stubber != null && parameterContext.getParameter().isAnnotationPresent(Stub.class);
+        return stubber != null && isAnnotatedWithStub(parameterContext.getParameter());
+    }
+
+    private boolean isAnnotatedWithStub(AnnotatedElement element) {
+        if (element.isAnnotationPresent(Stub.class)) {
+            return true;
+        }
+        return stream(element.getAnnotations())
+                .map(Annotation::annotationType)
+                .anyMatch(this::isAnnotatedWithStub);
     }
 
     /**
