@@ -15,7 +15,7 @@ For example:
 
 ```java
 Stubber stubber = Stubber.builder()
-        .stubWith(Stubbers.constantValue("Foo"))
+        .stubWith(StubbingStrategies.constantValue("Foo"))
         .stubWith(Stubbers.suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber))
         .build();
 String stringValue = stubber.stub(String.class); // Foo
@@ -107,18 +107,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-core</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-core:1.2.0'
+implementation 'ch.leadrian.stubr:stubr-core:1.3.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-core:1.2.0")
+implementation("ch.leadrian.stubr:stubr-core:1.3.0")
 ```
 
 ## 3rd party support
@@ -152,18 +152,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-junit</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-junit:1.2.0'
+implementation 'ch.leadrian.stubr:stubr-junit:1.3.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-junit:1.2.0")
+implementation("ch.leadrian.stubr:stubr-junit:1.3.0")
 ```
 
 ### Mockito
@@ -176,7 +176,7 @@ Concrete instances can be accessed through `ch.leadrian.stubr.mockito.MockitoStu
 A usage example:
 ```java
 Stubber stubber = Stubber.builder()
-    .stubWith(Stubbers.constantValue("stubbed"))
+    .stubWith(StubbingStrategies.constantValue("stubbed"))
     .stubWith(MockitoStubbers.mock())
     .stubWith(MockitoStubbers.mock(MyMockedObject.class, mock -> Mockito.when(mock.doSomething()).thenReturn("done")))
     .build();
@@ -192,18 +192,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-mockito</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-mockito:1.2.0'
+implementation 'ch.leadrian.stubr:stubr-mockito:1.3.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-mockito:1.2.0")
+implementation("ch.leadrian.stubr:stubr-mockito:1.3.0")
 ```
 
 ### Kotlin
@@ -219,7 +219,7 @@ object MyObject {
 }
 
 var stubber = Stubber.builder()
-    .stubWith(KotlinStubbers.objectInstance())
+    .stubWith(KotlinStubbingStrategies.objectInstance())
     .build()
 val stub: MyObject = stubber.stub()
 ```
@@ -231,16 +231,16 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-kotlin</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-kotlin:1.2.0'
+implementation 'ch.leadrian.stubr:stubr-kotlin:1.3.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-kotlin:1.2.0")
+implementation("ch.leadrian.stubr:stubr-kotlin:1.3.0")
 ```
