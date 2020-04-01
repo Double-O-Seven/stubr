@@ -412,6 +412,18 @@ public final class StubbingStrategies {
     }
 
     /**
+     * Returns a {@link StubbingStrategy} that accepts enum classes and selects a value using the given {@link
+     * Selector}.
+     * <p>
+     * An enum class will not be accepted if no values have been declared.
+     *
+     * @return a {@link StubbingStrategy} that uses the first enum value of an enum class
+     */
+    public static StubbingStrategy enumValue(Selector<Enum<?>> selector) {
+        return new EnumValueStubbingStrategy(selector);
+    }
+
+    /**
      * Returns a {@link StubbingStrategy} that accepts enum classes and uses the first enum value as stub value.
      * <p>
      * An enum class will not be accepted if no values have been declared.
@@ -419,7 +431,7 @@ public final class StubbingStrategies {
      * @return a {@link StubbingStrategy} that uses the first enum value of an enum class
      */
     public static StubbingStrategy enumValue() {
-        return EnumValueStubbingStrategy.INSTANCE;
+        return EnumValueStubbingStrategy.FIRST_ELEMENT;
     }
 
     /**
