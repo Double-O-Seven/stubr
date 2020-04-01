@@ -57,7 +57,7 @@ final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
                 .stream()
                 .map(test -> {
                     Stubber stubber = createStubber();
-                    StubbingContext context = new StubbingContext(stubber, TestStubbingSite.INSTANCE);
+                    StubbingContext context = StubbingContext.create(stubber, TestStubbingSite.INSTANCE);
                     return test.toDynamicTest(stubbingStrategy, context);
                 });
     }

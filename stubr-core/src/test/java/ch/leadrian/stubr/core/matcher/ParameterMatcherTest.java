@@ -16,7 +16,7 @@ class ParameterMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenParameterStubbingSiteItShouldReturnTrueIfAndOnlyIfDelegateMatches(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(ParameterStubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(ParameterStubbingSite.class));
         Matcher<Object> matcher = Matchers.parameterIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());
@@ -28,7 +28,7 @@ class ParameterMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenNoParameterStubbingSiteItShouldReturnFalse(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(StubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
         Matcher<Object> matcher = Matchers.parameterIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());

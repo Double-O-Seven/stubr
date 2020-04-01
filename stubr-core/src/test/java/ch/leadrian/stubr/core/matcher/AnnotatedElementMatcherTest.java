@@ -16,7 +16,7 @@ class AnnotatedElementMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenAnnotatedElementStubbingSiteItShouldReturnTrueIfAndOnlyIfDelegateMatches(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(AnnotatedStubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(AnnotatedStubbingSite.class));
         Matcher<Object> matcher = Matchers.annotatedSiteIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());
@@ -28,7 +28,7 @@ class AnnotatedElementMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenNoAnnotatedElementStubbingSiteItShouldReturnFalse(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(StubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
         Matcher<Object> matcher = Matchers.annotatedSiteIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());

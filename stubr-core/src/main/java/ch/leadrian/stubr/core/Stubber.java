@@ -90,7 +90,7 @@ public abstract class Stubber {
      * @see Stubber#tryToStub(Type, StubbingContext)
      */
     public final Result<?> tryToStub(Type type, StubbingSite site) {
-        StubbingContext context = new StubbingContext(this, site);
+        StubbingContext context = StubbingContext.create(this, site);
         return tryToStub(type, context);
     }
 

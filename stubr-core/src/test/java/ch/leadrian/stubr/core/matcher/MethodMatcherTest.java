@@ -16,7 +16,7 @@ class MethodMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenMethodStubbingSiteItShouldReturnTrueIfAndOnlyIfDelegateMatches(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(MethodStubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(MethodStubbingSite.class));
         Matcher<Object> matcher = Matchers.methodIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());
@@ -28,7 +28,7 @@ class MethodMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenNoMethodStubbingSiteItShouldReturnFalse(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(StubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
         Matcher<Object> matcher = Matchers.methodIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());

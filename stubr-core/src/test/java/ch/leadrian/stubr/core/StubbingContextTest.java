@@ -15,7 +15,7 @@ class StubbingContextTest {
         Stubber stubber = mock(Stubber.class);
         StubbingSite site = mock(StubbingSite.class);
 
-        StubbingContext context = new StubbingContext(stubber, site);
+        StubbingContext context = StubbingContext.create(stubber, site);
 
         assertAll(
                 () -> assertThat(context.getStubber()).isEqualTo(stubber),
@@ -31,8 +31,8 @@ class StubbingContextTest {
         StubbingSite site2 = mock(StubbingSite.class);
 
         new EqualsTester()
-                .addEqualityGroup(new StubbingContext(stubber1, site1), new StubbingContext(stubber1, site1))
-                .addEqualityGroup(new StubbingContext(stubber2, site2), new StubbingContext(stubber2, site2))
+                .addEqualityGroup(StubbingContext.create(stubber1, site1), StubbingContext.create(stubber1, site1))
+                .addEqualityGroup(StubbingContext.create(stubber2, site2), StubbingContext.create(stubber2, site2))
                 .addEqualityGroup("Test")
                 .testEquals();
     }

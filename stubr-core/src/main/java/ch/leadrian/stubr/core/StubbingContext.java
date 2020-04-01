@@ -27,11 +27,18 @@ public final class StubbingContext {
      * <p>
      * However, a custom implementation of {@link Stubber} might override the {@link StubbingContext} in order to
      * enhance the given {@link Stubber} or {@link StubbingSite}.
+     * <p>
+     * {@code StubbingContext}s must be instantiated using a factory method for sake of extensibility and to keep the
+     * option open to replace the concrete class with an interface or abstract class should the need arise.
      *
      * @param stubber the {@link Stubber} performing the stubbing
      * @param site    the {@link StubbingSite} where the requested stub value will be used
      */
-    public StubbingContext(Stubber stubber, StubbingSite site) {
+    public static StubbingContext create(Stubber stubber, StubbingSite site) {
+        return new StubbingContext(stubber, site);
+    }
+
+    private StubbingContext(Stubber stubber, StubbingSite site) {
         requireNonNull(stubber, "stubber");
         requireNonNull(site, "site");
         this.stubber = stubber;

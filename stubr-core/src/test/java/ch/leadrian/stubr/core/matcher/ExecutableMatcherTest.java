@@ -16,7 +16,7 @@ class ExecutableMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenExecutableStubbingSiteItShouldReturnTrueIfAndOnlyIfDelegateMatches(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(ExecutableStubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(ExecutableStubbingSite.class));
         Matcher<Object> matcher = Matchers.executableIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());
@@ -28,7 +28,7 @@ class ExecutableMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenNoExecutableStubbingSiteItShouldReturnFalse(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(StubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
         Matcher<Object> matcher = Matchers.executableIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());

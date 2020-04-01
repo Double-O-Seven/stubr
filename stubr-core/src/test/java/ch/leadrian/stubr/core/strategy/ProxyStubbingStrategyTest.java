@@ -60,7 +60,7 @@ class ProxyStubbingStrategyTest {
 
     @Test
     void testProxyEquals() {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), StubbingSites.unknown());
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), StubbingSites.unknown());
         StubbingStrategy stubbingStrategy = StubbingStrategies.proxy();
 
         Foo foo1 = (Foo) stubbingStrategy.stub(context, Foo.class);
@@ -75,7 +75,7 @@ class ProxyStubbingStrategyTest {
 
     @Test
     void toStringShouldNotReturnStubbedString() {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), StubbingSites.unknown());
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), StubbingSites.unknown());
         StubbingStrategy stubbingStrategy = StubbingStrategies.proxy();
 
         Foo foo = (Foo) stubbingStrategy.stub(context, Foo.class);

@@ -33,7 +33,7 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
         String displayName = getDisplayName(stubbingStrategy);
         return dynamicTest(displayName, () -> {
             CapturingStubber capturingStubber = new CapturingStubber(context.getStubber());
-            StubbingContext capturingContext = new StubbingContext(capturingStubber, context.getSite());
+            StubbingContext capturingContext = StubbingContext.create(capturingStubber, context.getSite());
 
             stubbingStrategy.stub(capturingContext, acceptedType);
 

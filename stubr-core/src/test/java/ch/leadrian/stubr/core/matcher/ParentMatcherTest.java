@@ -22,7 +22,7 @@ class ParentMatcherTest {
     @Test
     void givenNoParentSiteItShouldNotMatch() {
         StubbingSite site = new TestStubbingSite(null);
-        StubbingContext context = new StubbingContext(mock(Stubber.class), site);
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), site);
         Matcher<String> matcher = Matchers.parent((c, v) -> true);
 
         boolean matches = matcher.matches(context, "test");
@@ -37,7 +37,7 @@ class ParentMatcherTest {
         StubbingSite parentSite = new TestStubbingSite(null);
         StubbingSite site = new TestStubbingSite(parentSite);
         Stubber stubber = mock(Stubber.class);
-        StubbingContext context = new StubbingContext(stubber, site);
+        StubbingContext context = StubbingContext.create(stubber, site);
         @SuppressWarnings("unchecked")
         Matcher<String> delegate = mock(Matcher.class);
         when(delegate.matches(any(), any()))
@@ -48,7 +48,7 @@ class ParentMatcherTest {
 
         assertAll(
                 () -> assertThat(matches).isEqualTo(expectedMatch),
-                () -> verify(delegate).matches(new StubbingContext(stubber, parentSite), "test")
+                () -> verify(delegate).matches(StubbingContext.create(stubber, parentSite), "test")
         );
     }
 

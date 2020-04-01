@@ -16,7 +16,7 @@ class ConstructorMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenConstructorStubbingSiteItShouldReturnTrueIfAndOnlyIfDelegateMatches(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(ConstructorStubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(ConstructorStubbingSite.class));
         Matcher<Object> matcher = Matchers.constructorIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());
@@ -28,7 +28,7 @@ class ConstructorMatcherTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void givenNoConstructorStubbingSiteItShouldReturnFalse(boolean delegateMatches) {
-        StubbingContext context = new StubbingContext(mock(Stubber.class), mock(StubbingSite.class));
+        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
         Matcher<Object> matcher = Matchers.constructorIs((ctx, value) -> delegateMatches);
 
         boolean matches = matcher.matches(context, new Object());

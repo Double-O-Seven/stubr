@@ -18,7 +18,7 @@ final class ParentMatcher<T> implements Matcher<T> {
     public boolean matches(StubbingContext context, T value) {
         return context.getSite()
                 .getParent()
-                .map(parentSite -> new StubbingContext(context.getStubber(), parentSite))
+                .map(parentSite -> StubbingContext.create(context.getStubber(), parentSite))
                 .filter(parentContext -> delegate.matches(parentContext, value))
                 .isPresent();
     }
