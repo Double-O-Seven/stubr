@@ -1,15 +1,21 @@
 package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.equalizer.Equals;
+import ch.leadrian.stubr.core.Matcher;
+import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.site.StubbingSites;
 import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsBuilder;
 import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
+import static java.util.stream.Collectors.toList;
 
 class ConstructorStubbingStrategyTest {
 
@@ -45,7 +51,15 @@ class ConstructorStubbingStrategyTest {
                 .rejects(Foo.class)
                 .rejects(Bar.class)
                 .rejects(int.class)
-                .test(StubbingStrategies.constructor((context, constructor) -> constructor.getParameterCount() == 2));
+                .test(
+                        StubbingStrategies.constructor((Matcher<Constructor<?>>) (context, constructor) -> constructor.getParameterCount() == 2),
+                        StubbingStrategies.constructor((Selector<Constructor<?>>) (context, constructors) -> {
+                            List<? extends Constructor<?>> filteredValues = constructors.stream()
+                                    .filter(constructor -> constructor.getParameterCount() == 2)
+                                    .collect(toList());
+                            return Optional.ofNullable(filteredValues.size() == 1 ? filteredValues.get(0) : null);
+                        })
+                );
     }
 
     @TestFactory

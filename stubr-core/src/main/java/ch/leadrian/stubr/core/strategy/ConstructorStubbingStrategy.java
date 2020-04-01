@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core.strategy;
 
-import ch.leadrian.stubr.core.Matcher;
+import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
@@ -17,20 +17,20 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 final class ConstructorStubbingStrategy implements StubbingStrategy {
 
-    private final Matcher<? super Constructor<?>> constructorMatcher;
-    private final Map<Class<?>, Constructor<?>> constructorsByClass = new ConcurrentHashMap<>();
+    private final Selector<Constructor<?>> constructorSelector;
+    private final Map<Class<?>, Optional<Constructor<?>>> constructorsByClass = new ConcurrentHashMap<>();
 
-    ConstructorStubbingStrategy(Matcher<? super Constructor<?>> constructorMatcher) {
-        requireNonNull(constructorMatcher, "constructorMatcher");
-        this.constructorMatcher = constructorMatcher;
+    ConstructorStubbingStrategy(Selector<Constructor<?>> constructorSelector) {
+        requireNonNull(constructorSelector, "constructorSelector");
+        this.constructorSelector = constructorSelector;
     }
 
     @Override
@@ -80,21 +80,16 @@ final class ConstructorStubbingStrategy implements StubbingStrategy {
     }
 
     private Optional<Constructor<?>> getConstructor(StubbingContext context, Class<?> type) {
-        Constructor<?> constructor = constructorsByClass.computeIfAbsent(type, clazz -> {
-            List<Constructor<?>> constructors = getConstructors(context, clazz);
-            if (constructors.size() == 1) {
-                return constructors.get(0);
-            }
-            return null;
+        return constructorsByClass.computeIfAbsent(type, clazz -> {
+            List<Constructor<?>> constructors = getConstructors(clazz);
+            return constructorSelector.select(context, constructors);
         });
-        return Optional.ofNullable(constructor);
     }
 
-    private List<Constructor<?>> getConstructors(StubbingContext context, Class<?> type) {
+    private List<Constructor<?>> getConstructors(Class<?> type) {
         return stream(type.getDeclaredConstructors())
                 .filter(constructor -> !constructor.isSynthetic() && !isPrivate(constructor.getModifiers()))
-                .filter(constructor -> constructorMatcher.matches(context, constructor))
-                .collect(toList());
+                .collect(toImmutableList());
     }
 
 }

@@ -1,6 +1,7 @@
 package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.Matcher;
+import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.type.TypeLiteral;
@@ -61,6 +62,7 @@ import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.any;
+import static ch.leadrian.stubr.core.selector.Selectors.fromMatcher;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -321,6 +323,19 @@ public final class StubbingStrategies {
     }
 
     /**
+     * Returns a {@link StubbingStrategy} that uses a {@link Constructor} selected by the given {@code selector}.
+     * <p>
+     * The strategy will only accept a given type, if there is exactly one non-private constructor that matches the
+     * given {@code matcher}.
+     *
+     * @param selector selector used to select a suitable constructor
+     * @return a {@link StubbingStrategy} that uses a {@link Constructor}
+     */
+    public static StubbingStrategy constructor(Selector<Constructor<?>> selector) {
+        return new ConstructorStubbingStrategy(selector);
+    }
+
+    /**
      * Returns a {@link StubbingStrategy} that uses a {@link Constructor} that matches the given {@code matcher} to stub
      * a value.
      * <p>
@@ -331,7 +346,7 @@ public final class StubbingStrategies {
      * @return a {@link StubbingStrategy} that uses a {@link Constructor}
      */
     public static StubbingStrategy constructor(Matcher<? super Constructor<?>> matcher) {
-        return new ConstructorStubbingStrategy(matcher);
+        return constructor(fromMatcher(matcher));
     }
 
     /**
@@ -353,7 +368,7 @@ public final class StubbingStrategies {
      * @return a {@link StubbingStrategy} that uses a {@link Constructor}
      */
     public static StubbingStrategy defaultConstructor() {
-        return constructor(((context, value) -> value.getParameterCount() == 0));
+        return constructor(fromMatcher((context, value) -> value.getParameterCount() == 0));
     }
 
     /**
@@ -364,7 +379,7 @@ public final class StubbingStrategies {
      * @return a {@link StubbingStrategy} that uses a {@link Constructor}
      */
     public static StubbingStrategy nonDefaultConstructor() {
-        return constructor(((context, value) -> value.getParameterCount() > 0));
+        return constructor(fromMatcher((context, value) -> value.getParameterCount() > 0));
     }
 
     /**
