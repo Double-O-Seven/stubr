@@ -24,6 +24,34 @@ class StubbingContextTest {
     }
 
     @Test
+    void shouldForkWithSite() {
+        Stubber stubber = mock(Stubber.class);
+        StubbingSite site1 = mock(StubbingSite.class);
+        StubbingSite site2 = mock(StubbingSite.class);
+        StubbingContext context = StubbingContext.create(stubber, site1);
+
+        StubbingContext forkedContext = context.fork(site2);
+
+        assertThat(forkedContext)
+                .isNotSameAs(context)
+                .isEqualTo(StubbingContext.create(stubber, site2));
+    }
+
+    @Test
+    void shouldForkWithStubber() {
+        Stubber stubber1 = mock(Stubber.class);
+        Stubber stubber2 = mock(Stubber.class);
+        StubbingSite site = mock(StubbingSite.class);
+        StubbingContext context = StubbingContext.create(stubber1, site);
+
+        StubbingContext forkedContext = context.fork(stubber2);
+
+        assertThat(forkedContext)
+                .isNotSameAs(context)
+                .isEqualTo(StubbingContext.create(stubber2, site));
+    }
+
+    @Test
     void testEquals() {
         Stubber stubber1 = mock(Stubber.class);
         StubbingSite site1 = mock(StubbingSite.class);

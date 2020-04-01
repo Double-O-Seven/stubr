@@ -60,6 +60,22 @@ public final class StubbingContext {
     }
 
     /**
+     * @param site the {@link StubbingSite} of the forked context
+     * @return a copy of {@code this} with a potentially different {@link StubbingSite}
+     */
+    public StubbingContext fork(StubbingSite site) {
+        return StubbingContext.create(stubber, site);
+    }
+
+    /**
+     * @param stubber the {@link Stubber} of the forked context
+     * @return a copy of {@code this} with a potentially different {@link StubbingSite}
+     */
+    public StubbingContext fork(Stubber stubber) {
+        return StubbingContext.create(stubber, site);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
