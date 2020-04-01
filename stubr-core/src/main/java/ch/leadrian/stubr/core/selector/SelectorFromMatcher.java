@@ -24,11 +24,7 @@ final class SelectorFromMatcher<T> implements Selector<T> {
         List<? extends T> matchingValues = values.stream()
                 .filter(value -> matcher.matches(context, value))
                 .collect(toList());
-        if (matchingValues.size() == 1) {
-            return Optional.ofNullable(matchingValues.get(0));
-        } else {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(matchingValues.size() == 1 ? matchingValues.get(0) : null);
     }
 
 }
