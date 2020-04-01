@@ -100,7 +100,18 @@ Since `Matcher`s are generic, a matcher may be combined using logical _and_, _or
 
 Various `Matcher` implementations can be found in `ch.leadrian.stubr.core.matcher.Matchers`.
 
-### Download
+### Selector
+
+A `Selector<T>` is a generic functional interface that selects zero or one values from a given list of values:
+```java
+Optional<T> select(StubbingContext context, List<? extends T> values)
+```
+
+In core implementations of `StubbingStrategy`s `Selector`s are used to select an enum constant, a constructor or a factory.
+
+Various `Selector` implementations can be found in `ch.leadrian.stubr.core.selector.Selectors`.
+
+## Download
 
 For Maven:
 ```xml
