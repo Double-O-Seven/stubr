@@ -19,7 +19,7 @@ internal object KotlinMatchersSpec : Spek({
             context("given nullable return type") {
                 val method = KotlinMatchersSpec::nullableValue.javaMethod
                 val site = StubbingSites.methodReturnValue(StubbingSites.unknown(), method)
-                val context = StubbingContext(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, site)
 
                 it("should match") {
                     assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
@@ -30,7 +30,7 @@ internal object KotlinMatchersSpec : Spek({
             context("given non-null return type") {
                 val method = KotlinMatchersSpec::nonNullValue.javaMethod
                 val site = StubbingSites.methodReturnValue(StubbingSites.unknown(), method)
-                val context = StubbingContext(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, site)
 
                 it("should not match") {
                     assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
@@ -45,7 +45,7 @@ internal object KotlinMatchersSpec : Spek({
             context("given nullable parameter type") {
                 val function = KotlinMatchersSpec::testParameters
                 val site = StubbingSites.methodParameter(StubbingSites.unknown(), function.javaMethod, 0)
-                val context = StubbingContext(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, site)
 
                 it("should match") {
                     assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
@@ -56,7 +56,7 @@ internal object KotlinMatchersSpec : Spek({
             context("given non-null parameter type") {
                 val function = KotlinMatchersSpec::testParameters
                 val site = StubbingSites.methodParameter(StubbingSites.unknown(), function.javaMethod, 1)
-                val context = StubbingContext(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, site)
 
                 it("should not match") {
                     assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
@@ -67,7 +67,7 @@ internal object KotlinMatchersSpec : Spek({
             context("given java method") {
                 val function = KotlinMatchersTestFixtures::testParameters
                 val site = StubbingSites.methodParameter(StubbingSites.unknown(), function.javaMethod, 0)
-                val context = StubbingContext(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, site)
 
                 beforeEachTest {
                     require(function.parameters.size == 1)
@@ -85,7 +85,7 @@ internal object KotlinMatchersSpec : Spek({
             context("given nullable parameter type") {
                 val constructor = Foo::class.java.getDeclaredConstructor(Any::class.java, Any::class.java)
                 val site = StubbingSites.constructorParameter(StubbingSites.unknown(), constructor, 0)
-                val context = StubbingContext(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, site)
 
                 it("should match") {
                     assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
@@ -96,7 +96,7 @@ internal object KotlinMatchersSpec : Spek({
             context("given non-null parameter type") {
                 val constructor = Foo::class.java.getDeclaredConstructor(Any::class.java, Any::class.java)
                 val site = StubbingSites.constructorParameter(StubbingSites.unknown(), constructor, 1)
-                val context = StubbingContext(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, site)
 
                 it("should not match") {
                     assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
