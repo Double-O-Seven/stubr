@@ -5,7 +5,7 @@ plugins {
     jacoco
     `maven-publish`
     signing
-    id("com.palantir.git-version") version "0.12.0-rc2"
+    id("com.palantir.git-version") version "0.12.2"
 }
 
 val gitVersion: Closure<String> by extra
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    codacyCoverageReport(group = "com.codacy", name = "codacy-coverage-reporter", version = "6.2.0")
+    codacyCoverageReport(group = "com.codacy", name = "codacy-coverage-reporter", version = "7.1.0")
 }
 
 tasks {
