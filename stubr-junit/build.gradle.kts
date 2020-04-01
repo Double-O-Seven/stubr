@@ -1,13 +1,16 @@
-val equalizerVersion: String by rootProject.extra
-val guavaVersion: String by rootProject.extra
-val junitVersion: String by rootProject.extra
+plugins {
+    `java-library`
+    `java-test-fixtures`
+    jacoco
+    `maven-publish`
+}
 
 dependencies {
     api(project(":stubr-core"))
-    api(group = "org.junit.jupiter", name = "junit-jupiter-api", version = junitVersion)
+    api(group = "org.junit.jupiter", name = "junit-jupiter-api")
 
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core", version = equalizerVersion)
-    implementation(group = "com.google.guava", name = "guava", version = guavaVersion)
+    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
+    implementation(group = "com.google.guava", name = "guava")
 
     testImplementation(testFixtures(project(":stubr-core")))
 }

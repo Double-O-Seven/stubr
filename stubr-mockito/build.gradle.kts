@@ -1,13 +1,16 @@
-val equalizerVersion: String by rootProject.extra
-val guavaVersion: String by rootProject.extra
-val mockitoVersion: String by rootProject.extra
+plugins {
+    `java-library`
+    `java-test-fixtures`
+    jacoco
+    `maven-publish`
+}
 
 dependencies {
     api(project(":stubr-core"))
-    api(group = "org.mockito", name = "mockito-core", version = mockitoVersion)
+    api(group = "org.mockito", name = "mockito-core")
 
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core", version = equalizerVersion)
-    implementation(group = "com.google.guava", name = "guava", version = guavaVersion)
+    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
+    implementation(group = "com.google.guava", name = "guava")
 
     testImplementation(testFixtures(project(":stubr-core")))
 }

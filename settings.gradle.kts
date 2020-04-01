@@ -1,4 +1,6 @@
+include(":stubr-bom")
 include(":stubr-core")
+include(":stubr-dependencies")
 include(":stubr-integration-test")
 include(":stubr-junit")
 include(":stubr-kotlin")

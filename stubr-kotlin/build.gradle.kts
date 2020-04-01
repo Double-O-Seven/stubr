@@ -1,6 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    `java-library`
+    `java-test-fixtures`
+    jacoco
+    `maven-publish`
     kotlin("jvm")
     id("org.jetbrains.dokka") version "0.10.0"
 }
@@ -12,20 +16,18 @@ repositories {
     }
 }
 
-val spekVersion = "2.0.9"
-
 dependencies {
     api(project(":stubr-core"))
 
-    compileOnly(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8")
-    compileOnly(group = "org.jetbrains.kotlin", name = "kotlin-reflect")
+    compileOnly(kotlin("stdlib-jdk8"))
+    compileOnly(kotlin("reflect"))
 
     testImplementation(testFixtures(project(":stubr-core")))
-    testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8")
-    testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-reflect")
-    testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm", version = spekVersion)
+    testImplementation(kotlin("stdlib-jdk8"))
+    testImplementation(kotlin("reflect"))
+    testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
 
-    testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5", version = spekVersion)
+    testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5")
 }
 
 tasks {

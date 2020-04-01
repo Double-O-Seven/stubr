@@ -1,17 +1,15 @@
 plugins {
+    `java-library`
     `java-test-fixtures`
+    jacoco
+    `maven-publish`
 }
 
-val assertJVersion: String by rootProject.extra
-val equalizerVersion: String by rootProject.extra
-val guavaVersion: String by rootProject.extra
-val junitVersion: String by rootProject.extra
-
 dependencies {
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core", version = equalizerVersion)
-    implementation(group = "com.google.guava", name = "guava", version = guavaVersion)
+    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
+    implementation(group = "com.google.guava", name = "guava")
 
-    testFixturesApi(group = "org.junit.jupiter", name = "junit-jupiter-api", version = junitVersion)
+    testFixturesApi(group = "org.junit.jupiter", name = "junit-jupiter-api")
 
-    testFixturesImplementation(group = "org.assertj", name = "assertj-core", version = assertJVersion)
+    testFixturesImplementation(group = "org.assertj", name = "assertj-core")
 }
