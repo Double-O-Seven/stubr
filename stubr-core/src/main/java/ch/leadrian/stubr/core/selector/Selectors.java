@@ -32,6 +32,16 @@ public final class Selectors {
     }
 
     /**
+     * Creates a {@link Selector} that selects the first non-null element.
+     *
+     * @param <T> type of selectable objects
+     * @return a {@link Selector} that selects the first non-null element
+     */
+    public static <T> Selector<T> first() {
+        return new FirstElementSelector<>();
+    }
+
+    /**
      * Creates a {@link Selector} that selects a single value using the given {@link Matcher}.
      * <p>
      * The {@link Selector} returns {@link Optional#empty()} if zero or multiple values match the given {@link

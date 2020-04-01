@@ -8,13 +8,14 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
 
+import static ch.leadrian.stubr.core.selector.Selectors.first;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 final class EnumValueStubbingStrategy extends SimpleStubbingStrategy<Object> {
 
-    static final EnumValueStubbingStrategy FIRST_ELEMENT = new EnumValueStubbingStrategy(FirstElementSelector.INSTANCE);
+    static final EnumValueStubbingStrategy FIRST_ELEMENT = new EnumValueStubbingStrategy(first());
 
     private final Selector<Enum<?>> selector;
 
@@ -48,15 +49,6 @@ final class EnumValueStubbingStrategy extends SimpleStubbingStrategy<Object> {
                 .map(value -> (Enum<?>) value)
                 .collect(toList());
         return selector.select(context, values);
-    }
-
-    private enum FirstElementSelector implements Selector<Enum<?>> {
-        INSTANCE;
-
-        @Override
-        public Optional<Enum<?>> select(StubbingContext context, List<? extends Enum<?>> values) {
-            return Optional.ofNullable(values.isEmpty() ? null : values.get(0));
-        }
     }
 
 }
