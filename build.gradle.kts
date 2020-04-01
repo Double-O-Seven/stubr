@@ -12,8 +12,14 @@ val gitVersion: Closure<String> by extra
 
 val codacyCoverageReport: Configuration by configurations.creating
 
-repositories {
-    jcenter()
+allprojects {
+    group = "ch.leadrian.stubr"
+
+    version = gitVersion()
+
+    repositories {
+        jcenter()
+    }
 }
 
 dependencies {
@@ -47,16 +53,7 @@ task<JavaExec>("codacyCoverageReport") {
     )
 }
 
-allprojects {
-    group = "ch.leadrian.stubr"
-
-    version = gitVersion()
-}
-
 subprojects {
-    repositories {
-        jcenter()
-    }
 
     pluginManager.withPlugin("java-library") {
         java {
