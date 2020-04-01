@@ -16,7 +16,7 @@ For example:
 ```java
 Stubber stubber = Stubber.builder()
         .stubWith(StubbingStrategies.constantValue("Foo"))
-        .stubWith(Stubbers.suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber))
+        .stubWith(StubbingStrategies.suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber))
         .build();
 String stringValue = stubber.stub(String.class); // Foo
 int intValue1 = stubber.stub(int.class); // 0
@@ -171,14 +171,14 @@ implementation("ch.leadrian.stubr:stubr-junit:1.3.0")
 Stubr also includes a Mockito module that provides `StubbingStrategy` implementations that provide stubs using Mockito mocks.
 All non-void method call on such a mock will return a stub value provided by the `Stubber` that was used to mock the stub.
 
-Concrete instances can be accessed through `ch.leadrian.stubr.mockito.MockitoStubbers`.
+Concrete instances can be accessed through `ch.leadrian.stubr.mockito.MockitoStubbingStrategies`.
 
 A usage example:
 ```java
 Stubber stubber = Stubber.builder()
     .stubWith(StubbingStrategies.constantValue("stubbed"))
-    .stubWith(MockitoStubbers.mock())
-    .stubWith(MockitoStubbers.mock(MyMockedObject.class, mock -> Mockito.when(mock.doSomething()).thenReturn("done")))
+    .stubWith(MockitoStubbingStrategies.mock())
+    .stubWith(MockitoStubbingStrategies.mock(MyMockedObject.class, mock -> Mockito.when(mock.doSomething()).thenReturn("done")))
     .build();
 Foo someOtherMock = stubber.stub(Foo.class); // Stubbed using the generic mock stubbing strategy
 MyMockedObject obj = stubber.stub(MyMockedObject.class); // Stubbed using the specific mock stubbing strategy
