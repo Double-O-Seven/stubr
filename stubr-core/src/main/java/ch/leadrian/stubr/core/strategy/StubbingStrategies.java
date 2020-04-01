@@ -484,6 +484,19 @@ public final class StubbingStrategies {
     }
 
     /**
+     * Creates a {@link StubbingStrategy} that memoizes the computed stub for a given type.
+     * <p>
+     * Beware though: Only equal types will return the stub value. {@code List&lt;? extends CharSequence&gt;} and {@code
+     * List&lt;CharSequence&gt;} will <i>not</i> return the same stub value.
+     *
+     * @param delegate the wrapped stubbing strategy
+     * @return a {@link StubbingStrategy} that memoizes the computed stub for a given type
+     */
+    public static StubbingStrategy memoizing(StubbingStrategy delegate) {
+        return new MemoizingStubbingStrategy(delegate);
+    }
+
+    /**
      * Returns a {@link StubbingStrategy} that always uses {@code null} to provide stubs.
      *
      * @return a {@link StubbingStrategy} that always uses {@code null} to provide stubs
