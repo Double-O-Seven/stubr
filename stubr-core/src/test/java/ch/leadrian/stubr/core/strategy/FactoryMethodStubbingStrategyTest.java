@@ -1,15 +1,21 @@
 package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.equalizer.Equals;
+import ch.leadrian.stubr.core.Matcher;
+import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.site.StubbingSites;
 import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsBuilder;
 import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
+import static java.util.stream.Collectors.toList;
 
 class FactoryMethodStubbingStrategyTest {
 
@@ -47,7 +53,15 @@ class FactoryMethodStubbingStrategyTest {
                 .rejects(Foo.class)
                 .rejects(Bar.class)
                 .rejects(int.class)
-                .test(StubbingStrategies.factoryMethod((context, factoryMethod) -> factoryMethod.getParameterCount() == 2));
+                .test(
+                        StubbingStrategies.factoryMethod((Matcher<Method>) (context, factoryMethod) -> factoryMethod.getParameterCount() == 2),
+                        StubbingStrategies.factoryMethod((Selector<Method>) (context, factoryMethods) -> {
+                            List<? extends Method> filteredValues = factoryMethods.stream()
+                                    .filter(method -> method.getParameterCount() == 2)
+                                    .collect(toList());
+                            return Optional.ofNullable(filteredValues.size() == 1 ? filteredValues.get(0) : null);
+                        })
+                );
     }
 
     @TestFactory

@@ -423,6 +423,24 @@ public final class StubbingStrategies {
     }
 
     /**
+     * Returns a {@link StubbingStrategy} that uses a single factory method selected by the given {@code selector}.
+     * <p>
+     * The factory method must satisfy the following criteria:
+     * <ul>
+     * <li>non-private</li>
+     * <li>static</li>
+     * <li>returns exactly the type for which a stub is requested</li>
+     * <li>declared in the class of the type for which a stub is requested</li>
+     * </ul>
+     *
+     * @param selector selector used to select a suitable factory method
+     * @return a {@link StubbingStrategy} that uses a single factory method
+     */
+    public static StubbingStrategy factoryMethod(Selector<Method> selector) {
+        return new FactoryMethodStubbingStrategy(selector);
+    }
+
+    /**
      * Returns a {@link StubbingStrategy} that uses a single factory method that matches the given {@code matcher}.
      * <p>
      * The factory method must satisfy the following criteria:
@@ -439,7 +457,7 @@ public final class StubbingStrategies {
      * @return a {@link StubbingStrategy} that uses a single factory method
      */
     public static StubbingStrategy factoryMethod(Matcher<? super Method> matcher) {
-        return new FactoryMethodStubbingStrategy(matcher);
+        return factoryMethod(fromMatcher(matcher));
     }
 
     /**

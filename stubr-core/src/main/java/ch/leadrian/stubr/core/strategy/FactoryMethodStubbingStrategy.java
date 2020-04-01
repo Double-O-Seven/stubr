@@ -1,6 +1,6 @@
 package ch.leadrian.stubr.core.strategy;
 
-import ch.leadrian.stubr.core.Matcher;
+import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
@@ -25,12 +25,12 @@ import static java.util.stream.Collectors.toList;
 
 final class FactoryMethodStubbingStrategy implements StubbingStrategy {
 
-    private final Matcher<? super Method> methodMatcher;
-    private final Map<Class<?>, Method> factoryMethodsByClass = new ConcurrentHashMap<>();
+    private final Selector<Method> methodSelector;
+    private final Map<Class<?>, Optional<Method>> factoryMethodsByClass = new ConcurrentHashMap<>();
 
-    FactoryMethodStubbingStrategy(Matcher<? super Method> methodMatcher) {
-        requireNonNull(methodMatcher, "methodMatcher");
-        this.methodMatcher = methodMatcher;
+    FactoryMethodStubbingStrategy(Selector<Method> methodSelector) {
+        requireNonNull(methodSelector, "methodSelector");
+        this.methodSelector = methodSelector;
     }
 
     @Override
@@ -79,21 +79,16 @@ final class FactoryMethodStubbingStrategy implements StubbingStrategy {
     }
 
     private Optional<Method> getFactoryMethod(StubbingContext context, Class<?> targetClass) {
-        Method method = factoryMethodsByClass.computeIfAbsent(targetClass, c -> {
-            List<Method> methods = getFactoryMethods(context, targetClass);
-            if (methods.size() == 1) {
-                return methods.get(0);
-            }
-            return null;
+        return factoryMethodsByClass.computeIfAbsent(targetClass, c -> {
+            List<Method> methods = getFactoryMethods(targetClass);
+            return methodSelector.select(context, methods);
         });
-        return Optional.ofNullable(method);
     }
 
-    private List<Method> getFactoryMethods(StubbingContext context, Class<?> targetClass) {
+    private List<Method> getFactoryMethods(Class<?> targetClass) {
         return stream(targetClass.getDeclaredMethods())
                 .filter(method -> !method.isSynthetic() && !isPrivate(method.getModifiers()) && isStatic(method.getModifiers()))
                 .filter(method -> canReturn(method, targetClass))
-                .filter(method -> methodMatcher.matches(context, method))
                 .collect(toList());
     }
 
