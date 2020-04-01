@@ -4,6 +4,7 @@ import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Selector;
 
 import java.util.Optional;
+import java.util.Random;
 
 import static java.util.Arrays.asList;
 
@@ -11,6 +12,12 @@ import static java.util.Arrays.asList;
  * Collection of factory methods for various default implementations of {@link ch.leadrian.stubr.core.Selector}.
  */
 public final class Selectors {
+
+    private static final class RandomHolder {
+
+        static final Random INSTANCE = new Random(System.currentTimeMillis());
+
+    }
 
     private Selectors() {
     }
@@ -53,6 +60,45 @@ public final class Selectors {
      */
     public static <T> Selector<T> fromMatcher(Matcher<? super T> matcher) {
         return new SelectorFromMatcher<>(matcher);
+    }
+
+    /**
+     * Creates a {@link Selector} that randomly selects an element from the given list of values.
+     * <p>
+     * The selected index is determined by the given {@code random} object.
+     *
+     * @param random the random
+     * @param <T>    type of selectable objects
+     * @return a {@link Selector} that randomly selects an element from the given list of values
+     */
+    public static <T> Selector<T> random(Random random) {
+        return new RandomSelector<>(random);
+    }
+
+    /**
+     * Creates a {@link Selector} that randomly selects an element from the given list of values.
+     * <p>
+     * The selected index is determined by {@link Random} instance created with the given {@code seed}.
+     *
+     * @param seed the seed used to create a the {@link Random}
+     * @param <T>  type of selectable objects
+     * @return a {@link Selector} that randomly selects an element from the given list of values
+     */
+    public static <T> Selector<T> random(long seed) {
+        return random(new Random(seed));
+    }
+
+    /**
+     * Creates a {@link Selector} that randomly selects an element from the given list of values.
+     * <p>
+     * The selected index is determined by {@link Random} instance created with {@link System#currentTimeMillis()} as
+     * seed.
+     *
+     * @param <T> type of selectable objects
+     * @return a {@link Selector} that randomly selects an element from the given list of values
+     */
+    public static <T> Selector<T> random() {
+        return random(RandomHolder.INSTANCE);
     }
 
 }
