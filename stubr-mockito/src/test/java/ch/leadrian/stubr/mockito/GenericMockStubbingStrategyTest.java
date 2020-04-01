@@ -10,7 +10,7 @@ import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStra
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class GenericMockitoStubbingStrategyTest {
+class GenericMockStubbingStrategyTest {
 
     @SuppressWarnings("unchecked")
     @TestFactory

@@ -10,12 +10,12 @@ import static java.util.Objects.requireNonNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
-final class MockitoStubbingStrategy<T> extends SimpleStubbingStrategy<T> {
+final class MockStubbingStrategy<T> extends SimpleStubbingStrategy<T> {
 
     private final Class<T> classToMock;
     private final Consumer<? super T> configurationAction;
 
-    MockitoStubbingStrategy(Class<T> classToMock, Consumer<? super T> configurationAction) {
+    MockStubbingStrategy(Class<T> classToMock, Consumer<? super T> configurationAction) {
         requireNonNull(classToMock, "classToMock");
         this.classToMock = classToMock;
         this.configurationAction = configurationAction;

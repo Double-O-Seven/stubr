@@ -24,8 +24,8 @@ public final class MockitoStubbingStrategies {
      */
     public static StubbingStrategy mock(boolean stubFinalClasses) {
         return stubFinalClasses
-                ? GenericMockitoStubbingStrategy.FINAL_STUBBING_INSTANCE
-                : GenericMockitoStubbingStrategy.OPEN_ONLY_STUBBING_INSTANCE;
+                ? GenericMockStubbingStrategy.FINAL_STUBBING_INSTANCE
+                : GenericMockStubbingStrategy.OPEN_ONLY_STUBBING_INSTANCE;
     }
 
     /**
@@ -52,7 +52,7 @@ public final class MockitoStubbingStrategies {
      * @return a {@link StubbingStrategy} that provides stubs using mocks
      */
     public static <T> StubbingStrategy mock(Class<T> classToMock, Consumer<? super T> configurationAction) {
-        return new MockitoStubbingStrategy<>(classToMock, configurationAction);
+        return new MockStubbingStrategy<>(classToMock, configurationAction);
     }
 
     /**

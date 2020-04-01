@@ -9,14 +9,14 @@ import java.lang.reflect.ParameterizedType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
-final class GenericMockitoStubbingStrategy extends SimpleStubbingStrategy<Object> {
+final class GenericMockStubbingStrategy extends SimpleStubbingStrategy<Object> {
 
-    static final GenericMockitoStubbingStrategy FINAL_STUBBING_INSTANCE = new GenericMockitoStubbingStrategy(true);
-    static final GenericMockitoStubbingStrategy OPEN_ONLY_STUBBING_INSTANCE = new GenericMockitoStubbingStrategy(false);
+    static final GenericMockStubbingStrategy FINAL_STUBBING_INSTANCE = new GenericMockStubbingStrategy(true);
+    static final GenericMockStubbingStrategy OPEN_ONLY_STUBBING_INSTANCE = new GenericMockStubbingStrategy(false);
 
     private final boolean stubFinalClasses;
 
-    private GenericMockitoStubbingStrategy(boolean stubFinalClasses) {
+    private GenericMockStubbingStrategy(boolean stubFinalClasses) {
         this.stubFinalClasses = stubFinalClasses;
     }
 
