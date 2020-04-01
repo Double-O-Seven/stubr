@@ -3,11 +3,7 @@ package ch.leadrian.stubr.core.matcher;
 import ch.leadrian.stubr.core.Matcher;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 
 /**
  * Collection of factory methods for various default implementations of {@link Matcher}.
@@ -174,6 +170,19 @@ public final class Matchers {
      */
     public static <T> Matcher<T> parameterIs(Matcher<? super Parameter> delegate) {
         return new ParameterMatcher<>(delegate);
+    }
+
+    /**
+     * Returns a matcher that matches a given value {@code T} in a context of the parent site of the given context
+     * using a delegate matcher.
+     *
+     * @param delegate the delegate
+     * @param <T>      the generic type, may be anything
+     * @return a matcher that matches a given value {@code T} in a context of the parent site of the given context
+     * using a delegate matcher
+     */
+    public static <T> Matcher<T> parent(Matcher<? super T> delegate) {
+        return new ParentMatcher<>(delegate);
     }
 
 }
