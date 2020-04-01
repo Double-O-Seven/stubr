@@ -25,7 +25,8 @@ class GenericMockitoStubbingStrategyTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .accepts(new TypeLiteral<Bla<String>>() {})
+                .accepts(new TypeLiteral<Bla<String>>() {
+                })
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bla.class, bla ->
                         assertAll(
                                 () -> assertThat(bla.getInt()).isEqualTo(1337),
@@ -49,7 +50,7 @@ class GenericMockitoStubbingStrategyTest {
                 .rejects(int.class)
                 .rejects(Object[].class)
                 .rejects(Qux.class)
-                .test(MockitoStubbers.mock(true));
+                .test(MockitoStubbingStrategies.mock(true));
     }
 
     @TestFactory
@@ -60,8 +61,8 @@ class GenericMockitoStubbingStrategyTest {
                 .rejects(Object[].class)
                 .rejects(Qux.class)
                 .test(
-                        MockitoStubbers.mock(false),
-                        MockitoStubbers.mock()
+                        MockitoStubbingStrategies.mock(false),
+                        MockitoStubbingStrategies.mock()
                 );
     }
 

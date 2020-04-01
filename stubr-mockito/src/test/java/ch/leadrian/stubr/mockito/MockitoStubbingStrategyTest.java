@@ -25,10 +25,11 @@ class MockitoStubbingStrategyTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .rejects(new TypeLiteral<Bar<String>>() {})
+                .rejects(new TypeLiteral<Bar<String>>() {
+                })
                 .rejects(int.class)
                 .rejects(String.class)
-                .test(MockitoStubbers.mock(Foo.class));
+                .test(MockitoStubbingStrategies.mock(Foo.class));
     }
 
     @TestFactory
@@ -36,7 +37,8 @@ class MockitoStubbingStrategyTest {
         return stubbingStrategyTester()
                 .provideStub(int.class, 1337)
                 .provideStub("Test")
-                .accepts(new TypeLiteral<Bar<String>>() {})
+                .accepts(new TypeLiteral<Bar<String>>() {
+                })
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bar.class, bar ->
                         assertAll(
                                 () -> assertThat(bar.getInt()).isEqualTo(1337),
@@ -46,7 +48,7 @@ class MockitoStubbingStrategyTest {
                 .rejects(Foo.class)
                 .rejects(int.class)
                 .rejects(String.class)
-                .test(MockitoStubbers.mock(Bar.class));
+                .test(MockitoStubbingStrategies.mock(Bar.class));
     }
 
     @TestFactory
@@ -63,7 +65,7 @@ class MockitoStubbingStrategyTest {
                 ))
                 .rejects(int.class)
                 .rejects(String.class)
-                .test(MockitoStubbers.mock(Foo.class, mock -> {
+                .test(MockitoStubbingStrategies.mock(Foo.class, mock -> {
                     when(mock.getInt()).thenReturn(1337);
                     when(mock.getString()).thenReturn("Test");
                 }));

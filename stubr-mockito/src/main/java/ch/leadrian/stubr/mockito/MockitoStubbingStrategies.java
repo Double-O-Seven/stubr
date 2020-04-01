@@ -7,9 +7,9 @@ import java.util.function.Consumer;
 /**
  * Collection of factory methods to create {@link ch.leadrian.stubr.core.Stubber}s that use Mockito.
  */
-public final class MockitoStubbers {
+public final class MockitoStubbingStrategies {
 
-    private MockitoStubbers() {
+    private MockitoStubbingStrategies() {
     }
 
     /**
