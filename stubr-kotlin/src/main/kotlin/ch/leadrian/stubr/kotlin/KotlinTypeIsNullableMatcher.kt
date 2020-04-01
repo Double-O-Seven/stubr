@@ -12,10 +12,10 @@ internal class KotlinTypeIsNullableMatcher<T> : Matcher<T> {
 
     override fun matches(context: StubbingContext, value: T): Boolean {
         return when (val site = context.site) {
-            is MethodParameterStubbingSite -> isParameterTypeNullable(site)
-            is MethodReturnValueStubbingSite -> isReturnTypeNullable(site)
+            is MethodParameterStubbingSite      -> isParameterTypeNullable(site)
+            is MethodReturnValueStubbingSite    -> isReturnTypeNullable(site)
             is ConstructorParameterStubbingSite -> isParameterTypeNullable(site)
-            else -> false
+            else                                -> false
         }
     }
 

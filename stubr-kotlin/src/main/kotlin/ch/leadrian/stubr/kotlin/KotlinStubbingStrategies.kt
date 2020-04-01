@@ -24,7 +24,8 @@ object KotlinStubbingStrategies {
      * @param T reified type of the constant [value]
      * @return a [StubbingStrategy] using the given value every time the type of the given [value] is encountered
      */
-    inline fun <reified T> constantValue(value: T): StubbingStrategy = StubbingStrategies.constantValue(typeLiteral<T>(), value)
+    inline fun <reified T> constantValue(value: T): StubbingStrategy =
+            StubbingStrategies.constantValue(typeLiteral<T>(), value)
 
     /**
      * Inlined wrapper for [StubbingStrategies.collection].
@@ -37,7 +38,8 @@ object KotlinStubbingStrategies {
     inline fun <reified T : Collection<*>> collection(
             crossinline collectionFactory: (List<*>) -> T,
             crossinline collectionSize: (StubbingContext) -> Int
-    ): StubbingStrategy = StubbingStrategies.collection(T::class.java, { collectionFactory(it) }, { collectionSize(it) })
+    ): StubbingStrategy =
+            StubbingStrategies.collection(T::class.java, { collectionFactory(it) }, { collectionSize(it) })
 
     /**
      * Inlined wrapper for [StubbingStrategies.collection].
@@ -85,8 +87,11 @@ object KotlinStubbingStrategies {
      * @param T reified type of the supplied value
      * @return a [StubbingStrategy] providing a stub values using a supplying function
      */
-    inline fun <reified T> suppliedValue(crossinline supplier: (StubbingContext, Int) -> T): StubbingStrategy =
-            StubbingStrategies.suppliedValue(typeLiteral<T>()) { context, sequenceNumber -> supplier(context, sequenceNumber) }
+    inline fun <reified T> suppliedValue(crossinline supplier: (StubbingContext, Int) -> T): StubbingStrategy {
+        return StubbingStrategies.suppliedValue(typeLiteral<T>()) { context, sequenceNumber ->
+            supplier(context, sequenceNumber)
+        }
+    }
 
     /**
      * Inlined wrapper for [StubbingStrategies.suppliedValue].

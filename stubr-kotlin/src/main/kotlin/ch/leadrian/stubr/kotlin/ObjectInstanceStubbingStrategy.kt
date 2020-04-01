@@ -23,5 +23,4 @@ internal object ObjectInstanceStubbingStrategy : SimpleStubbingStrategy<Any>() {
         return stub(context, type.rawType)
     }
 
-
 }
