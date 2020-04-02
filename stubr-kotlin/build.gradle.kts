@@ -45,7 +45,7 @@ tasks {
         }
     }
 
-    withType(Jar::class).named("javadocJar") {
+    javadocJar {
         from(dokka)
     }
 }
