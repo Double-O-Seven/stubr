@@ -106,7 +106,7 @@ StubbingStrategy when(Matcher<? super Type> typeMatcher)
 
 This method returns a new `StubbingStrategy` that uses the receiver (`this`) to stub values, but in addition only accepts a given context and type if the given `Matcher` matches both the context and type.
 
-It is therefore possible conditionally apply `StubbingStrategy`s, for example depending on the `StubbingSite` or the type or both.
+It is therefore possible to conditionally apply `StubbingStrategy`s, for example depending on the `StubbingSite` or the type or both.
 
 A `Matcher<T>` is a generic functional interface that requires the following method to be implemented:
 ```java
@@ -124,7 +124,7 @@ A `Selector<T>` is a generic functional interface that selects zero or one value
 Optional<T> select(StubbingContext context, List<? extends T> values)
 ```
 
-In core implementations of `StubbingStrategy`s `Selector`s are used to select an enum constant, a constructor or a factory.
+In core implementations of `StubbingStrategy`s `Selector`s are used to select an enum constant, a constructor or a factory method.
 
 Various `Selector` implementations can be found in `ch.leadrian.stubr.core.selector.Selectors`.
 
