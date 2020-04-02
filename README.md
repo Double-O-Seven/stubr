@@ -23,6 +23,21 @@ int intValue1 = stubber.stub(int.class); // 0
 int intValue2 = stubber.stub(int.class); // 1
 ```
 
+## But why?
+
+Stubr was designed to complement existing mocking framework like Mockito or MockK. While those frameworks are often used to mock certain behaviour, Stubr was created to provide valid, commonly unmocked, instances of data objects.
+
+Sometimes in your test case, you will access various values of a data object. The accessed values may potentially be non-null. This will leave you with the following options:
+ *  Manually set up the whole data object
+ *  You mock the data object and define the return values
+
+In both cases you end up with a lot of boiler plate, especially when you need to set up or mock data whose content is not actually relevant to the test case.
+
+A possible solution for the problem described above is Stubr. Stubr can instantiate valid data objects for you, using suitable default or custom stubbing strategies.
+
+When using immutable data classes Stubr works especially well with Kotlin data classes which provide a `copy()` method. It will instantiate a valid instance from which you can derive a copy where you set the relevant properties yourself.
+The same applies when using `@Builder(toBuilder = true)` annotated Lombok data classes for example.
+
 ## Concepts
 
 ### Stubbing strategies
