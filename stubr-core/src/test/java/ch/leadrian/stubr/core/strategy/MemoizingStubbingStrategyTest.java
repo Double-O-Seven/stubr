@@ -23,7 +23,7 @@ class MemoizingStubbingStrategyTest {
     @Test
     void shouldReturnMemoizedValuesSeparatelyForDifferentTypes() {
         StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
-        StubbingStrategy strategy = StubbingStrategies.memoizing(new TestStubbingStrategy(1337));
+        StubbingStrategy strategy = StubbingStrategies.memoized(new TestStubbingStrategy(1337));
 
         List<Object> intValues = IntStream.iterate(0, i -> i + 1)
                 .limit(3)
@@ -47,7 +47,7 @@ class MemoizingStubbingStrategyTest {
         StubbingStrategy delegate = mock(StubbingStrategy.class);
         when(delegate.accepts(context, String.class))
                 .thenReturn(expectedAccepts);
-        StubbingStrategy strategy = StubbingStrategies.memoizing(delegate);
+        StubbingStrategy strategy = StubbingStrategies.memoized(delegate);
 
         boolean accepts = strategy.accepts(context, String.class);
 

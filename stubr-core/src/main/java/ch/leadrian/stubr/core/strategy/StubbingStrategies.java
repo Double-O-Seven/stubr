@@ -537,7 +537,7 @@ public final class StubbingStrategies {
      * @param delegate the wrapped stubbing strategy
      * @return a {@link StubbingStrategy} that memoizes the computed stub for a given type
      */
-    public static StubbingStrategy memoizing(StubbingStrategy delegate) {
+    public static StubbingStrategy memoized(StubbingStrategy delegate) {
         return new MemoizingStubbingStrategy(delegate);
     }
 
