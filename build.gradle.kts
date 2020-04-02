@@ -21,6 +21,7 @@ plugins {
     jacoco
     `maven-publish`
     signing
+    kotlin("jvm") apply false
     id("com.palantir.git-version") version "0.12.2"
 }
 
