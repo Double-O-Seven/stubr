@@ -17,6 +17,8 @@
 package ch.leadrian.stubr.kotlin
 
 import ch.leadrian.stubr.core.Matcher
+import ch.leadrian.stubr.core.StubbingContext
+import kotlin.reflect.KProperty
 
 /**
  * Collection of Kotlin [Matcher]s.
@@ -24,12 +26,25 @@ import ch.leadrian.stubr.core.Matcher
 object KotlinMatchers {
 
     /**
-     * Returns a [Matcher] matches if the stubbing site is a method parameter, constructor parameter or method return
+     * Returns a [Matcher] that matches if the stubbing site is a method parameter, constructor parameter or method return
      * where the type is nullable.
      *
      * @return a [Matcher] matching if the Kotlin type at a site is nullable
      */
     @JvmStatic
     fun <T> kotlinTypeIsNullable(): Matcher<T> = KotlinTypeIsNullableMatcher()
+
+    /**
+     * Returns a [Matcher] that matches if the stubbing site is a [KPropertyStubbingSite] and the [delegate] matches it.
+     *
+     * @return a [Matcher] matching if the stubbing site is a [KPropertyStubbingSite] and the [delegate] matches it
+     */
+    @JvmStatic
+    fun <T> kotlinPropertyIs(delegate: Matcher<in KProperty<*>>): Matcher<T> = KPropertyMatcher(delegate)
+
+    inline fun <T> kotlinPropertyIs(crossinline delegate: (StubbingContext, KProperty<*>) -> Boolean): Matcher<T> {
+        val delegateMatcher = Matcher<KProperty<*>> { context, value -> delegate(context, value) }
+        return kotlinPropertyIs(delegateMatcher)
+    }
 
 }
