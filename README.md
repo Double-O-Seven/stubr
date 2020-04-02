@@ -5,7 +5,7 @@
 
 # stubr
 
-Stubr is a small, extensible library for creating stubs for unit tests.
+Stubr is a small, extensible library for creating stubs (commonly for data classes) for unit tests.
 
 ## Basics
 
@@ -37,6 +37,8 @@ A possible solution for the problem described above is Stubr. Stubr can instanti
 
 When using immutable data classes Stubr works especially well with Kotlin data classes which provide a `copy()` method. It will instantiate a valid instance from which you can derive a copy where you set the relevant properties yourself.
 The same applies when using `@Builder(toBuilder = true)` annotated Lombok data classes for example.
+
+In the `samples` project you will also find an example where the test subject of a unit test is automatically instantiated with all dependencies being mocked with Mockito.
 
 ## Concepts
 
