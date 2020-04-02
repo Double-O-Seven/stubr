@@ -5,8 +5,8 @@ import ch.leadrian.stubr.core.StubbingContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
-import java.util.Arrays;
 
+import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
 
 abstract class AnnotationMatcher<T extends AnnotatedElement> implements Matcher<T> {
@@ -37,7 +37,7 @@ abstract class AnnotationMatcher<T extends AnnotatedElement> implements Matcher<
 
         @Override
         public boolean matches(StubbingContext context, T value) {
-            return Arrays.stream(value.getAnnotations())
+            return stream(value.getAnnotations())
                     .map(Annotation::annotationType)
                     .anyMatch(type -> annotationName.equals(type.getName()) || annotationName.equals(type.getSimpleName()));
         }
