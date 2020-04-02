@@ -1,3 +1,4 @@
+include(":samples")
 include(":stubr-bom")
 include(":stubr-core")
 include(":stubr-dependencies")
