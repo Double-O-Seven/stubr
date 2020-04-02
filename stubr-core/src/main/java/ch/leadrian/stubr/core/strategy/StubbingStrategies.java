@@ -433,6 +433,7 @@ public final class StubbingStrategies {
      * <p>
      * An enum class will not be accepted if no values have been declared.
      *
+     * @param selector selector used to select an enum value
      * @return a {@link StubbingStrategy} that uses the first enum value of an enum class
      */
     public static StubbingStrategy enumValue(Selector<Enum<?>> selector) {

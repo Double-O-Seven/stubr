@@ -49,6 +49,7 @@ public final class StubbingContext {
      *
      * @param stubber the {@link Stubber} performing the stubbing
      * @param site    the {@link StubbingSite} where the requested stub value will be used
+     * @return a new context
      */
     public static StubbingContext create(Stubber stubber, StubbingSite site) {
         return new StubbingContext(stubber, site);
