@@ -23,16 +23,32 @@ javaPlatform {
     allowDependencies()
 }
 
+object Versions {
+
+    const val assertJ = "3.15.0"
+
+    const val equalizer = "1.2.1"
+
+    const val guava = "28.2-jre"
+
+    const val junit = "5.6.1"
+
+    const val mockito = "3.3.3"
+
+    const val spek = "2.0.10"
+
+}
+
 dependencies {
-    api(platform("ch.leadrian.equalizer:equalizer-bom:1.2.1"))
-    api(platform("com.google.guava:guava-bom:28.2-jre"))
-    api(platform("org.junit:junit-bom:5.6.1"))
+    api(platform("ch.leadrian.equalizer:equalizer-bom:${Versions.equalizer}"))
+    api(platform("com.google.guava:guava-bom:${Versions.guava}"))
+    api(platform("org.junit:junit-bom:${Versions.junit}"))
 
     constraints {
-        api("org.assertj:assertj-core:3.15.0")
-        api("org.mockito:mockito-core:3.3.3")
-        api("org.spekframework.spek2:spek-dsl-jvm:2.0.10")
+        api("org.assertj:assertj-core:${Versions.assertJ}")
+        api("org.mockito:mockito-core:${Versions.mockito}")
+        api("org.spekframework.spek2:spek-dsl-jvm:${Versions.spek}")
 
-        runtime("org.spekframework.spek2:spek-runner-junit5:2.0.10")
+        runtime("org.spekframework.spek2:spek-runner-junit5:${Versions.spek}")
     }
 }
