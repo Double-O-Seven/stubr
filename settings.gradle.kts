@@ -22,6 +22,7 @@ include(":stubr-integration-test")
 include(":stubr-junit")
 include(":stubr-kotlin")
 include(":stubr-mockito")
+include(":stubr-mockk")
 
 rootProject.name = "stubr"
 

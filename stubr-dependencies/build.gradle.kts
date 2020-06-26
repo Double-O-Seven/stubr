@@ -35,6 +35,8 @@ object Versions {
 
     const val mockito = "3.3.3"
 
+    const val mockK = "1.10.0"
+
     const val spek = "2.0.10"
 
 }
@@ -45,6 +47,7 @@ dependencies {
     api(platform("org.junit:junit-bom:${Versions.junit}"))
 
     constraints {
+        api("io.mockk:mockk:${Versions.mockK}")
         api("org.assertj:assertj-core:${Versions.assertJ}")
         api("org.mockito:mockito-core:${Versions.mockito}")
         api("org.spekframework.spek2:spek-dsl-jvm:${Versions.spek}")

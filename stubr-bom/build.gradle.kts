@@ -25,5 +25,6 @@ dependencies {
         api(project(":stubr-junit"))
         api(project(":stubr-kotlin"))
         api(project(":stubr-mockito"))
+        api(project(":stubr-mockk"))
     }
 }
