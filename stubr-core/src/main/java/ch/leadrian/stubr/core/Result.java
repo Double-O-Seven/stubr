@@ -95,7 +95,7 @@ public abstract class Result<T> {
      * @return a successful {@link Result} containing a value of type {@link U}, else a failure {@link Result} in case
      * of a failure
      */
-    public abstract <U> Result<U> map(Function<T, U> mappingFunction);
+    public abstract <U> Result<U> map(Function<? super T, ? extends U> mappingFunction);
 
     /**
      * {@inheritDoc}
@@ -105,6 +105,7 @@ public abstract class Result<T> {
 
     private static final class Success<T> extends Result<T> {
 
+        @SuppressWarnings("rawtypes")
         private static final EqualsAndHashCode<Success> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Success.class)
                 .compareAndHash(Success::getValue)
                 .build();
@@ -126,7 +127,7 @@ public abstract class Result<T> {
         }
 
         @Override
-        public <U> Result<U> map(Function<T, U> mappingFunction) {
+        public <U> Result<U> map(Function<? super T, ? extends U> mappingFunction) {
             return Result.success(mappingFunction.apply(value));
         }
 
@@ -167,7 +168,7 @@ public abstract class Result<T> {
         }
 
         @Override
-        public <U> Result<U> map(Function<T, U> mappingFunction) {
+        public <U> Result<U> map(Function<? super T, ? extends U> mappingFunction) {
             return Result.failure();
         }
 
