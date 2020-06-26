@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `java-library`
     `java-test-fixtures`
@@ -47,13 +45,6 @@ dependencies {
 }
 
 tasks {
-    withType(KotlinCompile::class) {
-        sourceCompatibility = "1.8"
-        kotlinOptions {
-            jvmTarget = "1.8"
-            freeCompilerArgs = listOf("-Xjvm-default=compatibility")
-        }
-    }
 
     test {
         useJUnitPlatform {

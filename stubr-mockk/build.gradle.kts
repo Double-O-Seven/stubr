@@ -19,6 +19,8 @@ plugins {
     `java-test-fixtures`
     jacoco
     `maven-publish`
+    kotlin("jvm")
+    id("org.jetbrains.dokka") version "0.10.1"
 }
 
 dependencies {
@@ -31,4 +33,22 @@ dependencies {
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
 
     testImplementation(testFixtures(project(":stubr-core")))
+    testImplementation(kotlin("reflect"))
+    testImplementation(kotlin("stdlib-jdk8"))
+    testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
+
+    testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5")
+}
+
+tasks {
+
+    test {
+        useJUnitPlatform {
+            includeEngines("spek2", "junit-jupiter")
+        }
+    }
+
+    javadocJar {
+        from(dokka)
+    }
 }
