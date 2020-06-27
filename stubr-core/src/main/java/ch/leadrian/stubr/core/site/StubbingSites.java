@@ -17,6 +17,7 @@
 package ch.leadrian.stubr.core.site;
 
 import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 
@@ -79,6 +80,17 @@ public final class StubbingSites {
      */
     public static ConstructorParameterStubbingSite constructorParameter(StubbingSite parent, Constructor<?> constructor, int parameterIndex) {
         return new ConstructorParameterStubbingSite(parent, constructor, constructor.getParameters()[parameterIndex], parameterIndex);
+    }
+
+    /**
+     * Returns a {@link StubbingSite} indicating that the current stubbing site is a memoizing one.
+     *
+     * @param parent the parent site, must not be {@code null}
+     * @return a memoizing stubbing site
+     * @see StubbingStrategies#memoized(StubbingStrategy)
+     */
+    public static MemoizingStubbingSite memoizing(StubbingSite parent) {
+        return new MemoizingStubbingSite(parent);
     }
 
     /**
