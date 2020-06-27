@@ -25,19 +25,19 @@ javaPlatform {
 
 object Versions {
 
-    const val assertJ = "3.15.0"
+    const val assertJ = "3.16.1"
 
     const val equalizer = "1.2.1"
 
-    const val guava = "28.2-jre"
+    const val guava = "29.0-jre"
 
-    const val junit = "5.6.1"
+    const val junit = "5.6.2"
 
     const val mockito = "3.3.3"
 
     const val mockK = "1.10.0"
 
-    const val spek = "2.0.10"
+    const val spek = "2.0.11"
 
 }
 

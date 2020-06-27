@@ -23,7 +23,8 @@ plugins {
     `maven-publish`
     signing
     kotlin("jvm") apply false
-    id("com.palantir.git-version") version "0.12.2"
+    id("com.palantir.git-version") version "0.12.3"
+    id("com.github.ben-manes.versions") version "0.28.0"
 }
 
 val gitVersion: Closure<String> by extra
@@ -55,6 +56,10 @@ tasks {
         reports {
             xml.isEnabled = true
         }
+    }
+
+    dependencyUpdates {
+        checkConstraints = true
     }
 }
 
