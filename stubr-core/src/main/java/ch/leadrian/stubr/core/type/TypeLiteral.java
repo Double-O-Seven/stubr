@@ -41,6 +41,7 @@ import static com.google.common.base.MoreObjects.toStringHelper;
 @SuppressWarnings("unused")
 public abstract class TypeLiteral<T> {
 
+    @SuppressWarnings("rawtypes")
     private static final EqualsAndHashCode<TypeLiteral> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(TypeLiteral.class)
             .compareAndHash(TypeLiteral::getType)
             .build();
