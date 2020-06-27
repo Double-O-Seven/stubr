@@ -32,13 +32,10 @@ repositories {
 
 dependencies {
     api(project(":stubr-core"))
-
-    compileOnly(kotlin("reflect"))
-    compileOnly(kotlin("stdlib-jdk8"))
+    api(kotlin("reflect"))
+    api(kotlin("stdlib-jdk8"))
 
     testImplementation(testFixtures(project(":stubr-core")))
-    testImplementation(kotlin("reflect"))
-    testImplementation(kotlin("stdlib-jdk8"))
     testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
 
     testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5")

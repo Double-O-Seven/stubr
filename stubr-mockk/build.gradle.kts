@@ -25,16 +25,13 @@ plugins {
 
 dependencies {
     api(project(":stubr-core"))
+    api(kotlin("reflect"))
+    api(kotlin("stdlib-jdk8"))
     api(group = "io.mockk", name = "mockk")
-
-    compileOnly(kotlin("reflect"))
-    compileOnly(kotlin("stdlib-jdk8"))
 
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
 
     testImplementation(testFixtures(project(":stubr-core")))
-    testImplementation(kotlin("reflect"))
-    testImplementation(kotlin("stdlib-jdk8"))
     testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
 
     testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5")
