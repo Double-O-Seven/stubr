@@ -18,6 +18,8 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingStrategy;
+import ch.leadrian.stubr.core.site.MemoizingStubbingSite;
+import ch.leadrian.stubr.core.site.StubbingSites;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -42,7 +44,10 @@ final class MemoizingStubbingStrategy implements StubbingStrategy {
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        return memoizedStubsByType.computeIfAbsent(type, t -> delegate.stub(context, t));
+        return memoizedStubsByType.computeIfAbsent(type, t -> {
+            MemoizingStubbingSite site = StubbingSites.memoizing(context.getSite());
+            return delegate.stub(context.fork(site), t);
+        });
     }
 
 }
