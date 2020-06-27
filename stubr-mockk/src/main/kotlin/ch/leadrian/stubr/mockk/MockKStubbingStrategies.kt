@@ -16,7 +16,9 @@
 
 package ch.leadrian.stubr.mockk
 
+import ch.leadrian.stubr.core.StubbingContext
 import ch.leadrian.stubr.core.StubbingStrategy
+import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 /**
@@ -38,7 +40,7 @@ object MockKStubbingStrategies {
             relaxed: Boolean = true,
             relaxUnitFun: Boolean = false,
             vararg moreInterfaces: KClass<*>,
-            block: Any.() -> Unit = {}
+            block: Any.(StubbingContext, Type) -> Unit = { _, _ -> }
     ): StubbingStrategy {
         return GenericMockStubbingStrategy(
                 relaxed = relaxed,
@@ -63,7 +65,7 @@ object MockKStubbingStrategies {
             relaxed: Boolean = true,
             relaxUnitFun: Boolean = false,
             vararg moreInterfaces: KClass<*>,
-            block: T.() -> Unit = {}
+            block: T.(StubbingContext) -> Unit = {}
     ): StubbingStrategy {
         return MockStubbingStrategy(
                 type = type,
@@ -81,7 +83,7 @@ object MockKStubbingStrategies {
             relaxed: Boolean = true,
             relaxUnitFun: Boolean = false,
             vararg moreInterfaces: KClass<*>,
-            noinline block: T.() -> Unit = {}
+            noinline block: T.(StubbingContext) -> Unit = {}
     ): StubbingStrategy {
         return mockk(
                 type = T::class,

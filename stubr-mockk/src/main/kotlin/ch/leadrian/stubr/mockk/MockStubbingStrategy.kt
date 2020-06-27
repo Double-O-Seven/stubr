@@ -27,7 +27,7 @@ internal class MockStubbingStrategy<T : Any>(
         private val relaxed: Boolean,
         private val relaxUnitFun: Boolean,
         private val moreInterfaces: Array<out KClass<*>>,
-        private val block: T.() -> Unit
+        private val block: T.(StubbingContext) -> Unit
 ) : SimpleStubbingStrategy<T>() {
 
     override fun acceptsClass(context: StubbingContext, type: Class<*>): Boolean = type == this.type.java
@@ -35,11 +35,12 @@ internal class MockStubbingStrategy<T : Any>(
     override fun acceptsParameterizedType(context: StubbingContext, type: ParameterizedType): Boolean =
             type == this.type.java
 
-    override fun stubClass(context: StubbingContext, type: Class<*>): T = createMock()
+    override fun stubClass(context: StubbingContext, type: Class<*>): T = createMock { block(context) }
 
-    override fun stubParameterizedType(context: StubbingContext, type: ParameterizedType): T = createMock()
+    override fun stubParameterizedType(context: StubbingContext, type: ParameterizedType): T =
+            createMock { block(context) }
 
-    private fun createMock(): T {
+    private inline fun createMock(block: T.() -> Unit): T {
         return mockkClass(
                 type = type,
                 relaxed = relaxed,

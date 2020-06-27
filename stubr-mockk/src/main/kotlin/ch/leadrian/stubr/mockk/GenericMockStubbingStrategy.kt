@@ -17,16 +17,19 @@
 package ch.leadrian.stubr.mockk
 
 import ch.leadrian.stubr.core.StubbingContext
+import ch.leadrian.stubr.core.StubbingException
 import ch.leadrian.stubr.core.strategy.SimpleStubbingStrategy
+import ch.leadrian.stubr.core.type.Types
 import io.mockk.mockkClass
 import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 internal class GenericMockStubbingStrategy(
-        private val relaxed: Boolean = false,
-        private val relaxUnitFun: Boolean = false,
+        private val relaxed: Boolean,
+        private val relaxUnitFun: Boolean,
         private val moreInterfaces: Array<out KClass<*>>,
-        private val block: Any.() -> Unit = {}
+        private val block: Any.(StubbingContext, Type) -> Unit
 ) : SimpleStubbingStrategy<Any>() {
 
     override fun acceptsClass(context: StubbingContext, type: Class<*>): Boolean =
@@ -35,7 +38,14 @@ internal class GenericMockStubbingStrategy(
     override fun acceptsParameterizedType(context: StubbingContext, type: ParameterizedType): Boolean =
             accepts(context, type.rawType)
 
-    override fun stubClass(context: StubbingContext, type: Class<*>): Any {
+    override fun stubClass(context: StubbingContext, type: Class<*>): Any = createMock(type) { block(context, type) }
+
+    override fun stubParameterizedType(context: StubbingContext, type: ParameterizedType): Any {
+        val rawType = Types.getRawType(type).orElseThrow { StubbingException(context.site, type) }
+        return createMock(rawType) { block(context, type) }
+    }
+
+    private inline fun createMock(type: Class<*>, block: Any.() -> Unit): Any {
         return mockkClass(
                 type = type.kotlin,
                 relaxed = relaxed,
@@ -44,8 +54,5 @@ internal class GenericMockStubbingStrategy(
                 block = block
         )
     }
-
-    override fun stubParameterizedType(context: StubbingContext, type: ParameterizedType): Any =
-            stub(context, type.rawType)
 
 }
