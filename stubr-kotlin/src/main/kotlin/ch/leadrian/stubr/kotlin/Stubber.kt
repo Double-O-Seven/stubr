@@ -47,7 +47,6 @@ inline fun <reified T> Stubber.tryToStub(site: StubbingSite? = null): Result<T> 
  */
 inline fun <reified T> Stubber.stub(site: StubbingSite? = null): T {
     val typeLiteral = typeLiteral<T>()
-    val x: String by mutableMapOf<String, String>()
     return if (site != null) {
         stub(typeLiteral, site)
     } else {
