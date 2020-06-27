@@ -135,18 +135,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-core</artifactId>
-  <version>1.4.0</version>
+  <version>1.5.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-core:1.4.0'
+implementation 'ch.leadrian.stubr:stubr-core:1.5.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-core:1.4.0")
+implementation("ch.leadrian.stubr:stubr-core:1.5.0")
 ```
 
 ## 3rd party support
@@ -180,18 +180,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-junit</artifactId>
-  <version>1.4.0</version>
+  <version>1.5.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-junit:1.4.0'
+implementation 'ch.leadrian.stubr:stubr-junit:1.5.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-junit:1.4.0")
+implementation("ch.leadrian.stubr:stubr-junit:1.5.0")
 ```
 
 ### Mockito
@@ -220,18 +220,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-mockito</artifactId>
-  <version>1.4.0</version>
+  <version>1.5.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-mockito:1.4.0'
+implementation 'ch.leadrian.stubr:stubr-mockito:1.5.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-mockito:1.4.0")
+implementation("ch.leadrian.stubr:stubr-mockito:1.5.0")
 ```
 
 ### Kotlin
@@ -259,16 +259,57 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-kotlin</artifactId>
-  <version>1.4.0</version>
+  <version>1.5.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-kotlin:1.4.0'
+implementation 'ch.leadrian.stubr:stubr-kotlin:1.5.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-kotlin:1.4.0")
+implementation("ch.leadrian.stubr:stubr-kotlin:1.5.0")
+```
+### MockK
+
+Stubr also includes a MockK module that provides `StubbingStrategy` implementations that provide stubs using MockK mocks.
+The provided stubs are by default relaxed MockK mocks.
+
+Concrete instances can be accessed through `ch.leadrian.stubr.mockk.MockKStubbingStrategies`.
+
+A usage example:
+```kotlin
+val stubber = Stubber.builder()
+    .stubWith(MockKStubbingStrategies.mockkAny())
+    .stubWith(MockKStubbingStrategies.mockk<Foo> {
+        every { getSomeValue() } returns "Hello there!"
+    })
+    .build();
+val foo = stubber.stub<Foo>() // Stubbed with the mockk() stubbing strategy
+val result = foo.getSomeValue() // result = "Hello there!"
+val bar = stubber.stub<Bar>() // Stubbed with the mockkAny() stubbing strategy
+val otherResult = bar.getSomeOtherValue() // returns default value given by MockK
+```
+
+The Mockito extension can be downloaded here:
+
+For Maven:
+```xml
+<dependency>
+  <groupId>ch.leadrian.stubr</groupId>
+  <artifactId>stubr-mockk</artifactId>
+  <version>1.5.0</version>
+</dependency>
+```
+
+For Gradle (Groovy DSL):
+```groovy
+implementation 'ch.leadrian.stubr:stubr-mockk:1.5.0'
+```
+
+For Gradle (Kotlin DSL):
+```groovy
+implementation("ch.leadrian.stubr:stubr-mockk:1.5.0")
 ```
