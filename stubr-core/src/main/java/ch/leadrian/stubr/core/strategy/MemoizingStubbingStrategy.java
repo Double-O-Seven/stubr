@@ -22,14 +22,14 @@ import ch.leadrian.stubr.core.site.MemoizingStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
 
 final class MemoizingStubbingStrategy implements StubbingStrategy {
 
-    private final Map<Type, Object> memoizedStubsByType = new ConcurrentHashMap<>();
+    private final Map<Type, Object> memoizedStubsByType = new HashMap<>();
     private final StubbingStrategy delegate;
 
     MemoizingStubbingStrategy(StubbingStrategy delegate) {
@@ -44,10 +44,17 @@ final class MemoizingStubbingStrategy implements StubbingStrategy {
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        return memoizedStubsByType.computeIfAbsent(type, t -> {
-            MemoizingStubbingSite site = StubbingSites.memoizing(context.getSite());
-            return delegate.stub(context.fork(site), t);
-        });
+        Object value = memoizedStubsByType.get(type);
+        if (value == null) {
+            value = computeValue(context, type);
+            memoizedStubsByType.put(type, value);
+        }
+        return value;
+    }
+
+    private Object computeValue(StubbingContext context, Type type) {
+        MemoizingStubbingSite site = StubbingSites.memoizing(context.getSite());
+        return delegate.stub(context.fork(site), type);
     }
 
 }
