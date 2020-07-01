@@ -48,7 +48,7 @@ public final class Matchers {
      * @param <T>            subtype of {@link Executable}
      * @return a matcher that matches the given {@link Executable} if it accepts the given parameter types
      */
-    public static <T extends Executable> Matcher<T> accepting(Class<?>... parameterTypes) {
+    public static <T extends Executable> Matcher<T> accepts(Class<?>... parameterTypes) {
         return new ParameterTypesMatcher<>(parameterTypes);
     }
 

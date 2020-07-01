@@ -31,7 +31,7 @@ class ParameterTypesMatcherTest {
     void shouldReturnTrueForConstructorWithExactlyMatchingArguments() throws Exception {
         StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(CharSequence.class, long.class);
-        Matcher<Constructor<?>> matcher = Matchers.accepting(CharSequence.class, long.class);
+        Matcher<Constructor<?>> matcher = Matchers.accepts(CharSequence.class, long.class);
 
         boolean matches = matcher.matches(context, constructor);
 
@@ -43,7 +43,7 @@ class ParameterTypesMatcherTest {
     void shouldReturnTrueForConstructorWithMatchingArguments() throws Exception {
         StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(CharSequence.class, long.class);
-        Matcher<Constructor<?>> matcher = Matchers.accepting(String.class, long.class);
+        Matcher<Constructor<?>> matcher = Matchers.accepts(String.class, long.class);
 
         boolean matches = matcher.matches(context, constructor);
 
@@ -55,7 +55,7 @@ class ParameterTypesMatcherTest {
     void shouldReturnFalseForConstructorWithoutMatchingArguments() throws Exception {
         StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class, int.class);
-        Matcher<Constructor<?>> matcher = Matchers.accepting(String.class, long.class);
+        Matcher<Constructor<?>> matcher = Matchers.accepts(String.class, long.class);
 
         boolean matches = matcher.matches(context, constructor);
 
@@ -67,7 +67,7 @@ class ParameterTypesMatcherTest {
     void shouldReturnFalseForConstructorWithoutArguments() throws Exception {
         StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor();
-        Matcher<Constructor<?>> matcher = Matchers.accepting(String.class, long.class);
+        Matcher<Constructor<?>> matcher = Matchers.accepts(String.class, long.class);
 
         boolean matches = matcher.matches(context, constructor);
 
@@ -79,7 +79,7 @@ class ParameterTypesMatcherTest {
     void shouldReturnFalseForConstructorWithoutNumberOfArguments() throws Exception {
         StubbingContext context = mock(StubbingContext.class);
         Constructor<Foo> constructor = Foo.class.getDeclaredConstructor(String.class);
-        Matcher<Constructor<?>> matcher = Matchers.accepting(String.class, long.class);
+        Matcher<Constructor<?>> matcher = Matchers.accepts(String.class, long.class);
 
         boolean matches = matcher.matches(context, constructor);
 
