@@ -18,6 +18,11 @@ package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingSite;
+import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
+import ch.leadrian.stubr.core.site.ConstructorStubbingSite;
+import ch.leadrian.stubr.core.site.ExecutableStubbingSite;
+import ch.leadrian.stubr.core.site.MethodStubbingSite;
+import ch.leadrian.stubr.core.site.ParameterStubbingSite;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -25,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -50,6 +56,17 @@ public final class Matchers {
      */
     public static <T extends Executable> Matcher<T> accepts(Class<?>... parameterTypes) {
         return new ParameterTypesMatcher<>(parameterTypes);
+    }
+
+    /**
+     * Returns a matcher that matches {@link AnnotatedElement}s using a delegate matcher.
+     *
+     * @param delegate the delegate
+     * @param <T>      the generic type, may be anything
+     * @return a matcher that matches {@link AnnotatedElement}s using a delegate matcher
+     */
+    public static <T extends StubbingSite> Matcher<T> annotatedElement(Matcher<? super AnnotatedElement> delegate) {
+        return instanceOf(AnnotatedStubbingSite.class, mappedTo(AnnotatedStubbingSite::getAnnotatedElement, delegate));
     }
 
     /**
@@ -92,17 +109,6 @@ public final class Matchers {
     }
 
     /**
-     * Returns a matcher that matches {@link AnnotatedElement}s using a delegate matcher.
-     *
-     * @param delegate the delegate
-     * @param <T>      the generic type, may be anything
-     * @return a matcher that matches {@link AnnotatedElement}s using a delegate matcher
-     */
-    public static <T> Matcher<T> annotatedSiteIs(Matcher<? super AnnotatedElement> delegate) {
-        return new AnnotatedElementMatcher<>(delegate);
-    }
-
-    /**
      * Returns a matcher that always matches.
      *
      * @param <T> the generic type, may be anything
@@ -119,8 +125,19 @@ public final class Matchers {
      * @param <T>      the generic type, may be anything
      * @return a matcher that matches {@link Executable}s using a delegate matcher
      */
-    public static <T> Matcher<T> executableIs(Matcher<? super Executable> delegate) {
-        return new ExecutableMatcher<>(delegate);
+    public static <T extends StubbingSite> Matcher<T> executable(Matcher<? super Executable> delegate) {
+        return instanceOf(ExecutableStubbingSite.class, mappedTo(ExecutableStubbingSite::getExecutable, delegate));
+    }
+
+    /**
+     * Returns a matcher that matches when the target value is equal to the given value.
+     *
+     * @param value the value given for comparison
+     * @param <T>   the type of the value being compared to {@code value}
+     * @return a matcher that matches when the target value is equal to the given value
+     */
+    public static <T> Matcher<T> equalTo(Object value) {
+        return (context, v) -> Objects.equals(v, value);
     }
 
     /**
@@ -130,23 +147,8 @@ public final class Matchers {
      * @param <T>      the generic type, may be anything
      * @return a matcher that matches {@link Constructor}s using a delegate matcher
      */
-    public static <T> Matcher<T> constructorIs(Matcher<? super Constructor<?>> delegate) {
-        return new ConstructorMatcher<>(delegate);
-    }
-
-    /**
-     * Returns a matcher that matches if the given {@code delegate} matches the value extracted by {@code
-     * valueExtractor}.
-     *
-     * @param valueExtractor the value extracting function
-     * @param delegate       the delegate matcher
-     * @param <T>            the input type
-     * @param <U>            the output type
-     * @return a matcher that matches if the given {@code delegate} matches the value extracted by {@code
-     * valueExtractor}
-     */
-    public static <T, U> Matcher<T> mappedTo(Function<? super T, ? extends U> valueExtractor, Matcher<? super U> delegate) {
-        return new MappingMatcher<>(valueExtractor, delegate);
+    public static <T extends StubbingSite> Matcher<T> constructor(Matcher<? super Constructor<?>> delegate) {
+        return instanceOf(ConstructorStubbingSite.class, mappedTo(ConstructorStubbingSite::getConstructor, delegate));
     }
 
     /**
@@ -177,14 +179,29 @@ public final class Matchers {
     }
 
     /**
+     * Returns a matcher that matches if the given {@code delegate} matches the value extracted by {@code
+     * valueExtractor}.
+     *
+     * @param valueExtractor the value extracting function
+     * @param delegate       the delegate matcher
+     * @param <T>            the input type
+     * @param <U>            the output type
+     * @return a matcher that matches if the given {@code delegate} matches the value extracted by {@code
+     * valueExtractor}
+     */
+    public static <T, U> Matcher<T> mappedTo(Function<? super T, ? extends U> valueExtractor, Matcher<? super U> delegate) {
+        return new MappingMatcher<>(valueExtractor, delegate);
+    }
+
+    /**
      * Returns a matcher that matches {@link Method}s using a delegate matcher.
      *
      * @param delegate the delegate
      * @param <T>      the generic type, may be anything
      * @return a matcher that matches {@link Method}s using a delegate matcher
      */
-    public static <T> Matcher<T> methodIs(Matcher<? super Method> delegate) {
-        return new MethodMatcher<>(delegate);
+    public static <T extends StubbingSite> Matcher<T> method(Matcher<? super Method> delegate) {
+        return instanceOf(MethodStubbingSite.class, mappedTo(MethodStubbingSite::getMethod, delegate));
     }
 
     /**
@@ -232,8 +249,8 @@ public final class Matchers {
      * @param <T>      the generic type, may be anything
      * @return a matcher that matches {@link Parameter}s using a delegate matcher
      */
-    public static <T> Matcher<T> parameterIs(Matcher<? super Parameter> delegate) {
-        return new ParameterMatcher<>(delegate);
+    public static <T extends StubbingSite> Matcher<T> parameter(Matcher<? super Parameter> delegate) {
+        return instanceOf(ParameterStubbingSite.class, mappedTo(ParameterStubbingSite::getParameter, delegate));
     }
 
     /**

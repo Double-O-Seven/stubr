@@ -19,8 +19,9 @@ package ch.leadrian.stubr.core;
 import ch.leadrian.stubr.core.strategy.OptionalStubbingMode;
 import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 
-import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
+import static ch.leadrian.stubr.core.matcher.Matchers.annotatedElement;
 import static ch.leadrian.stubr.core.matcher.Matchers.nullable;
+import static ch.leadrian.stubr.core.matcher.Matchers.site;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.commonConstantValues;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.commonSuppliedValues;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultCollections;
@@ -89,7 +90,7 @@ public final class Stubbers {
     public static Stubber minimalStubber() {
         return Stubber.builder()
                 .include(defaultStubber())
-                .stubWith(nullValue().when(annotatedSiteIs(nullable())))
+                .stubWith(nullValue().when(site(annotatedElement(nullable()))))
                 .stubWith(optional(OptionalStubbingMode.EMPTY))
                 .stubWith(emptyDefaultCollections())
                 .build();

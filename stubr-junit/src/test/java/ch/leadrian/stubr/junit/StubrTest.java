@@ -37,8 +37,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
+import static ch.leadrian.stubr.core.matcher.Matchers.annotatedElement;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
+import static ch.leadrian.stubr.core.matcher.Matchers.site;
 import static ch.leadrian.stubr.junit.annotation.StubberBaseline.Variant.MINIMAL;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -165,7 +166,7 @@ class StubrTest {
         public List<? extends StubbingStrategy> getStubbingStrategies(ExtensionContext extensionContext) {
             return asList(
                     StubbingStrategies.constantValue(int.class, 1337),
-                    StubbingStrategies.suppliedValue(int.class, sequenceNumber -> sequenceNumber).when(annotatedSiteIs(annotatedWith(Sequence.class)))
+                    StubbingStrategies.suppliedValue(int.class, sequenceNumber -> sequenceNumber).when(site(annotatedElement(annotatedWith(Sequence.class))))
             );
         }
 

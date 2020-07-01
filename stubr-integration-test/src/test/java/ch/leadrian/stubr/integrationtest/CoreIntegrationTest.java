@@ -35,8 +35,9 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.util.List;
 
-import static ch.leadrian.stubr.core.matcher.Matchers.annotatedSiteIs;
+import static ch.leadrian.stubr.core.matcher.Matchers.annotatedElement;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
+import static ch.leadrian.stubr.core.matcher.Matchers.site;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultCollections;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.suppliedValue;
 import static ch.leadrian.stubr.integrationtest.CoreIntegrationTest.TestStubbingStrategies;
@@ -274,7 +275,7 @@ class CoreIntegrationTest {
                     .add(suppliedValue(Integer.class, sequenceNumber -> sequenceNumber))
                     .addAll(defaultCollections(this::getCollectionSize)
                             .stream()
-                            .map(strategy -> strategy.when(annotatedSiteIs(annotatedWith(CollectionSize.class))))
+                            .map(strategy -> strategy.when(site(annotatedElement(annotatedWith(CollectionSize.class)))))
                             .collect(toList()))
                     .build();
         }

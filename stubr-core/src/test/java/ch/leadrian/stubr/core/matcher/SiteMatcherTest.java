@@ -36,8 +36,9 @@ class SiteMatcherTest {
         when(context.getSite())
                 .thenReturn(site);
         @SuppressWarnings("unchecked")
-        Matcher<StubbingSite> delegate = (Matcher<StubbingSite>) mock(StubbingSite.class);
-        when(delegate.matches(context, site)).thenReturn(expectedResult);
+        Matcher<StubbingSite> delegate = (Matcher<StubbingSite>) mock(Matcher.class);
+        when(delegate.matches(context, site))
+                .thenReturn(expectedResult);
         Matcher<Object> matcher = Matchers.site(delegate);
 
         boolean result = matcher.matches(context, "test");
