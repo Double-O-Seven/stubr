@@ -16,11 +16,14 @@
 
 package ch.leadrian.stubr.kotlin
 
+import ch.leadrian.stubr.core.Matcher
 import ch.leadrian.stubr.core.Result
 import ch.leadrian.stubr.core.Stubber
 import ch.leadrian.stubr.core.StubbingContext
+import ch.leadrian.stubr.core.StubbingSite
 import ch.leadrian.stubr.core.site.StubbingSites
 import org.assertj.core.api.Assertions.assertThat
+import org.mockito.Mockito.mock
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.lang.reflect.Type
@@ -35,10 +38,10 @@ internal object KotlinMatchersSpec : Spek({
             context("given nullable return type") {
                 val method = KotlinMatchersSpec::nullableValue.javaMethod
                 val site = StubbingSites.methodReturnValue(StubbingSites.unknown(), method)
-                val context = StubbingContext.create(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, mock(StubbingSite::class.java))
 
                 it("should match") {
-                    assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
+                    assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
                             .isTrue()
                 }
             }
@@ -46,10 +49,10 @@ internal object KotlinMatchersSpec : Spek({
             context("given non-null return type") {
                 val method = KotlinMatchersSpec::nonNullValue.javaMethod
                 val site = StubbingSites.methodReturnValue(StubbingSites.unknown(), method)
-                val context = StubbingContext.create(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, mock(StubbingSite::class.java))
 
                 it("should not match") {
-                    assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
+                    assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
                             .isFalse()
                 }
             }
@@ -61,10 +64,10 @@ internal object KotlinMatchersSpec : Spek({
             context("given nullable parameter type") {
                 val function = KotlinMatchersSpec::testParameters
                 val site = StubbingSites.methodParameter(StubbingSites.unknown(), function.javaMethod, 0)
-                val context = StubbingContext.create(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, mock(StubbingSite::class.java))
 
                 it("should match") {
-                    assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
+                    assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
                             .isTrue()
                 }
             }
@@ -72,10 +75,10 @@ internal object KotlinMatchersSpec : Spek({
             context("given non-null parameter type") {
                 val function = KotlinMatchersSpec::testParameters
                 val site = StubbingSites.methodParameter(StubbingSites.unknown(), function.javaMethod, 1)
-                val context = StubbingContext.create(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, mock(StubbingSite::class.java))
 
                 it("should not match") {
-                    assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
+                    assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
                             .isFalse()
                 }
             }
@@ -83,14 +86,14 @@ internal object KotlinMatchersSpec : Spek({
             context("given java method") {
                 val function = KotlinMatchersTestFixtures::testParameters
                 val site = StubbingSites.methodParameter(StubbingSites.unknown(), function.javaMethod, 0)
-                val context = StubbingContext.create(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, mock(StubbingSite::class.java))
 
                 beforeEachTest {
                     require(function.parameters.size == 1)
                 }
 
                 it("should not match") {
-                    assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
+                    assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
                             .isFalse()
                 }
             }
@@ -101,10 +104,10 @@ internal object KotlinMatchersSpec : Spek({
             context("given nullable parameter type") {
                 val constructor = Foo::class.java.getDeclaredConstructor(Any::class.java, Any::class.java)
                 val site = StubbingSites.constructorParameter(StubbingSites.unknown(), constructor, 0)
-                val context = StubbingContext.create(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, mock(StubbingSite::class.java))
 
                 it("should match") {
-                    assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
+                    assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
                             .isTrue()
                 }
             }
@@ -112,16 +115,98 @@ internal object KotlinMatchersSpec : Spek({
             context("given non-null parameter type") {
                 val constructor = Foo::class.java.getDeclaredConstructor(Any::class.java, Any::class.java)
                 val site = StubbingSites.constructorParameter(StubbingSites.unknown(), constructor, 1)
-                val context = StubbingContext.create(TestStubber, site)
+                val context = StubbingContext.create(TestStubber, mock(StubbingSite::class.java))
 
                 it("should not match") {
-                    assertThat(KotlinMatchers.kotlinTypeIsNullable<Any>().matches(context, null))
+                    assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
                             .isFalse()
                 }
             }
         }
     }
 
+    describe("kotlinProperty") {
+
+        context("given site is not a KPropertyStubbingSite") {
+            val site = StubbingSites.unknown()
+            val context by memoized { StubbingContext.create(mock(Stubber::class.java), site) }
+            val matcher = KotlinMatchers.kotlinProperty<StubbingSite> { _, _ -> true }
+
+            it("should not match") {
+                assertThat(matcher.matches(context, site))
+                        .isFalse()
+            }
+        }
+
+        context("given site is a KPropertyStubbingSite") {
+            val site = KPropertyStubbingSite(Fubar("foo"), Fubar::foo)
+            val context by memoized { StubbingContext.create(mock(Stubber::class.java), site) }
+
+            context("given delegate matcher does not match") {
+                val matcher = KotlinMatchers.kotlinProperty<StubbingSite> { _, _ -> false }
+
+                it("should not match") {
+                    assertThat(matcher.matches(context, site))
+                            .isFalse()
+                }
+            }
+
+            context("given delegate matcher matches") {
+                val matcher = KotlinMatchers.kotlinProperty<StubbingSite> { _, property -> property == Fubar::foo }
+
+                it("should match") {
+                    assertThat(matcher.matches(context, site))
+                            .isTrue()
+                }
+            }
+        }
+    }
+
+    describe("instanceOf") {
+        val context by memoized { StubbingContext.create(mock(Stubber::class.java), StubbingSites.unknown()) }
+
+        listOf(true, false).forEach { expectedResult ->
+            context("given delegate returning $expectedResult") {
+                val matcher: Matcher<Any> = KotlinMatchers.instanceOf { _: StubbingContext, _: String -> expectedResult }
+
+                context("given value is instance of target class") {
+
+                    it("should return $expectedResult") {
+                        assertThat(matcher.matches(context, "Test"))
+                                .isEqualTo(expectedResult)
+                    }
+                }
+
+                context("given value is not instance of target class") {
+
+                    it("should return false") {
+                        assertThat(matcher.matches(context, 1234))
+                                .isFalse()
+                    }
+                }
+            }
+        }
+
+        context("given no delegate") {
+            val matcher = KotlinMatchers.instanceOf<Any, String>()
+
+            context("given value is instance of target class") {
+
+                it("should return true") {
+                    assertThat(matcher.matches(context, "Test"))
+                            .isTrue()
+                }
+            }
+
+            context("given value is not instance of target class") {
+
+                it("should return false") {
+                    assertThat(matcher.matches(context, 1234))
+                            .isFalse()
+                }
+            }
+        }
+    }
 }) {
 
     private fun nullableValue(): Any? = null
@@ -140,5 +225,7 @@ internal object KotlinMatchersSpec : Spek({
 
     @Suppress("UNUSED_PARAMETER")
     class Foo(nullableParam: Any?, nonNullParam: Any)
+
+    private data class Fubar(val foo: String)
 
 }
