@@ -20,7 +20,6 @@ import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.StubbingStrategy;
-import ch.leadrian.stubr.core.site.StubbingSites;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -33,7 +32,6 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class MemoizingStubbingStrategyTest {
@@ -71,19 +69,6 @@ class MemoizingStubbingStrategyTest {
 
         assertThat(accepts)
                 .isEqualTo(expectedAccepts);
-    }
-
-    @Test
-    void shouldUseMemoizingStubbingSite() {
-        StubbingSite parentSite = mock(StubbingSite.class);
-        Stubber stubber = mock(Stubber.class);
-        StubbingContext context = StubbingContext.create(stubber, parentSite);
-        StubbingStrategy delegate = mock(StubbingStrategy.class);
-        StubbingStrategy strategy = StubbingStrategies.memoized(delegate);
-
-        strategy.stub(context, String.class);
-
-        verify(delegate).stub(StubbingContext.create(stubber, StubbingSites.memoizing(parentSite)), String.class);
     }
 
     private static class TestStubbingStrategy implements StubbingStrategy {
