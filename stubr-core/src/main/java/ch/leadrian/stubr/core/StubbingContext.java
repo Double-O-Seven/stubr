@@ -18,6 +18,8 @@ package ch.leadrian.stubr.core;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 
+import java.util.function.Function;
+
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static java.util.Objects.requireNonNull;
 
@@ -82,6 +84,14 @@ public final class StubbingContext {
      */
     public StubbingContext fork(StubbingSite site) {
         return StubbingContext.create(stubber, site);
+    }
+
+    /**
+     * @param siteFactory a factory method creating a new {@link StubbingSite} from the current site
+     * @return a copy of {@code this} with a potentially different {@link StubbingSite}
+     */
+    public StubbingContext fork(Function<? super StubbingSite, ? extends StubbingSite> siteFactory) {
+        return StubbingContext.create(stubber, siteFactory.apply(site));
     }
 
     /**

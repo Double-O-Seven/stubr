@@ -19,9 +19,12 @@ package ch.leadrian.stubr.core;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Function;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("UnstableApiUsage")
 class StubbingContextTest {
@@ -47,6 +50,24 @@ class StubbingContextTest {
         StubbingContext context = StubbingContext.create(stubber, site1);
 
         StubbingContext forkedContext = context.fork(site2);
+
+        assertThat(forkedContext)
+                .isNotSameAs(context)
+                .isEqualTo(StubbingContext.create(stubber, site2));
+    }
+
+    @Test
+    void shouldForkWithSiteFactory() {
+        Stubber stubber = mock(Stubber.class);
+        StubbingSite site1 = mock(StubbingSite.class);
+        StubbingSite site2 = mock(StubbingSite.class);
+        StubbingContext context = StubbingContext.create(stubber, site1);
+        @SuppressWarnings("unchecked")
+        Function<StubbingSite, StubbingSite> siteFactory = mock(Function.class);
+        when(siteFactory.apply(site1))
+                .thenReturn(site2);
+
+        StubbingContext forkedContext = context.fork(siteFactory);
 
         assertThat(forkedContext)
                 .isNotSameAs(context)
