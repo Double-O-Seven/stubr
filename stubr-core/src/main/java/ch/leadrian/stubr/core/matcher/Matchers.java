@@ -17,9 +17,15 @@
 package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.Matcher;
+import ch.leadrian.stubr.core.StubbingSite;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.function.Function;
 
 /**
  * Collection of factory methods for various default implementations of {@link Matcher}.
@@ -129,6 +135,48 @@ public final class Matchers {
     }
 
     /**
+     * Returns a matcher that matches if the given {@code delegate} matches the value extracted by {@code
+     * valueExtractor}.
+     *
+     * @param valueExtractor the value extracting function
+     * @param delegate       the delegate matcher
+     * @param <T>            the input type
+     * @param <U>            the output type
+     * @return a matcher that matches if the given {@code delegate} matches the value extracted by {@code
+     * valueExtractor}
+     */
+    public static <T, U> Matcher<T> mappedTo(Function<? super T, ? extends U> valueExtractor, Matcher<? super U> delegate) {
+        return new MappingMatcher<>(valueExtractor, delegate);
+    }
+
+    /**
+     * Returns a matcher that matches if a given value of type {@code T} is an instance of type {@code U}. If the given
+     * {@code delegate} is not {@code null}, the matcher only matches if the delegate matcher also matches.
+     *
+     * @param targetClass the type of which a given value has to be an instance of
+     * @param delegate    the matcher that is applied if a given value of type {@code T} is an instance of type {@code
+     *                    U}
+     * @param <T>         the generic source type
+     * @param <U>         the generic target type
+     * @return a matcher that matches if a given value of type {@code T} is an instance of type {@code U}
+     */
+    public static <T, U> Matcher<T> instanceOf(Class<U> targetClass, Matcher<? super U> delegate) {
+        return new InstanceOfMatcher<>(targetClass, delegate);
+    }
+
+    /**
+     * Returns a matcher that matches if a given value of type {@code T} is an instance of type {@code U}.
+     *
+     * @param targetClass the type of which a given value has to be an instance of
+     * @param <T>         the generic source type
+     * @param <U>         the generic target type
+     * @return a matcher that matches if a given value of type {@code T} is an instance of type {@code U}
+     */
+    public static <T, U> Matcher<T> instanceOf(Class<U> targetClass) {
+        return instanceOf(targetClass, null);
+    }
+
+    /**
      * Returns a matcher that matches {@link Method}s using a delegate matcher.
      *
      * @param delegate the delegate
@@ -189,16 +237,24 @@ public final class Matchers {
     }
 
     /**
-     * Returns a matcher that matches a given value {@code T} in a context of the parent site of the given context
-     * using a delegate matcher.
+     * Returns a matcher that matches the parent of the {@link StubbingSite} passed as parameter.
+     *
+     * @param delegate the delegate
+     * @return a matcher that matches the parent of the {@link StubbingSite} passed as parameter
+     */
+    public static Matcher<StubbingSite> parent(Matcher<? super StubbingSite> delegate) {
+        return new ParentMatcher(delegate);
+    }
+
+    /**
+     * Returns a matcher that matches the {@link StubbingSite} of the given context using a delegate matcher.
      *
      * @param delegate the delegate
      * @param <T>      the generic type, may be anything
-     * @return a matcher that matches a given value {@code T} in a context of the parent site of the given context
-     * using a delegate matcher
+     * @return a matcher that matches the {@link StubbingSite} of the given context using a delegate matcher
      */
-    public static <T> Matcher<T> parent(Matcher<? super T> delegate) {
-        return new ParentMatcher<>(delegate);
+    public static <T> Matcher<T> site(Matcher<? super StubbingSite> delegate) {
+        return new SiteMatcher<>(delegate);
     }
 
 }

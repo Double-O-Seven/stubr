@@ -20,22 +20,20 @@ import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
 
-import static java.util.Objects.requireNonNull;
+import java.util.Objects;
 
-final class ParentMatcher implements Matcher<StubbingSite> {
+final class SiteMatcher<T> implements Matcher<T> {
 
     private final Matcher<? super StubbingSite> delegate;
 
-    ParentMatcher(Matcher<? super StubbingSite> delegate) {
-        requireNonNull(delegate, "delegate");
+    SiteMatcher(Matcher<? super StubbingSite> delegate) {
+        Objects.requireNonNull(delegate, "delegate");
         this.delegate = delegate;
     }
 
     @Override
-    public boolean matches(StubbingContext context, StubbingSite value) {
-        return value.getParent()
-                .filter(parentSite -> delegate.matches(context, parentSite))
-                .isPresent();
+    public boolean matches(StubbingContext context, T value) {
+        return delegate.matches(context, context.getSite());
     }
 
 }

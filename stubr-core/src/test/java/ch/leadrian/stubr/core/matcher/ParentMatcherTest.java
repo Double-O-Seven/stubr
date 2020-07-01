@@ -17,7 +17,6 @@
 package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.Matcher;
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingSite;
 import org.junit.jupiter.api.Test;
@@ -38,10 +37,10 @@ class ParentMatcherTest {
     @Test
     void givenNoParentSiteItShouldNotMatch() {
         StubbingSite site = new TestStubbingSite(null);
-        StubbingContext context = StubbingContext.create(mock(Stubber.class), site);
-        Matcher<String> matcher = Matchers.parent((c, v) -> true);
+        StubbingContext context = mock(StubbingContext.class);
+        Matcher<StubbingSite> matcher = Matchers.parent((c, v) -> true);
 
-        boolean matches = matcher.matches(context, "test");
+        boolean matches = matcher.matches(context, site);
 
         assertThat(matches)
                 .isFalse();
@@ -52,19 +51,18 @@ class ParentMatcherTest {
     void givenParentItShouldDelegateMatching(boolean expectedMatch) {
         StubbingSite parentSite = new TestStubbingSite(null);
         StubbingSite site = new TestStubbingSite(parentSite);
-        Stubber stubber = mock(Stubber.class);
-        StubbingContext context = StubbingContext.create(stubber, site);
+        StubbingContext context = mock(StubbingContext.class);
         @SuppressWarnings("unchecked")
-        Matcher<String> delegate = mock(Matcher.class);
+        Matcher<StubbingSite> delegate = mock(Matcher.class);
         when(delegate.matches(any(), any()))
                 .thenReturn(expectedMatch);
-        Matcher<String> matcher = Matchers.parent(delegate);
+        Matcher<StubbingSite> matcher = Matchers.parent(delegate);
 
-        boolean matches = matcher.matches(context, "test");
+        boolean matches = matcher.matches(context, site);
 
         assertAll(
                 () -> assertThat(matches).isEqualTo(expectedMatch),
-                () -> verify(delegate).matches(StubbingContext.create(stubber, parentSite), "test")
+                () -> verify(delegate).matches(context, parentSite)
         );
     }
 

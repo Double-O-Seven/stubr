@@ -18,24 +18,26 @@ package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingSite;
+
+import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
-final class ParentMatcher implements Matcher<StubbingSite> {
+final class MappingMatcher<T, U> implements Matcher<T> {
 
-    private final Matcher<? super StubbingSite> delegate;
+    private final Function<? super T, ? extends U> valueExtractor;
+    private final Matcher<? super U> delegate;
 
-    ParentMatcher(Matcher<? super StubbingSite> delegate) {
+    MappingMatcher(Function<? super T, ? extends U> valueExtractor, Matcher<? super U> delegate) {
+        requireNonNull(valueExtractor, "valueExtractor");
         requireNonNull(delegate, "delegate");
+        this.valueExtractor = valueExtractor;
         this.delegate = delegate;
     }
 
     @Override
-    public boolean matches(StubbingContext context, StubbingSite value) {
-        return value.getParent()
-                .filter(parentSite -> delegate.matches(context, parentSite))
-                .isPresent();
+    public boolean matches(StubbingContext context, T value) {
+        return delegate.matches(context, valueExtractor.apply(value));
     }
 
 }
