@@ -18,7 +18,6 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingStrategy;
-import ch.leadrian.stubr.core.site.MemoizingStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
 
 import java.lang.reflect.Type;
@@ -46,15 +45,10 @@ final class MemoizingStubbingStrategy implements StubbingStrategy {
     public Object stub(StubbingContext context, Type type) {
         Object value = memoizedStubsByType.get(type);
         if (value == null) {
-            value = computeValue(context, type);
+            value = delegate.stub(context.fork(StubbingSites::memoizing), type);
             memoizedStubsByType.put(type, value);
         }
         return value;
-    }
-
-    private Object computeValue(StubbingContext context, Type type) {
-        MemoizingStubbingSite site = StubbingSites.memoizing(context.getSite());
-        return delegate.stub(context.fork(site), type);
     }
 
 }
