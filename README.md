@@ -117,6 +117,20 @@ Since `Matcher`s are generic, a matcher may be combined using logical _and_, _or
 
 Various `Matcher` implementations can be found in `ch.leadrian.stubr.core.matcher.Matchers`.
 
+#### Example
+
+The following example discribes a situation when a constructor is used to stub a value and one of its parameters is annotated with `@One`. In this case, the integer stub value passed to the constructor would always be 1.
+```java
+
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.*;
+import static ch.leadrian.stubr.core.matcher.Matchers.*;
+
+Stubber.builder()
+    // ... more configuration
+    .stubWith(constantValue(1).when(site(constructor(annotatedWith(One.class))))
+    .build()
+```
+
 ### Selector
 
 A `Selector<T>` is a generic functional interface that selects zero or one values from a given list of values:
@@ -135,18 +149,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-core</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-core:1.5.0'
+implementation 'ch.leadrian.stubr:stubr-core:2.0.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-core:1.5.0")
+implementation("ch.leadrian.stubr:stubr-core:2.0.0")
 ```
 
 ## 3rd party support
@@ -180,18 +194,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-junit</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-junit:1.5.0'
+implementation 'ch.leadrian.stubr:stubr-junit:2.0.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-junit:1.5.0")
+implementation("ch.leadrian.stubr:stubr-junit:2.0.0")
 ```
 
 ### Mockito
@@ -220,18 +234,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-mockito</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-mockito:1.5.0'
+implementation 'ch.leadrian.stubr:stubr-mockito:2.0.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-mockito:1.5.0")
+implementation("ch.leadrian.stubr:stubr-mockito:2.0.0")
 ```
 
 ### Kotlin
@@ -259,18 +273,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-kotlin</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-kotlin:1.5.0'
+implementation 'ch.leadrian.stubr:stubr-kotlin:2.0.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-kotlin:1.5.0")
+implementation("ch.leadrian.stubr:stubr-kotlin:2.0.0")
 ```
 ### MockK
 
@@ -300,16 +314,16 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-mockk</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-mockk:1.5.0'
+implementation 'ch.leadrian.stubr:stubr-mockk:2.0.0'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-mockk:1.5.0")
+implementation("ch.leadrian.stubr:stubr-mockk:2.0.0")
 ```
