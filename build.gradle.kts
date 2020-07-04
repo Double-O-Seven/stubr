@@ -150,6 +150,11 @@ subprojects {
         val mavenJava by publishing.publications.creating(MavenPublication::class) {
             components.findByName("java")?.let { from(it) }
             components.findByName("javaPlatform")?.let { from(it) }
+            versionMapping {
+                allVariants {
+                    fromResolutionResult()
+                }
+            }
             pom {
                 name.set("Stubr (${this@subprojects.name})")
                 description.set("Library for instantiating stub objects in unit tests")
