@@ -106,6 +106,9 @@ subprojects {
 
         pluginManager.withPlugin("java-test-fixtures") {
             configurations {
+                val javaComponent = components["java"] as AdhocComponentWithVariants
+                javaComponent.withVariantsFromConfiguration(testFixturesApiElements.get()) { skip() }
+                javaComponent.withVariantsFromConfiguration(testFixturesRuntimeElements.get()) { skip() }
                 testFixturesCompileClasspath.get().extendsFrom(internal)
                 testFixturesRuntimeClasspath.get().extendsFrom(internal)
             }
