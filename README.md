@@ -149,18 +149,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-core</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-core:2.0.0'
+implementation 'ch.leadrian.stubr:stubr-core:2.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-core:2.0.0")
+implementation("ch.leadrian.stubr:stubr-core:2.0.1")
 ```
 
 ## 3rd party support
@@ -194,18 +194,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-junit</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-junit:2.0.0'
+implementation 'ch.leadrian.stubr:stubr-junit:2.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-junit:2.0.0")
+implementation("ch.leadrian.stubr:stubr-junit:2.0.1")
 ```
 
 ### Mockito
@@ -234,18 +234,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-mockito</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-mockito:2.0.0'
+implementation 'ch.leadrian.stubr:stubr-mockito:2.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-mockito:2.0.0")
+implementation("ch.leadrian.stubr:stubr-mockito:2.0.1")
 ```
 
 ### Kotlin
@@ -273,18 +273,18 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-kotlin</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-kotlin:2.0.0'
+implementation 'ch.leadrian.stubr:stubr-kotlin:2.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-kotlin:2.0.0")
+implementation("ch.leadrian.stubr:stubr-kotlin:2.0.1")
 ```
 ### MockK
 
@@ -314,16 +314,16 @@ For Maven:
 <dependency>
   <groupId>ch.leadrian.stubr</groupId>
   <artifactId>stubr-mockk</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
 For Gradle (Groovy DSL):
 ```groovy
-implementation 'ch.leadrian.stubr:stubr-mockk:2.0.0'
+implementation 'ch.leadrian.stubr:stubr-mockk:2.0.1'
 ```
 
 For Gradle (Kotlin DSL):
 ```groovy
-implementation("ch.leadrian.stubr:stubr-mockk:2.0.0")
+implementation("ch.leadrian.stubr:stubr-mockk:2.0.1")
 ```
