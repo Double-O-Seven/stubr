@@ -49,6 +49,16 @@ internal class KotlinStubbingStrategiesTest {
     }
 
     @TestFactory
+    fun `test primaryConstructor`(): Stream<DynamicTest> {
+        return stubbingStrategyTester()
+                .provideStub(String::class.java, "primary")
+                .accepts(PrimaryConstructorData::class.java)
+                .andStubs(PrimaryConstructorData("primary"))
+                .rejects(JavaPrimaryConstructorTestData::class.java)
+                .test(KotlinStubbingStrategies.primaryConstructor())
+    }
+
+    @TestFactory
     fun `test suppliedValue`(): Stream<DynamicTest> {
         return stubbingStrategyTester()
                 .accepts(typeLiteral<List<String>>())
@@ -66,6 +76,12 @@ internal class KotlinStubbingStrategiesTest {
                 .accepts(typeLiteral<Collection<CharSequence>>())
                 .andStubs(listOf("foo"))
                 .test(KotlinStubbingStrategies.implementation<Collection<CharSequence>, List<String>>())
+    }
+
+    data class PrimaryConstructorData(val value: String) {
+
+        constructor() : this("secondary")
+
     }
 
 }

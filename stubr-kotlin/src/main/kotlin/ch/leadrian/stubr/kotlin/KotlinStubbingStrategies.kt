@@ -19,6 +19,9 @@ package ch.leadrian.stubr.kotlin
 import ch.leadrian.stubr.core.StubbingContext
 import ch.leadrian.stubr.core.StubbingStrategy
 import ch.leadrian.stubr.core.strategy.StubbingStrategies
+import java.lang.reflect.Constructor
+import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.jvm.kotlinFunction
 
 /**
  * Collection of factory methods for [StubbingStrategy] to allow simplified use of Stubr in Kotlin.
@@ -95,6 +98,18 @@ object KotlinStubbingStrategies {
             mapSize: Int,
             crossinline mapFactory: (Map<*, *>) -> T
     ): StubbingStrategy = map(mapFactory) { mapSize }
+
+    /**
+     * Returns a stubbing strategy that uses the primary Kotlin constructor to instantiate an object.
+     *
+     * @return a [StubbingStrategy] that uses the primary Kotlin constructor
+     */
+    @JvmStatic
+    fun primaryConstructor(): StubbingStrategy {
+        return StubbingStrategies.constructor { _, constructor: Constructor<*> ->
+            constructor.kotlinFunction == constructor.declaringClass.kotlin.primaryConstructor
+        }
+    }
 
     /**
      * Inlined wrapper for [StubbingStrategies.suppliedValue].
