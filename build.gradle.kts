@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-library`
+    `java-test-fixtures`
     jacoco
     `maven-publish`
     signing
@@ -90,13 +91,33 @@ subprojects {
     }
 
     pluginManager.withPlugin("java-library") {
+        val internal by configurations.creating {
+            isVisible = false
+            isCanBeConsumed = false
+            isCanBeResolved = false
+        }
+
+        configurations {
+            compileClasspath.get().extendsFrom(internal)
+            runtimeClasspath.get().extendsFrom(internal)
+            testCompileClasspath.get().extendsFrom(internal)
+            testRuntimeClasspath.get().extendsFrom(internal)
+        }
+
+        pluginManager.withPlugin("java-test-fixtures") {
+            configurations {
+                testFixturesCompileClasspath.get().extendsFrom(internal)
+                testFixturesRuntimeClasspath.get().extendsFrom(internal)
+            }
+        }
+
         java {
             withSourcesJar()
             withJavadocJar()
         }
 
         dependencies {
-            api(platform(project(":stubr-dependencies")))
+            internal(platform(project(":stubr-dependencies")))
 
             testImplementation(group = "org.assertj", name = "assertj-core")
             testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api")
