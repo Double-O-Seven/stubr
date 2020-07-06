@@ -16,6 +16,7 @@
 
 plugins {
     `java-library`
+    `java-test-fixtures` apply false
 }
 
 val internal: Configuration by configurations.creating {
@@ -33,10 +34,12 @@ configurations {
 
 pluginManager.withPlugin("java-test-fixtures") {
     val javaComponent = components["java"] as AdhocComponentWithVariants
-    javaComponent.withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
-    javaComponent.withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
-    configurations["testFixturesCompileClasspath"].extendsFrom(internal)
-    configurations["testFixturesRuntimeClasspath"].extendsFrom(internal)
+    configurations {
+        javaComponent.withVariantsFromConfiguration(testFixturesApiElements.get()) { skip() }
+        javaComponent.withVariantsFromConfiguration(testFixturesRuntimeElements.get()) { skip() }
+        testFixturesCompileClasspath.get().extendsFrom(internal)
+        testFixturesRuntimeClasspath.get().extendsFrom(internal)
+    }
 }
 
 java {
