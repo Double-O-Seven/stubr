@@ -13,35 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    `java-library`
-    `java-test-fixtures`
-    jacoco
-    `maven-publish`
+    id("java-library-conventions")
     kotlin("jvm")
     id("org.jetbrains.dokka")
 }
 
-repositories {
-    jcenter()
-    maven {
-        setUrl("https://dl.bintray.com/spekframework/spek")
-    }
-}
-
 dependencies {
-    api(project(":stubr-core"))
     api(kotlin("reflect"))
     api(kotlin("stdlib-jdk8"))
 
-    testImplementation(testFixtures(project(":stubr-core")))
     testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
 
     testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5")
 }
 
 tasks {
+    withType(KotlinCompile::class) {
+        sourceCompatibility = "1.8"
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = listOf("-Xjvm-default=compatibility")
+        }
+    }
 
     test {
         useJUnitPlatform {
@@ -49,7 +45,7 @@ tasks {
         }
     }
 
-    javadocJar {
+    named<Jar>("javadocJar") {
         from(dokka)
     }
 }

@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-include(":dependencies")
-include(":samples")
-include(":stubr-bom")
-include(":stubr-core")
-include(":stubr-integration-test")
-include(":stubr-junit")
-include(":stubr-kotlin")
-include(":stubr-mockito")
-include(":stubr-mockk")
+plugins {
+    `kotlin-dsl`
+}
 
-rootProject.name = "stubr"
+repositories {
+    jcenter()
+    gradlePluginPortal()
+}
 
-pluginManagement {
-    plugins {
-        kotlin("jvm") version "1.3.72"
-        id("org.jetbrains.dokka") version "0.10.1"
-    }
+dependencies {
+    implementation(kotlin("gradle-plugin"))
+    implementation(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "0.10.1")
 }

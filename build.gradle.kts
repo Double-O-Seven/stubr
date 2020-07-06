@@ -120,7 +120,7 @@ subprojects {
         }
 
         dependencies {
-            internal(platform(project(":stubr-dependencies")))
+            internal(platform(project(":dependencies")))
 
             testImplementation(group = "org.assertj", name = "assertj-core")
             testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api")
