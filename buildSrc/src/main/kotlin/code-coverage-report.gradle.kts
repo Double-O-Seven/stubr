@@ -15,7 +15,7 @@
  */
 
 plugins {
-    id("java-library-conventions")
+    `java-library` apply false
     jacoco
 }
 
