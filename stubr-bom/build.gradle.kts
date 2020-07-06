@@ -16,7 +16,7 @@
 
 plugins {
     `java-platform`
-    `maven-publish`
+    `publishing-conventions`
 }
 
 dependencies {

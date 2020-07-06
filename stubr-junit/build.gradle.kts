@@ -15,10 +15,10 @@
  */
 
 plugins {
-    `java-library`
+    `java-library-conventions`
     `java-test-fixtures`
     jacoco
-    `maven-publish`
+    `publishing-conventions`
 }
 
 dependencies {

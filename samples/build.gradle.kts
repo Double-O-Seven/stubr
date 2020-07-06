@@ -15,12 +15,10 @@
  */
 
 plugins {
-    `java-library`
-    kotlin("jvm")
+    `kotlin-library-conventions`
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     implementation(project(":stubr-junit"))
     implementation(project(":stubr-mockito"))
 }

@@ -15,41 +15,14 @@
  */
 
 plugins {
-    `java-library`
+    `kotlin-library-conventions`
     `java-test-fixtures`
     jacoco
-    `maven-publish`
-    kotlin("jvm")
-    id("org.jetbrains.dokka")
-}
-
-repositories {
-    jcenter()
-    maven {
-        setUrl("https://dl.bintray.com/spekframework/spek")
-    }
+    `publishing-conventions`
 }
 
 dependencies {
     api(project(":stubr-core"))
-    api(kotlin("reflect"))
-    api(kotlin("stdlib-jdk8"))
 
     testImplementation(testFixtures(project(":stubr-core")))
-    testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
-
-    testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5")
-}
-
-tasks {
-
-    test {
-        useJUnitPlatform {
-            includeEngines("spek2", "junit-jupiter")
-        }
-    }
-
-    javadocJar {
-        from(dokka)
-    }
 }
