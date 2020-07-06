@@ -24,6 +24,8 @@ plugins {
 
 val gitVersion: Closure<String> by extra
 
+val dependenciesProject by extra(project(":dependencies"))
+
 allprojects {
     group = "ch.leadrian.stubr"
 

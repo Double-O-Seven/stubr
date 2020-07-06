@@ -44,8 +44,10 @@ java {
     withJavadocJar()
 }
 
+val dependenciesProject: Project by rootProject.extra
+
 dependencies {
-    internal(platform(project(":dependencies")))
+    internal(platform(dependenciesProject))
 
     testImplementation(group = "org.assertj", name = "assertj-core")
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api")
