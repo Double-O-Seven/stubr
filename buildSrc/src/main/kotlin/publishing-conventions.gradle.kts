@@ -19,8 +19,6 @@ plugins {
     signing
 }
 
-val projectName = name
-
 val mavenJava by publishing.publications.creating(MavenPublication::class) {
     components.findByName("java")?.let { from(it) }
     components.findByName("javaPlatform")?.let { from(it) }
@@ -30,7 +28,7 @@ val mavenJava by publishing.publications.creating(MavenPublication::class) {
         }
     }
     pom {
-        name.set("Stubr ($projectName)")
+        name.set("Stubr (${project.name})")
         description.set("Library for instantiating stub objects in unit tests")
         url.set("https://github.com/Double-O-Seven/stubr")
         licenses {
