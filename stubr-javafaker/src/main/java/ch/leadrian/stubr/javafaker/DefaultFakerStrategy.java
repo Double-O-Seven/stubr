@@ -24,9 +24,12 @@ import java.util.function.BiFunction;
 final class DefaultFakerStrategy implements FakerStrategy {
 
     private final List<String[]> acceptedWords;
-    private final BiFunction<Faker, WordSequence, String> fakerFunction;
+    private final BiFunction<? super Faker, ? super WordSequence, String> fakerFunction;
 
-    DefaultFakerStrategy(List<String[]> acceptedWords, BiFunction<Faker, WordSequence, String> fakerFunction) {
+    DefaultFakerStrategy(
+            List<String[]> acceptedWords,
+            BiFunction<? super Faker, ? super WordSequence, String> fakerFunction
+    ) {
         this.acceptedWords = acceptedWords;
         this.fakerFunction = fakerFunction;
     }

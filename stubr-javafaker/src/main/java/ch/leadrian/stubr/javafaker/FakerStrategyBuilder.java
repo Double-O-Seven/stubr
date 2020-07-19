@@ -38,12 +38,12 @@ public final class FakerStrategyBuilder {
         return this;
     }
 
-    public FakerStrategy build(BiFunction<Faker, WordSequence, String> fakerFunction) {
+    public FakerStrategy build(BiFunction<? super Faker, ? super WordSequence, String> fakerFunction) {
         requireNonNull(fakerFunction, "fakerFunction");
         return new DefaultFakerStrategy(acceptedWords, fakerFunction);
     }
 
-    public FakerStrategy build(Function<Faker, String> fakerFunction) {
+    public FakerStrategy build(Function<? super Faker, String> fakerFunction) {
         requireNonNull(fakerFunction, "fakerFunction");
         return build((faker, wordSequence) -> fakerFunction.apply(faker));
     }
