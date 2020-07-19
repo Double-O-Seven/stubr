@@ -16,7 +16,6 @@
 
 package ch.leadrian.stubr.javafaker;
 
-import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
@@ -35,12 +34,8 @@ public final class WordSequence {
     private final List<String> words;
 
     public static WordSequence extractFrom(String value) {
-        return extractFrom(value, LOWER_CAMEL);
-    }
-
-    public static WordSequence extractFrom(String value, CaseFormat caseFormat) {
-        List<String> words = ImmutableList.copyOf(caseFormat.to(LOWER_HYPHEN, value).split("-"));
-        return new WordSequence(words);
+        List<String> words1 = ImmutableList.copyOf(LOWER_CAMEL.to(LOWER_HYPHEN, value).split("-"));
+        return new WordSequence(words1);
     }
 
     private WordSequence(List<String> words) {

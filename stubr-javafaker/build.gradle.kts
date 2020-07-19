@@ -16,6 +16,7 @@
 
 plugins {
     `java-library-conventions`
+    kotlin("jvm")
     `java-test-fixtures`
     jacoco
     `publishing-conventions`
@@ -27,4 +28,17 @@ dependencies {
 
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
     implementation(group = "com.google.guava", name = "guava")
+
+    testImplementation(kotlin("stdlib-jdk8"))
+    testImplementation(project(":stubr-junit"))
+}
+
+tasks {
+    compileTestKotlin {
+        sourceCompatibility = "1.8"
+        kotlinOptions {
+            jvmTarget = "1.8"
+            javaParameters = true
+        }
+    }
 }
