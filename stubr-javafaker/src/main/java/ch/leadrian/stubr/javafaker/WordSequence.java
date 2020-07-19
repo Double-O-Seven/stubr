@@ -47,12 +47,12 @@ public final class WordSequence {
     }
 
     public boolean containsInSequence(String... words) {
-        List<String> lowerCaseWords = transform(words);
+        List<String> lowerCaseWords = toLowerCase(words);
         return indexOfSubList(this.words, lowerCaseWords) != -1;
     }
 
     public boolean containsInOrder(String... words) {
-        List<String> lowerCaseWords = transform(words);
+        List<String> lowerCaseWords = toLowerCase(words);
         Map<String, Integer> wordIndices = lowerCaseWords.stream().collect(toMap(identity(), this.words::indexOf));
         int currentIndex = 0;
         for (String word : lowerCaseWords) {
@@ -66,10 +66,10 @@ public final class WordSequence {
     }
 
     public boolean containsInAnyOrder(String... words) {
-        return this.words.containsAll(transform(words));
+        return this.words.containsAll(toLowerCase(words));
     }
 
-    private List<String> transform(String[] values) {
+    private static List<String> toLowerCase(String[] values) {
         return stream(values).map(String::toLowerCase).collect(toList());
     }
 
