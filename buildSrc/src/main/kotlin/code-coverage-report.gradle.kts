@@ -26,15 +26,18 @@ dependencies {
 }
 
 tasks {
-    jacocoTestReport {
-        val projectsWithTests = subprojects.filter { it.pluginManager.hasPlugin("jacoco") }
-        projectsWithTests.forEach { dependsOn(it.tasks.test) }
-        executionData.setFrom(projectsWithTests.map { file("${it.buildDir}/jacoco/test.exec") })
-        additionalSourceDirs.setFrom(projectsWithTests.map { it.sourceSets.main.get().allSource.sourceDirectories })
-        sourceDirectories.setFrom(projectsWithTests.map { it.sourceSets.main.get().allSource.sourceDirectories })
-        classDirectories.setFrom(projectsWithTests.map { it.sourceSets.main.get().output })
-        reports {
-            xml.isEnabled = true
+    afterEvaluate {
+        jacocoTestReport {
+            val projectsWithTests = subprojects.filter { it.pluginManager.hasPlugin("jacoco") }
+            projectsWithTests.forEach { dependsOn(it.tasks.test) }
+            executionData.setFrom(projectsWithTests.map { it.tasks.jacocoTestReport.get().executionData })
+            additionalSourceDirs.setFrom(projectsWithTests.map { it.sourceSets.main.get().allSource.sourceDirectories })
+            sourceDirectories.setFrom(projectsWithTests.map { it.sourceSets.main.get().allSource.sourceDirectories })
+            classDirectories.setFrom(projectsWithTests.map { it.sourceSets.main.get().output })
+
+            reports {
+                xml.isEnabled = true
+            }
         }
     }
 
