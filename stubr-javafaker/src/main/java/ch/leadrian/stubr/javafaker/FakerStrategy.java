@@ -16,16 +16,12 @@
 
 package ch.leadrian.stubr.javafaker;
 
-import com.github.javafaker.Faker;
-
-public interface FakerStrategy {
+public interface FakerStrategy extends FakerFunction {
 
     static FakerStrategyBuilder builder() {
         return new FakerStrategyBuilder();
     }
 
     boolean accepts(WordSequence words);
-
-    String fake(Faker faker, WordSequence words);
 
 }

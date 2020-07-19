@@ -60,7 +60,7 @@ final class FakerStubbingStrategy implements StubbingStrategy {
     public Object stub(StubbingContext context, Type type) {
         NamedStubbingSite namedSite = (NamedStubbingSite) context.getSite();
         WordSequence words = WordSequence.extractFrom(namedSite.getName());
-        return strategy.fake(faker, words);
+        return strategy.fake(faker, words, context);
     }
 
 }

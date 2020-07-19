@@ -19,29 +19,9 @@ package ch.leadrian.stubr.javafaker;
 import ch.leadrian.stubr.core.StubbingContext;
 import com.github.javafaker.Faker;
 
-import java.util.List;
+@FunctionalInterface
+public interface FakerFunction {
 
-final class DefaultFakerStrategy implements FakerStrategy {
-
-    private final List<String[]> acceptedWords;
-    private final FakerFunction delegate;
-
-    DefaultFakerStrategy(
-            List<String[]> acceptedWords,
-            FakerFunction delegate
-    ) {
-        this.acceptedWords = acceptedWords;
-        this.delegate = delegate;
-    }
-
-    @Override
-    public boolean accepts(WordSequence words) {
-        return acceptedWords.stream().anyMatch(words::containsInSequence);
-    }
-
-    @Override
-    public String fake(Faker faker, WordSequence words, StubbingContext context) {
-        return delegate.fake(faker, words, context);
-    }
+    String fake(Faker faker, WordSequence words, StubbingContext context);
 
 }

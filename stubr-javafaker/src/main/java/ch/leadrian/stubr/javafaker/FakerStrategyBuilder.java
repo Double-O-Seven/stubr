@@ -20,7 +20,6 @@ import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
@@ -38,14 +37,14 @@ public final class FakerStrategyBuilder {
         return this;
     }
 
-    public FakerStrategy build(BiFunction<? super Faker, ? super WordSequence, String> fakerFunction) {
+    public FakerStrategy build(FakerFunction fakerFunction) {
         requireNonNull(fakerFunction, "fakerFunction");
         return new DefaultFakerStrategy(acceptedWords, fakerFunction);
     }
 
     public FakerStrategy build(Function<? super Faker, String> fakerFunction) {
         requireNonNull(fakerFunction, "fakerFunction");
-        return build((faker, wordSequence) -> fakerFunction.apply(faker));
+        return build((faker, wordSequence, context) -> fakerFunction.apply(faker));
     }
 
 }
