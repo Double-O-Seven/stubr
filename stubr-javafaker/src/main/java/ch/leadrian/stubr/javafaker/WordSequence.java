@@ -34,8 +34,8 @@ public final class WordSequence {
     private final List<String> words;
 
     public static WordSequence extractFrom(String value) {
-        List<String> words1 = ImmutableList.copyOf(LOWER_CAMEL.to(LOWER_HYPHEN, value).split("-"));
-        return new WordSequence(words1);
+        List<String> words = ImmutableList.copyOf(LOWER_CAMEL.to(LOWER_HYPHEN, value).split("-"));
+        return new WordSequence(words);
     }
 
     private WordSequence(List<String> words) {
