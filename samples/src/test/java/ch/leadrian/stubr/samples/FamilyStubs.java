@@ -21,6 +21,7 @@ import ch.leadrian.stubr.junit.StubberProvider;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.util.List;
+import java.util.Random;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedElement;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
@@ -37,12 +38,20 @@ public final class FamilyStubs implements StubberProvider {
 
     @Override
     public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
+        int seed = getStableTestMethodHash(extensionContext);
+        Random random = new Random(seed);
         Stubber stubber = Stubber.builder()
-                .stubWith(faked(firstName()))
-                .stubWith(faked(lastName()))
+                .stubWith(faked(firstName(), random))
+                .stubWith(faked(lastName(), random))
                 .stubWith(memoized(mock()).when(site(parent(annotatedElement(annotatedWith(TestSubject.class)))).or(site(annotatedElement(annotatedWith(MockedDependency.class))))))
                 .build();
         return singletonList(stubber);
+    }
+
+    private int getStableTestMethodHash(ExtensionContext extensionContext) {
+        return extensionContext.getTestMethod()
+                .map(method -> method.getName().hashCode())
+                .orElseThrow(() -> new IllegalStateException("No test method available"));
     }
 
 }
