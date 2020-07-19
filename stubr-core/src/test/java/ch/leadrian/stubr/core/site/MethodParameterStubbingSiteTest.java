@@ -85,6 +85,19 @@ class MethodParameterStubbingSiteTest {
     }
 
     @Test
+    void shouldReturnParameterName() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Method method = Foo.class.getMethod("foo", int.class);
+        Parameter parameter = method.getParameters()[0];
+        MethodParameterStubbingSite site = StubbingSites.methodParameter(parent, method, parameter);
+
+        String parameterName = site.getName();
+
+        assertThat(parameterName)
+                .isEqualTo(parameter.getName());
+    }
+
+    @Test
     void shouldReturnParameterIndex() throws Exception {
         StubbingSite parent = mock(StubbingSite.class);
         Method method = Foo.class.getMethod("foo", int.class);

@@ -16,19 +16,19 @@
 
 package ch.leadrian.stubr.core.site;
 
-import java.lang.reflect.Executable;
+import ch.leadrian.stubr.core.StubbingSite;
 
 /**
- * Stubbing site indicating that the current stubbing site is an {@link Executable}. Implementations of {@link
- * Executable} are {@link java.lang.reflect.Constructor} and {@link java.lang.reflect.Method}.
+ * Stubbing site indicating that the current stubbing site has a name.
+ *
+ * @see ParameterStubbingSite
+ * @see MethodStubbingSite
  */
-public interface ExecutableStubbingSite extends NamedStubbingSite {
+public interface NamedStubbingSite extends StubbingSite {
 
     /**
-     * Returns the {@link Executable} where the stubbing takes place.
-     *
-     * @return the executable
+     * @return the name of the stubbing site
      */
-    Executable getExecutable();
+    String getName();
 
 }

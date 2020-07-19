@@ -85,6 +85,19 @@ class ConstructorParameterStubbingSiteTest {
     }
 
     @Test
+    void shouldReturnParameterName() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Constructor<Foo> constructor = Foo.class.getConstructor(int.class);
+        Parameter parameter = constructor.getParameters()[0];
+        ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(parent, constructor, parameter);
+
+        String parameterName = site.getName();
+
+        assertThat(parameterName)
+                .isEqualTo(parameter.getName());
+    }
+
+    @Test
     void shouldReturnParameterIndex() throws Exception {
         StubbingSite parent = mock(StubbingSite.class);
         Constructor<Foo> constructor = Foo.class.getConstructor(int.class);

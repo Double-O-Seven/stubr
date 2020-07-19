@@ -90,6 +90,14 @@ public final class MethodParameterStubbingSite implements ParameterStubbingSite,
      * {@inheritDoc}
      */
     @Override
+    public String getName() {
+        return parameter.getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean equals(Object obj) {
         return EQUALS_AND_HASH_CODE.equals(this, obj);
     }

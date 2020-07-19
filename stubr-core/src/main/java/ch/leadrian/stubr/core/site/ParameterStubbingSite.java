@@ -21,7 +21,7 @@ import java.lang.reflect.Parameter;
 /**
  * Stubbing site indicating that the current stubbing site is a {@link Parameter}.
  */
-public interface ParameterStubbingSite extends AnnotatedStubbingSite {
+public interface ParameterStubbingSite extends AnnotatedStubbingSite, NamedStubbingSite {
 
     /**
      * Returns the parameter where the stubbing takes place.
@@ -43,6 +43,14 @@ public interface ParameterStubbingSite extends AnnotatedStubbingSite {
     @Override
     default Parameter getAnnotatedElement() {
         return getParameter();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return getParameter().getName();
     }
 
 }

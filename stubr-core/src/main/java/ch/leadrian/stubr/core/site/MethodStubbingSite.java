@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 /**
  * Stubbing site indicating that the current stubbing site is a {@link Method}.
  */
-public interface MethodStubbingSite extends ExecutableStubbingSite {
+public interface MethodStubbingSite extends ExecutableStubbingSite, NamedStubbingSite {
 
     /**
      * Returns the method where the stubbing takes place.
@@ -36,6 +36,14 @@ public interface MethodStubbingSite extends ExecutableStubbingSite {
     @Override
     default Method getExecutable() {
         return getMethod();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return getMethod().getName();
     }
 
 }

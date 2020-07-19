@@ -56,6 +56,18 @@ class MethodReturnValueStubbingSiteTest {
     }
 
     @Test
+    void shouldReturnMethodName() throws Exception {
+        StubbingSite parent = mock(StubbingSite.class);
+        Method method = Foo.class.getMethod("foo", int.class);
+        MethodReturnValueStubbingSite site = StubbingSites.methodReturnValue(parent, method);
+
+        String name = site.getName();
+
+        assertThat(name)
+                .isEqualTo("foo");
+    }
+
+    @Test
     void shouldReturnMethodAsExecutable() throws Exception {
         StubbingSite parent = mock(StubbingSite.class);
         Method expectedMethod = Foo.class.getMethod("foo", int.class);
