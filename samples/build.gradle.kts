@@ -19,6 +19,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":stubr-javafaker"))
     implementation(project(":stubr-junit"))
     implementation(project(":stubr-mockito"))
 }

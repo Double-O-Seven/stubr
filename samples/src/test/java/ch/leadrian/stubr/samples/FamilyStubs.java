@@ -16,21 +16,20 @@
 
 package ch.leadrian.stubr.samples;
 
-import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.junit.StubberProvider;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import java.lang.reflect.Parameter;
 import java.util.List;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedElement;
 import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
-import static ch.leadrian.stubr.core.matcher.Matchers.parameter;
 import static ch.leadrian.stubr.core.matcher.Matchers.parent;
 import static ch.leadrian.stubr.core.matcher.Matchers.site;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.memoized;
-import static ch.leadrian.stubr.core.strategy.StubbingStrategies.suppliedValue;
+import static ch.leadrian.stubr.javafaker.FakerStrategies.firstName;
+import static ch.leadrian.stubr.javafaker.FakerStrategies.lastName;
+import static ch.leadrian.stubr.javafaker.JavaFakerStubbingStrategies.faked;
 import static ch.leadrian.stubr.mockito.MockitoStubbingStrategies.mock;
 import static java.util.Collections.singletonList;
 
@@ -39,18 +38,11 @@ public final class FamilyStubs implements StubberProvider {
     @Override
     public List<? extends Stubber> getStubbers(ExtensionContext extensionContext) {
         Stubber stubber = Stubber.builder()
-                .stubWith(suppliedValue(String.class, sequenceNumber -> "First Name " + sequenceNumber).when(site(parameter(named("firstName")))))
-                .stubWith(suppliedValue(String.class, sequenceNumber -> "Last Name " + sequenceNumber).when(site(parameter(named("lastName")))))
+                .stubWith(faked(firstName()))
+                .stubWith(faked(lastName()))
                 .stubWith(memoized(mock()).when(site(parent(annotatedElement(annotatedWith(TestSubject.class)))).or(site(annotatedElement(annotatedWith(MockedDependency.class))))))
                 .build();
         return singletonList(stubber);
-    }
-
-    /*
-     * Kotlin compile option javaParameters has been set to true, so the parameter names will be retained.
-     */
-    private static Matcher<Parameter> named(String name) {
-        return (context, parameter) -> parameter.getName().equals(name);
     }
 
 }
