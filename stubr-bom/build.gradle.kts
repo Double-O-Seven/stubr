@@ -22,6 +22,7 @@ plugins {
 dependencies {
     constraints {
         api(project(":stubr-core"))
+        api(project(":stubr-javafaker"))
         api(project(":stubr-junit"))
         api(project(":stubr-kotlin"))
         api(project(":stubr-mockito"))
