@@ -39,7 +39,11 @@ final class FakerStubbingStrategy implements StubbingStrategy {
 
     @Override
     public boolean accepts(StubbingContext context, Type type) {
-        if (!String.class.equals(type) && !CharSequence.class.equals(type)) {
+        if (!(type instanceof Class)) {
+            return false;
+        }
+
+        if (!((Class<?>) type).isAssignableFrom(String.class)) {
             return false;
         }
 
