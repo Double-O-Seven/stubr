@@ -26,7 +26,6 @@ dependencies {
     api(project(":stubr-core"))
     api(group = "com.github.javafaker", name = "javafaker")
 
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
     implementation(group = "com.google.guava", name = "guava")
 
     testImplementation(kotlin("stdlib-jdk8"))
