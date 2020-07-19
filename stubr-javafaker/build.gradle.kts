@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-include(":dependencies")
-include(":samples")
-include(":stubr-bom")
-include(":stubr-core")
-include(":stubr-integration-test")
-include(":stubr-javafaker")
-include(":stubr-junit")
-include(":stubr-kotlin")
-include(":stubr-mockito")
-include(":stubr-mockk")
+plugins {
+    `java-library-conventions`
+    `java-test-fixtures`
+    jacoco
+    `publishing-conventions`
+}
 
-rootProject.name = "stubr"
+dependencies {
+    api(project(":stubr-core"))
+    api(group = "com.github.javafaker", name = "javafaker")
 
-pluginManagement {
-    plugins {
-        kotlin("jvm") version "1.3.72"
-        id("com.github.ben-manes.versions") version "0.28.0"
-        id("com.palantir.git-version") version "0.12.3"
-    }
+    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
+    implementation(group = "com.google.guava", name = "guava")
 }

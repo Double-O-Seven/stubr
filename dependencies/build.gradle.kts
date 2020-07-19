@@ -30,6 +30,8 @@ object Versions {
 
     const val guava = "29.0-jre"
 
+    const val javaFaker = "1.0.2"
+
     const val junit = "5.6.2"
 
     const val mockito = "3.3.3"
@@ -46,6 +48,7 @@ dependencies {
     api(platform("org.junit:junit-bom:${Versions.junit}"))
 
     constraints {
+        api("com.github.javafaker:javafaker:${Versions.javaFaker}")
         api("io.mockk:mockk:${Versions.mockK}")
         api("org.assertj:assertj-core:${Versions.assertJ}")
         api("org.mockito:mockito-core:${Versions.mockito}")
