@@ -26,10 +26,7 @@ final class DefaultFakerStrategy implements FakerStrategy {
     private final List<String[]> acceptedWords;
     private final FakerFunction delegate;
 
-    DefaultFakerStrategy(
-            List<String[]> acceptedWords,
-            FakerFunction delegate
-    ) {
+    DefaultFakerStrategy(List<String[]> acceptedWords, FakerFunction delegate) {
         this.acceptedWords = acceptedWords;
         this.delegate = delegate;
     }
