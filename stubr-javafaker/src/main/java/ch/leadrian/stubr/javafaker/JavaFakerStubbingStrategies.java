@@ -18,11 +18,11 @@ package ch.leadrian.stubr.javafaker;
 
 import ch.leadrian.stubr.core.StubbingStrategy;
 import com.github.javafaker.Faker;
-import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.javafaker.FakerStrategies.city;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.country;
@@ -31,6 +31,7 @@ import static ch.leadrian.stubr.javafaker.FakerStrategies.lastName;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.phoneNumber;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.street;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.zipCode;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.util.Objects.requireNonNull;
 
 public final class JavaFakerStubbingStrategies {
@@ -71,15 +72,17 @@ public final class JavaFakerStubbingStrategies {
     }
 
     public static List<StubbingStrategy> fakedData(Random random, Locale locale) {
-        return ImmutableList.of(
-                faked(firstName(), random, locale),
-                faked(lastName(), random, locale),
-                faked(phoneNumber(), random, locale),
-                faked(street(), random, locale),
-                faked(city(), random, locale),
-                faked(zipCode(), random, locale),
-                faked(country(), random, locale)
-        );
+        return Stream.of(
+                firstName(),
+                lastName(),
+                phoneNumber(),
+                street(),
+                city(),
+                zipCode(),
+                country()
+        )
+                .map(strategy -> faked(strategy, random, locale))
+                .collect(toImmutableList());
     }
 
     public static List<StubbingStrategy> fakedData(Random random) {
