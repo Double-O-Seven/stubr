@@ -24,7 +24,6 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static java.util.Objects.requireNonNull;
 
 final class ParameterTypesMatcher<T extends Executable> implements Matcher<T> {
@@ -51,9 +50,7 @@ final class ParameterTypesMatcher<T extends Executable> implements Matcher<T> {
     }
 
     private boolean isAssignable(Parameter parameter, Class<?> type) {
-        return getRawType(parameter.getParameterizedType())
-                .filter(clazz -> clazz.isAssignableFrom(type))
-                .isPresent();
+        return parameter.getType().isAssignableFrom(type);
     }
 
 }
