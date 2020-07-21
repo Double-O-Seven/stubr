@@ -16,7 +16,6 @@
 
 plugins {
     `kotlin-library-conventions`
-    `java-test-fixtures`
     jacoco
     `publishing-conventions`
 }
