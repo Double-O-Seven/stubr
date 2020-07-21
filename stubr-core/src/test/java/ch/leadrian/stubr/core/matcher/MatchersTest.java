@@ -24,6 +24,7 @@ import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import ch.leadrian.stubr.core.site.ConstructorStubbingSite;
 import ch.leadrian.stubr.core.site.ExecutableStubbingSite;
 import ch.leadrian.stubr.core.site.MethodStubbingSite;
+import ch.leadrian.stubr.core.site.NamedStubbingSite;
 import ch.leadrian.stubr.core.site.ParameterStubbingSite;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Nested;
@@ -41,6 +42,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MatchersTest {
 
@@ -196,6 +198,96 @@ class MatchersTest {
             StubbingSite site = mock(StubbingSite.class);
             StubbingContext context = mock(StubbingContext.class);
             Matcher<StubbingSite> matcher = Matchers.method((ctx, value) -> delegateMatches);
+
+            boolean matches = matcher.matches(context, site);
+
+            assertThat(matches)
+                    .isFalse();
+        }
+
+    }
+
+    @Nested
+    class NamedTests {
+
+        @Test
+        void givenMatchingNameItShouldReturnTrue() {
+            NamedStubbingSite site = mock(NamedStubbingSite.class);
+            when(site.getName())
+                    .thenReturn("foo");
+            StubbingContext context = mock(StubbingContext.class);
+            Matcher<StubbingSite> matcher = Matchers.named("foo");
+
+            boolean matches = matcher.matches(context, site);
+
+            assertThat(matches)
+                    .isTrue();
+        }
+
+        @Test
+        void givenNotMatchingNameItShouldReturnFalse() {
+            NamedStubbingSite site = mock(NamedStubbingSite.class);
+            when(site.getName())
+                    .thenReturn("foo");
+            StubbingContext context = mock(StubbingContext.class);
+            Matcher<StubbingSite> matcher = Matchers.named("bar");
+
+            boolean matches = matcher.matches(context, site);
+
+            assertThat(matches)
+                    .isFalse();
+        }
+
+        @Test
+        void givenNoNamedStubbingSiteItShouldReturnFalse() {
+            StubbingSite site = mock(StubbingSite.class);
+            StubbingContext context = mock(StubbingContext.class);
+            Matcher<StubbingSite> matcher = Matchers.named("bla");
+
+            boolean matches = matcher.matches(context, site);
+
+            assertThat(matches)
+                    .isFalse();
+        }
+
+    }
+
+    @Nested
+    class NamedLikeTests {
+
+        @Test
+        void givenMatchingNameItShouldReturnTrue() {
+            NamedStubbingSite site = mock(NamedStubbingSite.class);
+            when(site.getName())
+                    .thenReturn("ABC123");
+            StubbingContext context = mock(StubbingContext.class);
+            Matcher<StubbingSite> matcher = Matchers.namedLike("[A-Z0-9]+");
+
+            boolean matches = matcher.matches(context, site);
+
+            assertThat(matches)
+                    .isTrue();
+        }
+
+        @Test
+        void givenNotMatchingNameItShouldReturnFalse() {
+            NamedStubbingSite site = mock(NamedStubbingSite.class);
+            when(site.getName())
+                    .thenReturn("123");
+            StubbingContext context = mock(StubbingContext.class);
+            Matcher<StubbingSite> matcher = Matchers.namedLike("[A-Z]+");
+
+            boolean matches = matcher.matches(context, site);
+
+            assertThat(matches)
+                    .isFalse();
+        }
+
+        @Test
+        void givenNoNamedLikeStubbingSiteItShouldReturnFalse() {
+            StubbingSite site = mock(StubbingSite.class);
+            StubbingContext context = mock(StubbingContext.class);
+            Matcher<StubbingSite> matcher = Matchers.namedLike("bla");
 
             boolean matches = matcher.matches(context, site);
 

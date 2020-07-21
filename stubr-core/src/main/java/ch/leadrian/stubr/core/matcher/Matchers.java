@@ -22,6 +22,7 @@ import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import ch.leadrian.stubr.core.site.ConstructorStubbingSite;
 import ch.leadrian.stubr.core.site.ExecutableStubbingSite;
 import ch.leadrian.stubr.core.site.MethodStubbingSite;
+import ch.leadrian.stubr.core.site.NamedStubbingSite;
 import ch.leadrian.stubr.core.site.ParameterStubbingSite;
 
 import java.lang.annotation.Annotation;
@@ -32,6 +33,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
 /**
  * Collection of factory methods for various default implementations of {@link Matcher}.
@@ -119,6 +121,17 @@ public final class Matchers {
     }
 
     /**
+     * Returns a matcher that matches {@link Constructor}s using a delegate matcher.
+     *
+     * @param delegate the delegate
+     * @param <T>      the generic type, may be anything
+     * @return a matcher that matches {@link Constructor}s using a delegate matcher
+     */
+    public static <T extends StubbingSite> Matcher<T> constructor(Matcher<? super Constructor<?>> delegate) {
+        return instanceOf(ConstructorStubbingSite.class, mappedTo(ConstructorStubbingSite::getConstructor, delegate));
+    }
+
+    /**
      * Returns a matcher that matches {@link Executable}s using a delegate matcher.
      *
      * @param delegate the delegate
@@ -138,17 +151,6 @@ public final class Matchers {
      */
     public static <T> Matcher<T> equalTo(Object value) {
         return (context, v) -> Objects.equals(v, value);
-    }
-
-    /**
-     * Returns a matcher that matches {@link Constructor}s using a delegate matcher.
-     *
-     * @param delegate the delegate
-     * @param <T>      the generic type, may be anything
-     * @return a matcher that matches {@link Constructor}s using a delegate matcher
-     */
-    public static <T extends StubbingSite> Matcher<T> constructor(Matcher<? super Constructor<?>> delegate) {
-        return instanceOf(ConstructorStubbingSite.class, mappedTo(ConstructorStubbingSite::getConstructor, delegate));
     }
 
     /**
@@ -202,6 +204,39 @@ public final class Matchers {
      */
     public static <T extends StubbingSite> Matcher<T> method(Matcher<? super Method> delegate) {
         return instanceOf(MethodStubbingSite.class, mappedTo(MethodStubbingSite::getMethod, delegate));
+    }
+
+    /**
+     * Returns a matcher that matches a {@link NamedStubbingSite} when the site's name is equal to the given name.
+     *
+     * @param name the name of matching stubbing sites
+     * @param <T>  the generic type, may be anything
+     * @return a matcher that matches a {@link NamedStubbingSite} when the site's name is equal to the given name
+     */
+    public static <T extends StubbingSite> Matcher<T> named(String name) {
+        return instanceOf(NamedStubbingSite.class, mappedTo(NamedStubbingSite::getName, equalTo(name)));
+    }
+
+    /**
+     * Returns a matcher that matches a {@link NamedStubbingSite} when the site's name matches the given regex pattern.
+     *
+     * @param pattern the regex matched against the site's name
+     * @param <T>     the generic type, may be anything
+     * @return a matcher that matches a {@link NamedStubbingSite} when the site's name matches the given regex pattern
+     */
+    public static <T extends StubbingSite> Matcher<T> namedLike(Pattern pattern) {
+        return instanceOf(NamedStubbingSite.class, mappedTo(NamedStubbingSite::getName, (c, v) -> pattern.matcher(v).matches()));
+    }
+
+    /**
+     * Returns a matcher that matches a {@link NamedStubbingSite} when the site's name matches the given regex pattern.
+     *
+     * @param regex the regex matched against the site's name
+     * @param <T>   the generic type, may be anything
+     * @return a matcher that matches a {@link NamedStubbingSite} when the site's name matches the given regex pattern
+     */
+    public static <T extends StubbingSite> Matcher<T> namedLike(String regex) {
+        return namedLike(Pattern.compile(regex));
     }
 
     /**
