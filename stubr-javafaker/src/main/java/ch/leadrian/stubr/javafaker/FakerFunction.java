@@ -19,9 +19,22 @@ package ch.leadrian.stubr.javafaker;
 import ch.leadrian.stubr.core.StubbingContext;
 import com.github.javafaker.Faker;
 
+/**
+ * A functional interface that typically provides a string value by using a {@link Faker}.
+ *
+ * @see FakerStrategy
+ * @see FakerStrategyBuilder
+ */
 @FunctionalInterface
 public interface FakerFunction {
 
+    /**
+     * @param faker   the {@link Faker} used to provide a fake value
+     * @param words   the words extracted from a {@link ch.leadrian.stubr.core.site.NamedStubbingSite} describing what
+     *                is being faked
+     * @param context the current stubbing context
+     * @return a string value typically provided by the given {@link Faker}
+     */
     String fake(Faker faker, WordSequence words, StubbingContext context);
 
 }

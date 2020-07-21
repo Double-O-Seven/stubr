@@ -16,14 +16,19 @@
 
 package ch.leadrian.stubr.javafaker;
 
+/**
+ * Class containing factory methods for commonly used {@link FakerStrategy}s.
+ */
 public final class FakerStrategies {
 
     private static final FakerStrategy FIRST_NAME = FakerStrategy.builder()
             .accept("first", "name")
+            .accept("firstname")
             .build(faker -> faker.name().firstName());
 
     private static final FakerStrategy LAST_NAME = FakerStrategy.builder()
             .accept("last", "name")
+            .accept("lastname")
             .accept("surname")
             .build(faker -> faker.name().lastName());
 
@@ -53,30 +58,51 @@ public final class FakerStrategies {
     private FakerStrategies() {
     }
 
+    /**
+     * @return a {@link FakerStrategy} for faking a first name
+     */
     public static FakerStrategy firstName() {
         return FIRST_NAME;
     }
 
+    /**
+     * @return a {@link FakerStrategy} for faking a last name (or surname)
+     */
     public static FakerStrategy lastName() {
         return LAST_NAME;
     }
 
+    /**
+     * @return a {@link FakerStrategy} for faking a phone number
+     */
     public static FakerStrategy phoneNumber() {
         return PHONE_NUMBER;
     }
 
+    /**
+     * @return a {@link FakerStrategy} for faking a street
+     */
     public static FakerStrategy street() {
         return STREET;
     }
 
+    /**
+     * @return a {@link FakerStrategy} for faking a city
+     */
     public static FakerStrategy city() {
         return CITY;
     }
 
+    /**
+     * @return a {@link FakerStrategy} for faking a ZIP code
+     */
     public static FakerStrategy zipCode() {
         return ZIP_CODE;
     }
 
+    /**
+     * @return a {@link FakerStrategy} for faking a country
+     */
     public static FakerStrategy country() {
         return COUNTRY;
     }
