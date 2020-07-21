@@ -23,8 +23,8 @@ plugins {
 }
 
 dependencies {
-    api(kotlin("reflect"))
-    api(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
+    implementation(kotlin("stdlib-jdk8"))
 
     testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
 
