@@ -34,6 +34,9 @@ import static ch.leadrian.stubr.javafaker.FakerStrategies.zipCode;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * A collection of {@link StubbingStrategy}s based on {@link Faker}.
+ */
 public final class JavaFakerStubbingStrategies {
 
     private static final class RandomHolder {
@@ -52,6 +55,14 @@ public final class JavaFakerStubbingStrategies {
         return new FakerStubbingStrategy(faker, strategy);
     }
 
+    /**
+     * Returns a new {@link StubbingStrategy} that uses a {@link Faker}.
+     *
+     * @param strategy the strategy applied for {@link Faker}
+     * @param random   the random instance used to randomly select a value
+     * @param locale   the locale for which a value is selected
+     * @return a new {@link StubbingStrategy} that uses a {@link Faker}
+     */
     public static StubbingStrategy faked(FakerStrategy strategy, Random random, Locale locale) {
         requireNonNull(strategy, "strategy");
         requireNonNull(random, "random");
@@ -59,18 +70,58 @@ public final class JavaFakerStubbingStrategies {
         return faked(strategy, new Faker(locale, random));
     }
 
+    /**
+     * Returns a new {@link StubbingStrategy} that uses a {@link Faker}.
+     *
+     * @param strategy the strategy applied for {@link Faker}
+     * @param locale   the locale for which a value is selected
+     * @return a new {@link StubbingStrategy} that uses a {@link Faker}
+     */
     public static StubbingStrategy faked(FakerStrategy strategy, Locale locale) {
         return faked(strategy, RandomHolder.INSTANCE, locale);
     }
 
+    /**
+     * Returns a new {@link StubbingStrategy} that uses a {@link Faker}.
+     * <p>
+     * By default, English is used as locale.
+     *
+     * @param strategy the strategy applied for {@link Faker}
+     * @param random   the random instance used to randomly select a value
+     * @return a new {@link StubbingStrategy} that uses a {@link Faker}
+     */
     public static StubbingStrategy faked(FakerStrategy strategy, Random random) {
         return faked(strategy, random, DEFAULT_LOCALE);
     }
 
+    /**
+     * Returns a new {@link StubbingStrategy} that uses a {@link Faker}.
+     * <p>
+     * By default, English is used as locale.
+     *
+     * @param strategy the strategy applied for {@link Faker}
+     * @return a new {@link StubbingStrategy} that uses a {@link Faker}
+     */
     public static StubbingStrategy faked(FakerStrategy strategy) {
         return faked(strategy, RandomHolder.INSTANCE);
     }
 
+    /**
+     * A list of {@link StubbingStrategy} for faking the following types of data:
+     * <ul>
+     *     <li>First name</li>
+     *     <li>Last name</li>
+     *     <li>Phone number</li>
+     *     <li>Street</li>
+     *     <li>City</li>
+     *     <li>ZIP code</li>
+     *     <li>Country</li>
+     * </ul>
+     *
+     * @param random the random instance used to randomly select a value
+     * @param locale the locale for which a value is selected
+     * @return a list of {@link StubbingStrategy} that use a {@link Faker}
+     */
     public static List<StubbingStrategy> fakedData(Random random, Locale locale) {
         return Stream.of(
                 firstName(),
@@ -85,14 +136,62 @@ public final class JavaFakerStubbingStrategies {
                 .collect(toImmutableList());
     }
 
+    /**
+     * A list of {@link StubbingStrategy} for faking the following types of data:
+     * <ul>
+     *     <li>First name</li>
+     *     <li>Last name</li>
+     *     <li>Phone number</li>
+     *     <li>Street</li>
+     *     <li>City</li>
+     *     <li>ZIP code</li>
+     *     <li>Country</li>
+     * </ul>
+     * <p>
+     * By default, English is used as locale.
+     *
+     * @param random the random instance used to randomly select a value
+     * @return a list of {@link StubbingStrategy} that use a {@link Faker}
+     */
     public static List<StubbingStrategy> fakedData(Random random) {
         return fakedData(random, DEFAULT_LOCALE);
     }
 
+    /**
+     * A list of {@link StubbingStrategy} for faking the following types of data:
+     * <ul>
+     *     <li>First name</li>
+     *     <li>Last name</li>
+     *     <li>Phone number</li>
+     *     <li>Street</li>
+     *     <li>City</li>
+     *     <li>ZIP code</li>
+     *     <li>Country</li>
+     * </ul>
+     *
+     * @param locale the locale for which a value is selected
+     * @return a list of {@link StubbingStrategy} that use a {@link Faker}
+     */
     public static List<StubbingStrategy> fakedData(Locale locale) {
         return fakedData(RandomHolder.INSTANCE, locale);
     }
 
+    /**
+     * A list of {@link StubbingStrategy} for faking the following types of data:
+     * <ul>
+     *     <li>First name</li>
+     *     <li>Last name</li>
+     *     <li>Phone number</li>
+     *     <li>Street</li>
+     *     <li>City</li>
+     *     <li>ZIP code</li>
+     *     <li>Country</li>
+     * </ul>
+     * <p>
+     * By default, English is used as locale.
+     *
+     * @return a list of {@link StubbingStrategy} that use a {@link Faker}
+     */
     public static List<StubbingStrategy> fakedData() {
         return fakedData(RandomHolder.INSTANCE);
     }
