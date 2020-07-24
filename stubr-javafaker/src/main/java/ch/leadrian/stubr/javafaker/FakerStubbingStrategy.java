@@ -51,16 +51,19 @@ final class FakerStubbingStrategy implements StubbingStrategy {
             return false;
         }
 
-        NamedStubbingSite namedSite = (NamedStubbingSite) context.getSite();
-        WordSequence words = WordSequence.extractFrom(namedSite.getName());
+        WordSequence words = getWords(context);
         return strategy.accepts(words);
     }
 
     @Override
     public Object stub(StubbingContext context, Type type) {
-        NamedStubbingSite namedSite = (NamedStubbingSite) context.getSite();
-        WordSequence words = WordSequence.extractFrom(namedSite.getName());
+        WordSequence words = getWords(context);
         return strategy.fake(faker, words, context);
+    }
+
+    private WordSequence getWords(StubbingContext context) {
+        NamedStubbingSite namedSite = (NamedStubbingSite) context.getSite();
+        return WordSequence.extractFrom(namedSite.getName());
     }
 
 }
