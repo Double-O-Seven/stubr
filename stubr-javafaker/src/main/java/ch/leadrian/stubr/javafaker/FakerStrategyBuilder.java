@@ -24,6 +24,9 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * A builder for building a {@link FakerStrategy} using a default implementation.
+ */
 public final class FakerStrategyBuilder {
 
     private final List<String[]> acceptedWords = new ArrayList<>();
@@ -31,17 +34,37 @@ public final class FakerStrategyBuilder {
     FakerStrategyBuilder() {
     }
 
+    /**
+     * Adds a sequence of words accepted by the built {@link FakerStrategy}. {@link
+     * WordSequence#containsInSequence(String...)} is used to determine whether the words are accepted.
+     *
+     * @param words the word sequence that is accepted
+     * @return {@code this}
+     * @see WordSequence#containsInSequence(String...)
+     */
     public FakerStrategyBuilder accept(String... words) {
         requireNonNull(words, "words");
         acceptedWords.add(words.clone());
         return this;
     }
 
+    /**
+     * Returns a new {@link FakerStrategy} that uses the given {@code fakerFunction} to provide a stub value.
+     *
+     * @param fakerFunction the {@link FakerFunction} used to provide a stub value
+     * @return a new {@link FakerStrategy} that uses the given {@code fakerFunction} to provide a stub value
+     */
     public FakerStrategy build(FakerFunction fakerFunction) {
         requireNonNull(fakerFunction, "fakerFunction");
         return new DefaultFakerStrategy(acceptedWords, fakerFunction);
     }
 
+    /**
+     * Returns a new {@link FakerStrategy} that uses the given {@code fakerFunction} to provide a stub value.
+     *
+     * @param fakerFunction the {@link Function} used to provide a stub value
+     * @return a new {@link FakerStrategy} that uses the given {@code fakerFunction} to provide a stub value
+     */
     public FakerStrategy build(Function<? super Faker, String> fakerFunction) {
         requireNonNull(fakerFunction, "fakerFunction");
         return build((faker, wordSequence, context) -> fakerFunction.apply(faker));

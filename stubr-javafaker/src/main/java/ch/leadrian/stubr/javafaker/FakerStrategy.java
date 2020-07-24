@@ -16,12 +16,30 @@
 
 package ch.leadrian.stubr.javafaker;
 
+/**
+ * A strategy defining how a {@link com.github.javafaker.Faker} is used to provide stub values.
+ *
+ * @see JavaFakerStubbingStrategies#faked(FakerStrategy)
+ * @see JavaFakerStubbingStrategies#faked(FakerStrategy, java.util.Locale)
+ * @see JavaFakerStubbingStrategies#faked(FakerStrategy, java.util.Random)
+ * @see JavaFakerStubbingStrategies#faked(FakerStrategy, java.util.Random, java.util.Locale)
+ */
 public interface FakerStrategy extends FakerFunction {
 
+    /**
+     * Factory method for creating a {@link FakerStrategyBuilder}.
+     *
+     * @return a new {@link FakerStrategyBuilder}
+     */
     static FakerStrategyBuilder builder() {
         return new FakerStrategyBuilder();
     }
 
+    /**
+     * Returns {@code true} if the strategy accepts a given word sequence, else {@code false}.
+     *
+     * @return {@code true} if the strategy accepts a given word sequence, else {@code false}
+     */
     boolean accepts(WordSequence words);
 
 }
