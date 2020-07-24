@@ -21,13 +21,15 @@ import com.github.javafaker.Faker;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 final class DefaultFakerStrategy implements FakerStrategy {
 
     private final List<String[]> acceptedWords;
     private final FakerFunction delegate;
 
     DefaultFakerStrategy(List<String[]> acceptedWords, FakerFunction delegate) {
-        this.acceptedWords = acceptedWords;
+        this.acceptedWords = acceptedWords.stream().map(String[]::clone).collect(toList());
         this.delegate = delegate;
     }
 
