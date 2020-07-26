@@ -29,6 +29,7 @@ dependencies {
 
     testImplementation(kotlin("stdlib-jdk8"))
     testImplementation(project(":stubr-junit"))
+    testImplementation(group = "io.mockk", name = "mockk")
 }
 
 tasks {
