@@ -34,11 +34,11 @@ object Versions {
 
     const val junit = "5.6.2"
 
-    const val mockito = "3.3.3"
+    const val mockito = "3.4.4"
 
     const val mockK = "1.10.0"
 
-    const val spek = "2.0.11"
+    const val spek = "2.0.12"
 
 }
 
