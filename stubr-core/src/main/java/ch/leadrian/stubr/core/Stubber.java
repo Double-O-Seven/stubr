@@ -18,12 +18,11 @@ package ch.leadrian.stubr.core;
 
 import ch.leadrian.stubr.core.site.StubbingSites;
 import ch.leadrian.stubr.core.type.TypeLiteral;
-import com.google.common.primitives.Primitives;
+import ch.leadrian.stubr.core.type.Types;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static com.google.common.primitives.Primitives.wrap;
 import static java.util.Arrays.asList;
 
@@ -204,7 +203,7 @@ public abstract class Stubber {
      * @see TypeLiteral
      */
     public final <T> Result<T> tryToStub(TypeLiteral<T> typeLiteral, StubbingSite site) {
-        Class<T> rawType = getWrappedRawType(typeLiteral);
+        Class<T> rawType = getRawType(typeLiteral);
         return tryToStub(typeLiteral.getType(), site).map(rawType::cast);
     }
 
@@ -235,7 +234,7 @@ public abstract class Stubber {
      * @see TypeLiteral
      */
     public final <T> T stub(TypeLiteral<T> typeLiteral, StubbingSite site) {
-        Class<T> rawType = getWrappedRawType(typeLiteral);
+        Class<T> rawType = getRawType(typeLiteral);
         return rawType.cast(stub(typeLiteral.getType(), site));
     }
 
@@ -256,10 +255,9 @@ public abstract class Stubber {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Class<T> getWrappedRawType(TypeLiteral<T> typeLiteral) {
+    private <T> Class<T> getRawType(TypeLiteral<T> typeLiteral) {
         Type type = typeLiteral.getType();
-        return (Class<T>) getRawType(type)
-                .map(Primitives::wrap)
+        return (Class<T>) Types.getRawType(type)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot get raw type of %s", type)));
     }
 
