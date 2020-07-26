@@ -238,13 +238,13 @@ class StubrTest {
 
     private static class NonOverriddenValueProvidedByStubbingStrategy {
 
-        private static NonOverriddenValueProvidedByStubbingStrategy INSTANCE = new NonOverriddenValueProvidedByStubbingStrategy();
+        private static final NonOverriddenValueProvidedByStubbingStrategy INSTANCE = new NonOverriddenValueProvidedByStubbingStrategy();
 
     }
 
     private static class NonOverriddenValueProvidedByStubber {
 
-        private static NonOverriddenValueProvidedByStubber INSTANCE = new NonOverriddenValueProvidedByStubber();
+        private static final NonOverriddenValueProvidedByStubber INSTANCE = new NonOverriddenValueProvidedByStubber();
 
     }
 
