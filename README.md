@@ -5,7 +5,7 @@
 
 # stubr
 
-Stubr is a small, extensible library for creating stubs (commonly for data classes) for unit tests.
+Stubr is a small, extensible library for creating stubs or fixtures for test data in unit tests.
 
 ## Basics
 
@@ -15,8 +15,8 @@ For example:
 
 ```java
 Stubber stubber = Stubber.builder()
-        .stubWith(StubbingStrategies.constantValue("Foo"))
-        .stubWith(StubbingStrategies.suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber))
+        .stubWith(StubbingStrategies.constantValue("Foo")) // Provide "Foo" when a String is required
+        .stubWith(StubbingStrategies.suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber)) // Provide a sequence value when an int is required
         .build();
 String stringValue = stubber.stub(String.class); // Foo
 int intValue1 = stubber.stub(int.class); // 0
@@ -25,13 +25,13 @@ int intValue2 = stubber.stub(int.class); // 1
 
 ## But why?
 
-Stubr was designed to complement existing mocking framework like Mockito or MockK. While those frameworks are often used to mock certain behaviour, Stubr was created to provide valid, commonly unmocked, instances of data objects.
+Stubr is an implementation of the "Object Mother" pattern and is designed to complement existing mocking framework like Mockito or MockK. While those frameworks are often used to mock certain behaviour, Stubr was created to provide valid, commonly unmocked, instances of data objects.
 
 Sometimes in your test case, you will access various values of a data object. The accessed values may potentially be non-null. This will leave you with the following options:
  *  Manually set up the whole data object
  *  You mock the data object and define the return values
 
-In both cases you end up with a lot of boiler plate, especially when you need to set up or mock data whose content is not actually relevant to the test case.
+In both cases you end up with a lot of boiler plate code, especially when you need to set up or mock data whose content is not actually relevant to the test case.
 
 A possible solution for the problem described above is Stubr. Stubr can instantiate valid data objects for you, using suitable default or custom stubbing strategies.
 
