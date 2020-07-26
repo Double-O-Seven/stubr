@@ -5,7 +5,7 @@
 
 # stubr
 
-Stubr is a small, extensible library for creating stubs or fixtures for test data in unit tests.
+Stubr is an implementation of the "Object Mother" pattern and is a small, extensible library for creating stubs or fixtures for test data in unit tests.
 
 ## Basics
 
@@ -260,10 +260,19 @@ object MyObject {
 
 }
 
+data class MyData(val foo: String) {
+
+    constructor() : this("default-value")
+
+}
+
 var stubber = Stubber.builder()
+    .stubWith(StubbingStrategies.constantValue("stub-value"))
     .stubWith(KotlinStubbingStrategies.objectInstance())
+    .stubWith(KotlinStubbingStrategies.primaryConstructor())
     .build()
-val stub: MyObject = stubber.stub()
+val myObject: MyObject = stubber.stub()
+val myData: MyData = stubber.stub() // MyData(foo = "stub-value"), instantiated with primary constructor
 ```
 
 The Kotlin extension can be downloaded here:
