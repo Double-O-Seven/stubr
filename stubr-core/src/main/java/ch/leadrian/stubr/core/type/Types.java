@@ -45,7 +45,7 @@ public final class Types {
      * <p>
      * If {@code type} is anything else, {@link Optional#empty()} will be returned.
      *
-     * @param type the from which an actual {@link Class} should be inferred
+     * @param type the type from which an actual {@link Class} should be inferred
      * @return Am {@link Optional} the actual raw type if a {@link Class} can be derived from the given {@link Type},
      * else {@link Optional#empty()}
      */
@@ -77,6 +77,28 @@ public final class Types {
                 return Optional.empty();
             }
         });
+    }
+
+    /**
+     * Returns the raw {@link Class} representation for the given type, if a raw type can be inferred.
+     * <p>
+     * If {@code typeLiteral.getType()} returns a {@link Class}, the type itself will be returned.
+     * <p>
+     * If {@code typeLiteral.getType()} returns a {@link ParameterizedType}, the raw type will be recursively inferred
+     * from {@link ParameterizedType#getRawType()}.
+     * <p>
+     * If {@code typeLiteral.getType()} returns a {@link WildcardType}, the raw type will be recursively inferred from
+     * the wildcard's bound.
+     * <p>
+     * If {@code typeLiteral.getType()} returns anything else, {@link Optional#empty()} will be returned.
+     *
+     * @param typeLiteral the type literal from which an actual {@link Class} should be inferred
+     * @return Am {@link Optional} the actual raw type if a {@link Class} can be derived from the given {@link Type},
+     * else {@link Optional#empty()}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Optional<Class<T>> getRawType(TypeLiteral<T> typeLiteral) {
+        return getRawType(typeLiteral.getType()).map(type -> (Class<T>) type);
     }
 
     /**

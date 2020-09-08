@@ -32,67 +32,113 @@ class TypesTest {
     @Nested
     class GetRawTypeTest {
 
-        @Test
-        void givenClassItShouldReturnIt() {
-            Type type = String.class;
-            Optional<Class<?>> clazz = Types.getRawType(type);
+        @Nested
+        class TypeArgumentTest {
 
-            assertThat(clazz)
-                    .hasValue(String.class);
+            @Test
+            void givenClassItShouldReturnIt() {
+                Type type = String.class;
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .hasValue(String.class);
+            }
+
+            @Test
+            void givenParameterizedTypeItShouldReturnRawType() {
+                Type type = new TypeLiteral<List<String>>() {}.getType();
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .hasValue(List.class);
+            }
+
+            @Test
+            void givenWildcardTypeWithLowerBoundItShouldReturnLowerBound() {
+                Type type = new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .hasValue(Number.class);
+            }
+
+            @Test
+            void givenWildcardTypeWithUpperBoundItShouldReturnUpperBound() {
+                Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .hasValue(Number.class);
+            }
+
+            @Test
+            void givenWildcardTypeWithoutExplicitBoundItShouldReturnObject() {
+                Type type = new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .hasValue(Object.class);
+            }
+
+            @Test
+            <T> void givenTypeVariableItShouldReturnEmpty() {
+                Type type = new TypeLiteral<T>() {}.getType();
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .isEmpty();
+            }
+
+            @Test
+            <T> void givenGenericArrayItShouldReturnEmpty() {
+                Type type = new TypeLiteral<T[]>() {}.getType();
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .isEmpty();
+            }
+
         }
 
-        @Test
-        void givenParameterizedTypeItShouldReturnRawType() {
-            Type type = new TypeLiteral<List<String>>() {}.getType();
-            Optional<Class<?>> clazz = Types.getRawType(type);
+        @Nested
+        class TypeLiteralArgumentTest {
 
-            assertThat(clazz)
-                    .hasValue(List.class);
-        }
+            @Test
+            void givenClassItShouldReturnIt() {
+                TypeLiteral<String> typeLiteral = new TypeLiteral<String>() {};
+                Optional<Class<String>> clazz = Types.getRawType(typeLiteral);
 
-        @Test
-        void givenWildcardTypeWithLowerBoundItShouldReturnLowerBound() {
-            Type type = new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
-            Optional<Class<?>> clazz = Types.getRawType(type);
+                assertThat(clazz)
+                        .hasValue(String.class);
+            }
 
-            assertThat(clazz)
-                    .hasValue(Number.class);
-        }
+            @Test
+            void givenParameterizedTypeItShouldReturnRawType() {
+                TypeLiteral<List<String>> typeLiteral = new TypeLiteral<List<String>>() {};
+                Optional<Class<List<String>>> clazz = Types.getRawType(typeLiteral);
 
-        @Test
-        void givenWildcardTypeWithUpperBoundItShouldReturnUpperBound() {
-            Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
-            Optional<Class<?>> clazz = Types.getRawType(type);
+                assertThat(clazz)
+                        .isEqualTo(Optional.of(List.class));
+            }
 
-            assertThat(clazz)
-                    .hasValue(Number.class);
-        }
+            @Test
+            <T> void givenTypeVariableItShouldReturnEmpty() {
+                TypeLiteral<T> typeLiteral = new TypeLiteral<T>() {};
+                Optional<Class<T>> clazz = Types.getRawType(typeLiteral);
 
-        @Test
-        void givenWildcardTypeWithoutExplicitBoundItShouldReturnObject() {
-            Type type = new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
-            Optional<Class<?>> clazz = Types.getRawType(type);
+                assertThat(clazz)
+                        .isEmpty();
+            }
 
-            assertThat(clazz)
-                    .hasValue(Object.class);
-        }
+            @Test
+            <T> void givenGenericArrayItShouldReturnEmpty() {
+                TypeLiteral<T[]> typeLiteral = new TypeLiteral<T[]>() {};
+                Optional<Class<T[]>> clazz = Types.getRawType(typeLiteral);
 
-        @Test
-        <T> void givenTypeVariableItShouldReturnEmpty() {
-            Type type = new TypeLiteral<T>() {}.getType();
-            Optional<Class<?>> clazz = Types.getRawType(type);
+                assertThat(clazz)
+                        .isEmpty();
+            }
 
-            assertThat(clazz)
-                    .isEmpty();
-        }
-
-        @Test
-        <T> void givenGenericArrayItShouldReturnEmpty() {
-            Type type = new TypeLiteral<T[]>() {}.getType();
-            Optional<Class<?>> clazz = Types.getRawType(type);
-
-            assertThat(clazz)
-                    .isEmpty();
         }
 
     }
