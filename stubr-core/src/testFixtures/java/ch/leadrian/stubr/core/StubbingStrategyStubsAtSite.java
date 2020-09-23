@@ -48,8 +48,10 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTestCase {
 
             stubbingStrategy.stub(capturingContext, acceptedType);
 
+            List<StubbingSite> allExpectedSites = new ArrayList<>(this.expectedSites);
+            allExpectedSites.add(0, site);
             assertThat(capturingStubber.getCapturedSites())
-                    .containsExactlyElementsOf(expectedSites);
+                    .containsExactlyElementsOf(allExpectedSites);
         });
     }
 
