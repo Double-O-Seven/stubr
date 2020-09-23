@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static ch.leadrian.stubr.core.type.TypeVisitor.accept;
 
@@ -143,6 +144,25 @@ public final class Types {
             return lowerBound;
         }
         return getOnlyUpperBound(wildcardType);
+    }
+
+    /**
+     * Visits all superclasses and interfaces of the given {@code type}. First, all superclasses are visited
+     * recursively, followed by implemented interfaces. Interfaces declared on different may be visited multiple times.
+     *
+     * @param type    the type to visit
+     * @param visitor the visitor function applied to the supertypes
+     */
+    public static void visitTypeHierarchy(Class<?> type, Consumer<? super Class<?>> visitor) {
+        if (type == null) {
+            return;
+        }
+
+        visitor.accept(type);
+        visitTypeHierarchy(type.getSuperclass(), visitor);
+        for (Class<?> interfaceType : type.getInterfaces()) {
+            visitTypeHierarchy(interfaceType, visitor);
+        }
     }
 
 }
