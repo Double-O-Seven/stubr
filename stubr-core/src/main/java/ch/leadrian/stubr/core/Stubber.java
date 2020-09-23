@@ -46,13 +46,6 @@ public abstract class Stubber {
         return new StubberImpl.Builder();
     }
 
-    /**
-     * TODO
-     *
-     * @param type
-     * @param context
-     * @return
-     */
     abstract StubberChain newChain(Type type, StubbingContext context);
 
     /**
