@@ -30,7 +30,7 @@ import static java.util.Arrays.asList;
 
 final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
 
-    private final List<StubbingStrategyTest> tests = new ArrayList<>();
+    private final List<StubbingStrategyTestCase> tests = new ArrayList<>();
     private final Map<Type, ResultProvider> resultProvidersByType = new HashMap<>();
 
     private StubbingStrategyTester addResultProvider(Type type, ResultProvider resultProvider) {

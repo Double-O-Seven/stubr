@@ -27,7 +27,7 @@ import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
+final class StubbingStrategyStubsAtSite implements StubbingStrategyTestCase {
 
     private final Type acceptedType;
     private final List<StubbingSite> expectedSites;

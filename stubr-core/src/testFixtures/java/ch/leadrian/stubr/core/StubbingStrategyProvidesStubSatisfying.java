@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubbingStrategyProvidesStubSatisfying implements StubbingStrategyTest {
+final class StubbingStrategyProvidesStubSatisfying implements StubbingStrategyTestCase {
 
     private final Type acceptedType;
     private final Consumer<Object> assertion;

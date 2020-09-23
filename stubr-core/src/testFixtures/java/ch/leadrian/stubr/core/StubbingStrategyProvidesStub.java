@@ -24,7 +24,7 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubbingStrategyProvidesStub implements StubbingStrategyTest {
+final class StubbingStrategyProvidesStub implements StubbingStrategyTestCase {
 
     private final Type acceptedType;
     private final Object expectedValue;

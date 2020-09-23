@@ -18,7 +18,7 @@ package ch.leadrian.stubr.core;
 
 import org.junit.jupiter.api.DynamicTest;
 
-interface StubbingStrategyTest {
+interface StubbingStrategyTestCase {
 
     DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site);
 
