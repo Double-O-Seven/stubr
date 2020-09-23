@@ -16,9 +16,8 @@
 
 package ch.leadrian.stubr.core;
 
-import ch.leadrian.equalizer.EqualsAndHashCode;
+import java.lang.reflect.Type;
 
-import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -29,37 +28,17 @@ import static java.util.Objects.requireNonNull;
  */
 public final class StubbingContext {
 
-    private static final EqualsAndHashCode<StubbingContext> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(StubbingContext.class)
-            .compareAndHash(StubbingContext::getStubber)
-            .compareAndHash(StubbingContext::getSite)
-            .build();
-
     private final Stubber stubber;
     private final StubbingSite site;
+    private final StubberChain chain;
 
-    /**
-     * Under normal circumstances it is not required to instantiate a {@link StubbingContext} manually, as {@link
-     * Stubber}s will automatically create a suitable instance during the stubbing process.
-     * <p>
-     * However, a custom implementation of {@link Stubber} might override the {@link StubbingContext} in order to
-     * enhance the given {@link Stubber} or {@link StubbingSite}.
-     * <p>
-     * {@code StubbingContext}s must be instantiated using a factory method for sake of extensibility and to keep the
-     * option open to replace the concrete class with an interface or abstract class should the need arise.
-     *
-     * @param stubber the {@link Stubber} performing the stubbing
-     * @param site    the {@link StubbingSite} where the requested stub value will be used
-     * @return a new context
-     */
-    public static StubbingContext create(Stubber stubber, StubbingSite site) {
-        return new StubbingContext(stubber, site);
-    }
-
-    private StubbingContext(Stubber stubber, StubbingSite site) {
+    StubbingContext(Stubber stubber, StubbingSite site, Type type) {
         requireNonNull(stubber, "stubber");
         requireNonNull(site, "site");
+        requireNonNull(type, "type");
         this.stubber = stubber;
         this.site = site;
+        this.chain = stubber.newChain(type, this);
     }
 
     /**
@@ -77,19 +56,10 @@ public final class StubbingContext {
     }
 
     /**
-     * {@inheritDoc}
+     * @return the {@link StubberChain} that is used to request a stub for a given type
      */
-    @Override
-    public boolean equals(Object obj) {
-        return EQUALS_AND_HASH_CODE.equals(this, obj);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return EQUALS_AND_HASH_CODE.hashCode(this);
+    public StubberChain getChain() {
+        return chain;
     }
 
 }

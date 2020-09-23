@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.Result;
-import ch.leadrian.stubr.core.Stubber;
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -45,11 +40,11 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
     }
 
     @Override
-    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
+    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site) {
         String displayName = getDisplayName(stubbingStrategy);
         return dynamicTest(displayName, () -> {
-            CapturingStubber capturingStubber = new CapturingStubber(context.getStubber());
-            StubbingContext capturingContext = StubbingContext.create(capturingStubber, context.getSite());
+            CapturingStubber capturingStubber = new CapturingStubber(stubber);
+            StubbingContext capturingContext = new StubbingContext(capturingStubber, site, acceptedType);
 
             stubbingStrategy.stub(capturingContext, acceptedType);
 
@@ -64,28 +59,6 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTest {
                 .map(Object::toString)
                 .collect(joining(", "));
         return String.format("%s should stub %s at %s", stubbingStrategy.getClass().getSimpleName(), acceptedType, sites);
-    }
-
-    private static final class CapturingStubber extends Stubber {
-
-        private final List<StubbingSite> capturedSites = new ArrayList<>();
-        private final Stubber delegate;
-
-        CapturingStubber(Stubber delegate) {
-            this.delegate = delegate;
-        }
-
-        @Override
-        protected Result<?> tryToStub(Type type, StubbingContext context) {
-            StubbingSite site = context.getSite();
-            capturedSites.add(site);
-            return delegate.tryToStub(type, site);
-        }
-
-        public List<StubbingSite> getCapturedSites() {
-            return capturedSites;
-        }
-
     }
 
 }

@@ -19,6 +19,7 @@ package ch.leadrian.stubr.core;
 import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Type;
+import java.util.Iterator;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -33,12 +34,33 @@ final class CompositeStubber extends Stubber {
     }
 
     @Override
-    protected Result<?> tryToStub(Type type, StubbingContext context) {
-        return stubbers.stream()
-                .map(stubber -> stubber.tryToStub(type, context))
-                .filter(Result::isSuccess)
-                .findFirst()
-                .orElse(Result.failure());
+    StubberChain newChain(Type type, StubbingContext context) {
+        return new Chain(stubbers, type, context);
+    }
+
+    private static final class Chain implements StubberChain {
+
+        private final Iterator<StubberChain> iterator;
+
+        private Chain(List<Stubber> stubbers, Type type, StubbingContext context) {
+            iterator = stubbers.stream().map(stubber -> stubber.newChain(type, context))
+                    .filter(StubberChain::hasNext)
+                    .iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public Result<?> next() {
+            if (iterator.hasNext()) {
+                return iterator.next().next();
+            }
+            return Result.failure();
+        }
+
     }
 
 }

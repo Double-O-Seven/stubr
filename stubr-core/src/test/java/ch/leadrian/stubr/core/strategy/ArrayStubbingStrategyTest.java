@@ -16,9 +16,9 @@
 
 package ch.leadrian.stubr.core.strategy;
 
+import ch.leadrian.stubr.core.StubbingStrategyTester;
+import ch.leadrian.stubr.core.TestStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
-import ch.leadrian.stubr.core.testing.StubbingStrategyTester;
-import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

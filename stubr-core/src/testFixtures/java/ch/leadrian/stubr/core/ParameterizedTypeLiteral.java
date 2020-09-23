@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
 import ch.leadrian.stubr.core.type.TypeLiteral;
 

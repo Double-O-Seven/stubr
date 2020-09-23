@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.Stubber;
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -73,8 +69,7 @@ final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
                 .stream()
                 .map(test -> {
                     Stubber stubber = createStubber();
-                    StubbingContext context = StubbingContext.create(stubber, TestStubbingSite.INSTANCE);
-                    return test.toDynamicTest(stubbingStrategy, context);
+                    return test.toDynamicTest(stubbingStrategy, stubber, TestStubbingSite.INSTANCE);
                 });
     }
 

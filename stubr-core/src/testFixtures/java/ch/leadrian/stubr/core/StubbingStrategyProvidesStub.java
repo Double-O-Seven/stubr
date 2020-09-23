@@ -14,36 +14,41 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
-import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubbingStrategyProvidesStubSatisfying implements StubbingStrategyTest {
+final class StubbingStrategyProvidesStub implements StubbingStrategyTest {
 
     private final Type acceptedType;
-    private final Consumer<Object> assertion;
+    private final Object expectedValue;
 
-    StubbingStrategyProvidesStubSatisfying(Type acceptedType, Consumer<Object> assertion) {
+    StubbingStrategyProvidesStub(Type acceptedType, Object expectedValue) {
         requireNonNull(acceptedType, "acceptedType");
         this.acceptedType = acceptedType;
-        this.assertion = assertion;
+        this.expectedValue = expectedValue;
     }
 
     @Override
-    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
-        String displayName = String.format("%s should provide stub for %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
+    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site) {
+        String displayName = String.format("%s should provide %s as stub for %s", stubbingStrategy.getClass().getSimpleName(), expectedValue, acceptedType);
         return dynamicTest(displayName, () -> {
+            StubbingContext context = new StubbingContext(stubber, site, acceptedType);
             Object value = stubbingStrategy.stub(context, acceptedType);
 
-            assertion.accept(value);
+            if (expectedValue == null) {
+                assertThat(value).isNull();
+            } else {
+                assertThat(value)
+                        .hasSameClassAs(expectedValue)
+                        .isEqualTo(expectedValue);
+            }
         });
     }
 

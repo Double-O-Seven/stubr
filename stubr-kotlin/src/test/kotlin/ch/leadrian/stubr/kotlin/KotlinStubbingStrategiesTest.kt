@@ -16,7 +16,7 @@
 
 package ch.leadrian.stubr.kotlin
 
-import ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester
+import ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.util.stream.Stream

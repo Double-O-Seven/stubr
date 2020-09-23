@@ -22,7 +22,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;

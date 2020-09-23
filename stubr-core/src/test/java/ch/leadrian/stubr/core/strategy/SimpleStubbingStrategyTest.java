@@ -16,11 +16,11 @@
 
 package ch.leadrian.stubr.core.strategy;
 
+import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.StubbingStrategy;
-import ch.leadrian.stubr.core.testing.ParameterizedTypeLiteral;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;

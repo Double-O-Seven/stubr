@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;

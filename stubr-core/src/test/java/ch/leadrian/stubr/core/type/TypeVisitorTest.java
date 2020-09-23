@@ -16,7 +16,7 @@
 
 package ch.leadrian.stubr.core.type;
 
-import ch.leadrian.stubr.core.testing.ParameterizedTypeLiteral;
+import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.GenericArrayType;

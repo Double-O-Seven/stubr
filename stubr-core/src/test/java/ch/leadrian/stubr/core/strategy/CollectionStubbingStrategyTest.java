@@ -16,9 +16,9 @@
 
 package ch.leadrian.stubr.core.strategy;
 
+import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
+import ch.leadrian.stubr.core.TestStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
-import ch.leadrian.stubr.core.testing.ParameterizedTypeLiteral;
-import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static org.assertj.core.util.Lists.newArrayList;
 
 class CollectionStubbingStrategyTest {
