@@ -16,7 +16,9 @@
 
 package ch.leadrian.stubr.core.strategy;
 
+import ch.leadrian.stubr.core.Result;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
 
 import java.lang.reflect.Type;
@@ -40,7 +42,12 @@ public abstract class EnhancingStubbingStrategy implements StubbingStrategy {
      */
     @Override
     public final Object stub(StubbingContext context, Type type) {
-        Object stubValue = context.getChain().next().getValue();
+        Result<?> result = context.getChain().next();
+        if (result.isFailure()) {
+            throw new StubbingException(context.getSite(), type);
+        }
+
+        Object stubValue = result.getValue();
         return enhance(context, type, stubValue);
     }
 
