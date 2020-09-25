@@ -21,7 +21,7 @@ import java.lang.reflect.Field;
 /**
  * Stubbing site indicating that the current stubbing site is a {@link Field}
  */
-public interface FieldStubbingSite extends AnnotatedStubbingSite {
+public interface FieldStubbingSite extends AnnotatedStubbingSite, NamedStubbingSite {
 
     /**
      * Returns the {@link Field} where the stubbing takes place.

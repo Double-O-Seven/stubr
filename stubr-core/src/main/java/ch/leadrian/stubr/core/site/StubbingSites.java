@@ -16,11 +16,13 @@
 
 package ch.leadrian.stubr.core.site;
 
+import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
@@ -79,6 +81,19 @@ public final class StubbingSites {
      */
     public static ConstructorParameterStubbingSite constructorParameter(StubbingSite parent, Constructor<?> constructor, int parameterIndex) {
         return new ConstructorParameterStubbingSite(parent, constructor, constructor.getParameters()[parameterIndex], parameterIndex);
+    }
+
+    /**
+     * Returns a {@link StubbingSite} indicating that the current stubbing site is a field that is being injected with a
+     * stub value.
+     *
+     * @param parent the parent site, must not be {@code null}
+     * @param field  the field that was set to a stub value
+     * @return a field stubbing site
+     * @see StubbingStrategies#fieldInjection(Matcher)
+     */
+    public static InjectedFieldStubbingSite injectedField(StubbingSite parent, Field field) {
+        return new InjectedFieldStubbingSite(parent, field);
     }
 
     /**
