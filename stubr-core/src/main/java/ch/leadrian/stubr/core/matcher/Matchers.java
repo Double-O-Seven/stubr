@@ -21,6 +21,7 @@ import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import ch.leadrian.stubr.core.site.ConstructorStubbingSite;
 import ch.leadrian.stubr.core.site.ExecutableStubbingSite;
+import ch.leadrian.stubr.core.site.FieldStubbingSite;
 import ch.leadrian.stubr.core.site.MethodStubbingSite;
 import ch.leadrian.stubr.core.site.NamedStubbingSite;
 import ch.leadrian.stubr.core.site.ParameterStubbingSite;
@@ -29,6 +30,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
@@ -151,6 +153,17 @@ public final class Matchers {
      */
     public static <T> Matcher<T> equalTo(Object value) {
         return (context, v) -> Objects.equals(v, value);
+    }
+
+    /**
+     * Returns a matcher that matches {@link Field}s using a delegate matcher.
+     *
+     * @param delegate the delegate
+     * @param <T>      the generic type, may be anything
+     * @return a matcher that matches {@link Executable}s using a delegate matcher
+     */
+    public static <T extends StubbingSite> Matcher<T> field(Matcher<? super Field> delegate) {
+        return instanceOf(FieldStubbingSite.class, mappedTo(FieldStubbingSite::getField, delegate));
     }
 
     /**
