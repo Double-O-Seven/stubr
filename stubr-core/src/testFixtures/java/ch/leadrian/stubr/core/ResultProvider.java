@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
-
-import ch.leadrian.stubr.core.Result;
+package ch.leadrian.stubr.core;
 
 import java.util.ArrayList;
 import java.util.Collection;

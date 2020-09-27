@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -26,7 +24,7 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-final class StubbingStrategyAcceptsType implements StubbingStrategyTest {
+final class StubbingStrategyAcceptsType implements StubbingStrategyTestCase {
 
     private final Type acceptedType;
 
@@ -36,9 +34,11 @@ final class StubbingStrategyAcceptsType implements StubbingStrategyTest {
     }
 
     @Override
-    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context) {
+    public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site) {
         String displayName = String.format("%s should accept %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
         return dynamicTest(displayName, () -> {
+            StubbingContext context = new StubbingContext(stubber, site, acceptedType);
+
             boolean accepts = stubbingStrategy.accepts(context, acceptedType);
 
             assertThat(accepts).isTrue();

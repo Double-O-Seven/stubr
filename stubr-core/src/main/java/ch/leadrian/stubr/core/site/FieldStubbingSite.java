@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core.site;
 
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingStrategy;
-import org.junit.jupiter.api.DynamicTest;
+import java.lang.reflect.Field;
 
-interface StubbingStrategyTest {
+/**
+ * Stubbing site indicating that the current stubbing site is a {@link Field}
+ */
+public interface FieldStubbingSite extends AnnotatedStubbingSite, NamedStubbingSite {
 
-    DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, StubbingContext context);
+    /**
+     * Returns the {@link Field} where the stubbing takes place.
+     *
+     * @return the field
+     */
+    Field getField();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default Field getAnnotatedElement() {
+        return getField();
+    }
 
 }

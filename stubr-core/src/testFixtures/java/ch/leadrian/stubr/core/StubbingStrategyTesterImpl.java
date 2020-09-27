@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.Stubber;
-import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.lang.reflect.Type;
@@ -34,14 +30,21 @@ import static java.util.Arrays.asList;
 
 final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
 
-    private final List<StubbingStrategyTest> tests = new ArrayList<>();
+    private final List<StubbingStrategyTestCase> tests = new ArrayList<>();
     private final Map<Type, ResultProvider> resultProvidersByType = new HashMap<>();
+    private final List<Stubber> stubbers = new ArrayList<>();
 
     private StubbingStrategyTester addResultProvider(Type type, ResultProvider resultProvider) {
         if (resultProvidersByType.containsKey(type)) {
             throw new IllegalArgumentException(String.format("Value for %s is already provided", type));
         }
         resultProvidersByType.put(type, resultProvider);
+        return this;
+    }
+
+    @Override
+    public StubbingStrategyTester provideStubsWith(Stubber stubber) {
+        stubbers.add(stubber);
         return this;
     }
 
@@ -73,18 +76,26 @@ final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
                 .stream()
                 .map(test -> {
                     Stubber stubber = createStubber();
-                    StubbingContext context = StubbingContext.create(stubber, TestStubbingSite.INSTANCE);
-                    return test.toDynamicTest(stubbingStrategy, context);
+                    return test.toDynamicTest(stubbingStrategy, stubber, TestStubbingSite.INSTANCE);
                 });
     }
 
     private Stubber createStubber() {
         Map<Type, ResultProvider> untouchedResultProvidersByType = new HashMap<>(resultProvidersByType);
         untouchedResultProvidersByType.replaceAll((type, resultProvider) -> resultProvider.getUntouchedInstance());
-        return new TestStubber(untouchedResultProvidersByType);
+        TestStubber testStubber = new TestStubber(untouchedResultProvidersByType);
+        StubberBuilder builder = Stubber.builder();
+        builder.include(testStubber);
+        stubbers.forEach(builder::include);
+        return builder.build();
     }
 
     private abstract class DelegatingStubbingStrategyTester implements StubbingStrategyTester {
+
+        @Override
+        public StubbingStrategyTester provideStubsWith(Stubber stubber) {
+            return StubbingStrategyTesterImpl.this.provideStubsWith(stubber);
+        }
 
         @Override
         public StubbingStrategyTester provideStub(Type type, Object... values) {

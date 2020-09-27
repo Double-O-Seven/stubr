@@ -16,12 +16,13 @@
 
 package ch.leadrian.stubr.core.type;
 
-import ch.leadrian.stubr.core.testing.ParameterizedTypeLiteral;
+import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -247,5 +248,38 @@ class TypesTest {
         }
 
     }
+
+    @Nested
+    class VisitTypeHierarchy {
+
+        @Test
+        void shouldVisitAllSuperclassesAndInterfaces() {
+            List<Class<?>> typeHierarchy = new ArrayList<>();
+
+            Types.visitTypeHierarchy(Bar.class, typeHierarchy::add);
+
+            assertThat(typeHierarchy)
+                    .containsExactly(
+                            Bar.class,
+                            Foo.class,
+                            Object.class,
+                            Fubar.class,
+                            Baz.class,
+                            Qux.class,
+                            Baz.class
+                    );
+        }
+
+    }
+
+    static class Foo implements Fubar, Baz {}
+
+    static class Bar extends Foo implements Qux {}
+
+    interface Baz {}
+
+    interface Qux extends Baz {}
+
+    interface Fubar {}
 
 }

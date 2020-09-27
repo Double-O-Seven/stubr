@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.conditional;
@@ -35,12 +36,39 @@ final class StubberImpl extends Stubber {
     }
 
     @Override
-    protected Result<?> tryToStub(Type type, StubbingContext context) {
-        return strategies.stream()
-                .filter(strategy -> strategy.accepts(context, type))
-                .map(strategy -> Result.success(strategy.stub(context, type)))
-                .findFirst()
-                .orElse(Result.failure());
+    StubberChain newChain(Type type, StubbingContext context) {
+        return new Chain(strategies, type, context);
+    }
+
+    private static final class Chain implements StubberChain {
+
+        private final Type type;
+
+        private final StubbingContext context;
+
+        private final Iterator<StubbingStrategy> iterator;
+
+        private Chain(List<StubbingStrategy> strategies, Type type, StubbingContext context) {
+            iterator = strategies.stream().filter(strategy -> strategy.accepts(context, type)).iterator();
+            this.type = type;
+            this.context = context;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public Result<?> next() {
+            if (iterator.hasNext()) {
+                StubbingStrategy strategy = iterator.next();
+                return Result.success(strategy.stub(context, type));
+            }
+
+            return Result.failure();
+        }
+
     }
 
     static final class Builder implements StubberBuilder {
@@ -99,7 +127,7 @@ final class StubberImpl extends Stubber {
             } else {
                 List<Stubber> stubberComposition = new ArrayList<>(this.stubbers);
                 stubberComposition.add(0, builtStubber);
-                return compose(stubberComposition);
+                return new CompositeStubber(stubberComposition);
             }
         }
 

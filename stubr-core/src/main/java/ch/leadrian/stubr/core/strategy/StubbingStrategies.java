@@ -24,6 +24,7 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -504,6 +505,18 @@ public final class StubbingStrategies {
     }
 
     /**
+     * Returns a {@link EnhancingStubbingStrategy} that injected fields that match the given {@link Matcher} with stub
+     * values.
+     *
+     * @param matcher the {@link Matcher} used to select fields
+     * @return a {@link EnhancingStubbingStrategy} that injected fields that match the given {@link Matcher} with stub *
+     * values
+     */
+    public static StubbingStrategy fieldInjection(Matcher<? super Field> matcher) {
+        return new FieldInjectingStubbingStrategy(matcher);
+    }
+
+    /**
      * Creates a {@link StubbingStrategy} used to stub maps. A {@link ToIntFunction} must be provided to determine the
      * map size. The map size may be constant, might be derive from annotations present at the stubbing site or it might
      * be anything else.
@@ -556,6 +569,18 @@ public final class StubbingStrategies {
      */
     public static StubbingStrategy memoized(StubbingStrategy delegate) {
         return new MemoizingStubbingStrategy(delegate);
+    }
+
+    /**
+     * Returns a {@link EnhancingStubbingStrategy} that injected methods that match the given {@link Matcher} with stub
+     * values.
+     *
+     * @param matcher the {@link Matcher} used to select methods
+     * @return a {@link EnhancingStubbingStrategy} that injected methods that match the given {@link Matcher} with stub
+     * values
+     */
+    public static StubbingStrategy methodInjection(Matcher<? super Method> matcher) {
+        return new MethodInjectingStubbingStrategy(matcher);
     }
 
     /**

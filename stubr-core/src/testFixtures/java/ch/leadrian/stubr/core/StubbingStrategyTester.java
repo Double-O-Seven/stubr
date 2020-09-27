@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.StubbingSite;
-import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 
@@ -30,6 +28,8 @@ public interface StubbingStrategyTester {
     static StubbingStrategyTester stubbingStrategyTester() {
         return new StubbingStrategyTesterImpl();
     }
+
+    StubbingStrategyTester provideStubsWith(Stubber stubber);
 
     StubbingStrategyTester provideStub(Type type, Object... values);
 

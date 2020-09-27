@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
+package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.core.StubbingSite;
+import org.junit.jupiter.api.DynamicTest;
 
-import java.util.Optional;
+interface StubbingStrategyTestCase {
 
-public enum TestStubbingSite implements StubbingSite {
-    INSTANCE;
+    DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site);
 
-    @Override
-    public Optional<? extends StubbingSite> getParent() {
-        return Optional.empty();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
 }

@@ -22,8 +22,8 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
+import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.stubber;
-import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StubberStubbingStrategyTest {

@@ -16,9 +16,7 @@
 
 package ch.leadrian.stubr.core.strategy;
 
-import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
-import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,7 +36,7 @@ class MemoizingStubbingStrategyTest {
 
     @Test
     void shouldReturnMemoizedValuesSeparatelyForDifferentTypes() {
-        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
+        StubbingContext context = mock(StubbingContext.class);
         StubbingStrategy strategy = StubbingStrategies.memoized(new TestStubbingStrategy(1337));
 
         List<Object> intValues = IntStream.iterate(0, i -> i + 1)
@@ -59,7 +57,7 @@ class MemoizingStubbingStrategyTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void shouldDelegateAccepts(boolean expectedAccepts) {
-        StubbingContext context = StubbingContext.create(mock(Stubber.class), mock(StubbingSite.class));
+        StubbingContext context = mock(StubbingContext.class);
         StubbingStrategy delegate = mock(StubbingStrategy.class);
         when(delegate.accepts(context, String.class))
                 .thenReturn(expectedAccepts);

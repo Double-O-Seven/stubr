@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-package ch.leadrian.stubr.core.testing;
-
-import ch.leadrian.stubr.core.Result;
-import ch.leadrian.stubr.core.Stubber;
-import ch.leadrian.stubr.core.StubbingContext;
+package ch.leadrian.stubr.core;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -36,12 +32,32 @@ final class TestStubber extends Stubber {
     }
 
     @Override
-    protected Result<?> tryToStub(Type type, StubbingContext context) {
-        ResultProvider resultProvider = resultProvidersByType.get(type);
-        if (resultProvider == null) {
-            throw new AssertionError(String.format("Unexpected type encountered: %s", type));
+    StubberChain newChain(Type type, StubbingContext context) {
+        return new Chain(type);
+    }
+
+    private final class Chain implements StubberChain {
+
+        private final Type type;
+
+        private Chain(Type type) {
+            this.type = type;
         }
-        return resultProvider.get();
+
+        @Override
+        public boolean hasNext() {
+            return true;
+        }
+
+        @Override
+        public Result<?> next() {
+            ResultProvider resultProvider = resultProvidersByType.get(type);
+            if (resultProvider == null) {
+                throw new AssertionError(String.format("Unexpected type encountered: %s", type));
+            }
+            return resultProvider.get();
+        }
+
     }
 
 }

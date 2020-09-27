@@ -19,8 +19,8 @@ package ch.leadrian.stubr.core.strategy;
 import ch.leadrian.equalizer.Equals;
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Selector;
+import ch.leadrian.stubr.core.TestStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
-import ch.leadrian.stubr.core.testing.TestStubbingSite;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsBuilder;
-import static ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static java.util.stream.Collectors.toList;
 
 class FactoryMethodStubbingStrategyTest {

@@ -16,7 +16,7 @@
 
 package ch.leadrian.stubr.mockk
 
-import ch.leadrian.stubr.core.testing.StubbingStrategyTester.stubbingStrategyTester
+import ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester
 import io.mockk.MockKException
 import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat

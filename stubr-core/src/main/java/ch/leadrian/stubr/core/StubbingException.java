@@ -68,6 +68,17 @@ public class StubbingException extends IllegalStateException {
     }
 
     /**
+     * Wraps another exception.
+     *
+     * @param cause the original cause of the exception
+     */
+    public StubbingException(Throwable cause) {
+        super(cause);
+        this.site = null;
+        this.type = null;
+    }
+
+    /**
      * @return the {@link StubbingSite} at which the exception has been thrown
      */
     public Optional<StubbingSite> getSite() {
