@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static com.google.common.base.MoreObjects.toStringHelper;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class FieldInjectingStubbingStrategyTest {
 
@@ -40,7 +41,11 @@ class FieldInjectingStubbingStrategyTest {
                 .provideStub(String.class, "Hans", "Wurst")
                 .provideStub(int.class, 69)
                 .accepts(Person.class)
-                .andStubs(expectedPerson)
+                .andStubSatisfies(value -> {
+                    assertThat(value)
+                            .isInstanceOfSatisfying(Person.class, person -> assertThat(person).isEqualTo(expectedPerson));
+                    assertThat(Person.numberOfPeopleInSwitzerland).isEqualTo(8_570_000);
+                })
                 .test(StubbingStrategies.fieldInjection((context, field) -> !"fullName".equals(field.getName())));
     }
 
@@ -59,6 +64,8 @@ class FieldInjectingStubbingStrategyTest {
     }
 
     static class Person extends LivingBeing {
+
+        static int numberOfPeopleInSwitzerland = 8_570_000;
 
         private static final EqualsAndHashCode<Person> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Person.class)
                 .compareAndHash(Person::getFirstName)
