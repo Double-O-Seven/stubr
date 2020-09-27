@@ -29,6 +29,8 @@ public interface StubbingStrategyTester {
         return new StubbingStrategyTesterImpl();
     }
 
+    StubbingStrategyTester provideStubsWith(Stubber stubber);
+
     StubbingStrategyTester provideStub(Type type, Object... values);
 
     default StubbingStrategyTester provideStub(Object value) {
