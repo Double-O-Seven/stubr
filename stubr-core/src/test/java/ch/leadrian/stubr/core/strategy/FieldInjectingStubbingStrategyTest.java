@@ -17,20 +17,27 @@
 package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
+import ch.leadrian.stubr.core.Stubber;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.lang.reflect.Field;
 import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.matcher.Matchers.equalTo;
+import static ch.leadrian.stubr.core.matcher.Matchers.field;
+import static ch.leadrian.stubr.core.matcher.Matchers.mappedTo;
+import static ch.leadrian.stubr.core.matcher.Matchers.site;
+import static ch.leadrian.stubr.core.strategy.StubbingStrategies.constantValue;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FieldInjectingStubbingStrategyTest {
 
     @TestFactory
-    Stream<DynamicTest> testDefaultEnumValueStubber() {
+    Stream<DynamicTest> testFieldInjectingStubbingStrategy() {
         Person expectedPerson = new Person();
         expectedPerson.setFirstName("Hans");
         expectedPerson.setLastName("Wurst");
@@ -38,7 +45,10 @@ class FieldInjectingStubbingStrategyTest {
         expectedPerson.setAge(69);
         return stubbingStrategyTester()
                 .provideStub(new Person())
-                .provideStub(String.class, "Hans", "Wurst")
+                .provideStubsWith(Stubber.builder()
+                        .stubWith(constantValue("Hans").when(site(field(mappedTo(Field::getName, equalTo("firstName"))))))
+                        .stubWith(constantValue("Wurst").when(site(field(mappedTo(Field::getName, equalTo("lastName"))))))
+                        .build())
                 .provideStub(int.class, 69)
                 .accepts(Person.class)
                 .andStubSatisfies(value -> {
@@ -123,6 +133,7 @@ class FieldInjectingStubbingStrategyTest {
                     .add("firstName", firstName)
                     .add("lastName", lastName)
                     .add("fullName", fullName)
+                    .add("age", getAge())
                     .toString();
         }
 
