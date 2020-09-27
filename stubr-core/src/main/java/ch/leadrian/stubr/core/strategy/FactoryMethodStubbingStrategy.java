@@ -20,18 +20,15 @@ import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
-import ch.leadrian.stubr.core.site.MethodParameterStubbingSite;
-import ch.leadrian.stubr.core.site.StubbingSites;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static ch.leadrian.stubr.core.strategy.Methods.invokeStaticMethodWithStubValues;
 import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.lang.reflect.Modifier.isStatic;
@@ -58,28 +55,7 @@ final class FactoryMethodStubbingStrategy implements StubbingStrategy {
     public Object stub(StubbingContext context, Type type) {
         Method method = getFactoryMethod(context, type)
                 .orElseThrow(() -> new StubbingException("No matching factory method found", context.getSite(), type));
-        Object[] parameterValues = stub(context, method);
-        return invokeFactoryMethod(method, parameterValues);
-    }
-
-    private Object invokeFactoryMethod(Method method, Object[] parameterValues) {
-        method.setAccessible(true);
-        try {
-            return method.invoke(null, parameterValues);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private Object[] stub(StubbingContext context, Method method) {
-        return stream(method.getParameters())
-                .map(parameter -> stub(context, method, parameter))
-                .toArray(Object[]::new);
-    }
-
-    private Object stub(StubbingContext context, Method method, Parameter parameter) {
-        MethodParameterStubbingSite site = StubbingSites.methodParameter(context.getSite(), method, parameter);
-        return context.getStubber().stub(parameter.getParameterizedType(), site);
+        return invokeStaticMethodWithStubValues(context, method);
     }
 
     private Optional<Method> getFactoryMethod(StubbingContext context, Type type) {
