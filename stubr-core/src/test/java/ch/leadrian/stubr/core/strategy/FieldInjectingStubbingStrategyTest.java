@@ -16,23 +16,92 @@
 
 package ch.leadrian.stubr.core.strategy;
 
+import ch.leadrian.equalizer.EqualsAndHashCode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
+import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 class FieldInjectingStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testDefaultEnumValueStubber() {
+        Person expectedPerson = new Person();
+        expectedPerson.setFirstName("Hans");
+        expectedPerson.setLastName("Wurst");
+        expectedPerson.setFullName("Hans Wurst");
         return stubbingStrategyTester()
-                .accepts(EnumValueStubbingStrategyTest.Foo.class)
-                .andStubs(EnumValueStubbingStrategyTest.Foo.FOO)
-                .rejects(EnumValueStubbingStrategyTest.Bar.class)
-                .rejects(EnumValueStubbingStrategyTest.Qux.class)
-                .test(StubbingStrategies.enumValue());
+                .provideStub(new Person())
+                .provideStub(String.class, "Hans", "Wurst")
+                .accepts(Person.class)
+                .andStubs(expectedPerson)
+                .test(StubbingStrategies.fieldInjection((context, field) -> !"fullName".equals(field.getName())));
+    }
+
+    static class Person {
+
+        private static final EqualsAndHashCode<Person> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Person.class)
+                .compareAndHash(Person::getFirstName)
+                .compareAndHash(Person::getLastName)
+                .compareAndHash(Person::getFullName)
+                .build();
+
+        private String firstName;
+
+        private String lastName;
+
+        private String fullName;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public void setFullName(String fullName) {
+            this.fullName = fullName;
+        }
+
+        public String getFullName() {
+            if (fullName == null) {
+                fullName = firstName + " " + lastName;
+            }
+            return fullName;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return EQUALS_AND_HASH_CODE.equals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return EQUALS_AND_HASH_CODE.hashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return toStringHelper(this)
+                    .add("firstName", firstName)
+                    .add("lastName", lastName)
+                    .add("fullName", fullName)
+                    .toString();
+        }
+
     }
 
 }
