@@ -34,20 +34,37 @@ class FieldInjectingStubbingStrategyTest {
         expectedPerson.setFirstName("Hans");
         expectedPerson.setLastName("Wurst");
         expectedPerson.setFullName("Hans Wurst");
+        expectedPerson.setAge(69);
         return stubbingStrategyTester()
                 .provideStub(new Person())
                 .provideStub(String.class, "Hans", "Wurst")
+                .provideStub(int.class, 69)
                 .accepts(Person.class)
                 .andStubs(expectedPerson)
                 .test(StubbingStrategies.fieldInjection((context, field) -> !"fullName".equals(field.getName())));
     }
 
-    static class Person {
+    static abstract class LivingBeing {
+
+        private int age;
+
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
+
+    }
+
+    static class Person extends LivingBeing {
 
         private static final EqualsAndHashCode<Person> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Person.class)
                 .compareAndHash(Person::getFirstName)
                 .compareAndHash(Person::getLastName)
                 .compareAndHash(Person::getFullName)
+                .compareAndHash(LivingBeing::getAge)
                 .build();
 
         private String firstName;

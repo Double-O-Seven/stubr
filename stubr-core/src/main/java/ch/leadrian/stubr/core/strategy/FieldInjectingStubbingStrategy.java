@@ -48,6 +48,10 @@ final class FieldInjectingStubbingStrategy extends EnhancingStubbingStrategy {
     }
 
     private void injectFields(StubbingContext context, Object stubValue, Class<?> type) {
+        if (type.isInterface()) {
+            return;
+        }
+
         for (Field field : type.getDeclaredFields()) {
             if (isStatic(field.getModifiers()) || field.isSynthetic()) {
                 continue;
