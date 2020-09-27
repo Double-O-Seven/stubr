@@ -24,6 +24,7 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -501,6 +502,18 @@ public final class StubbingStrategies {
      */
     public static StubbingStrategy factoryMethod() {
         return factoryMethod(any());
+    }
+
+    /**
+     * Returns a {@link EnhancingStubbingStrategy} that injected fields that match the given {@link Matcher} with stub
+     * values.
+     *
+     * @param matcher the {@link Matcher} used to select fields
+     * @return a {@link EnhancingStubbingStrategy} that injected fields that match the given {@link Matcher} with stub *
+     * values
+     */
+    public static StubbingStrategy fieldInjection(Matcher<? super Field> matcher) {
+        return new FieldInjectingStubbingStrategy(matcher);
     }
 
     /**
