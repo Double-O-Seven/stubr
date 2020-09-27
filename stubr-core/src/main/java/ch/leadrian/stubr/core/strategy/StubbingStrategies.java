@@ -572,6 +572,18 @@ public final class StubbingStrategies {
     }
 
     /**
+     * Returns a {@link EnhancingStubbingStrategy} that injected methods that match the given {@link Matcher} with stub
+     * values.
+     *
+     * @param matcher the {@link Matcher} used to select methods
+     * @return a {@link EnhancingStubbingStrategy} that injected methods that match the given {@link Matcher} with stub
+     * values
+     */
+    public static StubbingStrategy methodInjection(Matcher<? super Method> matcher) {
+        return new MethodInjectingStubbingStrategy(matcher);
+    }
+
+    /**
      * Returns a {@link StubbingStrategy} that always uses {@code null} to provide stubs.
      *
      * @return a {@link StubbingStrategy} that always uses {@code null} to provide stubs
