@@ -26,6 +26,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -45,21 +46,22 @@ class SimpleStubbingStrategyTest {
     <T> Stream<DynamicTest> testSimpleStubber() {
         return stubbingStrategyTester()
                 .accepts(String.class)
-                .andStubs("ABC")
+                .andStubs("stubClass")
                 .accepts(new TypeLiteral<List<String>>() {})
-                .andStubs(singletonList("DEF"))
+                .andStubs(singletonList("stubParameterizedType"))
                 .accepts(new ParameterizedTypeLiteral<List<? extends String>>() {}.getActualTypeArgument(0))
-                .andStubs("ABC")
+                .andStubs("stubClass")
                 .accepts(new ParameterizedTypeLiteral<List<? super String>>() {}.getActualTypeArgument(0))
-                .andStubs("ABC")
+                .andStubs("stubClass")
                 .accepts(new ParameterizedTypeLiteral<List<? extends List<String>>>() {}.getActualTypeArgument(0))
-                .andStubs(singletonList("DEF"))
+                .andStubs(singletonList("stubParameterizedType"))
                 .accepts(new ParameterizedTypeLiteral<List<? super List<String>>>() {}.getActualTypeArgument(0))
-                .andStubs(singletonList("DEF"))
+                .andStubs(singletonList("stubParameterizedType"))
+                .accepts(new TypeLiteral<List<String>[]>() {}.getType())
+                .andStubs(new List[]{singletonList("stubGenericArrayType")})
                 .rejects(Object.class)
                 .rejects(new TypeLiteral<List<Object>>() {})
                 .rejects(new TypeLiteral<T>() {})
-                .rejects(new TypeLiteral<T[]>() {})
                 .rejects(new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0))
                 .rejects(new ParameterizedTypeLiteral<List<? extends T>>() {}.getActualTypeArgument(0))
                 .rejects(new ParameterizedTypeLiteral<List<? super T>>() {}.getActualTypeArgument(0))
@@ -76,13 +78,23 @@ class SimpleStubbingStrategyTest {
                     }
 
                     @Override
+                    protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
+                        return new TypeLiteral<List<String>[]>() {}.getType().equals(type);
+                    }
+
+                    @Override
                     protected Object stubClass(StubbingContext context, Class<?> type) {
-                        return "ABC";
+                        return "stubClass";
                     }
 
                     @Override
                     protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
-                        return singletonList("DEF");
+                        return singletonList("stubParameterizedType");
+                    }
+
+                    @Override
+                    protected Object stubGenericArrayType(StubbingContext context, GenericArrayType type) {
+                        return new List[]{singletonList("stubGenericArrayType")};
                     }
                 });
     }
@@ -107,41 +119,7 @@ class SimpleStubbingStrategyTest {
             }
 
             @Override
-            protected Object stubClass(StubbingContext context, Class<?> type) {
-                return null;
-            }
-
-            @Override
-            protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
-                return null;
-            }
-        };
-
-        Throwable caughtThrowable = catchThrowable(() -> stubbingStrategy.stub(context, type));
-
-        assertThat(caughtThrowable)
-                .isInstanceOfSatisfying(StubbingException.class, exception -> assertAll(
-                        () -> assertThat(exception.getSite()).hasValue(site),
-                        () -> assertThat(exception.getType()).hasValue(type)
-                ));
-    }
-
-    @Test
-    <T> void givenGenericTypeArrayStubShouldThrowException() {
-        StubbingSite site = mock(StubbingSite.class);
-        StubbingContext context = mock(StubbingContext.class);
-        when(context.getSite())
-                .thenReturn(site);
-        Type type = new TypeLiteral<T[]>() {}.getType();
-        StubbingStrategy stubbingStrategy = new SimpleStubbingStrategy<Object>() {
-
-            @Override
-            protected boolean acceptsClass(StubbingContext context, Class<?> type) {
-                return false;
-            }
-
-            @Override
-            protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
+            protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
                 return false;
             }
 
@@ -152,6 +130,11 @@ class SimpleStubbingStrategyTest {
 
             @Override
             protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
+                return null;
+            }
+
+            @Override
+            protected Object stubGenericArrayType(StubbingContext context, GenericArrayType type) {
                 return null;
             }
         };

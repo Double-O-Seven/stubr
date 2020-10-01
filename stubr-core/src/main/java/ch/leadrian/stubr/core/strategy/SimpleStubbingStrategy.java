@@ -63,6 +63,7 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
      * false}
      * @see SimpleStubbingStrategy#acceptsClass(StubbingContext, Class)
      * @see SimpleStubbingStrategy#acceptsParameterizedType(StubbingContext, ParameterizedType)
+     * @see SimpleStubbingStrategy#acceptsGenericArrayType(StubbingContext, GenericArrayType)
      */
     @Override
     public boolean accepts(StubbingContext context, Type type) {
@@ -92,7 +93,7 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
 
             @Override
             public Boolean visit(GenericArrayType genericArrayType) {
-                return false;
+                return acceptsGenericArrayType(context, genericArrayType);
             }
         });
     }
@@ -124,6 +125,19 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
     protected abstract boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type);
 
     /**
+     * Method that determines whether {@code this} strategy can provide a suitable stub value for {@code type}, given
+     * the {@code context}.
+     *
+     * @param context current stubbing context
+     * @param type    type for which a stub value is requested
+     * @return {@code true} if the strategy can provide a suitable stub value for the given {@code type}, else {@code
+     * false}
+     * @see SimpleStubbingStrategy#accepts(StubbingContext, Type)
+     * @see StubbingStrategy#accepts(StubbingContext, Type)
+     */
+    protected abstract boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type);
+
+    /**
      * Delegates the stubbing of {@link Class}es to {@link SimpleStubbingStrategy#stubClass(StubbingContext, Class)} and
      * the stubbing of {@link ParameterizedType}s to {@link SimpleStubbingStrategy#stubParameterizedType(StubbingContext,
      * ParameterizedType)}.
@@ -131,6 +145,9 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
      * @param context current stubbing context
      * @param type    type for which a stub value is requested
      * @return a suitable stub value for the given {@code type}
+     * @see SimpleStubbingStrategy#stubClass(StubbingContext, Class)
+     * @see SimpleStubbingStrategy#stubParameterizedType(StubbingContext, ParameterizedType)
+     * @see SimpleStubbingStrategy#stubGenericArrayType(StubbingContext, GenericArrayType)
      */
     @Override
     public T stub(StubbingContext context, Type type) {
@@ -160,7 +177,7 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
 
             @Override
             public T visit(GenericArrayType genericArrayType) {
-                throw new StubbingException(context.getSite(), genericArrayType);
+                return stubGenericArrayType(context, genericArrayType);
             }
         });
     }
@@ -182,5 +199,14 @@ public abstract class SimpleStubbingStrategy<T> implements StubbingStrategy {
      * @return a suitable stub value for the given {@code type}
      */
     protected abstract T stubParameterizedType(StubbingContext context, ParameterizedType type);
+
+    /**
+     * Returns a suitable value for the given {@code type}.
+     *
+     * @param context current stubbing context
+     * @param type    type for which a stub value is requested
+     * @return a suitable stub value for the given {@code type}
+     */
+    protected abstract T stubGenericArrayType(StubbingContext context, GenericArrayType type);
 
 }
