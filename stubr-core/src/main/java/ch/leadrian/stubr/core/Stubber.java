@@ -22,7 +22,7 @@ import ch.leadrian.stubr.core.type.Types;
 
 import java.lang.reflect.Type;
 
-import static com.google.common.primitives.Primitives.wrap;
+import static ch.leadrian.stubr.internal.com.google.common.primitives.Primitives.wrap;
 
 /**
  * Class {@code Stubber} represents the main API used to stub a specific type. A {@code Stubber} may be a composition of

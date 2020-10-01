@@ -25,7 +25,7 @@ dependencies {
     api(project(":stubr-core"))
     api(group = "com.github.javafaker", name = "javafaker")
 
-    implementation(group = "com.google.guava", name = "guava")
+    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
 
     testImplementation(kotlin("stdlib-jdk8"))
     testImplementation(project(":stubr-junit"))

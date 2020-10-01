@@ -26,7 +26,7 @@ import java.lang.reflect.Parameter;
 import java.util.Optional;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
-import static com.google.common.base.MoreObjects.toStringHelper;
+import static ch.leadrian.stubr.internal.com.google.common.base.MoreObjects.toStringHelper;
 
 /**
  * Represent the stubbing site of a {@link org.junit.jupiter.api.extension.ParameterResolver#resolveParameter(ParameterContext,

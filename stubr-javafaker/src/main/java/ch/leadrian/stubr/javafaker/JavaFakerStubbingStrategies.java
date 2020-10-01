@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import static ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList.toImmutableList;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.city;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.country;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.firstName;
@@ -31,7 +32,6 @@ import static ch.leadrian.stubr.javafaker.FakerStrategies.lastName;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.phoneNumber;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.street;
 import static ch.leadrian.stubr.javafaker.FakerStrategies.zipCode;
-import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.util.Objects.requireNonNull;
 
 /**

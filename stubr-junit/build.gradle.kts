@@ -25,7 +25,7 @@ dependencies {
     api(group = "org.junit.jupiter", name = "junit-jupiter-api")
 
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
-    implementation(group = "com.google.guava", name = "guava")
+    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
 
     testImplementation(testFixtures(project(":stubr-core")))
 }

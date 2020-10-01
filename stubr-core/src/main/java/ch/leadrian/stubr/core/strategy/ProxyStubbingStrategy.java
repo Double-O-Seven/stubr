@@ -20,7 +20,7 @@ import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.site.StubbingSites;
-import com.google.common.base.StandardSystemProperty;
+import ch.leadrian.stubr.internal.com.google.common.base.StandardSystemProperty;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;

@@ -29,9 +29,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static ch.leadrian.stubr.internal.com.google.common.collect.Lists.reverse;
 import static ch.leadrian.stubr.junit.ExtensionContexts.getAnnotations;
 import static ch.leadrian.stubr.junit.ExtensionContexts.walk;
-import static com.google.common.collect.Lists.reverse;
 import static java.util.stream.Collectors.toList;
 
 final class StubberFactory {

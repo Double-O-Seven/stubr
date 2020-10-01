@@ -21,7 +21,7 @@ import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.type.TypeLiteral;
-import com.google.common.collect.ImmutableList;
+import ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

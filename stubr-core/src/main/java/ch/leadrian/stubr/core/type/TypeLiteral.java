@@ -22,7 +22,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
-import static com.google.common.base.MoreObjects.toStringHelper;
+import static ch.leadrian.stubr.internal.com.google.common.base.MoreObjects.toStringHelper;
 
 /**
  * A class representing a generic type {@link T}. Since only raw class literals are supported out of the box by Java,

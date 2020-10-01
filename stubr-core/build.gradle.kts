@@ -23,7 +23,7 @@ plugins {
 
 dependencies {
     implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
-    implementation(group = "com.google.guava", name = "guava")
+    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
 
     testFixturesApi(group = "org.junit.jupiter", name = "junit-jupiter-api")
 

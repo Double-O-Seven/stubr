@@ -30,7 +30,7 @@ import java.util.Map;
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static ch.leadrian.stubr.core.strategy.Methods.invokeMethodWithStubValues;
 import static ch.leadrian.stubr.core.type.Types.visitTypeHierarchy;
-import static com.google.common.base.MoreObjects.toStringHelper;
+import static ch.leadrian.stubr.internal.com.google.common.base.MoreObjects.toStringHelper;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;

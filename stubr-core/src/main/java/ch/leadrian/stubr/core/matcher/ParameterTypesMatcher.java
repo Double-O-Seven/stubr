@@ -18,7 +18,7 @@ package ch.leadrian.stubr.core.matcher;
 
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
-import com.google.common.collect.ImmutableList;
+import ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;

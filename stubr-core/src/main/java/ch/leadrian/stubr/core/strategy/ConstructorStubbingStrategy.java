@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
-import static com.google.common.collect.ImmutableList.toImmutableList;
+import static ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList.toImmutableList;
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;

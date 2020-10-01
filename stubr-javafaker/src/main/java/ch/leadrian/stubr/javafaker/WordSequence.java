@@ -16,13 +16,13 @@
 
 package ch.leadrian.stubr.javafaker;
 
-import com.google.common.collect.ImmutableList;
+import ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.CaseFormat.LOWER_CAMEL;
-import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
+import static ch.leadrian.stubr.internal.com.google.common.base.CaseFormat.LOWER_CAMEL;
+import static ch.leadrian.stubr.internal.com.google.common.base.CaseFormat.LOWER_HYPHEN;
 import static java.util.Arrays.stream;
 import static java.util.Collections.indexOfSubList;
 import static java.util.function.Function.identity;

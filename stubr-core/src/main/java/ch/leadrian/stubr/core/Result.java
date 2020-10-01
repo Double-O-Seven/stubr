@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
-import static com.google.common.base.MoreObjects.toStringHelper;
+import static ch.leadrian.stubr.internal.com.google.common.base.MoreObjects.toStringHelper;
 
 /**
  * Class representing the result of a stubbing attempt using {@link Stubber#tryToStub}. Instances of {@link Result} can

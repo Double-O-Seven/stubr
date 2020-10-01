@@ -18,7 +18,7 @@ package ch.leadrian.stubr.core.selector;
 
 import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.StubbingContext;
-import com.google.common.collect.ImmutableList;
+import ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList;
 
 import java.util.List;
 import java.util.Optional;

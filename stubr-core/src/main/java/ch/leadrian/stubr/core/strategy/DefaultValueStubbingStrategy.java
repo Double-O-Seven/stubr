@@ -24,8 +24,8 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
-import static com.google.common.base.Defaults.defaultValue;
-import static com.google.common.primitives.Primitives.unwrap;
+import static ch.leadrian.stubr.internal.com.google.common.base.Defaults.defaultValue;
+import static ch.leadrian.stubr.internal.com.google.common.primitives.Primitives.unwrap;
 
 enum DefaultValueStubbingStrategy implements StubbingStrategy {
     INSTANCE;

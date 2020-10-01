@@ -16,7 +16,7 @@
 
 package ch.leadrian.stubr.core;
 
-import com.google.common.collect.ImmutableList;
+import ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
