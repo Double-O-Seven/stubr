@@ -41,6 +41,7 @@ class OptionalStubbingStrategyTest {
                 .andStubs(Optional.empty())
                 .rejects(String.class)
                 .rejects(new TypeLiteral<List<String>>() {})
+                .rejects(new TypeLiteral<Optional<String>[]>() {})
                 .test(StubbingStrategies.optional(OptionalStubbingMode.EMPTY));
     }
 
@@ -53,6 +54,7 @@ class OptionalStubbingStrategyTest {
                 .rejects(Optional.class)
                 .rejects(String.class)
                 .rejects(new TypeLiteral<List<String>>() {})
+                .rejects(new TypeLiteral<Optional<String>[]>() {})
                 .test(StubbingStrategies.optional(OptionalStubbingMode.PRESENT));
     }
 
@@ -69,6 +71,7 @@ class OptionalStubbingStrategyTest {
                 .andStubs(Optional.empty())
                 .rejects(String.class)
                 .rejects(new TypeLiteral<List<String>>() {})
+                .rejects(new TypeLiteral<Optional<String>[]>() {})
                 .test(StubbingStrategies.optional(OptionalStubbingMode.PRESENT_IF_POSSIBLE));
     }
 

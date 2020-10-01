@@ -20,6 +20,7 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
@@ -41,8 +42,7 @@ class GenericMockStubbingStrategyTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .accepts(new TypeLiteral<Bla<String>>() {
-                })
+                .accepts(new TypeLiteral<Bla<String>>() {})
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bla.class, bla ->
                         assertAll(
                                 () -> assertThat(bla.getInt()).isEqualTo(1337),
@@ -66,6 +66,7 @@ class GenericMockStubbingStrategyTest {
                 .rejects(int.class)
                 .rejects(Object[].class)
                 .rejects(Qux.class)
+                .rejects(new TypeLiteral<List<String>[]>() {})
                 .test(MockitoStubbingStrategies.mock(true));
     }
 

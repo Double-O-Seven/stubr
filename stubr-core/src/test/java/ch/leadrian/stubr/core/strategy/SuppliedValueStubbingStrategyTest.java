@@ -62,6 +62,21 @@ class SuppliedValueStubbingStrategyTest {
                 );
     }
 
+    @SuppressWarnings("unchecked")
+    @TestFactory
+    Stream<DynamicTest> testFixedSuppliedValueOfGenericArrayTypeType() {
+        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {};
+        return stubbingStrategyTester()
+                .accepts(listOfStringsArray)
+                .andStubs(new List[]{singletonList("Test")})
+                .rejects(new TypeLiteral<List<Integer>>() {})
+                .test(
+                        StubbingStrategies.suppliedValue(listOfStringsArray, () -> new List[]{singletonList("Test")}),
+                        StubbingStrategies.suppliedValue(listOfStringsArray, sequenceNumber -> new List[]{singletonList("Test")}),
+                        StubbingStrategies.suppliedValue(listOfStringsArray, (context, sequenceNumber) -> new List[]{singletonList("Test")})
+                );
+    }
+
     @Test
     void shouldSuppliedSequencedValue() {
         StubbingStrategy stubbingStrategy = StubbingStrategies.suppliedValue(Integer.class, sequenceNumber -> sequenceNumber);

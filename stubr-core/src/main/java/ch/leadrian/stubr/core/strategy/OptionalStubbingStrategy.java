@@ -18,9 +18,11 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.Result;
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -45,6 +47,11 @@ abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<
     }
 
     @Override
+    protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
+        return false;
+    }
+
+    @Override
     protected Optional<Object> stubClass(StubbingContext context, Class<?> type) {
         return Optional.empty();
     }
@@ -52,6 +59,11 @@ abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<
     @Override
     protected Optional<Object> stubParameterizedType(StubbingContext context, ParameterizedType type) {
         return stubOptional(context, type);
+    }
+
+    @Override
+    protected Optional<Object> stubGenericArrayType(StubbingContext context, GenericArrayType type) {
+        throw new StubbingException(context.getSite(), type);
     }
 
     protected abstract Optional<Object> stubOptional(StubbingContext context, ParameterizedType type);

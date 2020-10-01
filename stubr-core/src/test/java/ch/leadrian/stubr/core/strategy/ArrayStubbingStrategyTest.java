@@ -69,9 +69,9 @@ class ArrayStubbingStrategyTest {
                 .accepts(new TypeLiteral<List<String>[]>() {})
                 .andStubs(new List[]{singletonList("Foo"), singletonList("Bar"), singletonList("Fubar")})
                 .at(
-                        StubbingSites.array(TestStubbingSite.INSTANCE, String.class),
-                        StubbingSites.array(TestStubbingSite.INSTANCE, String.class),
-                        StubbingSites.array(TestStubbingSite.INSTANCE, String.class)
+                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {}),
+                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {}),
+                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {})
                 )
                 .rejects(Object.class)
                 .rejects(String.class)

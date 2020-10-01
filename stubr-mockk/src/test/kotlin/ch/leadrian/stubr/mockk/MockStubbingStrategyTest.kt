@@ -17,6 +17,7 @@
 package ch.leadrian.stubr.mockk
 
 import ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester
+import ch.leadrian.stubr.core.type.TypeLiteral
 import io.mockk.MockKException
 import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
@@ -44,6 +45,7 @@ internal class MockStubbingStrategyTest {
                 .rejects(Int::class.javaPrimitiveType)
                 .rejects(Array<Any>::class.java)
                 .rejects(Qux::class.java)
+                .rejects(object : TypeLiteral<Array<List<String>>>() {})
                 .test(MockKStubbingStrategies.mockk<Foo>())
     }
 

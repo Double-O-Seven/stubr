@@ -17,8 +17,10 @@
 package ch.leadrian.stubr.mockito;
 
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.strategy.SimpleStubbingStrategy;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 
@@ -50,6 +52,11 @@ final class GenericMockStubbingStrategy extends SimpleStubbingStrategy<Object> {
     }
 
     @Override
+    protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
+        return false;
+    }
+
+    @Override
     protected Object stubClass(StubbingContext context, Class<?> type) {
         return mock(type, withSettings().defaultAnswer(new StubbingAnswer(context)));
     }
@@ -57,6 +64,11 @@ final class GenericMockStubbingStrategy extends SimpleStubbingStrategy<Object> {
     @Override
     protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
         return stub(context, type.getRawType());
+    }
+
+    @Override
+    protected Object stubGenericArrayType(StubbingContext context, GenericArrayType type) {
+        throw new StubbingException(context.getSite(), type);
     }
 
     private boolean isFinal(Class<?> type) {

@@ -19,6 +19,7 @@ package ch.leadrian.stubr.kotlin
 import ch.leadrian.stubr.core.StubbingContext
 import ch.leadrian.stubr.core.StubbingException
 import ch.leadrian.stubr.core.strategy.SimpleStubbingStrategy
+import java.lang.reflect.GenericArrayType
 import java.lang.reflect.ParameterizedType
 
 internal object ObjectInstanceStubbingStrategy : SimpleStubbingStrategy<Any>() {
@@ -31,12 +32,20 @@ internal object ObjectInstanceStubbingStrategy : SimpleStubbingStrategy<Any>() {
         return accepts(context, type.rawType)
     }
 
+    override fun acceptsGenericArrayType(context: StubbingContext, type: GenericArrayType): Boolean {
+        return false
+    }
+
     override fun stubClass(context: StubbingContext, type: Class<*>): Any {
         return type.kotlin.objectInstance ?: throw StubbingException(context.site, type)
     }
 
     override fun stubParameterizedType(context: StubbingContext, type: ParameterizedType): Any {
         return stub(context, type.rawType)
+    }
+
+    override fun stubGenericArrayType(context: StubbingContext, type: GenericArrayType): Any {
+        throw StubbingException(context.site, type)
     }
 
 }

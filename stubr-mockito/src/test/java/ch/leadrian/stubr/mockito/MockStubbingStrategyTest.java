@@ -41,10 +41,10 @@ class MockStubbingStrategyTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .rejects(new TypeLiteral<Bar<String>>() {
-                })
+                .rejects(new TypeLiteral<Bar<String>>() {})
                 .rejects(int.class)
                 .rejects(String.class)
+                .rejects(new TypeLiteral<Bar<String>[]>() {})
                 .test(MockitoStubbingStrategies.mock(Foo.class));
     }
 

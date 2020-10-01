@@ -18,6 +18,7 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.StubbingContext;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -48,12 +49,22 @@ final class SuppliedValueStubbingStrategy extends SimpleStubbingStrategy<Object>
     }
 
     @Override
+    protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
+        return valueType.equals(type);
+    }
+
+    @Override
     protected Object stubClass(StubbingContext context, Class<?> type) {
         return getNextValue(context);
     }
 
     @Override
     protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
+        return getNextValue(context);
+    }
+
+    @Override
+    protected Object stubGenericArrayType(StubbingContext context, GenericArrayType type) {
         return getNextValue(context);
     }
 

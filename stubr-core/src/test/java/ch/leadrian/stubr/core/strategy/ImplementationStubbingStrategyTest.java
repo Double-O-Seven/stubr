@@ -63,4 +63,19 @@ class ImplementationStubbingStrategyTest {
                 .test(StubbingStrategies.implementation(new TypeLiteral<Collection<? extends CharSequence>>() {}, new TypeLiteral<List<String>>() {}));
     }
 
+    @SuppressWarnings("unchecked")
+    @TestFactory
+    Stream<DynamicTest> testImplementationStubberWithGenericArrayType() {
+        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {};
+        TypeLiteral<Collection<String>[]> collectionOfStringsArray = new TypeLiteral<Collection<String>[]>() {};
+        return stubbingStrategyTester()
+                .provideStub(listOfStringsArray, new List[]{singletonList("Test")})
+                .accepts(collectionOfStringsArray)
+                .andStubs(new List[]{singletonList("Test")})
+                .at(TestStubbingSite.INSTANCE)
+                .rejects(String.class)
+                .rejects(Object.class)
+                .test(StubbingStrategies.implementation(collectionOfStringsArray, listOfStringsArray));
+    }
+
 }

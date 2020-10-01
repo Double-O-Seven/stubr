@@ -68,6 +68,7 @@ internal class GenericMockStubbingStrategyTest {
                 .rejects(Int::class.javaPrimitiveType)
                 .rejects(Array<Any>::class.java)
                 .rejects(Qux::class.java)
+                .rejects(object : TypeLiteral<Array<List<String>>>() {})
                 .test(MockKStubbingStrategies.mockkAny())
     }
 

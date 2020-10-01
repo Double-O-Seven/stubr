@@ -76,7 +76,7 @@ final class ArrayStubbingStrategy extends SimpleStubbingStrategy<Object> {
 
     private Object stub(StubbingContext context, Type componentType, Class<?> rawComponentType) {
         Object array = Array.newInstance(rawComponentType, arraySize.applyAsInt(context));
-        ArrayStubbingSite site = StubbingSites.array(context.getSite(), rawComponentType);
+        ArrayStubbingSite site = StubbingSites.array(context.getSite(), componentType);
         int length = getArrayLength(array);
         Stubber stubber = context.getStubber();
         for (int i = 0; i < length; i++) {

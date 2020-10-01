@@ -50,6 +50,7 @@ class MapStubbingStrategyTest {
                 .rejects(new TypeLiteral<HashMap<String, String>>() {})
                 .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {})
                 .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {})
+                .rejects(new TypeLiteral<Map<String, Integer>[]>() {})
                 .test(
                         StubbingStrategies.map(Map.class, HashMap::new, context -> 0),
                         StubbingStrategies.map(Map.class, HashMap::new, 0),
@@ -78,6 +79,7 @@ class MapStubbingStrategyTest {
                 .rejects(new TypeLiteral<HashMap<String, Integer>>() {})
                 .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {})
                 .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {})
+                .rejects(new TypeLiteral<Map<String, Integer>[]>() {})
                 .test(StubbingStrategies.map(Map.class, HashMap::new, context -> 3), StubbingStrategies.map(Map.class, HashMap::new, 3));
     }
 

@@ -29,6 +29,7 @@ internal class ObjectInstanceStubbingStrategyTest {
                 .accepts(TestObject::class.java)
                 .andStubs(TestObject)
                 .rejects(TestClass::class.java)
+                .rejects(typeLiteral<Array<List<String>>>())
                 .test(KotlinStubbingStrategies.objectInstance())
     }
 

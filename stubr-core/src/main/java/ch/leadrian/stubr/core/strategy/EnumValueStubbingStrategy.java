@@ -20,6 +20,7 @@ import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
@@ -51,12 +52,22 @@ final class EnumValueStubbingStrategy extends SimpleStubbingStrategy<Object> {
     }
 
     @Override
+    protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
+        return false;
+    }
+
+    @Override
     protected Object stubClass(StubbingContext context, Class<?> type) {
         return selectValue(context, type).orElseThrow(() -> new StubbingException(context.getSite(), type));
     }
 
     @Override
     protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
+        throw new StubbingException(context.getSite(), type);
+    }
+
+    @Override
+    protected Object stubGenericArrayType(StubbingContext context, GenericArrayType type) {
         throw new StubbingException(context.getSite(), type);
     }
 

@@ -19,6 +19,7 @@ package ch.leadrian.stubr.core.site;
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.StubbingSite;
 
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
@@ -36,9 +37,9 @@ public final class ArrayStubbingSite implements StubbingSite {
             .build();
 
     private final StubbingSite parent;
-    private final Class<?> componentType;
+    private final Type componentType;
 
-    ArrayStubbingSite(StubbingSite parent, Class<?> componentType) {
+    ArrayStubbingSite(StubbingSite parent, Type componentType) {
         requireNonNull(parent, "parent");
         requireNonNull(componentType, "type");
         this.parent = parent;
@@ -58,7 +59,7 @@ public final class ArrayStubbingSite implements StubbingSite {
      *
      * @return the component type of the array
      */
-    public Class<?> getComponentType() {
+    public Type getComponentType() {
         return componentType;
     }
 

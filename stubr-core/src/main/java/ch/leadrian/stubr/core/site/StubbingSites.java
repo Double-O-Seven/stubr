@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
@@ -47,8 +48,21 @@ public final class StubbingSites {
      * @see ArrayStubbingSite
      * @see StubbingStrategies#array()
      */
-    public static ArrayStubbingSite array(StubbingSite parent, Class<?> componentType) {
+    public static ArrayStubbingSite array(StubbingSite parent, Type componentType) {
         return new ArrayStubbingSite(parent, componentType);
+    }
+
+    /**
+     * Returns a {@link StubbingSite} indicating that the current stubbing site is an array being filled with elements.
+     *
+     * @param parent               the parent site, must not be {@code null}
+     * @param componentTypeLiteral the literal of the component type of the array
+     * @return an array stubbing site
+     * @see ArrayStubbingSite
+     * @see StubbingStrategies#array()
+     */
+    public static ArrayStubbingSite array(StubbingSite parent, TypeLiteral<?> componentTypeLiteral) {
+        return array(parent, componentTypeLiteral.getType());
     }
 
     /**

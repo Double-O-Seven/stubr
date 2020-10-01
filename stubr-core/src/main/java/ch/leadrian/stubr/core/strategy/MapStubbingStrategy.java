@@ -17,9 +17,11 @@
 package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.StubbingContext;
+import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -57,6 +59,11 @@ final class MapStubbingStrategy<T extends Map> extends SimpleStubbingStrategy<T>
     }
 
     @Override
+    protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
+        return false;
+    }
+
+    @Override
     protected T stubClass(StubbingContext context, Class<?> type) {
         return mapFactory.apply(emptyMap());
     }
@@ -77,6 +84,11 @@ final class MapStubbingStrategy<T extends Map> extends SimpleStubbingStrategy<T>
                     values.put(key, value);
                 });
         return mapFactory.apply(values);
+    }
+
+    @Override
+    protected T stubGenericArrayType(StubbingContext context, GenericArrayType type) {
+        throw new StubbingException(context.getSite(), type);
     }
 
 }

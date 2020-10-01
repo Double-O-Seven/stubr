@@ -17,8 +17,10 @@
 package ch.leadrian.stubr.mockk
 
 import ch.leadrian.stubr.core.StubbingContext
+import ch.leadrian.stubr.core.StubbingException
 import ch.leadrian.stubr.core.strategy.SimpleStubbingStrategy
 import io.mockk.mockkClass
+import java.lang.reflect.GenericArrayType
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 
@@ -35,10 +37,16 @@ internal class MockStubbingStrategy<T : Any>(
     override fun acceptsParameterizedType(context: StubbingContext, type: ParameterizedType): Boolean =
             type == this.type.java
 
+    override fun acceptsGenericArrayType(context: StubbingContext, type: GenericArrayType): Boolean = false
+
     override fun stubClass(context: StubbingContext, type: Class<*>): T = createMock { block(context) }
 
     override fun stubParameterizedType(context: StubbingContext, type: ParameterizedType): T =
             createMock { block(context) }
+
+    override fun stubGenericArrayType(context: StubbingContext, type: GenericArrayType): T {
+        throw StubbingException(context.site, type)
+    }
 
     private inline fun createMock(block: T.() -> Unit): T {
         return mockkClass(

@@ -54,6 +54,7 @@ class CollectionStubbingStrategyTest {
                 .rejects(new TypeLiteral<ArrayList<String>>() {})
                 .rejects(new TypeLiteral<ArrayList<? super String>>() {})
                 .rejects(new TypeLiteral<ArrayList<? extends String>>() {})
+                .rejects(new TypeLiteral<List<String>[]>() {})
                 .test(
                         StubbingStrategies.collection(List.class, ArrayList::new, context -> 0),
                         StubbingStrategies.collection(List.class, ArrayList::new, 0),
@@ -82,6 +83,7 @@ class CollectionStubbingStrategyTest {
                 .rejects(new TypeLiteral<ArrayList<String>>() {})
                 .rejects(new TypeLiteral<ArrayList<? super String>>() {})
                 .rejects(new TypeLiteral<ArrayList<? extends String>>() {})
+                .rejects(new TypeLiteral<List<String>[]>() {})
                 .test(StubbingStrategies.collection(List.class, ArrayList::new, context -> 3), StubbingStrategies.collection(List.class, ArrayList::new, 3));
     }
 

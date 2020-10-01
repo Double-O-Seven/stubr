@@ -58,4 +58,15 @@ class ConstantValueStubbingStrategyTest {
                 .test(StubbingStrategies.constantValue(listOfStrings, singletonList("Test")));
     }
 
+    @SuppressWarnings("unchecked")
+    @TestFactory
+    Stream<DynamicTest> testConstantValueStubberWithGenericArrayType() {
+        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {};
+        return stubbingStrategyTester()
+                .accepts(listOfStringsArray)
+                .andStubs(new List[]{singletonList("Test")})
+                .rejects(new TypeLiteral<List<Integer>>() {})
+                .test(StubbingStrategies.constantValue(listOfStringsArray, new List[]{singletonList("Test")}));
+    }
+
 }

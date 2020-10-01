@@ -16,15 +16,18 @@
 
 package ch.leadrian.stubr.core.strategy;
 
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
 import static com.google.common.collect.MoreCollectors.toOptional;
 
-class EnumValueStubbingStrategyTest {
+class
+EnumValueStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testDefaultEnumValueStubber() {
@@ -33,6 +36,8 @@ class EnumValueStubbingStrategyTest {
                 .andStubs(Foo.FOO)
                 .rejects(Bar.class)
                 .rejects(Qux.class)
+                .rejects(new TypeLiteral<List<Foo>>() {})
+                .rejects(new TypeLiteral<List<Foo>[]>() {})
                 .test(StubbingStrategies.enumValue());
     }
 
@@ -46,6 +51,8 @@ class EnumValueStubbingStrategyTest {
                 .rejects(Bla.class)
                 .rejects(Bar.class)
                 .rejects(Qux.class)
+                .rejects(new TypeLiteral<List<Foo>>() {})
+                .rejects(new TypeLiteral<List<Foo>[]>() {})
                 .test(StubbingStrategies.enumValue(((context, values) -> values.stream()
                         .filter(value -> "FU".equals(value.name()))
                         .collect(toOptional()))));
