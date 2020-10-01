@@ -21,6 +21,7 @@ import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Selector;
 import ch.leadrian.stubr.core.TestStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -57,6 +58,12 @@ class ConstructorStubbingStrategyTest {
                 .at(
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPackagePrivateConstructor.class.getDeclaredConstructor(String.class, int.class), 0),
                         StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, UnambiguousPackagePrivateConstructor.class.getDeclaredConstructor(String.class, int.class), 1)
+                )
+                .accepts(new TypeLiteral<GenericPublicConstructor<String>>() {})
+                .andStubs(new GenericPublicConstructor<>("test", 1337))
+                .at(
+                        StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, GenericPublicConstructor.class.getDeclaredConstructor(Object.class, int.class), 0),
+                        StubbingSites.constructorParameter(TestStubbingSite.INSTANCE, GenericPublicConstructor.class.getDeclaredConstructor(Object.class, int.class), 1)
                 )
                 .rejects(UnambiguousPrivateConstructor.class)
                 .rejects(AmbiguousPublicConstructor.class)
@@ -118,6 +125,27 @@ class ConstructorStubbingStrategyTest {
         public UnambiguousPublicConstructor(String stringValue, int intValue) {
             this.stringValue = stringValue;
             this.intValue = intValue;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return EQUALS.equals(this, obj);
+        }
+
+    }
+
+    @SuppressWarnings("unused")
+    private static class GenericPublicConstructor<T> {
+
+        @SuppressWarnings("rawtypes")
+        private static final Equals<GenericPublicConstructor> EQUALS = equalsBuilder(GenericPublicConstructor.class)
+                .compare(value -> value.value)
+                .build();
+
+        private final T value;
+
+        public GenericPublicConstructor(T value, int intValue) {
+            this.value = value;
         }
 
         @Override
