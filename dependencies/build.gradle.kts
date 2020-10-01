@@ -38,6 +38,8 @@ object Versions {
 
     const val mockK = "1.10.0"
 
+    const val stubrShadedDependencies = "1.0.1"
+
     const val spek = "2.0.12"
 
 }
@@ -48,6 +50,7 @@ dependencies {
     api(platform("org.junit:junit-bom:${Versions.junit}"))
 
     constraints {
+        api("ch.leadrian.stubr:stubr-shaded-dependencies:${Versions.stubrShadedDependencies}")
         api("com.github.javafaker:javafaker:${Versions.javaFaker}")
         api("io.mockk:mockk:${Versions.mockK}")
         api("org.assertj:assertj-core:${Versions.assertJ}")
