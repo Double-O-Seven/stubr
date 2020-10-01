@@ -26,9 +26,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
+import static java.util.Collections.singletonList;
 
 class ArrayStubbingStrategyTest {
 
+    @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testEmptyArray() {
         return stubbingStrategyTester()
@@ -36,6 +38,8 @@ class ArrayStubbingStrategyTest {
                 .andStubs(new Object[0])
                 .accepts(String[].class)
                 .andStubs(new String[0])
+                .accepts(new TypeLiteral<List<String>[]>() {})
+                .andStubs(new List[0])
                 .rejects(Object.class)
                 .rejects(String.class)
                 .rejects(new TypeLiteral<List<String[]>>() {})
@@ -46,9 +50,11 @@ class ArrayStubbingStrategyTest {
                 );
     }
 
+    @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testNonEmptyArray() {
         return stubbingStrategyTester()
+                .provideStub(new TypeLiteral<List<String>>() {}, singletonList("Foo"), singletonList("Bar"), singletonList("Fubar"))
                 .provideStub(Object.class, 1, 2, 3)
                 .provideStub(String.class, "Foo", "Bar", "Baz")
                 .accepts(Object[].class)
@@ -60,6 +66,8 @@ class ArrayStubbingStrategyTest {
                 )
                 .accepts(String[].class)
                 .andStubs(new String[]{"Foo", "Bar", "Baz"})
+                .accepts(new TypeLiteral<List<String>[]>() {})
+                .andStubs(new List[]{singletonList("Foo"), singletonList("Bar"), singletonList("Fubar")})
                 .at(
                         StubbingSites.array(TestStubbingSite.INSTANCE, String.class),
                         StubbingSites.array(TestStubbingSite.INSTANCE, String.class),

@@ -16,15 +16,19 @@
 
 package ch.leadrian.stubr.core.strategy;
 
+import ch.leadrian.stubr.core.Stubber;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.site.ArrayStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.function.ToIntFunction;
 
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static java.util.Objects.requireNonNull;
 
 final class ArrayStubbingStrategy extends SimpleStubbingStrategy<Object> {
@@ -47,20 +51,38 @@ final class ArrayStubbingStrategy extends SimpleStubbingStrategy<Object> {
     }
 
     @Override
+    protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
+        return true;
+    }
+
+    @Override
     protected Object stubClass(StubbingContext context, Class<?> type) {
         Class<?> componentType = type.getComponentType();
-        Object array = Array.newInstance(componentType, arraySize.applyAsInt(context));
-        ArrayStubbingSite site = StubbingSites.array(context.getSite(), componentType);
-        int length = getArrayLength(array);
-        for (int i = 0; i < length; i++) {
-            setArrayValue(array, i, context.getStubber().stub(componentType, site));
-        }
-        return array;
+        return stub(context, componentType, componentType);
     }
 
     @Override
     protected Object stubParameterizedType(StubbingContext context, ParameterizedType type) {
         throw new StubbingException(context.getSite(), type);
+    }
+
+    @Override
+    protected Object stubGenericArrayType(StubbingContext context, GenericArrayType type) {
+        Type componentType = type.getGenericComponentType();
+        Class<?> rawComponentType = getRawType(componentType)
+                .orElseThrow(() -> new StubbingException(context.getSite(), type));
+        return stub(context, componentType, rawComponentType);
+    }
+
+    private Object stub(StubbingContext context, Type componentType, Class<?> rawComponentType) {
+        Object array = Array.newInstance(rawComponentType, arraySize.applyAsInt(context));
+        ArrayStubbingSite site = StubbingSites.array(context.getSite(), rawComponentType);
+        int length = getArrayLength(array);
+        Stubber stubber = context.getStubber();
+        for (int i = 0; i < length; i++) {
+            setArrayValue(array, i, stubber.stub(componentType, site));
+        }
+        return array;
     }
 
     private int getArrayLength(Object array) {
