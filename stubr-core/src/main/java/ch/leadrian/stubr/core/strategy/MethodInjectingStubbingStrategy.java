@@ -51,7 +51,7 @@ final class MethodInjectingStubbingStrategy extends EnhancingStubbingStrategy {
         }
 
         Collection<Method> methodsToInject = collectMethodsToInject(context, stubValue.getClass());
-        injectMethods(context, type, stubValue, methodsToInject);
+        injectMethods(context, stubValue, methodsToInject);
         return stubValue;
     }
 
@@ -71,8 +71,8 @@ final class MethodInjectingStubbingStrategy extends EnhancingStubbingStrategy {
         return methodsToInject.values();
     }
 
-    private void injectMethods(StubbingContext context, Type type, Object stubValue, Collection<Method> methodsToInject) {
-        methodsToInject.forEach(method -> invokeMethodWithStubValues(context, type, method, stubValue));
+    private void injectMethods(StubbingContext context, Object stubValue, Collection<Method> methodsToInject) {
+        methodsToInject.forEach(method -> invokeMethodWithStubValues(context, method, stubValue));
     }
 
     private static final class MethodSignature {

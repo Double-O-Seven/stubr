@@ -22,7 +22,6 @@ import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.site.ConstructorParameterStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
-import ch.leadrian.stubr.core.type.TypeResolver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -59,8 +58,7 @@ final class ConstructorStubbingStrategy implements StubbingStrategy {
     public Object stub(StubbingContext context, Type type) {
         Constructor<?> constructor = getConstructor(context, type)
                 .orElseThrow(() -> new StubbingException("No matching constructor found", context.getSite(), type));
-        TypeResolver typeResolver = TypeResolver.using(type);
-        Object[] parameterValues = stub(context, typeResolver, constructor);
+        Object[] parameterValues = stub(context, constructor);
         return invokeConstructor(constructor, parameterValues);
     }
 
@@ -73,20 +71,19 @@ final class ConstructorStubbingStrategy implements StubbingStrategy {
         }
     }
 
-    private Object[] stub(StubbingContext context, TypeResolver typeResolver, Constructor<?> constructor) {
+    private Object[] stub(StubbingContext context, Constructor<?> constructor) {
         return stream(constructor.getParameters())
-                .map(parameter -> stub(context, typeResolver, constructor, parameter))
+                .map(parameter -> stub(context, constructor, parameter))
                 .toArray(Object[]::new);
     }
 
     private Object stub(
             StubbingContext context,
-            TypeResolver typeResolver,
             Constructor<?> constructor,
             Parameter parameter
     ) {
         ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(context.getSite(), constructor, parameter);
-        Type parameterType = typeResolver.resolve(parameter.getParameterizedType());
+        Type parameterType = context.getTypeResolver().resolve(parameter.getParameterizedType());
         return context.getStubber().stub(parameterType, site);
     }
 

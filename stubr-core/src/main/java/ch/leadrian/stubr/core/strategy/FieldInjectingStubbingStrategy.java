@@ -20,7 +20,6 @@ import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.site.InjectedFieldStubbingSite;
-import ch.leadrian.stubr.core.type.TypeResolver;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -45,12 +44,11 @@ final class FieldInjectingStubbingStrategy extends EnhancingStubbingStrategy {
             return null;
         }
 
-        TypeResolver typeResolver = TypeResolver.using(type);
-        visitTypeHierarchy(stubValue.getClass(), t -> injectFields(context, typeResolver, stubValue, t));
+        visitTypeHierarchy(stubValue.getClass(), t -> injectFields(context, stubValue, t));
         return stubValue;
     }
 
-    private void injectFields(StubbingContext context, TypeResolver typeResolver, Object stubValue, Class<?> type) {
+    private void injectFields(StubbingContext context, Object stubValue, Class<?> type) {
         if (type.isInterface()) {
             return;
         }
@@ -62,14 +60,14 @@ final class FieldInjectingStubbingStrategy extends EnhancingStubbingStrategy {
 
             field.setAccessible(true);
             if (matcher.matches(context, field)) {
-                injectField(context, typeResolver, stubValue, field);
+                injectField(context, stubValue, field);
             }
         }
     }
 
-    private void injectField(StubbingContext context, TypeResolver typeResolver, Object stubValue, Field field) {
+    private void injectField(StubbingContext context, Object stubValue, Field field) {
         InjectedFieldStubbingSite site = injectedField(context.getSite(), field);
-        Type fieldType = typeResolver.resolve(field.getGenericType());
+        Type fieldType = context.getTypeResolver().resolve(field.getGenericType());
         Object fieldValue = context.getStubber().stub(fieldType, site);
         try {
             field.set(stubValue, fieldValue);
