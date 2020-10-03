@@ -61,6 +61,18 @@ class TypeResolverTest {
     }
 
     @Test
+    void shouldResolveTypeItself() throws NoSuchMethodException {
+        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {};
+        TypeResolver resolver = TypeResolver.using(typeLiteral);
+        Method selfMethod = Foo.class.getMethod("self");
+
+        Type resolvedType = resolver.resolve(selfMethod.getGenericReturnType());
+
+        assertThat(resolvedType)
+                .isEqualTo(typeLiteral.getType());
+    }
+
+    @Test
     void shouldResolveTypeParameterOfSubclass() {
         TypeResolver resolver = TypeResolver.using(Fubar.class);
 
@@ -96,6 +108,10 @@ class TypeResolverTest {
 
         @SuppressWarnings("unused")
         public void foo(T value1, int value2) {
+        }
+
+        public Foo<T> self() {
+            return this;
         }
 
     }
