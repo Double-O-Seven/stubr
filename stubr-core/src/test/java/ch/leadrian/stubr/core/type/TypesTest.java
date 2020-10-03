@@ -100,8 +100,17 @@ class TypesTest {
             }
 
             @Test
-            void givenGenericArrayOfConcreteTypeItShouldReturnArrayClass() {
+            void givenGenericArrayOfParameterizedTypeItShouldReturnArrayClass() {
                 Type type = new TypeLiteral<List<String>[]>() {}.getType();
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .hasValue(List[].class);
+            }
+
+            @Test
+            <T> void givenGenericArrayOfParameterizedTypeWithTypeVariableItShouldReturnArrayClass() {
+                Type type = new TypeLiteral<List<T>[]>() {}.getType();
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
