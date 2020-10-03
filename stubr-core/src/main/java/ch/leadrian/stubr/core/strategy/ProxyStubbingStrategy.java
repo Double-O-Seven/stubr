@@ -119,7 +119,7 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
         }
 
         protected final Object stub(Method method) {
-            Type returnType = method.getGenericReturnType();
+            Type returnType = context.getTypeResolver().resolve(method.getGenericReturnType());
             if (returnType == void.class || returnType == Void.class) {
                 return null;
             }

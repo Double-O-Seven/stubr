@@ -18,6 +18,7 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingStrategy;
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import com.google.common.testing.EqualsTester;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -72,6 +73,23 @@ class ProxyStubbingStrategyTest {
                 );
     }
 
+    @TestFactory
+    Stream<DynamicTest> testGenericProxies() {
+        return stubbingStrategyTester()
+                .provideStub("Test")
+                .provideStub(1234)
+                .accepts(new TypeLiteral<Fubar<String>>() {})
+                .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Fubar.class, fubar ->
+                        assertThat(fubar.getGenericValue()).isEqualTo("Test")))
+                .accepts(new TypeLiteral<Fubar<Integer>>() {})
+                .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Fubar.class, fubar ->
+                        assertThat(fubar.getGenericValue()).isEqualTo(1234)))
+                .test(
+                        StubbingStrategies.proxy(true),
+                        StubbingStrategies.proxy()
+                );
+    }
+
     @Test
     void testProxyEquals() {
         StubbingContext context = mock(StubbingContext.class);
@@ -114,6 +132,12 @@ class ProxyStubbingStrategyTest {
     }
 
     private class Qux {
+    }
+
+    private interface Fubar<T> {
+
+        T getGenericValue();
+
     }
 
 }

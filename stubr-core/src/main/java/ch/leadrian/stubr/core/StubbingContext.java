@@ -16,6 +16,8 @@
 
 package ch.leadrian.stubr.core;
 
+import ch.leadrian.stubr.core.type.TypeResolver;
+
 import java.lang.reflect.Type;
 
 import static java.util.Objects.requireNonNull;
@@ -31,6 +33,7 @@ public final class StubbingContext {
     private final Stubber stubber;
     private final StubbingSite site;
     private final StubberChain chain;
+    private final TypeResolver typeResolver;
 
     StubbingContext(Stubber stubber, StubbingSite site, Type type) {
         requireNonNull(stubber, "stubber");
@@ -39,6 +42,7 @@ public final class StubbingContext {
         this.stubber = stubber;
         this.site = site;
         this.chain = stubber.newChain(type, this);
+        this.typeResolver = TypeResolver.using(type);
     }
 
     /**
@@ -60,6 +64,13 @@ public final class StubbingContext {
      */
     public StubberChain getChain() {
         return chain;
+    }
+
+    /**
+     * @return the {@link TypeResolver} that is used to resolve types
+     */
+    public TypeResolver getTypeResolver() {
+        return typeResolver;
     }
 
 }
