@@ -56,7 +56,7 @@ final class CollectionStubbingStrategy<T extends Collection> extends SimpleStubb
 
     @Override
     protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
-        return collectionClass == type.getRawType() && type.getActualTypeArguments().length == 1;
+        return collectionClass == type.getRawType();
     }
 
     @Override
@@ -71,7 +71,7 @@ final class CollectionStubbingStrategy<T extends Collection> extends SimpleStubb
 
     @Override
     protected T stubParameterizedType(StubbingContext context, ParameterizedType type) {
-        Type valueType = type.getActualTypeArguments()[0];
+        Type valueType = context.getTypeResolver().resolve(Collection.class.getTypeParameters()[0]);
         StubbingSite site = StubbingSites.parameterizedType(context.getSite(), type, 0);
         List<Object> values = IntStream.iterate(0, i -> i + 1)
                 .limit(collectionSize.applyAsInt(context))

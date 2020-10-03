@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Lists.newArrayList;
 
 class CollectionStubbingStrategyTest {
@@ -87,15 +88,26 @@ class CollectionStubbingStrategyTest {
                 .test(StubbingStrategies.collection(List.class, ArrayList::new, context -> 3), StubbingStrategies.collection(List.class, ArrayList::new, 3));
     }
 
+    @SuppressWarnings({"unchecked"})
     @TestFactory
-    Stream<DynamicTest> testUnsupportedParameterization() {
+    Stream<DynamicTest> testCollectionWithNonStandardTypeParameters() {
         return stubbingStrategyTester()
-                .rejects(new TypeLiteral<WeirdList<String, Integer>>() {})
-                .test(StubbingStrategies.collection(WeirdList.class, values -> new WeirdList(), context -> 3));
+                .provideStub(String.class, "A", "B", "C")
+                .accepts(new TypeLiteral<WeirdList<String, Integer>>() {})
+                .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(
+                        WeirdList.class,
+                        weirdList -> assertThat(weirdList).containsExactly("A", "B", "C")
+                ))
+                .test(StubbingStrategies.collection(WeirdList.class, WeirdList::new, context -> 3));
     }
 
     @SuppressWarnings("unused")
     private static final class WeirdList<T, U> extends ArrayList<T> {
+
+        WeirdList(Collection<? extends T> values) {
+            super(values);
+        }
+
     }
 
 }
