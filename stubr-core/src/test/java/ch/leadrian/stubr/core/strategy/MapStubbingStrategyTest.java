@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 
 class MapStubbingStrategyTest {
 
@@ -83,15 +85,26 @@ class MapStubbingStrategyTest {
                 .test(StubbingStrategies.map(Map.class, HashMap::new, context -> 3), StubbingStrategies.map(Map.class, HashMap::new, 3));
     }
 
+    @SuppressWarnings("unchecked")
     @TestFactory
-    Stream<DynamicTest> testUnsupportedParameterization() {
+    Stream<DynamicTest> testNonStandardParameterization() {
         return stubbingStrategyTester()
-                .rejects(new TypeLiteral<WeirdMap<String, Integer, BigDecimal>>() {})
-                .test(StubbingStrategies.map(WeirdMap.class, values -> new WeirdMap(), context -> 3));
+                .provideStub(String.class, "A", "B", "C")
+                .provideStub(Integer.class, 1, 2, 3)
+                .accepts(new TypeLiteral<WeirdMap<String, Integer, BigDecimal>>() {})
+                .andStubSatisfies(stub -> assertThat(stub)
+                        .isInstanceOfSatisfying(WeirdMap.class, map -> assertThat(map)
+                                .containsOnly(entry("A", 1), entry("B", 2), entry("C", 3))))
+                .test(StubbingStrategies.map(WeirdMap.class, WeirdMap::new, context -> 3));
     }
 
     @SuppressWarnings("unused")
     private static final class WeirdMap<T, U, V> extends HashMap<T, U> {
+
+        WeirdMap(Map<? extends T, ? extends U> m) {
+            super(m);
+        }
+
     }
 
 }

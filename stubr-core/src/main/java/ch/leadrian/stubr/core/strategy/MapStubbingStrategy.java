@@ -24,6 +24,7 @@ import ch.leadrian.stubr.core.site.StubbingSites;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -55,7 +56,7 @@ final class MapStubbingStrategy<T extends Map> extends SimpleStubbingStrategy<T>
 
     @Override
     protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
-        return mapClass == type.getRawType() && type.getActualTypeArguments().length == 2;
+        return mapClass == type.getRawType();
     }
 
     @Override
@@ -70,8 +71,9 @@ final class MapStubbingStrategy<T extends Map> extends SimpleStubbingStrategy<T>
 
     @Override
     protected T stubParameterizedType(StubbingContext context, ParameterizedType type) {
-        Type keyType = type.getActualTypeArguments()[0];
-        Type valueType = type.getActualTypeArguments()[1];
+        TypeVariable<Class<Map>>[] typeParameters = Map.class.getTypeParameters();
+        Type keyType = context.getTypeResolver().resolve(typeParameters[0]);
+        Type valueType = context.getTypeResolver().resolve(typeParameters[1]);
         StubbingSite keySite = StubbingSites.parameterizedType(context.getSite(), type, 0);
         StubbingSite valueSite = StubbingSites.parameterizedType(context.getSite(), type, 1);
         int size = mapSize.applyAsInt(context);
