@@ -18,6 +18,7 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -26,6 +27,7 @@ import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.matcher.Matchers.any;
 import static ch.leadrian.stubr.core.matcher.Matchers.equalTo;
 import static ch.leadrian.stubr.core.matcher.Matchers.field;
 import static ch.leadrian.stubr.core.matcher.Matchers.mappedTo;
@@ -36,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FieldInjectingStubbingStrategyTest {
 
+    @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testFieldInjectingStubbingStrategy() {
         Person expectedPerson = new Person();
@@ -57,6 +60,20 @@ class FieldInjectingStubbingStrategyTest {
                     assertThat(Person.numberOfPeopleInSwitzerland).isEqualTo(8_570_000);
                 })
                 .test(StubbingStrategies.fieldInjection((context, field) -> !"fullName".equals(field.getName())));
+    }
+
+    @SuppressWarnings("unchecked")
+    @TestFactory
+    Stream<DynamicTest> testFieldInjectingStubbingStrategyWithGenericType() {
+        return stubbingStrategyTester()
+                .provideStub(new Person())
+                .provideStubsWith(Stubber.builder()
+                        .stubWith(constantValue("fubar").when(site(field(mappedTo(Field::getName, equalTo("foo"))))))
+                        .build())
+                .provideStub(new TypeLiteral<Foo<String>>() {}, new Foo<>())
+                .accepts(new TypeLiteral<Foo<String>>() {})
+                .andStubs(new Foo<>("fubar"))
+                .test(StubbingStrategies.fieldInjection(any()));
     }
 
     static abstract class LivingBeing {
@@ -134,6 +151,41 @@ class FieldInjectingStubbingStrategyTest {
                     .add("lastName", lastName)
                     .add("fullName", fullName)
                     .add("age", getAge())
+                    .toString();
+        }
+
+    }
+
+    static class Foo<T> {
+
+        @SuppressWarnings("rawtypes")
+        private static final EqualsAndHashCode<Foo> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Foo.class)
+                .compareAndHash(foo -> foo.foo)
+                .build();
+
+        private T foo;
+
+        Foo() {
+        }
+
+        Foo(T foo) {
+            this.foo = foo;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return EQUALS_AND_HASH_CODE.equals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return EQUALS_AND_HASH_CODE.hashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return toStringHelper(this)
+                    .add("foo", foo)
                     .toString();
         }
 

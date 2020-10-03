@@ -55,7 +55,7 @@ final class FactoryMethodStubbingStrategy implements StubbingStrategy {
     public Object stub(StubbingContext context, Type type) {
         Method method = getFactoryMethod(context, type)
                 .orElseThrow(() -> new StubbingException("No matching factory method found", context.getSite(), type));
-        return invokeStaticMethodWithStubValues(context, method);
+        return invokeStaticMethodWithStubValues(context, type, method);
     }
 
     private Optional<Method> getFactoryMethod(StubbingContext context, Type type) {

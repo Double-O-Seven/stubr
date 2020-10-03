@@ -20,10 +20,12 @@ import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingException;
 import ch.leadrian.stubr.core.site.MethodParameterStubbingSite;
 import ch.leadrian.stubr.core.site.StubbingSites;
+import ch.leadrian.stubr.core.type.TypeResolver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.stream;
@@ -33,29 +35,31 @@ final class Methods {
     private Methods() {
     }
 
-    static Object invokeStaticMethodWithStubValues(StubbingContext context, Method method) {
-        return invokeMethodWithStubValues(context, method, null);
+    static Object invokeStaticMethodWithStubValues(StubbingContext context, Type requestedType, Method method) {
+        return invokeMethodWithStubValues(context, requestedType, method, null);
     }
 
-    static Object invokeMethodWithStubValues(StubbingContext context, Method method, Object receiver) {
+    static Object invokeMethodWithStubValues(StubbingContext context, Type requestedType, Method method, Object receiver) {
         boolean isStatic = isStatic(method.getModifiers());
         if (!isStatic && receiver == null) {
             throw new IllegalArgumentException(String.format("Method %s requires a non-null receiver", method));
         }
 
-        Object[] parameterValues = stubParameterValues(context, method);
+        Object[] parameterValues = stubParameterValues(context, requestedType, method);
         return invokeMethod(method, parameterValues, receiver);
     }
 
-    private static Object[] stubParameterValues(StubbingContext context, Method method) {
+    private static Object[] stubParameterValues(StubbingContext context, Type requestedType, Method method) {
+        TypeResolver typeResolver = TypeResolver.using(requestedType);
         return stream(method.getParameters())
-                .map(parameter -> stubParameterValue(context, method, parameter))
+                .map(parameter -> stubParameterValue(context, typeResolver, method, parameter))
                 .toArray(Object[]::new);
     }
 
-    private static Object stubParameterValue(StubbingContext context, Method method, Parameter parameter) {
+    private static Object stubParameterValue(StubbingContext context, TypeResolver typeResolver, Method method, Parameter parameter) {
         MethodParameterStubbingSite site = StubbingSites.methodParameter(context.getSite(), method, parameter);
-        return context.getStubber().stub(parameter.getParameterizedType(), site);
+        Type parameterType = typeResolver.resolve(parameter.getParameterizedType());
+        return context.getStubber().stub(parameterType, site);
     }
 
     private static Object invokeMethod(Method method, Object[] parameterValues, Object receiver) {

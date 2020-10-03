@@ -18,6 +18,7 @@ package ch.leadrian.stubr.core.strategy;
 
 import ch.leadrian.equalizer.EqualsAndHashCode;
 import ch.leadrian.stubr.core.Stubber;
+import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -55,6 +56,19 @@ class MethodInjectingStubbingStrategyTest {
                 .provideStub(int.class, 69, 1337)
                 .accepts(Person.class)
                 .andStubs(expectedPerson)
+                .test(StubbingStrategies.methodInjection((context, method) -> method.isAnnotationPresent(Inject.class)));
+    }
+
+    @SuppressWarnings("unchecked")
+    @TestFactory
+    Stream<DynamicTest> testMethodInjectingStubbingStrategyWithGenericType() {
+        return stubbingStrategyTester()
+                .provideStubsWith(Stubber.builder()
+                        .stubWith(constantValue("fubar").when(site(method(mappedTo(Method::getName, equalTo("setFoo"))))))
+                        .build())
+                .provideStub(new TypeLiteral<Foo<String>>() {}, new Foo<>())
+                .accepts(new TypeLiteral<Foo<String>>() {})
+                .andStubs(new Foo<>("fubar"))
                 .test(StubbingStrategies.methodInjection((context, method) -> method.isAnnotationPresent(Inject.class)));
     }
 
@@ -151,6 +165,46 @@ class MethodInjectingStubbingStrategyTest {
                     .add("lastName", lastName)
                     .add("fullName", fullName)
                     .add("age", getAge())
+                    .toString();
+        }
+
+    }
+
+    static class Foo<T> {
+
+        @SuppressWarnings("rawtypes")
+        private static final EqualsAndHashCode<Foo> EQUALS_AND_HASH_CODE = equalsAndHashCodeBuilder(Foo.class)
+                .compareAndHash(foo -> foo.foo)
+                .build();
+
+        private T foo;
+
+        Foo() {
+        }
+
+        Foo(T foo) {
+            this.foo = foo;
+        }
+
+        @Inject
+        public void setFoo(T foo) {
+            this.foo = foo;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return EQUALS_AND_HASH_CODE.equals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return EQUALS_AND_HASH_CODE.hashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return toStringHelper(this)
+                    .add("foo", foo)
                     .toString();
         }
 
