@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library-conventions`
-    jacoco
-}
+package ch.leadrian.stubr.integrationtest.testdata;
 
-dependencies {
-    testImplementation(project(":stubr-junit"))
-    testImplementation(project(":stubr-core"))
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
-    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
+import ch.leadrian.stubr.integrationtest.annotation.CollectionSize;
+
+public interface Pies {
+
+    Pie<Cherry> getCherryPie();
+
+    Pie<Cherry>[] getCherryPies();
+
+    @CollectionSize(3)
+    Pie<Pie<Cherry>> getPieMadeFromCherryPies();
+
 }

@@ -23,13 +23,15 @@ public final class TestData {
     private final Collections collections;
     private final Primitives primitives;
     private final PrimitiveWrappers primitiveWrappers;
+    private final Pies pies;
 
-    public TestData(Annotations annotations, Arrays arrays, Collections collections, Primitives primitives, PrimitiveWrappers primitiveWrappers) {
+    public TestData(Annotations annotations, Arrays arrays, Collections collections, Primitives primitives, PrimitiveWrappers primitiveWrappers, Pies pies) {
         this.annotations = annotations;
         this.arrays = arrays;
         this.collections = collections;
         this.primitives = primitives;
         this.primitiveWrappers = primitiveWrappers;
+        this.pies = pies;
     }
 
     public Annotations getAnnotations() {
@@ -50,6 +52,10 @@ public final class TestData {
 
     public PrimitiveWrappers getPrimitiveWrappers() {
         return primitiveWrappers;
+    }
+
+    public Pies getPies() {
+        return pies;
     }
 
 }

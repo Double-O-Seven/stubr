@@ -20,6 +20,8 @@ import ch.leadrian.stubr.core.StubbingContext;
 import ch.leadrian.stubr.core.StubbingStrategy;
 import ch.leadrian.stubr.core.site.AnnotatedStubbingSite;
 import ch.leadrian.stubr.integrationtest.annotation.CollectionSize;
+import ch.leadrian.stubr.integrationtest.testdata.Cherry;
+import ch.leadrian.stubr.integrationtest.testdata.Pie;
 import ch.leadrian.stubr.integrationtest.testdata.TestData;
 import ch.leadrian.stubr.junit.StubbingStrategyProvider;
 import ch.leadrian.stubr.junit.Stubr;
@@ -42,6 +44,7 @@ import static ch.leadrian.stubr.core.strategy.StubbingStrategies.defaultCollecti
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.suppliedValue;
 import static ch.leadrian.stubr.integrationtest.CoreIntegrationTest.TestStubbingStrategies;
 import static ch.leadrian.stubr.junit.annotation.StubberBaseline.Variant.DEFAULT;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -66,7 +69,8 @@ class CoreIntegrationTest {
                 () -> assertThat(testData.getArrays()).isNotNull(),
                 () -> assertThat(testData.getCollections()).isNotNull(),
                 () -> assertThat(testData.getPrimitives()).isNotNull(),
-                () -> assertThat(testData.getPrimitiveWrappers()).isNotNull()
+                () -> assertThat(testData.getPrimitiveWrappers()).isNotNull(),
+                () -> assertThat(testData.getPies()).isNotNull()
         );
     }
 
@@ -261,6 +265,69 @@ class CoreIntegrationTest {
         @Test
         void shouldStubDoubleWrapper() {
             assertThat(testData.getPrimitiveWrappers().getDouble()).isZero();
+        }
+
+    }
+
+    @Nested
+    class PiesTest {
+
+        @Test
+        void shouldReturnCherryPie() {
+            assertThat(testData.getPies().getCherryPie())
+                    .isEqualTo(
+                            new Pie<>(asList(
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0)
+                            ))
+                    );
+        }
+
+        @Test
+        void shouldReturnCherryPies() {
+            assertThat(testData.getPies().getCherryPies())
+                    .containsExactly(
+                            new Pie<>(asList(
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0)
+                            )),
+                            new Pie<>(asList(
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0)
+                            )),
+                            new Pie<>(asList(
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0),
+                                    new Cherry(Cherry.Color.RED, 0)
+                            ))
+                    );
+        }
+
+        @Test
+        void shouldReturnPieMadeFromCherryPies() {
+            assertThat(testData.getPies().getPieMadeFromCherryPies())
+                    .isEqualTo(
+                            new Pie<>(asList(
+                                    new Pie<>(asList(
+                                            new Cherry(Cherry.Color.RED, 0),
+                                            new Cherry(Cherry.Color.RED, 0),
+                                            new Cherry(Cherry.Color.RED, 0)
+                                    )),
+                                    new Pie<>(asList(
+                                            new Cherry(Cherry.Color.RED, 0),
+                                            new Cherry(Cherry.Color.RED, 0),
+                                            new Cherry(Cherry.Color.RED, 0)
+                                    )),
+                                    new Pie<>(asList(
+                                            new Cherry(Cherry.Color.RED, 0),
+                                            new Cherry(Cherry.Color.RED, 0),
+                                            new Cherry(Cherry.Color.RED, 0)
+                                    ))
+                            ))
+                    );
         }
 
     }
