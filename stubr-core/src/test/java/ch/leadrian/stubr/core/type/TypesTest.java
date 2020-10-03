@@ -91,12 +91,21 @@ class TypesTest {
             }
 
             @Test
-            <T> void givenGenericArrayItShouldReturnEmpty() {
+            <T> void givenGenericArrayOfTypeVariableItShouldReturnEmpty() {
                 Type type = new TypeLiteral<T[]>() {}.getType();
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
                         .isEmpty();
+            }
+
+            @Test
+            void givenGenericArrayOfConcreteTypeItShouldReturnArrayClass() {
+                Type type = new TypeLiteral<List<String>[]>() {}.getType();
+                Optional<Class<?>> clazz = Types.getRawType(type);
+
+                assertThat(clazz)
+                        .hasValue(List[].class);
             }
 
         }

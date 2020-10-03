@@ -16,6 +16,7 @@
 
 package ch.leadrian.stubr.core.type;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -75,7 +76,8 @@ public final class Types {
 
             @Override
             public Optional<Class<?>> visit(GenericArrayType genericArrayType) {
-                return Optional.empty();
+                return getRawType(genericArrayType.getGenericComponentType())
+                        .map(componentType -> Array.newInstance(componentType, 0).getClass());
             }
         });
     }
