@@ -212,11 +212,9 @@ public abstract class Stubber {
         return stub(typeLiteral, StubbingSites.unknown());
     }
 
-    @SuppressWarnings("unchecked")
     private <T> Class<T> getRawType(TypeLiteral<T> typeLiteral) {
-        Type type = typeLiteral.getType();
-        return (Class<T>) Types.getRawType(type)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot get raw type of %s", type)));
+        return Types.getRawType(typeLiteral)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot get raw type of %s", typeLiteral.getType())));
     }
 
 }
