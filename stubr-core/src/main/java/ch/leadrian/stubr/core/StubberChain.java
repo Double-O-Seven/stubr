@@ -19,6 +19,12 @@ package ch.leadrian.stubr.core;
 /**
  * An interface that allows to query a {@link Stubber} for a given type even after an first matching {@link
  * StubbingStrategy} has provided a stub value.
+ * <p>
+ * This interface is useful for intercepting stubs and enhancing them for example before finally returning them.
+ *
+ * @see ch.leadrian.stubr.core.strategy.EnhancingStubbingStrategy
+ * @see ch.leadrian.stubr.core.strategy.StubbingStrategies#fieldInjection(Matcher)
+ * @see ch.leadrian.stubr.core.strategy.StubbingStrategies#methodInjection(Matcher)
  */
 public interface StubberChain {
 
