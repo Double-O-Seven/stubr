@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-platform`
-    `publishing-conventions`
-}
+package ch.leadrian.stubr.spek
 
-dependencies {
-    constraints {
-        api(project(":stubr-core"))
-        api(project(":stubr-javafaker"))
-        api(project(":stubr-junit"))
-        api(project(":stubr-kotlin"))
-        api(project(":stubr-mockito"))
-        api(project(":stubr-mockk"))
-        api(project(":stubr-spek"))
-    }
+import ch.leadrian.stubr.core.StubbingSite
+import java.util.Optional
+
+/**
+ * The default site used when using [memoizedStub].
+ *
+ * @see memoizedStub
+ */
+object MemoizingStubbingSite : StubbingSite {
+
+    /**
+     * Returns [Optional.empty] since this site does not have a parent.
+     *
+     * @return [Optional.empty]
+     */
+    override fun getParent(): Optional<StubbingSite> = Optional.empty()
 }

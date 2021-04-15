@@ -15,18 +15,14 @@
  */
 
 plugins {
-    `java-platform`
+    `kotlin-library-conventions`
     `publishing-conventions`
 }
 
 dependencies {
-    constraints {
-        api(project(":stubr-core"))
-        api(project(":stubr-javafaker"))
-        api(project(":stubr-junit"))
-        api(project(":stubr-kotlin"))
-        api(project(":stubr-mockito"))
-        api(project(":stubr-mockk"))
-        api(project(":stubr-spek"))
-    }
+    api(project(":stubr-kotlin"))
+    api(group = "io.mockk", name = "mockk")
+    api(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
+
+    testImplementation(testFixtures(project(":stubr-core")))
 }
