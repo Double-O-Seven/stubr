@@ -95,6 +95,7 @@ public final class Types {
      * <p>
      * If {@code typeLiteral.getType()} returns anything else, {@link Optional#empty()} will be returned.
      *
+     * @param <T>         the type represented by the type literal
      * @param typeLiteral the type literal from which an actual {@link Class} should be inferred
      * @return Am {@link Optional} the actual raw type if a {@link Class} can be derived from the given {@link Type},
      * else {@link Optional#empty()}

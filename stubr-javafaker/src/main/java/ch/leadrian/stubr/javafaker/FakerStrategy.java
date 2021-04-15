@@ -38,6 +38,7 @@ public interface FakerStrategy extends FakerFunction {
     /**
      * Returns {@code true} if the strategy accepts a given word sequence, else {@code false}.
      *
+     * @param words the words that may be accepted
      * @return {@code true} if the strategy accepts a given word sequence, else {@code false}
      */
     boolean accepts(WordSequence words);

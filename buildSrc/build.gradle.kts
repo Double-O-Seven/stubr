@@ -21,9 +21,10 @@ plugins {
 repositories {
     mavenCentral()
     gradlePluginPortal()
+    maven { setUrl("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") }
 }
 
 dependencies {
     implementation(kotlin("gradle-plugin"))
-    implementation(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "1.4.20")
+    implementation(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "1.4.30")
 }

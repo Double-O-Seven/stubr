@@ -30,4 +30,12 @@ tasks {
             javaParameters = true
         }
     }
+
+    dokkaJavadoc {
+        isEnabled = false
+    }
+
+    javadocJar {
+        isEnabled = false
+    }
 }
