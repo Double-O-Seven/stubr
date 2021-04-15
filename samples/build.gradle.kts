@@ -18,24 +18,31 @@ plugins {
     `kotlin-library-conventions`
 }
 
-dependencies {
-    implementation(project(":stubr-javafaker"))
-    implementation(project(":stubr-junit"))
-    implementation(project(":stubr-mockito"))
-}
+subprojects {
+    apply(plugin = "kotlin-library-conventions")
 
-tasks {
-    compileKotlin {
-        kotlinOptions {
-            javaParameters = true
+    dependencies {
+        testImplementation(project(":stubr-javafaker"))
+        testImplementation(project(":stubr-junit"))
+        testImplementation(project(":stubr-kotlin"))
+        testImplementation(project(":stubr-mockito"))
+        testImplementation(project(":stubr-mockk"))
+        testImplementation(project(":stubr-spek"))
+    }
+
+    tasks {
+        compileKotlin {
+            kotlinOptions {
+                javaParameters = true
+            }
         }
-    }
 
-    dokkaHtml {
-        isEnabled = false
-    }
+        dokkaHtml {
+            isEnabled = false
+        }
 
-    javadocJar {
-        isEnabled = false
+        javadocJar {
+            isEnabled = false
+        }
     }
 }

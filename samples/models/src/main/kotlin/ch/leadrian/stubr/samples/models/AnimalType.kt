@@ -14,26 +14,9 @@
  * limitations under the License.
  */
 
-include(":dependencies")
-include(":samples")
-include(":samples:inject-mocked-dependencies")
-include(":samples:junit-basics")
-include(":samples:models")
-include(":stubr-bom")
-include(":stubr-core")
-include(":stubr-integration-test")
-include(":stubr-javafaker")
-include(":stubr-junit")
-include(":stubr-kotlin")
-include(":stubr-mockito")
-include(":stubr-mockk")
-include(":stubr-spek")
+package ch.leadrian.stubr.samples.models
 
-rootProject.name = "stubr"
-
-pluginManagement {
-    plugins {
-        id("com.github.ben-manes.versions") version "0.38.0"
-        id("com.palantir.git-version") version "0.12.3"
-    }
+enum class AnimalType {
+    CAT,
+    DOG
 }
