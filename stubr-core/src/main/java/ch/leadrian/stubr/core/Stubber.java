@@ -30,6 +30,7 @@ import static ch.leadrian.stubr.internal.com.google.common.primitives.Primitives
  * {@code Stubber}s
  *
  * @see StubbingStrategy
+ * @see Stubbers
  */
 public abstract class Stubber {
 

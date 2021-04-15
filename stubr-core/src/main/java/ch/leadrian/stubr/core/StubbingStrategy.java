@@ -38,6 +38,8 @@ import java.lang.reflect.Type;
  * {@code false}, it is NOT required that {@code stub} double-checks the input. The implementation may therefore assume
  * that the input is valid. Calling {@code stub} without checking the input with {@code accepts} first may therefore
  * result in undefined behaviour.
+ *
+ * @see StubbingStrategies
  */
 public interface StubbingStrategy {
 

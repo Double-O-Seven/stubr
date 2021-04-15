@@ -25,6 +25,10 @@ import static ch.leadrian.stubr.core.selector.Selectors.compose;
  * Class used to select zero or one value from a given list of values.
  *
  * @param <T> type of selectable objects
+ * @see ch.leadrian.stubr.core.strategy.StubbingStrategies#constructor
+ * @see ch.leadrian.stubr.core.strategy.StubbingStrategies#factoryMethod
+ * @see ch.leadrian.stubr.core.strategy.StubbingStrategies#enumValue
+ * @see ch.leadrian.stubr.core.selector.Selectors
  */
 @FunctionalInterface
 public interface Selector<T> {

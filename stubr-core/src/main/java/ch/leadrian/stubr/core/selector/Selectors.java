@@ -18,6 +18,7 @@ package ch.leadrian.stubr.core.selector;
 
 import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.Selector;
+import ch.leadrian.stubr.core.strategy.StubbingStrategies;
 
 import java.util.Optional;
 import java.util.Random;
@@ -26,6 +27,10 @@ import static java.util.Arrays.asList;
 
 /**
  * Collection of factory methods for various default implementations of {@link ch.leadrian.stubr.core.Selector}.
+ *
+ * @see StubbingStrategies#constructor
+ * @see StubbingStrategies#factoryMethod
+ * @see StubbingStrategies#enumValue
  */
 public final class Selectors {
 
