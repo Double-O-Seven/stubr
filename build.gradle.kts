@@ -32,7 +32,7 @@ allprojects {
     version = gitVersion()
 
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
