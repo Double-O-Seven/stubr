@@ -53,8 +53,8 @@ internal class MockStubbingStrategy<T : Any>(
                 type = type,
                 relaxed = relaxed,
                 relaxUnitFun = relaxUnitFun,
-                moreInterfaces = *moreInterfaces,
-                block = block
+                block = block,
+                moreInterfaces = moreInterfaces,
         )
     }
 

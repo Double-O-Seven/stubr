@@ -57,8 +57,8 @@ internal class GenericMockStubbingStrategy(
                 type = type.kotlin,
                 relaxed = relaxed,
                 relaxUnitFun = relaxUnitFun,
-                moreInterfaces = *moreInterfaces,
-                block = block
+                block = block,
+                moreInterfaces = moreInterfaces,
         )
     }
 
