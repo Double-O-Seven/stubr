@@ -31,7 +31,7 @@ tasks {
         }
     }
 
-    dokkaJavadoc {
+    dokkaHtml {
         isEnabled = false
     }
 

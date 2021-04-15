@@ -45,8 +45,8 @@ tasks {
             includeEngines("spek2", "junit-jupiter")
         }
     }
-
+    
     named<Jar>("javadocJar") {
-        from(dokkaJavadoc)
+        from(dokkaHtml)
     }
 }
