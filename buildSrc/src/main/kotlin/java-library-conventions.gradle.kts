@@ -43,6 +43,11 @@ pluginManager.withPlugin("java-test-fixtures") {
 }
 
 java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+    }
+
     withSourcesJar()
     withJavadocJar()
 }
