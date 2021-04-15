@@ -47,6 +47,6 @@ tasks {
     }
 
     named<Jar>("javadocJar") {
-        from(dokka)
+        from(dokkaJavadoc)
     }
 }
