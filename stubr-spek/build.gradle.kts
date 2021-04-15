@@ -21,7 +21,6 @@ plugins {
 
 dependencies {
     api(project(":stubr-kotlin"))
-    api(group = "io.mockk", name = "mockk")
     api(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
 
     testImplementation(testFixtures(project(":stubr-core")))

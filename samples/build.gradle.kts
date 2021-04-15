@@ -36,7 +36,11 @@ subprojects {
                 javaParameters = true
             }
         }
+    }
+}
 
+allprojects {
+    tasks {
         dokkaHtml {
             isEnabled = false
         }
