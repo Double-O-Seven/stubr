@@ -24,7 +24,7 @@ javaPlatform {
 
 object Versions {
 
-    const val assertJ = "3.16.1"
+    const val assertJ = "3.19.0"
 
     const val equalizer = "1.2.1"
 
@@ -32,15 +32,15 @@ object Versions {
 
     const val javaFaker = "1.0.2"
 
-    const val junit = "5.6.2"
+    const val junit = "5.7.1"
 
-    const val mockito = "3.4.4"
+    const val mockito = "3.9.0"
 
-    const val mockK = "1.10.0"
+    const val mockK = "1.11.0"
 
     const val stubrShadedDependencies = "1.0.1"
 
-    const val spek = "2.0.12"
+    const val spek = "2.0.16"
 
 }
 
