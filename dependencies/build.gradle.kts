@@ -28,7 +28,7 @@ object Versions {
 
     const val equalizer = "1.2.1"
 
-    const val guava = "29.0-jre"
+    const val guava = "30.1.1-jre"
 
     const val javaFaker = "1.0.2"
 
