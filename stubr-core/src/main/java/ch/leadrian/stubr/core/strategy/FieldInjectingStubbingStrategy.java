@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 
 import static ch.leadrian.stubr.core.site.StubbingSites.injectedField;
 import static ch.leadrian.stubr.core.type.Types.visitTypeHierarchy;
+import static java.lang.reflect.Modifier.isFinal;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Objects.requireNonNull;
 
@@ -54,7 +55,8 @@ final class FieldInjectingStubbingStrategy extends EnhancingStubbingStrategy {
         }
 
         for (Field field : type.getDeclaredFields()) {
-            if (isStatic(field.getModifiers()) || field.isSynthetic()) {
+            int modifiers = field.getModifiers();
+            if (isStatic(modifiers) || isFinal(modifiers) || field.isSynthetic()) {
                 continue;
             }
 

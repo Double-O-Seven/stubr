@@ -56,7 +56,10 @@ class FieldInjectingStubbingStrategyTest {
                 .accepts(Person.class)
                 .andStubSatisfies(value -> {
                     assertThat(value)
-                            .isInstanceOfSatisfying(Person.class, person -> assertThat(person).isEqualTo(expectedPerson));
+                            .isInstanceOfSatisfying(Person.class, person -> {
+                                assertThat(person).isEqualTo(expectedPerson);
+                                assertThat(person.getSocialSecurityNumber()).isEqualTo(1337L);
+                            });
                     assertThat(Person.numberOfPeopleInSwitzerland).isEqualTo(8_570_000);
                 })
                 .test(StubbingStrategies.fieldInjection((context, field) -> !"fullName".equals(field.getName())));
@@ -99,6 +102,7 @@ class FieldInjectingStubbingStrategyTest {
                 .compareAndHash(Person::getLastName)
                 .compareAndHash(Person::getFullName)
                 .compareAndHash(LivingBeing::getAge)
+                .compareAndHash(Person::getSocialSecurityNumber)
                 .build();
 
         private String firstName;
@@ -106,6 +110,8 @@ class FieldInjectingStubbingStrategyTest {
         private String lastName;
 
         private String fullName;
+
+        private final long socialSecurityNumber = 1337;
 
         public String getFirstName() {
             return firstName;
@@ -125,6 +131,10 @@ class FieldInjectingStubbingStrategyTest {
 
         public void setFullName(String fullName) {
             this.fullName = fullName;
+        }
+
+        public long getSocialSecurityNumber() {
+            return socialSecurityNumber;
         }
 
         public String getFullName() {
@@ -151,6 +161,7 @@ class FieldInjectingStubbingStrategyTest {
                     .add("lastName", lastName)
                     .add("fullName", fullName)
                     .add("age", getAge())
+                    .add("socialSecurityNumber", socialSecurityNumber)
                     .toString();
         }
 
