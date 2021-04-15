@@ -89,8 +89,8 @@ object MockKStubbingStrategies {
                 type = T::class,
                 relaxed = relaxed,
                 relaxUnitFun = relaxUnitFun,
-                moreInterfaces = *moreInterfaces,
-                block = block
+                block = block,
+                moreInterfaces = moreInterfaces,
         )
     }
 
