@@ -14,13 +14,29 @@ The basic concept is very simple: You build a stubber, using different stubbing 
 For example:
 
 ```java
+public class Fubar {
+
+        public final String foo;
+        public final int bar;
+        public final int fubar;
+        
+        public Foo(String foo, int bar, int fubar) {
+                this.foo = foo;
+                this.bar = bar;
+                this.fubar = fubar;
+        }
+}
+
+
 Stubber stubber = Stubber.builder()
+        .stubWith(StubbingStrategies.constructor()) // Instantiate an object using a constructor
         .stubWith(StubbingStrategies.constantValue("Foo")) // Provide "Foo" when a String is required
         .stubWith(StubbingStrategies.suppliedValue(int.class, (int sequenceNumber) -> sequenceNumber)) // Provide a sequence value when an int is required
         .build();
 String stringValue = stubber.stub(String.class); // Foo
 int intValue1 = stubber.stub(int.class); // 0
 int intValue2 = stubber.stub(int.class); // 1
+Fubar fubar = stubber.stub(Fubar.class); // Fubar(foo = "Foo", bar = 2, fubar = 3)
 ```
 
 ## But why?
