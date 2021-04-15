@@ -40,7 +40,7 @@ object Versions {
 
     const val stubrShadedDependencies = "1.0.1"
 
-    const val spek = "2.0.16"
+    const val spek = "2.0.15"
 
 }
 
