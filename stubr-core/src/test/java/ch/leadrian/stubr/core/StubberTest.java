@@ -38,9 +38,9 @@ class StubberTest {
         void shouldUseMatchingStubber() {
             Stubber stubber = Stubber.builder()
                     .stubWith()
-                    .stubWith(testStubber(Float.class, 1f))
-                    .stubWith(testStubber(Integer.class, 2))
-                    .stubWith(testStubber(String.class, "Test"))
+                    .stubWith(testStrategy(Float.class, 1f))
+                    .stubWith(testStrategy(Integer.class, 2))
+                    .stubWith(testStrategy(String.class, "Test"))
                     .build();
 
             Object value = stubber.stub(Integer.class);
@@ -53,9 +53,9 @@ class StubberTest {
         void shouldUseLastConfiguredMatchingStubber() {
             Stubber stubber = Stubber.builder()
                     .stubWith()
-                    .stubWith(testStubber(Integer.class, 1))
-                    .stubWith(testStubber(Integer.class, 2))
-                    .stubWith(testStubber(Integer.class, 3))
+                    .stubWith(testStrategy(Integer.class, 1))
+                    .stubWith(testStrategy(Integer.class, 2))
+                    .stubWith(testStrategy(Integer.class, 3))
                     .build();
 
             Object value = stubber.stub(Integer.class);
@@ -69,9 +69,9 @@ class StubberTest {
             Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(
-                            testStubber(Integer.class, 1),
-                            testStubber(Integer.class, 2),
-                            testStubber(Integer.class, 3)
+                            testStrategy(Integer.class, 1),
+                            testStrategy(Integer.class, 2),
+                            testStrategy(Integer.class, 3)
                     )
                     .build();
 
@@ -86,9 +86,9 @@ class StubberTest {
             Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(asList(
-                            testStubber(Integer.class, 1),
-                            testStubber(Integer.class, 2),
-                            testStubber(Integer.class, 3)
+                            testStrategy(Integer.class, 1),
+                            testStrategy(Integer.class, 2),
+                            testStrategy(Integer.class, 3)
                     ))
                     .build();
 
@@ -102,9 +102,9 @@ class StubberTest {
         void shouldUseLastConfiguredConditionalMatchingStubber() {
             Stubber stubber = Stubber.builder()
                     .stubWith()
-                    .stubWith(testStubber(Integer.class, 1), (context, type) -> context.getSite() == TestStubbingSite.FOO)
-                    .stubWith(testStubber(Integer.class, 2), (context, type) -> context.getSite() == TestStubbingSite.FOO)
-                    .stubWith(testStubber(Integer.class, 3), (context, type) -> context.getSite() == TestStubbingSite.BAR)
+                    .stubWith(testStrategy(Integer.class, 1), (context, type) -> context.getSite() == TestStubbingSite.FOO)
+                    .stubWith(testStrategy(Integer.class, 2), (context, type) -> context.getSite() == TestStubbingSite.FOO)
+                    .stubWith(testStrategy(Integer.class, 3), (context, type) -> context.getSite() == TestStubbingSite.BAR)
                     .build();
 
             Object value = stubber.stub(Integer.class, TestStubbingSite.FOO);
@@ -118,9 +118,9 @@ class StubberTest {
             Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(
-                            testStubber(Integer.class, 1).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
-                            testStubber(Integer.class, 2).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
-                            testStubber(Integer.class, 3).when((context, type) -> context.getSite() == TestStubbingSite.BAR)
+                            testStrategy(Integer.class, 1).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
+                            testStrategy(Integer.class, 2).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
+                            testStrategy(Integer.class, 3).when((context, type) -> context.getSite() == TestStubbingSite.BAR)
                     )
                     .build();
 
@@ -135,9 +135,9 @@ class StubberTest {
             Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(asList(
-                            testStubber(Integer.class, 1).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
-                            testStubber(Integer.class, 2).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
-                            testStubber(Integer.class, 3).when((context, type) -> context.getSite() == TestStubbingSite.BAR)
+                            testStrategy(Integer.class, 1).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
+                            testStrategy(Integer.class, 2).when((context, type) -> context.getSite() == TestStubbingSite.FOO),
+                            testStrategy(Integer.class, 3).when((context, type) -> context.getSite() == TestStubbingSite.BAR)
                     ))
                     .build();
 
@@ -156,11 +156,11 @@ class StubberTest {
             Stubber stubber = Stubber.builder()
                     .stubWith()
                     .stubWith(
-                            asList(testStubber(Integer.class, 1), testStubber(Integer.class, 2)),
+                            asList(testStrategy(Integer.class, 1), testStrategy(Integer.class, 2)),
                             (context, type) -> context.getSite() == TestStubbingSite.FOO
                     )
                     .stubWith(
-                            asList(testStubber(Integer.class, 3), testStubber(Integer.class, 4)),
+                            asList(testStrategy(Integer.class, 3), testStrategy(Integer.class, 4)),
                             (context, type) -> context.getSite() == TestStubbingSite.BAR
                     )
                     .build();
@@ -175,7 +175,7 @@ class StubberTest {
         void shouldStubValueWithIncludedStubber() {
             Stubber stubber = Stubber.builder()
                     .include(Stubber.builder()
-                            .stubWith(testStubber(Integer.class, 1337))
+                            .stubWith(testStrategy(Integer.class, 1337))
                             .build())
                     .build();
 
@@ -189,10 +189,10 @@ class StubberTest {
         void shouldUseValueOfLastConfiguredIncludedStubber() {
             Stubber stubber = Stubber.builder()
                     .include(Stubber.builder()
-                            .stubWith(testStubber(Integer.class, 1337))
+                            .stubWith(testStrategy(Integer.class, 1337))
                             .build())
                     .include(Stubber.builder()
-                            .stubWith(testStubber(Integer.class, 1234))
+                            .stubWith(testStrategy(Integer.class, 1234))
                             .build())
                     .build();
 
@@ -206,9 +206,9 @@ class StubberTest {
         void shouldOverrideStubValueOfStubber() {
             Stubber stubber = Stubber.builder()
                     .include(Stubber.builder()
-                            .stubWith(testStubber(Integer.class, 1337))
+                            .stubWith(testStrategy(Integer.class, 1337))
                             .build())
-                    .stubWith(testStubber(Integer.class, 1234))
+                    .stubWith(testStrategy(Integer.class, 1234))
                     .build();
 
             Object value = stubber.stub(Integer.class);
@@ -225,7 +225,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForTypeAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<?> result = stubber.tryToStub((Type) Integer.class, TestStubbingSite.FOO);
@@ -237,7 +237,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForTypeAndSiteItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<?> result = stubber.tryToStub((Type) Float.class, TestStubbingSite.FOO);
@@ -249,7 +249,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForClassItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Integer> result = stubber.tryToStub(Integer.class);
@@ -261,7 +261,7 @@ class StubberTest {
         @Test
         void givenMatchingPrimitiveValueForClassItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(int.class, 1337))
+                    .stubWith(testStrategy(int.class, 1337))
                     .build();
 
             Result<Integer> result = stubber.tryToStub(int.class);
@@ -273,7 +273,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForClassAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Integer> result = stubber.tryToStub(Integer.class, TestStubbingSite.FOO);
@@ -285,7 +285,7 @@ class StubberTest {
         @Test
         void givenMatchingPrimitiveValueForClassAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(int.class, 1337))
+                    .stubWith(testStrategy(int.class, 1337))
                     .build();
 
             Result<Integer> result = stubber.tryToStub(int.class, TestStubbingSite.FOO);
@@ -297,7 +297,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForClassItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class));
@@ -309,7 +309,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForClassAndSiteItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class, TestStubbingSite.FOO));
@@ -321,7 +321,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForClassItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Float> result = stubber.tryToStub(Float.class);
@@ -333,7 +333,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForClassAndSiteItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Float> result = stubber.tryToStub(Float.class, TestStubbingSite.FOO);
@@ -345,7 +345,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForTypeLiteralItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {});
@@ -357,7 +357,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForTypeLiteralAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
@@ -369,7 +369,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForTypeLiteralItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}));
@@ -381,7 +381,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForTypeLiteralAndSiteItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
@@ -393,7 +393,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForTypeLiteralItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {});
@@ -405,7 +405,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForTypeLiteralAndSiteItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO);
@@ -417,7 +417,7 @@ class StubberTest {
         @Test
         void givenNoRawTypeForTypeLiteralItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}));
@@ -430,7 +430,7 @@ class StubberTest {
         @Test
         void givenNoRawTypeForTypeLiteralAndSiteItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
@@ -448,7 +448,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForTypeAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Object result = stubber.stub((Type) Integer.class, TestStubbingSite.FOO);
@@ -460,7 +460,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForTypeAndSiteItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.stub((Type) Float.class, TestStubbingSite.FOO));
@@ -473,7 +473,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForClassItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Integer result = stubber.stub(Integer.class);
@@ -485,7 +485,7 @@ class StubberTest {
         @Test
         void givenMatchingPrimitiveValueForClassItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(int.class, 1337))
+                    .stubWith(testStrategy(int.class, 1337))
                     .build();
 
             int result = stubber.stub(int.class);
@@ -497,7 +497,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForClassAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Integer result = stubber.stub(Integer.class, TestStubbingSite.FOO);
@@ -509,7 +509,7 @@ class StubberTest {
         @Test
         void givenMatchingPrimitiveValueForClassAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(int.class, 1337))
+                    .stubWith(testStrategy(int.class, 1337))
                     .build();
 
             int result = stubber.stub(int.class, TestStubbingSite.FOO);
@@ -521,7 +521,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForClassItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class));
@@ -533,7 +533,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForClassAndSiteItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(Integer.class, TestStubbingSite.FOO));
@@ -545,7 +545,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForClassItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.stub(Float.class));
@@ -558,7 +558,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForClassAndSiteItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.stub(Float.class, TestStubbingSite.FOO));
@@ -571,7 +571,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForTypeLiteralItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Integer result = stubber.stub(new TypeLiteral<Integer>() {});
@@ -583,7 +583,7 @@ class StubberTest {
         @Test
         void givenMatchingValueForTypeLiteralAndSiteItShouldReturnSuccess() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Integer result = stubber.stub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
@@ -595,7 +595,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForTypeLiteralItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}));
@@ -607,7 +607,7 @@ class StubberTest {
         @Test
         void givenClassMismatchForTypeLiteralAndSiteItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, "Test"))
+                    .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
@@ -619,7 +619,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForTypeLiteralItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {}));
@@ -632,7 +632,7 @@ class StubberTest {
         @Test
         void givenNoMatchingValueForTypeLiteralAndSiteItShouldReturnFailure() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO));
@@ -645,7 +645,7 @@ class StubberTest {
         @Test
         void givenNoRawTypeForTypeLiteralItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}));
@@ -658,7 +658,7 @@ class StubberTest {
         @Test
         void givenNoRawTypeForTypeLiteralAndSiteItShouldThrowException() {
             Stubber stubber = Stubber.builder()
-                    .stubWith(testStubber(Integer.class, 1337))
+                    .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
             Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
@@ -680,7 +680,7 @@ class StubberTest {
         }
     }
 
-    static StubbingStrategy testStubber(Type type, Object value) {
+    static StubbingStrategy testStrategy(Type type, Object value) {
         return new TestStubbingStrategy(type, value);
     }
 
