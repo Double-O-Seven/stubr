@@ -17,6 +17,7 @@
 package ch.leadrian.stubr.kotlin
 
 import ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester
+import ch.leadrian.stubr.core.matcher.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.util.stream.Stream
@@ -55,7 +56,10 @@ internal class KotlinStubbingStrategiesTest {
                 .accepts(PrimaryConstructorData::class.java)
                 .andStubs(PrimaryConstructorData("primary"))
                 .rejects(JavaPrimaryConstructorTestData::class.java)
-                .test(KotlinStubbingStrategies.primaryConstructor())
+                .test(
+                        KotlinStubbingStrategies.primaryConstructor()
+                                .applyWhen(equalTo(PrimaryConstructorData::class.java))
+                )
     }
 
     @TestFactory

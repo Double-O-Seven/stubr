@@ -16,14 +16,21 @@
 
 package ch.leadrian.stubr.mockito;
 
+import ch.leadrian.stubr.core.Matcher;
 import ch.leadrian.stubr.core.type.TypeLiteral;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
+import static ch.leadrian.stubr.core.matcher.Matchers.annotatedWith;
+import static ch.leadrian.stubr.core.matcher.Matchers.mappedTo;
+import static ch.leadrian.stubr.core.type.Types.getRawType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -67,7 +74,7 @@ class GenericMockStubbingStrategyTest {
                 .rejects(Object[].class)
                 .rejects(Qux.class)
                 .rejects(new TypeLiteral<List<String>[]>() {})
-                .test(MockitoStubbingStrategies.mock(true));
+                .test(MockitoStubbingStrategies.mock(true).when(typeIsTestClass()));
     }
 
     @TestFactory
@@ -78,11 +85,23 @@ class GenericMockStubbingStrategyTest {
                 .rejects(Object[].class)
                 .rejects(Qux.class)
                 .test(
-                        MockitoStubbingStrategies.mock(false),
-                        MockitoStubbingStrategies.mock()
+                        MockitoStubbingStrategies.mock(false).when(typeIsTestClass()),
+                        MockitoStubbingStrategies.mock().when(typeIsTestClass())
                 );
     }
 
+    private static Matcher<Type> rawType(Matcher<? super Class<?>> next) {
+        return mappedTo(type -> getRawType(type).orElse(Object.class), next);
+    }
+
+    private static Matcher<Type> typeIsTestClass() {
+        return rawType(annotatedWith(TestClass.class));
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface TestClass {}
+
+    @TestClass
     interface Foo {
 
         int getInt();
@@ -91,6 +110,7 @@ class GenericMockStubbingStrategyTest {
 
     }
 
+    @TestClass
     interface Bla<T> {
 
         int getInt();
@@ -99,6 +119,7 @@ class GenericMockStubbingStrategyTest {
 
     }
 
+    @TestClass
     class Bar {
 
         int getInt() {
@@ -111,6 +132,7 @@ class GenericMockStubbingStrategyTest {
 
     }
 
+    @TestClass
     final class FinalClass {
 
         int getInt() {
@@ -123,6 +145,7 @@ class GenericMockStubbingStrategyTest {
 
     }
 
+    @TestClass
     enum Qux {}
 
 }
