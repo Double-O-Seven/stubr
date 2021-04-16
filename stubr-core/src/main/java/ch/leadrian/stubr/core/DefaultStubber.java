@@ -27,11 +27,11 @@ import static ch.leadrian.stubr.core.strategy.StubbingStrategies.conditional;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
-final class StubberImpl extends Stubber {
+final class DefaultStubber extends Stubber {
 
     private final List<StubbingStrategy> strategies;
 
-    private StubberImpl(List<StubbingStrategy> strategies) {
+    private DefaultStubber(List<StubbingStrategy> strategies) {
         this.strategies = ImmutableList.copyOf(strategies);
     }
 
@@ -121,7 +121,7 @@ final class StubberImpl extends Stubber {
 
         @Override
         public Stubber build() {
-            Stubber builtStubber = new StubberImpl(strategies);
+            Stubber builtStubber = new DefaultStubber(strategies);
             if (stubbers.isEmpty()) {
                 return builtStubber;
             } else {

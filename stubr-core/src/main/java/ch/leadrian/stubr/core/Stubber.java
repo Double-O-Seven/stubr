@@ -44,7 +44,7 @@ public abstract class Stubber {
      * @see StubberBuilder
      */
     public static StubberBuilder builder() {
-        return new StubberImpl.Builder();
+        return new DefaultStubber.Builder();
     }
 
     abstract StubberChain newChain(Type type, StubbingContext context);
