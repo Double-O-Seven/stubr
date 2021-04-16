@@ -20,6 +20,7 @@ import ch.leadrian.stubr.core.ParameterizedTypeLiteral;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TypesTest {
 
@@ -263,6 +265,96 @@ class TypesTest {
 
             assertThat(upperBound)
                     .hasValue(Object.class);
+        }
+
+    }
+
+    @Nested
+    class TrimWildcard {
+
+        @Test
+        void givenMultipleBoundsItShouldThrowException() {
+            Type type = new TypeLiteral<List<String>>() {}.getType();
+
+            Type trimmedType = Types.trimWildcard(type);
+
+            assertThat(trimmedType)
+                    .isEqualTo(type);
+        }
+
+        @Test
+        <T> void givenTypeVariableWithoutExplicitBoundItShouldReturnObject() {
+            Type type = new TypeLiteral<T>() {}.getType();
+
+            Type trimmedType = Types.trimWildcard(type);
+
+            assertThat(trimmedType)
+                    .isEqualTo(Object.class);
+        }
+
+        @Test
+        <T extends Number> void givenTypeVariableWithSingleBoundItShouldReturnBound() {
+            Type type = new TypeLiteral<T>() {}.getType();
+
+            Type trimmedType = Types.trimWildcard(type);
+
+            assertThat(trimmedType)
+                    .isEqualTo(Number.class);
+        }
+
+        @Test
+        <T extends Number & Serializable> void givenTypeVariableWithMultipleBoundsItShouldReturnBound() {
+            Type type = new TypeLiteral<T>() {}.getType();
+
+            assertThrows(IllegalArgumentException.class, () -> Types.trimWildcard(type));
+        }
+
+        @Test
+        <T> void givenGenericArrayTypeItShouldJustReturnIt() {
+            Type type = new TypeLiteral<T[]>() {}.getType();
+
+            Type trimmedType = Types.trimWildcard(type);
+
+            assertThat(trimmedType)
+                    .isEqualTo(type);
+        }
+
+        @Test
+        void givenClassItShouldJustReturnIt() {
+            Type trimmedType = Types.trimWildcard(Number.class);
+
+            assertThat(trimmedType)
+                    .isEqualTo(Number.class);
+        }
+
+        @Test
+        void shouldTrimLowerBoundedType() {
+            Type type = new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
+
+            Type trimmedType = Types.trimWildcard(type);
+
+            assertThat(trimmedType)
+                    .isEqualTo(Number.class);
+        }
+
+        @Test
+        void shouldTrimUpperBoundedType() {
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
+
+            Type trimmedType = Types.trimWildcard(type);
+
+            assertThat(trimmedType)
+                    .isEqualTo(Number.class);
+        }
+
+        @Test
+        void shouldTrimWildcardType() {
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+
+            Type trimmedType = Types.trimWildcard(type);
+
+            assertThat(trimmedType)
+                    .isEqualTo(Object.class);
         }
 
     }

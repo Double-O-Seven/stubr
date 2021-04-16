@@ -27,6 +27,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
+import static ch.leadrian.stubr.core.type.Types.trimWildcard;
+
 abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<Object>> {
 
     static final OptionalStubbingStrategy EMPTY = new Empty();
@@ -89,7 +91,7 @@ abstract class OptionalStubbingStrategy extends SimpleStubbingStrategy<Optional<
         @Override
         protected final Optional<Object> stubOptional(StubbingContext context, ParameterizedType type) {
             StubbingSite site = StubbingSites.parameterizedType(context.getSite(), type, 0);
-            Type valueType = type.getActualTypeArguments()[0];
+            Type valueType = trimWildcard(context.getTypeResolver().resolve(Optional.class.getTypeParameters()[0]));
             return stubOptional(context, site, valueType);
         }
 

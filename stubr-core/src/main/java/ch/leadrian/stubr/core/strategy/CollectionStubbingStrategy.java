@@ -30,6 +30,7 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
+import static ch.leadrian.stubr.core.type.Types.trimWildcard;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -71,7 +72,7 @@ final class CollectionStubbingStrategy<T extends Collection> extends SimpleStubb
 
     @Override
     protected T stubParameterizedType(StubbingContext context, ParameterizedType type) {
-        Type valueType = context.getTypeResolver().resolve(Collection.class.getTypeParameters()[0]);
+        Type valueType = trimWildcard(context.getTypeResolver().resolve(Collection.class.getTypeParameters()[0]));
         StubbingSite site = StubbingSites.parameterizedType(context.getSite(), type, 0);
         List<Object> values = IntStream.iterate(0, i -> i + 1)
                 .limit(collectionSize.applyAsInt(context))

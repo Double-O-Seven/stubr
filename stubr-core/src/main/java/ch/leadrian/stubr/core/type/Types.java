@@ -112,41 +112,110 @@ public final class Types {
      * @param type the wildcard type
      * @return the lower bound of the given {@code type}
      */
-    public static Optional<Type> getLowerBound(WildcardType type) {
-        Type[] lowerBounds = type.getLowerBounds();
-        if (lowerBounds.length == 1) {
-            return Optional.of(lowerBounds[0]);
+    public static Optional<Type> getLowerBound(Type type) {
+        if (type instanceof WildcardType) {
+            Type[] lowerBounds = ((WildcardType) type).getLowerBounds();
+            if (lowerBounds.length == 1) {
+                return Optional.of(lowerBounds[0]);
+            }
         }
         return Optional.empty();
     }
 
     /**
-     * Returns the upper bound of the given {@link WildcardType} if there is exactly one upper bound, else {@link
-     * Optional#empty()}.
+     * Returns the upper bound of the given {@link WildcardType} or {@link TypeVariable} if there is exactly one upper
+     * bound, else {@link Optional#empty()}.
      *
-     * @param type the wildcard type
+     * @param type the type
      * @return the upper bound of the given {@code type}
      */
-    public static Optional<Type> getOnlyUpperBound(WildcardType type) {
-        Type[] upperBounds = type.getUpperBounds();
-        if (upperBounds.length == 1) {
-            return Optional.of(upperBounds[0]);
-        }
-        return Optional.empty();
+    public static Optional<Type> getOnlyUpperBound(Type type) {
+        return accept(type, new TypeVisitor<Optional<Type>>() {
+
+            @Override
+            public Optional<Type> visit(Class<?> clazz) {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Type> visit(ParameterizedType parameterizedType) {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Type> visit(WildcardType wildcardType) {
+                Type[] upperBounds = wildcardType.getUpperBounds();
+                if (upperBounds.length == 1) {
+                    return Optional.of(upperBounds[0]);
+                }
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Type> visit(TypeVariable<?> typeVariable) {
+                Type[] upperBounds = typeVariable.getBounds();
+                if (upperBounds.length == 1) {
+                    return Optional.of(upperBounds[0]);
+                }
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Type> visit(GenericArrayType genericArrayType) {
+                return Optional.empty();
+            }
+        });
     }
 
     /**
-     * Returns the lower bound of the given {@code wildcardType} if present, else if the upper bound.
+     * Returns the lower bound of the given {@code type} if present, else if the upper bound.
      *
-     * @param wildcardType the wildcard type
-     * @return the lower bound of the given {@code wildcardType} if present, else if the upper bound
+     * @param type the type
+     * @return the lower bound of the given {@code type} if present, else if the upper bound
      */
-    public static Optional<Type> getBound(WildcardType wildcardType) {
-        Optional<Type> lowerBound = getLowerBound(wildcardType);
+    public static Optional<Type> getBound(Type type) {
+        Optional<Type> lowerBound = getLowerBound(type);
         if (lowerBound.isPresent()) {
             return lowerBound;
         }
-        return getOnlyUpperBound(wildcardType);
+        return getOnlyUpperBound(type);
+    }
+
+    /**
+     * Removes the wildcard from the given {@code type}.
+     *
+     * @param type the type that may contain a wildcard
+     * @return the type without the wildcards
+     * @throws IllegalArgumentException if the the given {@code type} is a {@link WildcardType} with multiple bounds
+     */
+    public static Type trimWildcard(Type type) {
+        return accept(type, new TypeVisitor<Type>() {
+
+            @Override
+            public Type visit(Class<?> clazz) {
+                return clazz;
+            }
+
+            @Override
+            public Type visit(ParameterizedType parameterizedType) {
+                return parameterizedType;
+            }
+
+            @Override
+            public Type visit(WildcardType wildcardType) {
+                return getBound(type).orElseThrow(() -> new IllegalArgumentException("Cannot trim wildcard type that does not have exactly one bound: " + type));
+            }
+
+            @Override
+            public Type visit(TypeVariable<?> typeVariable) {
+                return getBound(type).orElseThrow(() -> new IllegalArgumentException("Cannot trim type variable that does not have exactly one bound: " + type));
+            }
+
+            @Override
+            public Type visit(GenericArrayType genericArrayType) {
+                return genericArrayType;
+            }
+        });
     }
 
     /**

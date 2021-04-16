@@ -62,20 +62,42 @@ class MapStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyMapStubber() {
-        ParameterizedTypeLiteral<Map<String, Integer>> mapOfStrings = new ParameterizedTypeLiteral<Map<String, Integer>>() {};
+        ParameterizedTypeLiteral<Map<String, Integer>> unboundedStringMap = new ParameterizedTypeLiteral<Map<String, Integer>>() {};
+        ParameterizedTypeLiteral<Map<? extends String, ? extends Integer>> upperBoundedStringMap = new ParameterizedTypeLiteral<Map<? extends String, ? extends Integer>>() {};
+        ParameterizedTypeLiteral<Map<? super String, ? super Integer>> lowerBoundedStringMap = new ParameterizedTypeLiteral<Map<? super String, ? super Integer>>() {};
         return stubbingStrategyTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .provideStub(Integer.class, 123, 456, 789)
                 .rejects(Map.class)
-                .accepts(mapOfStrings)
+                .accepts(unboundedStringMap)
                 .andStubs(new HashMap<>(ImmutableMap.of("foo", 123, "bar", 456, "baz", 789)))
                 .at(
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 0),
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 1),
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 0),
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 1),
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 0),
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, mapOfStrings.getType(), 1)
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedStringMap.getType(), 1),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedStringMap.getType(), 1),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedStringMap.getType(), 1)
+                )
+                .accepts(upperBoundedStringMap)
+                .andStubs(new HashMap<>(ImmutableMap.of("foo", 123, "bar", 456, "baz", 789)))
+                .at(
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedStringMap.getType(), 1),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedStringMap.getType(), 1),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedStringMap.getType(), 1)
+                )
+                .accepts(lowerBoundedStringMap)
+                .andStubs(new HashMap<>(ImmutableMap.of("foo", 123, "bar", 456, "baz", 789)))
+                .at(
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedStringMap.getType(), 1),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedStringMap.getType(), 1),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedStringMap.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedStringMap.getType(), 1)
                 )
                 .rejects(HashMap.class)
                 .rejects(new TypeLiteral<HashMap<String, Integer>>() {})

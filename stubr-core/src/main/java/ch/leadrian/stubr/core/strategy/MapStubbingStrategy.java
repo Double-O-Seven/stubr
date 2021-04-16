@@ -31,6 +31,7 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
+import static ch.leadrian.stubr.core.type.Types.trimWildcard;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 
@@ -72,8 +73,8 @@ final class MapStubbingStrategy<T extends Map> extends SimpleStubbingStrategy<T>
     @Override
     protected T stubParameterizedType(StubbingContext context, ParameterizedType type) {
         TypeVariable<Class<Map>>[] typeParameters = Map.class.getTypeParameters();
-        Type keyType = context.getTypeResolver().resolve(typeParameters[0]);
-        Type valueType = context.getTypeResolver().resolve(typeParameters[1]);
+        Type keyType = trimWildcard(context.getTypeResolver().resolve(typeParameters[0]));
+        Type valueType = trimWildcard(context.getTypeResolver().resolve(typeParameters[1]));
         StubbingSite keySite = StubbingSites.parameterizedType(context.getSite(), type, 0);
         StubbingSite valueSite = StubbingSites.parameterizedType(context.getSite(), type, 1);
         int size = mapSize.applyAsInt(context);

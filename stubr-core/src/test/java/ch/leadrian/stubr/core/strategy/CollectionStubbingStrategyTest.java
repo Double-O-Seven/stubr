@@ -65,16 +65,32 @@ class CollectionStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyCollectionStubber() {
-        ParameterizedTypeLiteral<List<String>> listOfStrings = new ParameterizedTypeLiteral<List<String>>() {};
+        ParameterizedTypeLiteral<List<String>> unboundedList = new ParameterizedTypeLiteral<List<String>>() {};
+        ParameterizedTypeLiteral<List<? super String>> lowerBoundedList = new ParameterizedTypeLiteral<List<? super String>>() {};
+        ParameterizedTypeLiteral<List<? extends String>> upperBoundedList = new ParameterizedTypeLiteral<List<? extends String>>() {};
         return stubbingStrategyTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .rejects(List.class)
-                .accepts(listOfStrings)
+                .accepts(unboundedList)
                 .andStubs(newArrayList("foo", "bar", "baz"))
                 .at(
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0),
-                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, listOfStrings.getType(), 0)
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedList.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedList.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, unboundedList.getType(), 0)
+                )
+                .accepts(lowerBoundedList)
+                .andStubs(newArrayList("foo", "bar", "baz"))
+                .at(
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedList.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedList.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedList.getType(), 0)
+                )
+                .accepts(upperBoundedList)
+                .andStubs(newArrayList("foo", "bar", "baz"))
+                .at(
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedList.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedList.getType(), 0),
+                        StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedList.getType(), 0)
                 )
                 .rejects(Collection.class)
                 .rejects(new TypeLiteral<Collection<String>>() {})
