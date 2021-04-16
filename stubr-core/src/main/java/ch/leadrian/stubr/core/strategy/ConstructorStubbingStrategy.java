@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.trimWildcard;
 import static ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList.toImmutableList;
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isPrivate;
@@ -83,7 +84,7 @@ final class ConstructorStubbingStrategy implements StubbingStrategy {
             Parameter parameter
     ) {
         ConstructorParameterStubbingSite site = StubbingSites.constructorParameter(context.getSite(), constructor, parameter);
-        Type parameterType = context.getTypeResolver().resolve(parameter.getParameterizedType());
+        Type parameterType = trimWildcard(context.getTypeResolver().resolve(parameter.getParameterizedType()));
         return context.getStubber().stub(parameterType, site);
     }
 

@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
+import static ch.leadrian.stubr.core.type.Types.trimWildcard;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.stream;
 
@@ -56,7 +57,7 @@ final class Methods {
 
     private static Object stubParameterValue(StubbingContext context, Method method, Parameter parameter) {
         MethodParameterStubbingSite site = StubbingSites.methodParameter(context.getSite(), method, parameter);
-        Type parameterType = context.getTypeResolver().resolve(parameter.getParameterizedType());
+        Type parameterType = trimWildcard(context.getTypeResolver().resolve(parameter.getParameterizedType()));
         return context.getStubber().stub(parameterType, site);
     }
 

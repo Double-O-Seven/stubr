@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static ch.leadrian.stubr.core.type.Types.getRawType;
+import static ch.leadrian.stubr.core.type.Types.trimWildcard;
 import static java.lang.Float.parseFloat;
 import static java.lang.invoke.MethodHandles.Lookup.PACKAGE;
 import static java.lang.invoke.MethodHandles.Lookup.PRIVATE;
@@ -119,7 +120,7 @@ enum ProxyStubbingStrategy implements StubbingStrategy {
         }
 
         protected final Object stub(Method method) {
-            Type returnType = context.getTypeResolver().resolve(method.getGenericReturnType());
+            Type returnType = trimWildcard(context.getTypeResolver().resolve(method.getGenericReturnType()));
             if (returnType == void.class || returnType == Void.class) {
                 return null;
             }

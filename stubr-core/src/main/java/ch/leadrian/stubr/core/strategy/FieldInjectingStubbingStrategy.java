@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 import static ch.leadrian.stubr.core.site.StubbingSites.injectedField;
+import static ch.leadrian.stubr.core.type.Types.trimWildcard;
 import static ch.leadrian.stubr.core.type.Types.visitTypeHierarchy;
 import static java.lang.reflect.Modifier.isFinal;
 import static java.lang.reflect.Modifier.isStatic;
@@ -69,7 +70,7 @@ final class FieldInjectingStubbingStrategy extends EnhancingStubbingStrategy {
 
     private void injectField(StubbingContext context, Object stubValue, Field field) {
         InjectedFieldStubbingSite site = injectedField(context.getSite(), field);
-        Type fieldType = context.getTypeResolver().resolve(field.getGenericType());
+        Type fieldType = trimWildcard(context.getTypeResolver().resolve(field.getGenericType()));
         Object fieldValue = context.getStubber().stub(fieldType, site);
         try {
             field.set(stubValue, fieldValue);
