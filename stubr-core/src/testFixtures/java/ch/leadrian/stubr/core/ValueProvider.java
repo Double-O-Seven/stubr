@@ -23,11 +23,10 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toCollection;
 
-abstract class ResultProvider {
+abstract class ValueProvider {
 
-    static ResultProvider of(Object... values) {
+    static ValueProvider of(Object... values) {
         if (values.length == 0) {
             return NoValue.INSTANCE;
         } else if (values.length == 1) {
@@ -37,30 +36,37 @@ abstract class ResultProvider {
         }
     }
 
-    private ResultProvider() {
+    private ValueProvider() {
     }
 
-    abstract Result<?> get();
+    abstract boolean hasValue();
 
-    abstract ResultProvider getUntouchedInstance();
+    abstract Object get();
 
-    private static class NoValue extends ResultProvider {
+    abstract ValueProvider getUntouchedInstance();
+
+    private static class NoValue extends ValueProvider {
 
         static final NoValue INSTANCE = new NoValue();
 
         @Override
-        Result<?> get() {
-            return Result.failure();
+        boolean hasValue() {
+            return false;
         }
 
         @Override
-        ResultProvider getUntouchedInstance() {
+        Object get() {
+            throw new AssertionError("Not supported");
+        }
+
+        @Override
+        ValueProvider getUntouchedInstance() {
             return this;
         }
 
     }
 
-    private static class ConstantValue extends ResultProvider {
+    private static class ConstantValue extends ValueProvider {
 
         private final Object value;
 
@@ -69,31 +75,41 @@ abstract class ResultProvider {
         }
 
         @Override
-        Result<?> get() {
-            return Result.success(value);
+        boolean hasValue() {
+            return true;
         }
 
         @Override
-        ResultProvider getUntouchedInstance() {
+        Object get() {
+            return value;
+        }
+
+        @Override
+        ValueProvider getUntouchedInstance() {
             return this;
         }
 
     }
 
-    private static class ValueSequence extends ResultProvider {
+    private static class ValueSequence extends ValueProvider {
 
         private final List<?> originalValues;
-        private final LinkedList<Result<?>> results;
+        private final LinkedList<Object> results;
 
         private ValueSequence(Collection<?> values) {
             requireNonNull(values, "values");
             this.originalValues = new ArrayList<>(values);
-            this.results = values.stream().map(Result::success).collect(toCollection(LinkedList::new));
+            this.results = new LinkedList<>(values);
         }
 
         @Override
-        public Result<?> get() {
-            Result<?> result = results.poll();
+        boolean hasValue() {
+            return results.peek() != null;
+        }
+
+        @Override
+        public Object get() {
+            Object result = results.poll();
             if (result == null) {
                 throw new AssertionError("Exhausted results");
             }
@@ -101,7 +117,7 @@ abstract class ResultProvider {
         }
 
         @Override
-        ResultProvider getUntouchedInstance() {
+        ValueProvider getUntouchedInstance() {
             return new ValueSequence(originalValues);
         }
 

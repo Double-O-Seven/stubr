@@ -37,7 +37,8 @@ final class StubbingStrategyRejectsType implements StubbingStrategyTestCase {
     public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site) {
         String displayName = String.format("%s should rejects %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
         return dynamicTest(displayName, () -> {
-            StubbingContext context = new StubbingContext(stubber, site, acceptedType);
+            StubbingContext context = stubber.newContext(stubber, site, acceptedType);
+            
             boolean accepts = stubbingStrategy.accepts(context, acceptedType);
 
             assertThat(accepts).isFalse();

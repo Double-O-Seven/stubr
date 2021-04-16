@@ -19,6 +19,7 @@ package ch.leadrian.stubr.core;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 final class CapturingStubber extends Stubber {
 
@@ -30,10 +31,9 @@ final class CapturingStubber extends Stubber {
     }
 
     @Override
-    StubberChain newChain(Type type, StubbingContext context) {
-        StubbingSite site = context.getSite();
+    Stream<StubbingContext> newContextStream(Stubber rootStubber, StubbingSite site, Type type) {
         capturedSites.add(site);
-        return delegate.newChain(type, context);
+        return delegate.newContextStream(rootStubber, site, type);
     }
 
     public List<StubbingSite> getCapturedSites() {

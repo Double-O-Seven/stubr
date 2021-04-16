@@ -19,6 +19,7 @@ package ch.leadrian.stubr.core;
 import ch.leadrian.stubr.core.type.TypeResolver;
 
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -32,17 +33,20 @@ public final class StubbingContext {
 
     private final Stubber stubber;
     private final StubbingSite site;
-    private final StubberChain chain;
     private final TypeResolver typeResolver;
+    private final Type type;
+    private final StubbingStrategy strategy;
+    private StubbingContext next;
 
-    StubbingContext(Stubber stubber, StubbingSite site, Type type) {
+    StubbingContext(Stubber stubber, StubbingSite site, Type type, StubbingStrategy strategy) {
         requireNonNull(stubber, "stubber");
         requireNonNull(site, "site");
         requireNonNull(type, "type");
         this.stubber = stubber;
         this.site = site;
-        this.chain = stubber.newChain(type, this);
         this.typeResolver = TypeResolver.using(type);
+        this.type = type;
+        this.strategy = strategy;
     }
 
     /**
@@ -60,17 +64,37 @@ public final class StubbingContext {
     }
 
     /**
-     * @return the {@link StubberChain} that is used to request a stub for a given type
-     */
-    public StubberChain getChain() {
-        return chain;
-    }
-
-    /**
      * @return the {@link TypeResolver} that is used to resolve types
      */
     public TypeResolver getTypeResolver() {
         return typeResolver;
+    }
+
+    /**
+     * @return the context that may be applied afterwards
+     */
+    public Optional<StubbingContext> getNext() {
+        return Optional.ofNullable(next);
+    }
+
+    void setNext(StubbingContext next) {
+        this.next = next;
+    }
+
+    /**
+     * @return {@code true} if this {@link StubbingContext} can provide a result, else {@code false}
+     * @see ch.leadrian.stubr.core.strategy.EnhancingStubbingStrategy
+     */
+    public boolean hasResult() {
+        return strategy != null && strategy.accepts(this, type);
+    }
+
+    /**
+     * @return the {@link Result} computed in this context
+     * @see ch.leadrian.stubr.core.strategy.EnhancingStubbingStrategy
+     */
+    public Result<?> result() {
+        return strategy != null ? Result.success(strategy.stub(this, type)) : Result.failure();
     }
 
 }

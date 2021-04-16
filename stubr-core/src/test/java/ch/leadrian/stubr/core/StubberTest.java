@@ -467,7 +467,7 @@ class StubberTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
-                    .hasMessage("Failed to stub instance of class java.lang.Float");
+                    .hasMessageStartingWith("Failed to stub instance of class java.lang.Float");
         }
 
         @Test
@@ -552,7 +552,7 @@ class StubberTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
-                    .hasMessage("Failed to stub instance of class java.lang.Float");
+                    .hasMessageStartingWith("Failed to stub instance of class java.lang.Float");
         }
 
         @Test
@@ -565,7 +565,7 @@ class StubberTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
-                    .hasMessage("Failed to stub instance of class java.lang.Float");
+                    .hasMessageStartingWith("Failed to stub instance of class java.lang.Float");
         }
 
         @Test
@@ -626,7 +626,7 @@ class StubberTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
-                    .hasMessage("Failed to stub instance of class java.lang.Float");
+                    .hasMessageStartingWith("Failed to stub instance of class java.lang.Float");
         }
 
         @Test
@@ -639,7 +639,7 @@ class StubberTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
-                    .hasMessage("Failed to stub instance of class java.lang.Float");
+                    .hasMessageStartingWith("Failed to stub instance of class java.lang.Float");
         }
 
         @Test

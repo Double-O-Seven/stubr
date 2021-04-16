@@ -22,6 +22,7 @@ import ch.leadrian.stubr.core.strategy.EnhancingStubbingStrategy;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
+import java.util.Locale;
 
 import static ch.leadrian.stubr.core.matcher.Matchers.equalTo;
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.constantValue;
@@ -36,6 +37,7 @@ class ComposeIntegrationTest {
                 .include(Stubber.builder()
                         .stubWith(constantValue("Bar"))
                         .stubWith(constantValue(123))
+                        .stubWith(constantValue(Locale.GERMAN))
                         .build())
                 .include(Stubber.builder()
                         .stubWith(constantValue("Foo"))
@@ -58,7 +60,8 @@ class ComposeIntegrationTest {
 
         assertAll(
                 () -> assertThat(stubber.stub(String.class)).isEqualTo("FOO"),
-                () -> assertThat(stubber.stub(Integer.class)).isEqualTo(-123)
+                () -> assertThat(stubber.stub(Integer.class)).isEqualTo(-123),
+                () -> assertThat(stubber.stub(Locale.class)).isEqualTo(Locale.GERMAN)
         );
     }
 

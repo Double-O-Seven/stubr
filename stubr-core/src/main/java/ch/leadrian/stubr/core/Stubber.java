@@ -21,8 +21,13 @@ import ch.leadrian.stubr.core.type.TypeLiteral;
 import ch.leadrian.stubr.core.type.Types;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.internal.com.google.common.primitives.Primitives.wrap;
+import static java.util.Collections.reverse;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * Class {@code Stubber} represents the main API used to stub a specific type. A {@code Stubber} may be a composition of
@@ -47,7 +52,26 @@ public abstract class Stubber {
         return new DefaultStubber.Builder();
     }
 
-    abstract StubberChain newChain(Type type, StubbingContext context);
+    abstract Stream<StubbingContext> newContextStream(Stubber rootStubber, StubbingSite site, Type type);
+
+    final StubbingContext newContext(Stubber rootStubber, StubbingSite site, Type type) {
+        List<StubbingContext> contexts = newContextStream(rootStubber, site, type).collect(toCollection(ArrayList::new));
+        reverse(contexts);
+
+        StubbingContext root = null;
+        for (StubbingContext context : contexts) {
+            if (root != null) {
+                context.setNext(root);
+            }
+
+            if (context.hasResult()) { // Fully set up the context before filtering it out
+                root = context;
+            } else {
+                context.setNext(null);
+            }
+        }
+        return root != null ? root : new StubbingContext(this, site, type, null);
+    }
 
     /**
      * Type-unsafe wrapper method that tries to provide a stub value for the given {@code Type}.
@@ -64,8 +88,7 @@ public abstract class Stubber {
      * @return a successful {@link Result} containing the stub value, or a failure result
      */
     public final Result<?> tryToStub(Type type, StubbingSite site) {
-        StubbingContext context = new StubbingContext(this, site, type);
-        return context.getChain().next();
+        return newContext(this, site, type).result();
     }
 
     /**
@@ -90,7 +113,7 @@ public abstract class Stubber {
     public final Object stub(Type type, StubbingSite site) {
         Result<?> result = tryToStub(type, site);
         if (result.isFailure()) {
-            throw new StubbingException(String.format("Failed to stub instance of %s", type));
+            throw new StubbingException(String.format("Failed to stub instance of %s at %s", type, site));
         }
         return result.getValue();
     }

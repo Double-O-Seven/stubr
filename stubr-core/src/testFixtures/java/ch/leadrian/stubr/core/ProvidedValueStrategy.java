@@ -16,26 +16,30 @@
 
 package ch.leadrian.stubr.core;
 
-import ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList;
-
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
-final class CompositeStubber extends Stubber {
+final class ProvidedValueStrategy implements StubbingStrategy {
 
-    private final List<Stubber> stubbers;
+    private final Map<Type, ValueProvider> valueProviders;
 
-    CompositeStubber(List<? extends Stubber> stubbers) {
-        requireNonNull(stubbers, "stubbers");
-        this.stubbers = ImmutableList.copyOf(stubbers);
+    ProvidedValueStrategy(Map<Type, ValueProvider> valueProviders) {
+        requireNonNull(valueProviders, "valueProviders");
+        this.valueProviders = new HashMap<>(valueProviders);
     }
 
     @Override
-    Stream<StubbingContext> newContextStream(Stubber rootStubber, StubbingSite site, Type type) {
-        return stubbers.stream().flatMap(stubber -> stubber.newContextStream(rootStubber, site, type));
+    public boolean accepts(StubbingContext context, Type type) {
+        ValueProvider valueProvider = valueProviders.get(type);
+        return valueProvider != null && valueProvider.hasValue();
+    }
+
+    @Override
+    public Object stub(StubbingContext context, Type type) {
+        return valueProviders.get(type).get();
     }
 
 }

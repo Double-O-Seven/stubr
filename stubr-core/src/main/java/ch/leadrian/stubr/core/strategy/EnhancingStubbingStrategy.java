@@ -24,8 +24,11 @@ import ch.leadrian.stubr.core.StubbingStrategy;
 import java.lang.reflect.Type;
 
 /**
- * A base class for stubbing strategies that may delegate the creation of the requested stub value further down the
- * {@link ch.leadrian.stubr.core.StubberChain} and then only perform enhancing operations on the stub value.
+ * A base class for stubbing strategies that may delegate the creation of the requested stub value further downstream
+ * and then only perform enhancing operations on the stub value.
+ *
+ * @see StubbingContext#hasResult()
+ * @see StubbingContext#result()
  */
 public abstract class EnhancingStubbingStrategy implements StubbingStrategy {
 
@@ -34,7 +37,7 @@ public abstract class EnhancingStubbingStrategy implements StubbingStrategy {
      */
     @Override
     public final boolean accepts(StubbingContext context, Type type) {
-        return context.getChain().hasNext();
+        return context.getNext().filter(StubbingContext::hasResult).isPresent();
     }
 
     /**
@@ -42,7 +45,7 @@ public abstract class EnhancingStubbingStrategy implements StubbingStrategy {
      */
     @Override
     public final Object stub(StubbingContext context, Type type) {
-        Result<?> result = context.getChain().next();
+        Result<?> result = context.getNext().map(StubbingContext::result).orElse(Result.failure());
         if (result.isFailure()) {
             throw new StubbingException(context.getSite(), type);
         }
@@ -60,8 +63,8 @@ public abstract class EnhancingStubbingStrategy implements StubbingStrategy {
      *
      * @param context   the context of the stub request
      * @param type      the requested stub value type
-     * @param stubValue the stub value that was provided by the next {@link StubbingStrategy} in the {@link
-     *                  StubbingContext}s {@link ch.leadrian.stubr.core.StubberChain}
+     * @param stubValue the stub value that was provided by the {@link StubbingStrategy} of {@link
+     *                  StubbingContext#getNext()}
      * @return the enhanced stub value
      */
     protected abstract Object enhance(StubbingContext context, Type type, Object stubValue);

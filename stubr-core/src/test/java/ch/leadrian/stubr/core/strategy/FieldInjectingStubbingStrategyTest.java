@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 
 import static ch.leadrian.equalizer.Equalizer.equalsAndHashCodeBuilder;
 import static ch.leadrian.stubr.core.StubbingStrategyTester.stubbingStrategyTester;
-import static ch.leadrian.stubr.core.matcher.Matchers.any;
 import static ch.leadrian.stubr.core.matcher.Matchers.equalTo;
 import static ch.leadrian.stubr.core.matcher.Matchers.field;
 import static ch.leadrian.stubr.core.matcher.Matchers.mappedTo;
@@ -76,7 +75,7 @@ class FieldInjectingStubbingStrategyTest {
                 .provideStub(new TypeLiteral<Foo<String>>() {}, new Foo<>())
                 .accepts(new TypeLiteral<Foo<String>>() {})
                 .andStubs(new Foo<>("fubar"))
-                .test(StubbingStrategies.fieldInjection(any()));
+                .test(StubbingStrategies.fieldInjection((context, field) -> field.getDeclaringClass() == Foo.class));
     }
 
     static abstract class LivingBeing {

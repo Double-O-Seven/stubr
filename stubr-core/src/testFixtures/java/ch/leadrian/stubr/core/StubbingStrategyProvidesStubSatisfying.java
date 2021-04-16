@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 final class StubbingStrategyProvidesStubSatisfying implements StubbingStrategyTestCase {
@@ -39,9 +40,10 @@ final class StubbingStrategyProvidesStubSatisfying implements StubbingStrategyTe
     public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site) {
         String displayName = String.format("%s should provide stub for %s", stubbingStrategy.getClass().getSimpleName(), acceptedType);
         return dynamicTest(displayName, () -> {
-            StubbingContext context = new StubbingContext(stubber, site, acceptedType);
-            Object value = stubbingStrategy.stub(context, acceptedType);
+            Result<?> result = stubber.tryToStub(acceptedType, site);
 
+            assertThat(result.isSuccess()).isTrue();
+            Object value = result.getValue();
             assertion.accept(value);
         });
     }

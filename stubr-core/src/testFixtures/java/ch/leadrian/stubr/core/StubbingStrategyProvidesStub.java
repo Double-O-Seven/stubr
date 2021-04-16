@@ -39,9 +39,10 @@ final class StubbingStrategyProvidesStub implements StubbingStrategyTestCase {
     public DynamicTest toDynamicTest(StubbingStrategy stubbingStrategy, Stubber stubber, StubbingSite site) {
         String displayName = String.format("%s should provide %s as stub for %s", stubbingStrategy.getClass().getSimpleName(), expectedValue, acceptedType);
         return dynamicTest(displayName, () -> {
-            StubbingContext context = new StubbingContext(stubber, site, acceptedType);
-            Object value = stubbingStrategy.stub(context, acceptedType);
+            Result<?> result = stubber.tryToStub(acceptedType, site);
 
+            assertThat(result.isSuccess()).isTrue();
+            Object value = result.getValue();
             if (expectedValue == null) {
                 assertThat(value).isNull();
             } else {

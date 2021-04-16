@@ -44,9 +44,8 @@ final class StubbingStrategyStubsAtSite implements StubbingStrategyTestCase {
         String displayName = getDisplayName(stubbingStrategy);
         return dynamicTest(displayName, () -> {
             CapturingStubber capturingStubber = new CapturingStubber(stubber);
-            StubbingContext capturingContext = new StubbingContext(capturingStubber, site, acceptedType);
 
-            stubbingStrategy.stub(capturingContext, acceptedType);
+            capturingStubber.tryToStub(acceptedType, site);
 
             List<StubbingSite> allExpectedSites = new ArrayList<>(this.expectedSites);
             allExpectedSites.add(0, site);

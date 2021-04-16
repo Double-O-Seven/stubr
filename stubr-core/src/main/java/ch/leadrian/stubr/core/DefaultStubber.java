@@ -20,8 +20,8 @@ import ch.leadrian.stubr.internal.com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static ch.leadrian.stubr.core.strategy.StubbingStrategies.conditional;
 import static java.util.Arrays.asList;
@@ -36,39 +36,8 @@ final class DefaultStubber extends Stubber {
     }
 
     @Override
-    StubberChain newChain(Type type, StubbingContext context) {
-        return new Chain(strategies, type, context);
-    }
-
-    private static final class Chain implements StubberChain {
-
-        private final Type type;
-
-        private final StubbingContext context;
-
-        private final Iterator<StubbingStrategy> iterator;
-
-        private Chain(List<StubbingStrategy> strategies, Type type, StubbingContext context) {
-            iterator = strategies.stream().filter(strategy -> strategy.accepts(context, type)).iterator();
-            this.type = type;
-            this.context = context;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return iterator.hasNext();
-        }
-
-        @Override
-        public Result<?> next() {
-            if (iterator.hasNext()) {
-                StubbingStrategy strategy = iterator.next();
-                return Result.success(strategy.stub(context, type));
-            }
-
-            return Result.failure();
-        }
-
+    Stream<StubbingContext> newContextStream(Stubber rootStubber, StubbingSite site, Type type) {
+        return strategies.stream().map(strategy -> new StubbingContext(rootStubber, site, type, strategy));
     }
 
     static final class Builder implements StubberBuilder {

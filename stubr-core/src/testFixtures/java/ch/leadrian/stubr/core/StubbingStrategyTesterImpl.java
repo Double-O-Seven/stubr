@@ -31,14 +31,14 @@ import static java.util.Arrays.asList;
 final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
 
     private final List<StubbingStrategyTestCase> tests = new ArrayList<>();
-    private final Map<Type, ResultProvider> resultProvidersByType = new HashMap<>();
+    private final Map<Type, ValueProvider> resultProvidersByType = new HashMap<>();
     private final List<Stubber> stubbers = new ArrayList<>();
 
-    private StubbingStrategyTester addResultProvider(Type type, ResultProvider resultProvider) {
+    private StubbingStrategyTester addResultProvider(Type type, ValueProvider valueProvider) {
         if (resultProvidersByType.containsKey(type)) {
             throw new IllegalArgumentException(String.format("Value for %s is already provided", type));
         }
-        resultProvidersByType.put(type, resultProvider);
+        resultProvidersByType.put(type, valueProvider);
         return this;
     }
 
@@ -50,12 +50,12 @@ final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
 
     @Override
     public StubbingStrategyTester provideStub(Type type, Object... values) {
-        return addResultProvider(type, ResultProvider.of(values));
+        return addResultProvider(type, ValueProvider.of(values));
     }
 
     @Override
     public StubbingStrategyTester doNotStub(Type type) {
-        return addResultProvider(type, ResultProvider.of());
+        return addResultProvider(type, ValueProvider.of());
     }
 
     @Override
@@ -75,19 +75,21 @@ final class StubbingStrategyTesterImpl implements StubbingStrategyTester {
         return new ArrayList<>(tests)
                 .stream()
                 .map(test -> {
-                    Stubber stubber = createStubber();
+                    Stubber stubber = createStubber(stubbingStrategy);
                     return test.toDynamicTest(stubbingStrategy, stubber, TestStubbingSite.INSTANCE);
                 });
     }
 
-    private Stubber createStubber() {
-        Map<Type, ResultProvider> untouchedResultProvidersByType = new HashMap<>(resultProvidersByType);
-        untouchedResultProvidersByType.replaceAll((type, resultProvider) -> resultProvider.getUntouchedInstance());
-        TestStubber testStubber = new TestStubber(untouchedResultProvidersByType);
+    private Stubber createStubber(StubbingStrategy stubbingStrategy) {
+        Map<Type, ValueProvider> untouchedResultProvidersByType = new HashMap<>(resultProvidersByType);
+        untouchedResultProvidersByType.replaceAll((type, valueProvider) -> valueProvider.getUntouchedInstance());
+        ProvidedValueStrategy providedValueStrategy = new ProvidedValueStrategy(untouchedResultProvidersByType);
         StubberBuilder builder = Stubber.builder();
-        builder.include(testStubber);
+        builder.include(Stubber.builder().stubWith(providedValueStrategy).build());
         stubbers.forEach(builder::include);
-        return builder.build();
+        return builder
+                .stubWith(stubbingStrategy)
+                .build();
     }
 
     private abstract class DelegatingStubbingStrategyTester implements StubbingStrategyTester {
