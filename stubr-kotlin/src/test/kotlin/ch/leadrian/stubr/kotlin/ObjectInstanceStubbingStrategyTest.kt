@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,20 +26,20 @@ internal class ObjectInstanceStubbingStrategyTest {
     @TestFactory
     fun `test ObjectInstanceStubber`(): Stream<DynamicTest> {
         return stubbingStrategyTester()
-                .accepts(TestObject::class.java)
-                .andStubs(TestObject)
-                .rejects(TestClass::class.java)
-                .rejects(typeLiteral<Array<List<String>>>())
-                .test(KotlinStubbingStrategies.objectInstance())
+            .accepts(TestObject::class.java)
+            .andStubs(TestObject)
+            .rejects(TestClass::class.java)
+            .rejects(typeLiteral<Array<List<String>>>())
+            .test(KotlinStubbingStrategies.objectInstance())
     }
 
     @TestFactory
     fun `test constantValue`(): Stream<DynamicTest> {
         return stubbingStrategyTester()
-                .accepts(typeLiteral<List<String>>())
-                .andStubs(listOf("foo", "bar"))
-                .rejects(typeLiteral<List<Int>>())
-                .test(KotlinStubbingStrategies.constantValue(listOf("foo", "bar")))
+            .accepts(typeLiteral<List<String>>())
+            .andStubs(listOf("foo", "bar"))
+            .rejects(typeLiteral<List<Int>>())
+            .test(KotlinStubbingStrategies.constantValue(listOf("foo", "bar")))
     }
 
     object TestObject

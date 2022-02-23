@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,8 +66,10 @@ class MethodInjectingStubbingStrategyTest {
                 .provideStubsWith(Stubber.builder()
                         .stubWith(constantValue("fubar").when(site(method(mappedTo(Method::getName, equalTo("setFoo"))))))
                         .build())
-                .provideStub(new TypeLiteral<Foo<String>>() {}, new Foo<>())
-                .accepts(new TypeLiteral<Foo<String>>() {})
+                .provideStub(new TypeLiteral<Foo<String>>() {
+                }, new Foo<>())
+                .accepts(new TypeLiteral<Foo<String>>() {
+                })
                 .andStubs(new Foo<>("fubar"))
                 .test(StubbingStrategies.methodInjection((context, method) -> method.isAnnotationPresent(Inject.class)));
     }
@@ -89,7 +91,8 @@ class MethodInjectingStubbingStrategyTest {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
-    @interface Inject {}
+    @interface Inject {
+    }
 
     static class Person extends LivingBeing {
 

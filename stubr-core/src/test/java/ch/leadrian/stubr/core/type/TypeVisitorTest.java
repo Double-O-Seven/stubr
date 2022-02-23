@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,8 @@ class TypeVisitorTest {
     void shouldVisitParameterizedType() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        Type type = new TypeLiteral<List<String>>() {}.getType();
+        Type type = new TypeLiteral<List<String>>() {
+        }.getType();
 
         TypeVisitor.accept(type, visitor);
 
@@ -58,7 +59,8 @@ class TypeVisitorTest {
     void shouldVisitWildcardType() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        Type type = new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+        Type type = new ParameterizedTypeLiteral<List<?>>() {
+        }.getActualTypeArgument(0);
 
         TypeVisitor.accept(type, visitor);
 
@@ -69,7 +71,8 @@ class TypeVisitorTest {
     <T> void shouldVisitTypeVariable() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        Type type = new TypeLiteral<T>() {}.getType();
+        Type type = new TypeLiteral<T>() {
+        }.getType();
 
         TypeVisitor.accept(type, visitor);
 
@@ -80,7 +83,8 @@ class TypeVisitorTest {
     <T> void shouldVisitGenericArrayType() {
         @SuppressWarnings("unchecked")
         TypeVisitor<Void> visitor = mock(TypeVisitor.class);
-        Type type = new TypeLiteral<T[]>() {}.getType();
+        Type type = new TypeLiteral<T[]>() {
+        }.getType();
 
         TypeVisitor.accept(type, visitor);
 

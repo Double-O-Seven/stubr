@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,13 @@ class ArrayStubbingStrategyTest {
                 .andStubs(new Object[0])
                 .accepts(String[].class)
                 .andStubs(new String[0])
-                .accepts(new TypeLiteral<List<String>[]>() {})
+                .accepts(new TypeLiteral<List<String>[]>() {
+                })
                 .andStubs(new List[0])
                 .rejects(Object.class)
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String[]>>() {})
+                .rejects(new TypeLiteral<List<String[]>>() {
+                })
                 .test(
                         StubbingStrategies.array(context -> 0),
                         StubbingStrategies.array(0),
@@ -54,7 +56,8 @@ class ArrayStubbingStrategyTest {
     @TestFactory
     Stream<DynamicTest> testNonEmptyArray() {
         return stubbingStrategyTester()
-                .provideStub(new TypeLiteral<List<String>>() {}, singletonList("Foo"), singletonList("Bar"), singletonList("Fubar"))
+                .provideStub(new TypeLiteral<List<String>>() {
+                }, singletonList("Foo"), singletonList("Bar"), singletonList("Fubar"))
                 .provideStub(Object.class, 1, 2, 3)
                 .provideStub(String.class, "Foo", "Bar", "Baz")
                 .accepts(Object[].class)
@@ -66,16 +69,21 @@ class ArrayStubbingStrategyTest {
                 )
                 .accepts(String[].class)
                 .andStubs(new String[]{"Foo", "Bar", "Baz"})
-                .accepts(new TypeLiteral<List<String>[]>() {})
+                .accepts(new TypeLiteral<List<String>[]>() {
+                })
                 .andStubs(new List[]{singletonList("Foo"), singletonList("Bar"), singletonList("Fubar")})
                 .at(
-                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {}),
-                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {}),
-                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {})
+                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {
+                        }),
+                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {
+                        }),
+                        StubbingSites.array(TestStubbingSite.INSTANCE, new TypeLiteral<List<String>>() {
+                        })
                 )
                 .rejects(Object.class)
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String[]>>() {})
+                .rejects(new TypeLiteral<List<String[]>>() {
+                })
                 .test(
                         StubbingStrategies.array(context -> 3),
                         StubbingStrategies.array(3)

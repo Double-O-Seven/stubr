@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,7 @@ import ch.leadrian.stubr.core.Matcher
 import ch.leadrian.stubr.core.Stubber
 import ch.leadrian.stubr.core.Stubbers
 import ch.leadrian.stubr.core.StubbingSite
-import ch.leadrian.stubr.core.matcher.Matchers.equalTo
-import ch.leadrian.stubr.core.matcher.Matchers.parent
-import ch.leadrian.stubr.core.matcher.Matchers.site
+import ch.leadrian.stubr.core.matcher.Matchers.*
 import ch.leadrian.stubr.core.strategy.StubbingStrategies.memoized
 import ch.leadrian.stubr.javafaker.FakerStrategies.firstName
 import ch.leadrian.stubr.javafaker.FakerStrategies.lastName
@@ -35,18 +33,17 @@ import org.spekframework.spek2.dsl.LifecycleAware
 import org.spekframework.spek2.lifecycle.MemoizedValue
 import java.lang.reflect.Modifier
 import java.lang.reflect.Type
-import java.util.Optional
-import java.util.Random
+import java.util.*
 
 fun familyStubber(seed: Long = 1234567890L): Stubber {
     val random = Random(seed)
     return Stubber.builder()
-            .include(Stubbers.defaultStubber())
-            .include(KotlinStubbers.defaultStubber())
-            .stubWith(faked(firstName(), random))
-            .stubWith(faked(lastName(), random))
-            .stubWith(memoized(mockkAny(relaxed = false)).applyWhen(testSubject().or(mockedTestDependency())))
-            .build()
+        .include(Stubbers.defaultStubber())
+        .include(KotlinStubbers.defaultStubber())
+        .stubWith(faked(firstName(), random))
+        .stubWith(faked(lastName(), random))
+        .stubWith(memoized(mockkAny(relaxed = false)).applyWhen(testSubject().or(mockedTestDependency())))
+        .build()
 }
 
 private fun testSubject(): Matcher<Type> = site(parent(equalTo(TestSubjectStubbingSite)))
@@ -74,4 +71,4 @@ inline fun <reified T : Any> LifecycleAware.testSubject(crossinline action: T.()
 }
 
 inline fun <reified T : Any> LifecycleAware.mockedTestDependency(crossinline action: T.() -> Unit = {}): MemoizedValue<T> =
-        memoizedStub(site = MockedTestDependencyStubbingSite) { apply(action) }
+    memoizedStub(site = MockedTestDependencyStubbingSite) { apply(action) }

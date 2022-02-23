@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,8 @@ class TypeResolverTest {
 
     @Test
     void shouldResolveTypeParameterOfClass() {
-        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {};
+        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {
+        };
         TypeResolver resolver = TypeResolver.using(typeLiteral);
 
         Type resolvedType = resolver.resolve(Foo.class.getTypeParameters()[0]);
@@ -38,7 +39,8 @@ class TypeResolverTest {
 
     @Test
     void shouldResolveGenericMethodParameter() throws NoSuchMethodException {
-        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {};
+        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {
+        };
         TypeResolver resolver = TypeResolver.using(typeLiteral);
         Method fooMethod = Foo.class.getMethod("foo", Object.class, int.class);
 
@@ -50,7 +52,8 @@ class TypeResolverTest {
 
     @Test
     void shouldResolveNonGenericMethodParameter() throws NoSuchMethodException {
-        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {};
+        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {
+        };
         TypeResolver resolver = TypeResolver.using(typeLiteral);
         Method fooMethod = Foo.class.getMethod("foo", Object.class, int.class);
 
@@ -62,7 +65,8 @@ class TypeResolverTest {
 
     @Test
     void shouldResolveTypeItself() throws NoSuchMethodException {
-        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {};
+        TypeLiteral<Foo<String>> typeLiteral = new TypeLiteral<Foo<String>>() {
+        };
         TypeResolver resolver = TypeResolver.using(typeLiteral);
         Method selfMethod = Foo.class.getMethod("self");
 
@@ -116,6 +120,7 @@ class TypeResolverTest {
 
     }
 
-    static class Fubar extends Foo<Integer> {}
+    static class Fubar extends Foo<Integer> {
+    }
 
 }

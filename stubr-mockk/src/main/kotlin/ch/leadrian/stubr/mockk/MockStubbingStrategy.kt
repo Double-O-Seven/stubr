@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,24 +25,24 @@ import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 
 internal class MockStubbingStrategy<T : Any>(
-        private val type: KClass<T>,
-        private val relaxed: Boolean,
-        private val relaxUnitFun: Boolean,
-        private val moreInterfaces: Array<out KClass<*>>,
-        private val block: T.(StubbingContext) -> Unit
+    private val type: KClass<T>,
+    private val relaxed: Boolean,
+    private val relaxUnitFun: Boolean,
+    private val moreInterfaces: Array<out KClass<*>>,
+    private val block: T.(StubbingContext) -> Unit
 ) : SimpleStubbingStrategy<T>() {
 
     override fun acceptsClass(context: StubbingContext, type: Class<*>): Boolean = type == this.type.java
 
     override fun acceptsParameterizedType(context: StubbingContext, type: ParameterizedType): Boolean =
-            type == this.type.java
+        type == this.type.java
 
     override fun acceptsGenericArrayType(context: StubbingContext, type: GenericArrayType): Boolean = false
 
     override fun stubClass(context: StubbingContext, type: Class<*>): T = createMock { block(context) }
 
     override fun stubParameterizedType(context: StubbingContext, type: ParameterizedType): T =
-            createMock { block(context) }
+        createMock { block(context) }
 
     override fun stubGenericArrayType(context: StubbingContext, type: GenericArrayType): T {
         throw StubbingException(context.site, type)
@@ -50,11 +50,11 @@ internal class MockStubbingStrategy<T : Any>(
 
     private inline fun createMock(block: T.() -> Unit): T {
         return mockkClass(
-                type = type,
-                relaxed = relaxed,
-                relaxUnitFun = relaxUnitFun,
-                block = block,
-                moreInterfaces = moreInterfaces,
+            type = type,
+            relaxed = relaxed,
+            relaxUnitFun = relaxUnitFun,
+            block = block,
+            moreInterfaces = moreInterfaces,
         )
     }
 

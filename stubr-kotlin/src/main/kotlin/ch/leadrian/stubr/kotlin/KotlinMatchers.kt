@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,27 +44,27 @@ object KotlinMatchers {
      */
     @JvmStatic
     fun <T, U : Any> instanceOf(targetClass: KClass<U>, delegate: Matcher<in U>? = null): Matcher<T> =
-            Matchers.instanceOf(targetClass.java, delegate)
+        Matchers.instanceOf(targetClass.java, delegate)
 
     /**
      * `KClass`-based variant of [Matchers.instanceOf].
      */
     inline fun <T, U : Any> instanceOf(
-            targetClass: KClass<U>,
-            crossinline delegate: (StubbingContext, U) -> Boolean
+        targetClass: KClass<U>,
+        crossinline delegate: (StubbingContext, U) -> Boolean
     ): Matcher<T> = instanceOf(targetClass, Matcher { context, value -> delegate(context, value) })
 
     /**
      * Inlined variant of [Matchers.instanceOf].
      */
     inline fun <T, reified U : Any> instanceOf(delegate: Matcher<in U>? = null): Matcher<T> =
-            instanceOf(U::class, delegate)
+        instanceOf(U::class, delegate)
 
     /**
      * Inlined variant of [Matchers.instanceOf].
      */
     inline fun <T, reified U : Any> instanceOf(crossinline delegate: (StubbingContext, U) -> Boolean): Matcher<T> =
-            instanceOf(U::class, delegate)
+        instanceOf(U::class, delegate)
 
     /**
      * Returns a [Matcher] that matches if the stubbing site is a [KPropertyStubbingSite] and the [delegate] matches it.
@@ -74,8 +74,8 @@ object KotlinMatchers {
     @JvmStatic
     fun <T : StubbingSite> kotlinProperty(delegate: Matcher<in KProperty<*>>): Matcher<T> {
         return instanceOf(
-                KPropertyStubbingSite::class,
-                mappedTo(Function { site: KPropertyStubbingSite -> site.property }, delegate)
+            KPropertyStubbingSite::class,
+            mappedTo(Function { site: KPropertyStubbingSite -> site.property }, delegate)
         )
     }
 
@@ -83,6 +83,6 @@ object KotlinMatchers {
      * Inlined variant of [kotlinProperty].
      */
     inline fun <T : StubbingSite> kotlinProperty(crossinline delegate: (StubbingContext, KProperty<*>) -> Boolean): Matcher<T> =
-            kotlinProperty(Matcher { context, value -> delegate(context, value) })
+        kotlinProperty(Matcher { context, value -> delegate(context, value) })
 
 }

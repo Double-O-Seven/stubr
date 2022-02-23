@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,24 +47,35 @@ class SimpleStubbingStrategyTest {
         return stubbingStrategyTester()
                 .accepts(String.class)
                 .andStubs("stubClass")
-                .accepts(new TypeLiteral<List<String>>() {})
+                .accepts(new TypeLiteral<List<String>>() {
+                })
                 .andStubs(singletonList("stubParameterizedType"))
-                .accepts(new ParameterizedTypeLiteral<List<? extends String>>() {}.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? extends String>>() {
+                }.getActualTypeArgument(0))
                 .andStubs("stubClass")
-                .accepts(new ParameterizedTypeLiteral<List<? super String>>() {}.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? super String>>() {
+                }.getActualTypeArgument(0))
                 .andStubs("stubClass")
-                .accepts(new ParameterizedTypeLiteral<List<? extends List<String>>>() {}.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? extends List<String>>>() {
+                }.getActualTypeArgument(0))
                 .andStubs(singletonList("stubParameterizedType"))
-                .accepts(new ParameterizedTypeLiteral<List<? super List<String>>>() {}.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? super List<String>>>() {
+                }.getActualTypeArgument(0))
                 .andStubs(singletonList("stubParameterizedType"))
-                .accepts(new TypeLiteral<List<String>[]>() {}.getType())
+                .accepts(new TypeLiteral<List<String>[]>() {
+                }.getType())
                 .andStubs(new List[]{singletonList("stubGenericArrayType")})
                 .rejects(Object.class)
-                .rejects(new TypeLiteral<List<Object>>() {})
-                .rejects(new TypeLiteral<T>() {})
-                .rejects(new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0))
-                .rejects(new ParameterizedTypeLiteral<List<? extends T>>() {}.getActualTypeArgument(0))
-                .rejects(new ParameterizedTypeLiteral<List<? super T>>() {}.getActualTypeArgument(0))
+                .rejects(new TypeLiteral<List<Object>>() {
+                })
+                .rejects(new TypeLiteral<T>() {
+                })
+                .rejects(new ParameterizedTypeLiteral<List<?>>() {
+                }.getActualTypeArgument(0))
+                .rejects(new ParameterizedTypeLiteral<List<? extends T>>() {
+                }.getActualTypeArgument(0))
+                .rejects(new ParameterizedTypeLiteral<List<? super T>>() {
+                }.getActualTypeArgument(0))
                 .test(new SimpleStubbingStrategy<Object>() {
 
                     @Override
@@ -74,12 +85,14 @@ class SimpleStubbingStrategyTest {
 
                     @Override
                     protected boolean acceptsParameterizedType(StubbingContext context, ParameterizedType type) {
-                        return new TypeLiteral<List<String>>() {}.getType().equals(type);
+                        return new TypeLiteral<List<String>>() {
+                        }.getType().equals(type);
                     }
 
                     @Override
                     protected boolean acceptsGenericArrayType(StubbingContext context, GenericArrayType type) {
-                        return new TypeLiteral<List<String>[]>() {}.getType().equals(type);
+                        return new TypeLiteral<List<String>[]>() {
+                        }.getType().equals(type);
                     }
 
                     @Override
@@ -105,7 +118,8 @@ class SimpleStubbingStrategyTest {
         StubbingContext context = mock(StubbingContext.class);
         when(context.getSite())
                 .thenReturn(site);
-        Type type = new TypeLiteral<T>() {}.getType();
+        Type type = new TypeLiteral<T>() {
+        }.getType();
         StubbingStrategy stubbingStrategy = new SimpleStubbingStrategy<Object>() {
 
             @Override

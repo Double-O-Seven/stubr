@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,8 @@ class TypesTest {
 
             @Test
             void givenParameterizedTypeItShouldReturnRawType() {
-                Type type = new TypeLiteral<List<String>>() {}.getType();
+                Type type = new TypeLiteral<List<String>>() {
+                }.getType();
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -58,7 +59,8 @@ class TypesTest {
 
             @Test
             void givenWildcardTypeWithLowerBoundItShouldReturnLowerBound() {
-                Type type = new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
+                Type type = new ParameterizedTypeLiteral<List<? super Number>>() {
+                }.getActualTypeArgument(0);
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -67,7 +69,8 @@ class TypesTest {
 
             @Test
             void givenWildcardTypeWithUpperBoundItShouldReturnUpperBound() {
-                Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
+                Type type = new ParameterizedTypeLiteral<List<? extends Number>>() {
+                }.getActualTypeArgument(0);
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -76,7 +79,8 @@ class TypesTest {
 
             @Test
             void givenWildcardTypeWithoutExplicitBoundItShouldReturnObject() {
-                Type type = new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+                Type type = new ParameterizedTypeLiteral<List<?>>() {
+                }.getActualTypeArgument(0);
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -85,7 +89,8 @@ class TypesTest {
 
             @Test
             <T> void givenTypeVariableItShouldReturnEmpty() {
-                Type type = new TypeLiteral<T>() {}.getType();
+                Type type = new TypeLiteral<T>() {
+                }.getType();
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -94,7 +99,8 @@ class TypesTest {
 
             @Test
             <T> void givenGenericArrayOfTypeVariableItShouldReturnEmpty() {
-                Type type = new TypeLiteral<T[]>() {}.getType();
+                Type type = new TypeLiteral<T[]>() {
+                }.getType();
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -103,7 +109,8 @@ class TypesTest {
 
             @Test
             void givenGenericArrayOfParameterizedTypeItShouldReturnArrayClass() {
-                Type type = new TypeLiteral<List<String>[]>() {}.getType();
+                Type type = new TypeLiteral<List<String>[]>() {
+                }.getType();
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -112,7 +119,8 @@ class TypesTest {
 
             @Test
             <T> void givenGenericArrayOfParameterizedTypeWithTypeVariableItShouldReturnArrayClass() {
-                Type type = new TypeLiteral<List<T>[]>() {}.getType();
+                Type type = new TypeLiteral<List<T>[]>() {
+                }.getType();
                 Optional<Class<?>> clazz = Types.getRawType(type);
 
                 assertThat(clazz)
@@ -126,7 +134,8 @@ class TypesTest {
 
             @Test
             void givenClassItShouldReturnIt() {
-                TypeLiteral<String> typeLiteral = new TypeLiteral<String>() {};
+                TypeLiteral<String> typeLiteral = new TypeLiteral<String>() {
+                };
                 Optional<Class<String>> clazz = Types.getRawType(typeLiteral);
 
                 assertThat(clazz)
@@ -135,7 +144,8 @@ class TypesTest {
 
             @Test
             void givenParameterizedTypeItShouldReturnRawType() {
-                TypeLiteral<List<String>> typeLiteral = new TypeLiteral<List<String>>() {};
+                TypeLiteral<List<String>> typeLiteral = new TypeLiteral<List<String>>() {
+                };
                 Optional<Class<List<String>>> clazz = Types.getRawType(typeLiteral);
 
                 assertThat(clazz)
@@ -144,7 +154,8 @@ class TypesTest {
 
             @Test
             <T> void givenTypeVariableItShouldReturnEmpty() {
-                TypeLiteral<T> typeLiteral = new TypeLiteral<T>() {};
+                TypeLiteral<T> typeLiteral = new TypeLiteral<T>() {
+                };
                 Optional<Class<T>> clazz = Types.getRawType(typeLiteral);
 
                 assertThat(clazz)
@@ -153,7 +164,8 @@ class TypesTest {
 
             @Test
             <T> void givenGenericArrayItShouldReturnEmpty() {
-                TypeLiteral<T[]> typeLiteral = new TypeLiteral<T[]>() {};
+                TypeLiteral<T[]> typeLiteral = new TypeLiteral<T[]>() {
+                };
                 Optional<Class<T[]>> clazz = Types.getRawType(typeLiteral);
 
                 assertThat(clazz)
@@ -169,7 +181,8 @@ class TypesTest {
 
         @Test
         void shouldReturnLowerBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -179,7 +192,8 @@ class TypesTest {
 
         @Test
         void givenOnlyUpperBoundItShouldReturnEmpty() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -189,7 +203,8 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnEmpty() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> lowerBound = Types.getLowerBound(type);
 
@@ -204,7 +219,8 @@ class TypesTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnObject() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -214,7 +230,8 @@ class TypesTest {
 
         @Test
         void shouldReturnUpperBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -224,7 +241,8 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnObject() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getOnlyUpperBound(type);
 
@@ -239,7 +257,8 @@ class TypesTest {
 
         @Test
         void givenOnlyLowerBoundItShouldReturnLowerBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? super Number>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getBound(type);
 
@@ -249,7 +268,8 @@ class TypesTest {
 
         @Test
         void shouldReturnUpperBound() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getBound(type);
 
@@ -259,7 +279,8 @@ class TypesTest {
 
         @Test
         void givenNoExplicitBoundsItShouldReturnObject() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {
+            }.getActualTypeArgument(0);
 
             Optional<Type> upperBound = Types.getBound(type);
 
@@ -274,7 +295,8 @@ class TypesTest {
 
         @Test
         void givenMultipleBoundsItShouldThrowException() {
-            Type type = new TypeLiteral<List<String>>() {}.getType();
+            Type type = new TypeLiteral<List<String>>() {
+            }.getType();
 
             Type trimmedType = Types.trimWildcard(type);
 
@@ -284,7 +306,8 @@ class TypesTest {
 
         @Test
         <T> void givenTypeVariableWithoutExplicitBoundItShouldReturnObject() {
-            Type type = new TypeLiteral<T>() {}.getType();
+            Type type = new TypeLiteral<T>() {
+            }.getType();
 
             Type trimmedType = Types.trimWildcard(type);
 
@@ -294,7 +317,8 @@ class TypesTest {
 
         @Test
         <T extends Number> void givenTypeVariableWithSingleBoundItShouldReturnBound() {
-            Type type = new TypeLiteral<T>() {}.getType();
+            Type type = new TypeLiteral<T>() {
+            }.getType();
 
             Type trimmedType = Types.trimWildcard(type);
 
@@ -304,14 +328,16 @@ class TypesTest {
 
         @Test
         <T extends Number & Serializable> void givenTypeVariableWithMultipleBoundsItShouldReturnBound() {
-            Type type = new TypeLiteral<T>() {}.getType();
+            Type type = new TypeLiteral<T>() {
+            }.getType();
 
             assertThrows(IllegalArgumentException.class, () -> Types.trimWildcard(type));
         }
 
         @Test
         <T> void givenGenericArrayTypeItShouldJustReturnIt() {
-            Type type = new TypeLiteral<T[]>() {}.getType();
+            Type type = new TypeLiteral<T[]>() {
+            }.getType();
 
             Type trimmedType = Types.trimWildcard(type);
 
@@ -329,7 +355,8 @@ class TypesTest {
 
         @Test
         void shouldTrimLowerBoundedType() {
-            Type type = new ParameterizedTypeLiteral<List<? super Number>>() {}.getActualTypeArgument(0);
+            Type type = new ParameterizedTypeLiteral<List<? super Number>>() {
+            }.getActualTypeArgument(0);
 
             Type trimmedType = Types.trimWildcard(type);
 
@@ -339,7 +366,8 @@ class TypesTest {
 
         @Test
         void shouldTrimUpperBoundedType() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<? extends Number>>() {
+            }.getActualTypeArgument(0);
 
             Type trimmedType = Types.trimWildcard(type);
 
@@ -349,7 +377,8 @@ class TypesTest {
 
         @Test
         void shouldTrimWildcardType() {
-            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {}.getActualTypeArgument(0);
+            WildcardType type = (WildcardType) new ParameterizedTypeLiteral<List<?>>() {
+            }.getActualTypeArgument(0);
 
             Type trimmedType = Types.trimWildcard(type);
 
@@ -382,14 +411,19 @@ class TypesTest {
 
     }
 
-    static class Foo implements Fubar, Baz {}
+    static class Foo implements Fubar, Baz {
+    }
 
-    static class Bar extends Foo implements Qux {}
+    static class Bar extends Foo implements Qux {
+    }
 
-    interface Baz {}
+    interface Baz {
+    }
 
-    interface Qux extends Baz {}
+    interface Qux extends Baz {
+    }
 
-    interface Fubar {}
+    interface Fubar {
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,17 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 internal class GenericMockStubbingStrategy(
-        private val relaxed: Boolean,
-        private val relaxUnitFun: Boolean,
-        private val moreInterfaces: Array<out KClass<*>>,
-        private val block: Any.(StubbingContext, Type) -> Unit
+    private val relaxed: Boolean,
+    private val relaxUnitFun: Boolean,
+    private val moreInterfaces: Array<out KClass<*>>,
+    private val block: Any.(StubbingContext, Type) -> Unit
 ) : SimpleStubbingStrategy<Any>() {
 
     override fun acceptsClass(context: StubbingContext, type: Class<*>): Boolean =
-            !(type.isEnum || type.isArray || type.isPrimitive)
+        !(type.isEnum || type.isArray || type.isPrimitive)
 
     override fun acceptsParameterizedType(context: StubbingContext, type: ParameterizedType): Boolean =
-            accepts(context, type.rawType)
+        accepts(context, type.rawType)
 
     override fun acceptsGenericArrayType(context: StubbingContext, type: GenericArrayType): Boolean = false
 
@@ -54,11 +54,11 @@ internal class GenericMockStubbingStrategy(
 
     private inline fun createMock(type: Class<*>, block: Any.() -> Unit): Any {
         return mockkClass(
-                type = type.kotlin,
-                relaxed = relaxed,
-                relaxUnitFun = relaxUnitFun,
-                block = block,
-                moreInterfaces = moreInterfaces,
+            type = type.kotlin,
+            relaxed = relaxed,
+            relaxUnitFun = relaxUnitFun,
+            block = block,
+            moreInterfaces = moreInterfaces,
         )
     }
 

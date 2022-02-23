@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import java.lang.reflect.Type
  * @return a new [StubbingStrategy] that is only applied when the given [matcher] matches
  */
 fun StubbingStrategy.applyWhen(matcher: Matcher<in Type>): StubbingStrategy =
-        this.`when`(matcher)
+    this.`when`(matcher)
 
 /**
  * Inline wrapper for [StubbingStrategy.when].
@@ -41,4 +41,4 @@ fun StubbingStrategy.applyWhen(matcher: Matcher<in Type>): StubbingStrategy =
  * @return a new [StubbingStrategy] that is only applied when the given [matcher] matches
  */
 inline fun StubbingStrategy.applyWhen(crossinline matcher: (StubbingContext, Type) -> Boolean): StubbingStrategy =
-        this.`when` { context, value -> matcher(context, value) }
+    this.`when` { context, value -> matcher(context, value) }

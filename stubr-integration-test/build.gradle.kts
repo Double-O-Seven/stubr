@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ plugins {
 dependencies {
     implementation(libs.equalizer.core)
     implementation(libs.stubr.shaded.dependencies)
-    
+
     testImplementation(project(":stubr-junit"))
     testImplementation(project(":stubr-core"))
 }

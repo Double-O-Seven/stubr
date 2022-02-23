@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,37 +35,45 @@ class ConstantValueStubbingStrategyTest {
         return stubbingStrategyTester()
                 .accepts(BigDecimal.class)
                 .andStubs(new BigDecimal(1337))
-                .accepts(new ParameterizedTypeLiteral<List<? extends BigDecimal>>() {}.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? extends BigDecimal>>() {
+                }.getActualTypeArgument(0))
                 .andStubs(new BigDecimal(1337))
-                .accepts(new ParameterizedTypeLiteral<List<? super BigDecimal>>() {}.getActualTypeArgument(0))
+                .accepts(new ParameterizedTypeLiteral<List<? super BigDecimal>>() {
+                }.getActualTypeArgument(0))
                 .andStubs(new BigDecimal(1337))
                 .rejects(Number.class)
-                .rejects(new BigDecimal(1337) {}.getClass())
+                .rejects(new BigDecimal(1337) {
+                }.getClass())
                 .test(
                         StubbingStrategies.constantValue(new BigDecimal(1337)),
                         StubbingStrategies.constantValue(BigDecimal.class, new BigDecimal(1337)),
-                        StubbingStrategies.constantValue(new TypeLiteral<BigDecimal>() {}, new BigDecimal(1337))
+                        StubbingStrategies.constantValue(new TypeLiteral<BigDecimal>() {
+                        }, new BigDecimal(1337))
                 );
     }
 
     @TestFactory
     Stream<DynamicTest> testConstantValueStubberWithParameterizedType() {
-        TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {};
+        TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {
+        };
         return stubbingStrategyTester()
                 .accepts(listOfStrings)
                 .andStubs(singletonList("Test"))
-                .rejects(new TypeLiteral<List<Integer>>() {})
+                .rejects(new TypeLiteral<List<Integer>>() {
+                })
                 .test(StubbingStrategies.constantValue(listOfStrings, singletonList("Test")));
     }
 
     @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testConstantValueStubberWithGenericArrayType() {
-        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {};
+        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {
+        };
         return stubbingStrategyTester()
                 .accepts(listOfStringsArray)
                 .andStubs(new List[]{singletonList("Test")})
-                .rejects(new TypeLiteral<List<Integer>>() {})
+                .rejects(new TypeLiteral<List<Integer>>() {
+                })
                 .test(StubbingStrategies.constantValue(listOfStringsArray, new List[]{singletonList("Test")}));
     }
 

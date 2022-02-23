@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ import kotlin.properties.ReadOnlyProperty
 internal object StubberSpec : Spek({
     val stubber by memoized {
         Stubber.builder()
-                .stubWith(KotlinStubbingStrategies.constantValue(1337))
-                .stubWith(KotlinStubbingStrategies.suppliedValue { sequenceNumber -> sequenceNumber.toString() })
-                .build()
+            .stubWith(KotlinStubbingStrategies.constantValue(1337))
+            .stubWith(KotlinStubbingStrategies.suppliedValue { sequenceNumber -> sequenceNumber.toString() })
+            .build()
     }
 
     describe("tryToStub") {
@@ -42,7 +42,7 @@ internal object StubberSpec : Spek({
                 it("should return success") {
                     val value = stubber.tryToStub<Int>(StubbingSites.unknown())
                     assertThat(value)
-                            .isEqualTo(Result.success(1337))
+                        .isEqualTo(Result.success(1337))
                 }
 
             }
@@ -52,7 +52,7 @@ internal object StubberSpec : Spek({
                 it("should return failure") {
                     val value = stubber.tryToStub<Long>(StubbingSites.unknown())
                     assertThat(value)
-                            .isEqualTo(Result.failure<Long>())
+                        .isEqualTo(Result.failure<Long>())
                 }
 
             }
@@ -66,7 +66,7 @@ internal object StubberSpec : Spek({
                 it("should return success") {
                     val value = stubber.tryToStub<Int>()
                     assertThat(value)
-                            .isEqualTo(Result.success(1337))
+                        .isEqualTo(Result.success(1337))
                 }
 
             }
@@ -76,7 +76,7 @@ internal object StubberSpec : Spek({
                 it("should return failure") {
                     val value = stubber.tryToStub<Long>()
                     assertThat(value)
-                            .isEqualTo(Result.failure<Long>())
+                        .isEqualTo(Result.failure<Long>())
                 }
 
             }
@@ -92,7 +92,7 @@ internal object StubberSpec : Spek({
             it("should return stub value") {
                 val value: Int = stubber.stub(StubbingSites.unknown())
                 assertThat(value)
-                        .isEqualTo(1337)
+                    .isEqualTo(1337)
             }
 
         }
@@ -102,7 +102,7 @@ internal object StubberSpec : Spek({
             it("should return stub value") {
                 val value: Int = stubber.stub()
                 assertThat(value)
-                        .isEqualTo(1337)
+                    .isEqualTo(1337)
             }
 
         }
@@ -117,7 +117,7 @@ internal object StubberSpec : Spek({
             val values = listOf(value, value)
 
             assertThat(values)
-                    .containsExactly("0", "1")
+                .containsExactly("0", "1")
         }
     }
 
@@ -134,8 +134,8 @@ internal object StubberSpec : Spek({
 
             it("should not reuse stub values for different owners") {
                 assertAll(
-                        { assertThat(delegatingObject.foo).isEqualTo("0") },
-                        { assertThat(delegatingObject.bar).isEqualTo("1") }
+                    { assertThat(delegatingObject.foo).isEqualTo("0") },
+                    { assertThat(delegatingObject.bar).isEqualTo("1") }
                 )
             }
         }
@@ -145,8 +145,8 @@ internal object StubberSpec : Spek({
 
             it("should not reuse stub values for different owners") {
                 assertAll(
-                        { assertThat(delegatingObject.foo).isEqualTo("0") },
-                        { assertThat(otherDelegatingObject.foo).isEqualTo("1") }
+                    { assertThat(delegatingObject.foo).isEqualTo("0") },
+                    { assertThat(otherDelegatingObject.foo).isEqualTo("1") }
                 )
             }
         }

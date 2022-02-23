@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,8 +72,10 @@ class FieldInjectingStubbingStrategyTest {
                 .provideStubsWith(Stubber.builder()
                         .stubWith(constantValue("fubar").when(site(field(mappedTo(Field::getName, equalTo("foo"))))))
                         .build())
-                .provideStub(new TypeLiteral<Foo<String>>() {}, new Foo<>())
-                .accepts(new TypeLiteral<Foo<String>>() {})
+                .provideStub(new TypeLiteral<Foo<String>>() {
+                }, new Foo<>())
+                .accepts(new TypeLiteral<Foo<String>>() {
+                })
                 .andStubs(new Foo<>("fubar"))
                 .test(StubbingStrategies.fieldInjection((context, field) -> field.getDeclaringClass() == Foo.class));
     }

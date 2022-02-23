@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,14 +30,14 @@ internal class StubbingStrategyTest {
     @TestFactory
     fun testApplyWhen(): Stream<DynamicTest> {
         return stubbingStrategyTester()
-                .accepts(String::class.java)
-                .accepts(Int::class.java)
-                .rejects(Float::class.java)
-                .rejects(Any::class.java)
-                .test(
-                        NullStubbingStrategy.applyWhen(Matcher { _, type -> type == String::class.java || type == Int::class.java }),
-                        NullStubbingStrategy.applyWhen { _, type -> type == String::class.java || type == Int::class.java }
-                )
+            .accepts(String::class.java)
+            .accepts(Int::class.java)
+            .rejects(Float::class.java)
+            .rejects(Any::class.java)
+            .test(
+                NullStubbingStrategy.applyWhen(Matcher { _, type -> type == String::class.java || type == Int::class.java }),
+                NullStubbingStrategy.applyWhen { _, type -> type == String::class.java || type == Int::class.java }
+            )
     }
 
     private object NullStubbingStrategy : StubbingStrategy {

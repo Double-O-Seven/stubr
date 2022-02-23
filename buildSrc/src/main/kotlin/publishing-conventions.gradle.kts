@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ publishing {
             val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
             url = when {
                 version.toString().endsWith("SNAPSHOT") -> snapshotsRepoUrl
-                else                                    -> releasesRepoUrl
+                else -> releasesRepoUrl
             }
             credentials {
                 val ossrhUsername: String? by extra

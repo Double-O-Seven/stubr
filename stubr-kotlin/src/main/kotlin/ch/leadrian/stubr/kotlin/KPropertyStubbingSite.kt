@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package ch.leadrian.stubr.kotlin
 
 import ch.leadrian.stubr.core.StubbingSite
-import java.util.Optional
+import java.util.*
 import kotlin.reflect.KProperty
 
 /**
@@ -26,14 +26,14 @@ import kotlin.reflect.KProperty
 data class KPropertyStubbingSite
 @PublishedApi
 internal constructor(
-        /**
-         * the receiver of the property (`this`)
-         */
-        val propertyOwner: Any?,
-        /**
-         * the delegated property
-         */
-        val property: KProperty<*>
+    /**
+     * the receiver of the property (`this`)
+     */
+    val propertyOwner: Any?,
+    /**
+     * the delegated property
+     */
+    val property: KProperty<*>
 ) : StubbingSite {
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,8 @@ class NullValueStubbingStrategyTest {
                 .andStubs(null)
                 .accepts(String.class)
                 .andStubs(null)
-                .accepts(new TypeLiteral<List<String>>() {})
+                .accepts(new TypeLiteral<List<String>>() {
+                })
                 .andStubs(null)
                 .rejects(boolean.class)
                 .rejects(byte.class)

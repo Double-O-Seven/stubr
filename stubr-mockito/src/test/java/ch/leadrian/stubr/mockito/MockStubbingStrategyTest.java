@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,10 +41,12 @@ class MockStubbingStrategyTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .rejects(new TypeLiteral<Bar<String>>() {})
+                .rejects(new TypeLiteral<Bar<String>>() {
+                })
                 .rejects(int.class)
                 .rejects(String.class)
-                .rejects(new TypeLiteral<Bar<String>[]>() {})
+                .rejects(new TypeLiteral<Bar<String>[]>() {
+                })
                 .test(MockitoStubbingStrategies.mock(Foo.class));
     }
 

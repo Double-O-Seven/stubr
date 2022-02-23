@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -348,7 +348,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {});
+            Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {
+            });
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -360,7 +361,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
+            Result<Integer> result = stubber.tryToStub(new TypeLiteral<Integer>() {
+            }, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.success(1337));
@@ -372,7 +374,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {
+            }));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -384,7 +387,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {
+            }, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -396,7 +400,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {});
+            Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {
+            });
 
             assertThat(result)
                     .isEqualTo(Result.failure());
@@ -408,7 +413,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO);
+            Result<Float> result = stubber.tryToStub(new TypeLiteral<Float>() {
+            }, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(Result.failure());
@@ -420,7 +426,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {
+            }));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)
@@ -433,7 +440,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {
+            }, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)
@@ -574,7 +582,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Integer result = stubber.stub(new TypeLiteral<Integer>() {});
+            Integer result = stubber.stub(new TypeLiteral<Integer>() {
+            });
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -586,7 +595,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Integer result = stubber.stub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO);
+            Integer result = stubber.stub(new TypeLiteral<Integer>() {
+            }, TestStubbingSite.FOO);
 
             assertThat(result)
                     .isEqualTo(1337);
@@ -598,7 +608,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {
+            }));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -610,7 +621,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, "Test"))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<Integer>() {
+            }, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(ClassCastException.class);
@@ -622,7 +634,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {
+            }));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
@@ -635,7 +648,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.stub(new TypeLiteral<Float>() {
+            }, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(StubbingException.class)
@@ -648,7 +662,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {
+            }));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)
@@ -661,7 +676,8 @@ class StubberTest {
                     .stubWith(testStrategy(Integer.class, 1337))
                     .build();
 
-            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {}, TestStubbingSite.FOO));
+            Throwable caughtThrowable = catchThrowable(() -> stubber.tryToStub(new TypeLiteral<T>() {
+            }, TestStubbingSite.FOO));
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalArgumentException.class)

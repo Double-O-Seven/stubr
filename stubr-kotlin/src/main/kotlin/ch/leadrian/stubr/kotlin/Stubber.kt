@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,12 +74,12 @@ inline operator fun <reified T> Stubber.getValue(thisRef: Any?, property: KPrope
  * @see KPropertyStubbingSite
  */
 inline fun <reified T> Stubber.stubbing(): ReadOnlyProperty<Any?, T> =
-        StubProperty(this, typeLiteral())
+    StubProperty(this, typeLiteral())
 
 @PublishedApi
 internal class StubProperty<in R, T>(
-        private val stubber: Stubber,
-        private val typeLiteral: TypeLiteral<T>
+    private val stubber: Stubber,
+    private val typeLiteral: TypeLiteral<T>
 ) : ReadOnlyProperty<R, T> {
 
     private val stubValuesBySite = ConcurrentHashMap<StubbingSite, T>()

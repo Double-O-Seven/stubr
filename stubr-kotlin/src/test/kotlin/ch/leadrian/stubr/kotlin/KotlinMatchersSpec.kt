@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should match") {
                     assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
-                            .isTrue()
+                        .isTrue()
                 }
             }
 
@@ -50,7 +50,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should not match") {
                     assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
-                            .isFalse()
+                        .isFalse()
                 }
             }
 
@@ -65,7 +65,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should match") {
                     assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
-                            .isTrue()
+                        .isTrue()
                 }
             }
 
@@ -76,7 +76,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should not match") {
                     assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
-                            .isFalse()
+                        .isFalse()
                 }
             }
 
@@ -91,7 +91,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should not match") {
                     assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
-                            .isFalse()
+                        .isFalse()
                 }
             }
         }
@@ -105,7 +105,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should match") {
                     assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
-                            .isTrue()
+                        .isTrue()
                 }
             }
 
@@ -116,7 +116,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should not match") {
                     assertThat(KotlinMatchers.kotlinTypeNullable<StubbingSite>().matches(context, site))
-                            .isFalse()
+                        .isFalse()
                 }
             }
         }
@@ -131,7 +131,7 @@ internal object KotlinMatchersSpec : Spek({
 
             it("should not match") {
                 assertThat(matcher.matches(context, site))
-                        .isFalse()
+                    .isFalse()
             }
         }
 
@@ -144,7 +144,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should not match") {
                     assertThat(matcher.matches(context, site))
-                            .isFalse()
+                        .isFalse()
                 }
             }
 
@@ -153,7 +153,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should match") {
                     assertThat(matcher.matches(context, site))
-                            .isTrue()
+                        .isTrue()
                 }
             }
         }
@@ -164,13 +164,14 @@ internal object KotlinMatchersSpec : Spek({
 
         listOf(true, false).forEach { expectedResult ->
             context("given delegate returning $expectedResult") {
-                val matcher: Matcher<Any> = KotlinMatchers.instanceOf { _: StubbingContext, _: String -> expectedResult }
+                val matcher: Matcher<Any> =
+                    KotlinMatchers.instanceOf { _: StubbingContext, _: String -> expectedResult }
 
                 context("given value is instance of target class") {
 
                     it("should return $expectedResult") {
                         assertThat(matcher.matches(context, "Test"))
-                                .isEqualTo(expectedResult)
+                            .isEqualTo(expectedResult)
                     }
                 }
 
@@ -178,7 +179,7 @@ internal object KotlinMatchersSpec : Spek({
 
                     it("should return false") {
                         assertThat(matcher.matches(context, 1234))
-                                .isFalse()
+                            .isFalse()
                     }
                 }
             }
@@ -191,7 +192,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should return true") {
                     assertThat(matcher.matches(context, "Test"))
-                            .isTrue()
+                        .isTrue()
                 }
             }
 
@@ -199,7 +200,7 @@ internal object KotlinMatchersSpec : Spek({
 
                 it("should return false") {
                     assertThat(matcher.matches(context, 1234))
-                            .isFalse()
+                        .isFalse()
                 }
             }
         }

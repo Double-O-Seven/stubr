@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,15 +33,20 @@ class OptionalStubbingStrategyTest {
         return stubbingStrategyTester()
                 .accepts(Optional.class)
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<String>>() {})
+                .accepts(new TypeLiteral<Optional<String>>() {
+                })
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<? super String>>() {})
+                .accepts(new TypeLiteral<Optional<? super String>>() {
+                })
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<? extends String>>() {})
+                .accepts(new TypeLiteral<Optional<? extends String>>() {
+                })
                 .andStubs(Optional.empty())
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String>>() {})
-                .rejects(new TypeLiteral<Optional<String>[]>() {})
+                .rejects(new TypeLiteral<List<String>>() {
+                })
+                .rejects(new TypeLiteral<Optional<String>[]>() {
+                })
                 .test(StubbingStrategies.optional(OptionalStubbingMode.EMPTY));
     }
 
@@ -49,16 +54,21 @@ class OptionalStubbingStrategyTest {
     Stream<DynamicTest> testPresentOptionalStubber() {
         return stubbingStrategyTester()
                 .provideStub("Test")
-                .accepts(new TypeLiteral<Optional<String>>() {})
+                .accepts(new TypeLiteral<Optional<String>>() {
+                })
                 .andStubs(Optional.of("Test"))
-                .accepts(new TypeLiteral<Optional<? super String>>() {})
+                .accepts(new TypeLiteral<Optional<? super String>>() {
+                })
                 .andStubs(Optional.of("Test"))
-                .accepts(new TypeLiteral<Optional<? extends String>>() {})
+                .accepts(new TypeLiteral<Optional<? extends String>>() {
+                })
                 .andStubs(Optional.of("Test"))
                 .rejects(Optional.class)
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String>>() {})
-                .rejects(new TypeLiteral<Optional<String>[]>() {})
+                .rejects(new TypeLiteral<List<String>>() {
+                })
+                .rejects(new TypeLiteral<Optional<String>[]>() {
+                })
                 .test(StubbingStrategies.optional(OptionalStubbingMode.PRESENT));
     }
 
@@ -69,15 +79,20 @@ class OptionalStubbingStrategyTest {
                 .doNotStub(Integer.class)
                 .accepts(Optional.class)
                 .andStubs(Optional.empty())
-                .accepts(new TypeLiteral<Optional<? super String>>() {})
+                .accepts(new TypeLiteral<Optional<? super String>>() {
+                })
                 .andStubs(Optional.of("Test"))
-                .accepts(new TypeLiteral<Optional<? extends String>>() {})
+                .accepts(new TypeLiteral<Optional<? extends String>>() {
+                })
                 .andStubs(Optional.of("Test"))
-                .accepts(new TypeLiteral<Optional<Integer>>() {})
+                .accepts(new TypeLiteral<Optional<Integer>>() {
+                })
                 .andStubs(Optional.empty())
                 .rejects(String.class)
-                .rejects(new TypeLiteral<List<String>>() {})
-                .rejects(new TypeLiteral<Optional<String>[]>() {})
+                .rejects(new TypeLiteral<List<String>>() {
+                })
+                .rejects(new TypeLiteral<Optional<String>[]>() {
+                })
                 .test(StubbingStrategies.optional(OptionalStubbingMode.PRESENT_IF_POSSIBLE));
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,23 +39,34 @@ class CollectionStubbingStrategyTest {
         return stubbingStrategyTester()
                 .accepts(List.class)
                 .andStubs(new ArrayList<>())
-                .accepts(new TypeLiteral<List<String>>() {})
+                .accepts(new TypeLiteral<List<String>>() {
+                })
                 .andStubs(new ArrayList<>())
-                .accepts(new TypeLiteral<List<? super String>>() {})
+                .accepts(new TypeLiteral<List<? super String>>() {
+                })
                 .andStubs(new ArrayList<>())
-                .accepts(new TypeLiteral<List<?>>() {})
+                .accepts(new TypeLiteral<List<?>>() {
+                })
                 .andStubs(new ArrayList<>())
-                .accepts(new TypeLiteral<List<? extends String>>() {})
+                .accepts(new TypeLiteral<List<? extends String>>() {
+                })
                 .andStubs(new ArrayList<>())
                 .rejects(Collection.class)
-                .rejects(new TypeLiteral<Collection<String>>() {})
-                .rejects(new TypeLiteral<Collection<? super String>>() {})
-                .rejects(new TypeLiteral<Collection<? extends String>>() {})
+                .rejects(new TypeLiteral<Collection<String>>() {
+                })
+                .rejects(new TypeLiteral<Collection<? super String>>() {
+                })
+                .rejects(new TypeLiteral<Collection<? extends String>>() {
+                })
                 .rejects(ArrayList.class)
-                .rejects(new TypeLiteral<ArrayList<String>>() {})
-                .rejects(new TypeLiteral<ArrayList<? super String>>() {})
-                .rejects(new TypeLiteral<ArrayList<? extends String>>() {})
-                .rejects(new TypeLiteral<List<String>[]>() {})
+                .rejects(new TypeLiteral<ArrayList<String>>() {
+                })
+                .rejects(new TypeLiteral<ArrayList<? super String>>() {
+                })
+                .rejects(new TypeLiteral<ArrayList<? extends String>>() {
+                })
+                .rejects(new TypeLiteral<List<String>[]>() {
+                })
                 .test(
                         StubbingStrategies.collection(List.class, ArrayList::new, context -> 0),
                         StubbingStrategies.collection(List.class, ArrayList::new, 0),
@@ -65,9 +76,12 @@ class CollectionStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyCollectionStubber() {
-        ParameterizedTypeLiteral<List<String>> unboundedList = new ParameterizedTypeLiteral<List<String>>() {};
-        ParameterizedTypeLiteral<List<? super String>> lowerBoundedList = new ParameterizedTypeLiteral<List<? super String>>() {};
-        ParameterizedTypeLiteral<List<? extends String>> upperBoundedList = new ParameterizedTypeLiteral<List<? extends String>>() {};
+        ParameterizedTypeLiteral<List<String>> unboundedList = new ParameterizedTypeLiteral<List<String>>() {
+        };
+        ParameterizedTypeLiteral<List<? super String>> lowerBoundedList = new ParameterizedTypeLiteral<List<? super String>>() {
+        };
+        ParameterizedTypeLiteral<List<? extends String>> upperBoundedList = new ParameterizedTypeLiteral<List<? extends String>>() {
+        };
         return stubbingStrategyTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .rejects(List.class)
@@ -93,14 +107,21 @@ class CollectionStubbingStrategyTest {
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, upperBoundedList.getType(), 0)
                 )
                 .rejects(Collection.class)
-                .rejects(new TypeLiteral<Collection<String>>() {})
-                .rejects(new TypeLiteral<Collection<? super String>>() {})
-                .rejects(new TypeLiteral<Collection<? extends String>>() {})
+                .rejects(new TypeLiteral<Collection<String>>() {
+                })
+                .rejects(new TypeLiteral<Collection<? super String>>() {
+                })
+                .rejects(new TypeLiteral<Collection<? extends String>>() {
+                })
                 .rejects(ArrayList.class)
-                .rejects(new TypeLiteral<ArrayList<String>>() {})
-                .rejects(new TypeLiteral<ArrayList<? super String>>() {})
-                .rejects(new TypeLiteral<ArrayList<? extends String>>() {})
-                .rejects(new TypeLiteral<List<String>[]>() {})
+                .rejects(new TypeLiteral<ArrayList<String>>() {
+                })
+                .rejects(new TypeLiteral<ArrayList<? super String>>() {
+                })
+                .rejects(new TypeLiteral<ArrayList<? extends String>>() {
+                })
+                .rejects(new TypeLiteral<List<String>[]>() {
+                })
                 .test(StubbingStrategies.collection(List.class, ArrayList::new, context -> 3), StubbingStrategies.collection(List.class, ArrayList::new, 3));
     }
 
@@ -109,7 +130,8 @@ class CollectionStubbingStrategyTest {
     Stream<DynamicTest> testCollectionWithNonStandardTypeParameters() {
         return stubbingStrategyTester()
                 .provideStub(String.class, "A", "B", "C")
-                .accepts(new TypeLiteral<WeirdList<String, Integer>>() {})
+                .accepts(new TypeLiteral<WeirdList<String, Integer>>() {
+                })
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(
                         WeirdList.class,
                         weirdList -> assertThat(weirdList).containsExactly("A", "B", "C")

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,10 +78,12 @@ class ProxyStubbingStrategyTest {
         return stubbingStrategyTester()
                 .provideStub("Test")
                 .provideStub(1234)
-                .accepts(new TypeLiteral<Fubar<String>>() {})
+                .accepts(new TypeLiteral<Fubar<String>>() {
+                })
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Fubar.class, fubar ->
                         assertThat(fubar.getGenericValue()).isEqualTo("Test")))
-                .accepts(new TypeLiteral<Fubar<Integer>>() {})
+                .accepts(new TypeLiteral<Fubar<Integer>>() {
+                })
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Fubar.class, fubar ->
                         assertThat(fubar.getGenericValue()).isEqualTo(1234)))
                 .test(

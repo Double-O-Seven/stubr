@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +41,13 @@ class ImplementationStubbingStrategyTest {
                 .rejects(Object.class)
                 .test(
                         StubbingStrategies.implementation(CharSequence.class, String.class),
-                        StubbingStrategies.implementation(new TypeLiteral<CharSequence>() {}, new TypeLiteral<String>() {}),
-                        StubbingStrategies.implementation(CharSequence.class, new TypeLiteral<String>() {}),
-                        StubbingStrategies.implementation(new TypeLiteral<CharSequence>() {}, String.class)
+                        StubbingStrategies.implementation(new TypeLiteral<CharSequence>() {
+                        }, new TypeLiteral<String>() {
+                        }),
+                        StubbingStrategies.implementation(CharSequence.class, new TypeLiteral<String>() {
+                        }),
+                        StubbingStrategies.implementation(new TypeLiteral<CharSequence>() {
+                        }, String.class)
                 );
     }
 
@@ -51,23 +55,32 @@ class ImplementationStubbingStrategyTest {
     @TestFactory
     Stream<DynamicTest> testImplementationStubberWithParameterizedClass() {
         return stubbingStrategyTester()
-                .provideStub(new TypeLiteral<List<String>>() {}, singletonList("Test"))
-                .accepts(new TypeLiteral<Collection<? extends CharSequence>>() {})
+                .provideStub(new TypeLiteral<List<String>>() {
+                }, singletonList("Test"))
+                .accepts(new TypeLiteral<Collection<? extends CharSequence>>() {
+                })
                 .andStubs(singletonList("Test"))
                 .at(TestStubbingSite.INSTANCE)
-                .rejects(new TypeLiteral<Collection<CharSequence>>() {})
-                .rejects(new TypeLiteral<Collection<String>>() {})
-                .rejects(new TypeLiteral<List<String>>() {})
+                .rejects(new TypeLiteral<Collection<CharSequence>>() {
+                })
+                .rejects(new TypeLiteral<Collection<String>>() {
+                })
+                .rejects(new TypeLiteral<List<String>>() {
+                })
                 .rejects(String.class)
                 .rejects(Object.class)
-                .test(StubbingStrategies.implementation(new TypeLiteral<Collection<? extends CharSequence>>() {}, new TypeLiteral<List<String>>() {}));
+                .test(StubbingStrategies.implementation(new TypeLiteral<Collection<? extends CharSequence>>() {
+                }, new TypeLiteral<List<String>>() {
+                }));
     }
 
     @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testImplementationStubberWithGenericArrayType() {
-        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {};
-        TypeLiteral<Collection<String>[]> collectionOfStringsArray = new TypeLiteral<Collection<String>[]>() {};
+        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {
+        };
+        TypeLiteral<Collection<String>[]> collectionOfStringsArray = new TypeLiteral<Collection<String>[]>() {
+        };
         return stubbingStrategyTester()
                 .provideStub(listOfStringsArray, new List[]{singletonList("Test")})
                 .accepts(collectionOfStringsArray)

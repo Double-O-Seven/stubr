@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,19 +40,27 @@ class MapStubbingStrategyTest {
         return stubbingStrategyTester()
                 .accepts(Map.class)
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<String, Integer>>() {})
+                .accepts(new TypeLiteral<Map<String, Integer>>() {
+                })
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<? super String, ? super Integer>>() {})
+                .accepts(new TypeLiteral<Map<? super String, ? super Integer>>() {
+                })
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<?, ?>>() {})
+                .accepts(new TypeLiteral<Map<?, ?>>() {
+                })
                 .andStubs(new HashMap<>())
-                .accepts(new TypeLiteral<Map<? extends String, ? extends Integer>>() {})
+                .accepts(new TypeLiteral<Map<? extends String, ? extends Integer>>() {
+                })
                 .andStubs(new HashMap<>())
                 .rejects(HashMap.class)
-                .rejects(new TypeLiteral<HashMap<String, String>>() {})
-                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {})
-                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {})
-                .rejects(new TypeLiteral<Map<String, Integer>[]>() {})
+                .rejects(new TypeLiteral<HashMap<String, String>>() {
+                })
+                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {
+                })
+                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {
+                })
+                .rejects(new TypeLiteral<Map<String, Integer>[]>() {
+                })
                 .test(
                         StubbingStrategies.map(Map.class, HashMap::new, context -> 0),
                         StubbingStrategies.map(Map.class, HashMap::new, 0),
@@ -62,9 +70,12 @@ class MapStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testNonEmptyMapStubber() {
-        ParameterizedTypeLiteral<Map<String, Integer>> unboundedStringMap = new ParameterizedTypeLiteral<Map<String, Integer>>() {};
-        ParameterizedTypeLiteral<Map<? extends String, ? extends Integer>> upperBoundedStringMap = new ParameterizedTypeLiteral<Map<? extends String, ? extends Integer>>() {};
-        ParameterizedTypeLiteral<Map<? super String, ? super Integer>> lowerBoundedStringMap = new ParameterizedTypeLiteral<Map<? super String, ? super Integer>>() {};
+        ParameterizedTypeLiteral<Map<String, Integer>> unboundedStringMap = new ParameterizedTypeLiteral<Map<String, Integer>>() {
+        };
+        ParameterizedTypeLiteral<Map<? extends String, ? extends Integer>> upperBoundedStringMap = new ParameterizedTypeLiteral<Map<? extends String, ? extends Integer>>() {
+        };
+        ParameterizedTypeLiteral<Map<? super String, ? super Integer>> lowerBoundedStringMap = new ParameterizedTypeLiteral<Map<? super String, ? super Integer>>() {
+        };
         return stubbingStrategyTester()
                 .provideStub(String.class, "foo", "bar", "baz")
                 .provideStub(Integer.class, 123, 456, 789)
@@ -100,10 +111,14 @@ class MapStubbingStrategyTest {
                         StubbingSites.parameterizedType(TestStubbingSite.INSTANCE, lowerBoundedStringMap.getType(), 1)
                 )
                 .rejects(HashMap.class)
-                .rejects(new TypeLiteral<HashMap<String, Integer>>() {})
-                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {})
-                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {})
-                .rejects(new TypeLiteral<Map<String, Integer>[]>() {})
+                .rejects(new TypeLiteral<HashMap<String, Integer>>() {
+                })
+                .rejects(new TypeLiteral<HashMap<? super String, ? super Integer>>() {
+                })
+                .rejects(new TypeLiteral<HashMap<? extends String, ? extends Integer>>() {
+                })
+                .rejects(new TypeLiteral<Map<String, Integer>[]>() {
+                })
                 .test(StubbingStrategies.map(Map.class, HashMap::new, context -> 3), StubbingStrategies.map(Map.class, HashMap::new, 3));
     }
 
@@ -113,7 +128,8 @@ class MapStubbingStrategyTest {
         return stubbingStrategyTester()
                 .provideStub(String.class, "A", "B", "C")
                 .provideStub(Integer.class, 1, 2, 3)
-                .accepts(new TypeLiteral<WeirdMap<String, Integer, BigDecimal>>() {})
+                .accepts(new TypeLiteral<WeirdMap<String, Integer, BigDecimal>>() {
+                })
                 .andStubSatisfies(stub -> assertThat(stub)
                         .isInstanceOfSatisfying(WeirdMap.class, map -> assertThat(map)
                                 .containsOnly(entry("A", 1), entry("B", 2), entry("C", 3))))

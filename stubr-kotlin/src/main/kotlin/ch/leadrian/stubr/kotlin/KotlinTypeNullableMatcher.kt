@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,10 @@ internal class KotlinTypeNullableMatcher<T : StubbingSite> : Matcher<T> {
 
     override fun matches(context: StubbingContext, value: T): Boolean {
         return when (value) {
-            is MethodParameterStubbingSite      -> isParameterTypeNullable(value)
-            is MethodReturnValueStubbingSite    -> isReturnTypeNullable(value)
+            is MethodParameterStubbingSite -> isParameterTypeNullable(value)
+            is MethodReturnValueStubbingSite -> isReturnTypeNullable(value)
             is ConstructorParameterStubbingSite -> isParameterTypeNullable(value)
-            else                                -> false
+            else -> false
         }
     }
 
@@ -45,7 +45,7 @@ internal class KotlinTypeNullableMatcher<T : StubbingSite> : Matcher<T> {
     }
 
     private fun isReturnTypeNullable(site: MethodReturnValueStubbingSite): Boolean =
-            site.method.kotlinFunction?.returnType?.isMarkedNullable ?: false
+        site.method.kotlinFunction?.returnType?.isMarkedNullable ?: false
 
     private fun isParameterTypeNullable(site: ConstructorParameterStubbingSite): Boolean {
         val function = site.constructor.kotlinFunction ?: return false

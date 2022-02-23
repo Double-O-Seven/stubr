@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package ch.leadrian.stubr.spek
 
 import ch.leadrian.stubr.core.StubbingSite
-import java.util.Optional
+import java.util.*
 
 /**
  * The default site used when using [memoizedStub].

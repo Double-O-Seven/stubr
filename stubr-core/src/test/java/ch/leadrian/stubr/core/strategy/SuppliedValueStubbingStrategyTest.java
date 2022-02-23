@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,11 +50,13 @@ class SuppliedValueStubbingStrategyTest {
 
     @TestFactory
     Stream<DynamicTest> testFixedSuppliedValueOfParameterizedType() {
-        TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {};
+        TypeLiteral<List<String>> listOfStrings = new TypeLiteral<List<String>>() {
+        };
         return stubbingStrategyTester()
                 .accepts(listOfStrings)
                 .andStubs(singletonList("Test"))
-                .rejects(new TypeLiteral<List<Integer>>() {})
+                .rejects(new TypeLiteral<List<Integer>>() {
+                })
                 .test(
                         StubbingStrategies.suppliedValue(listOfStrings, () -> singletonList("Test")),
                         StubbingStrategies.suppliedValue(listOfStrings, sequenceNumber -> singletonList("Test")),
@@ -65,11 +67,13 @@ class SuppliedValueStubbingStrategyTest {
     @SuppressWarnings("unchecked")
     @TestFactory
     Stream<DynamicTest> testFixedSuppliedValueOfGenericArrayTypeType() {
-        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {};
+        TypeLiteral<List<String>[]> listOfStringsArray = new TypeLiteral<List<String>[]>() {
+        };
         return stubbingStrategyTester()
                 .accepts(listOfStringsArray)
                 .andStubs(new List[]{singletonList("Test")})
-                .rejects(new TypeLiteral<List<Integer>>() {})
+                .rejects(new TypeLiteral<List<Integer>>() {
+                })
                 .test(
                         StubbingStrategies.suppliedValue(listOfStringsArray, () -> new List[]{singletonList("Test")}),
                         StubbingStrategies.suppliedValue(listOfStringsArray, sequenceNumber -> new List[]{singletonList("Test")}),

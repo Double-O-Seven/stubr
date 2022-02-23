@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,10 @@ EnumValueStubbingStrategyTest {
                 .andStubs(Foo.FOO)
                 .rejects(Bar.class)
                 .rejects(Qux.class)
-                .rejects(new TypeLiteral<List<Foo>>() {})
-                .rejects(new TypeLiteral<List<Foo>[]>() {})
+                .rejects(new TypeLiteral<List<Foo>>() {
+                })
+                .rejects(new TypeLiteral<List<Foo>[]>() {
+                })
                 .test(StubbingStrategies.enumValue());
     }
 
@@ -51,8 +53,10 @@ EnumValueStubbingStrategyTest {
                 .rejects(Bla.class)
                 .rejects(Bar.class)
                 .rejects(Qux.class)
-                .rejects(new TypeLiteral<List<Foo>>() {})
-                .rejects(new TypeLiteral<List<Foo>[]>() {})
+                .rejects(new TypeLiteral<List<Foo>>() {
+                })
+                .rejects(new TypeLiteral<List<Foo>[]>() {
+                })
                 .test(StubbingStrategies.enumValue(((context, values) -> values.stream()
                         .filter(value -> "FU".equals(value.name()))
                         .collect(toOptional()))));
@@ -75,6 +79,7 @@ EnumValueStubbingStrategyTest {
         BLUB
     }
 
-    private static class Qux {}
+    private static class Qux {
+    }
 
 }

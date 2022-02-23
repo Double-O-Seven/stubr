@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,8 @@ class StubbersTest {
 
         @Test
         void shouldStubListOfStrings() {
-            List<Integer> value = stubber.stub(new TypeLiteral<List<Integer>>() {});
+            List<Integer> value = stubber.stub(new TypeLiteral<List<Integer>>() {
+            });
 
             assertThat(value)
                     .containsExactly(0);

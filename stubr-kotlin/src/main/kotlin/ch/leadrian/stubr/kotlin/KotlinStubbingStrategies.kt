@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ object KotlinStubbingStrategies {
      * @return a [StubbingStrategy] using the given value every time the type of the given [value] is encountered
      */
     inline fun <reified T> constantValue(value: T): StubbingStrategy =
-            StubbingStrategies.constantValue(typeLiteral<T>(), value)
+        StubbingStrategies.constantValue(typeLiteral<T>(), value)
 
     /**
      * Inlined wrapper for [StubbingStrategies.collection].
@@ -55,10 +55,10 @@ object KotlinStubbingStrategies {
      * @return a [StubbingStrategy] for stubbing collections
      */
     inline fun <reified T : Collection<*>> collection(
-            crossinline collectionFactory: (List<*>) -> T,
-            crossinline collectionSize: (StubbingContext) -> Int
+        crossinline collectionFactory: (List<*>) -> T,
+        crossinline collectionSize: (StubbingContext) -> Int
     ): StubbingStrategy =
-            StubbingStrategies.collection(T::class.java, { collectionFactory(it) }, { collectionSize(it) })
+        StubbingStrategies.collection(T::class.java, { collectionFactory(it) }, { collectionSize(it) })
 
     /**
      * Inlined wrapper for [StubbingStrategies.collection].
@@ -69,8 +69,8 @@ object KotlinStubbingStrategies {
      * @return a [StubbingStrategy] for stubbing collections
      */
     inline fun <reified T : Collection<*>> collection(
-            collectionSize: Int,
-            crossinline collectionFactory: (List<*>) -> T
+        collectionSize: Int,
+        crossinline collectionFactory: (List<*>) -> T
     ): StubbingStrategy = collection(collectionFactory) { collectionSize }
 
     /**
@@ -82,8 +82,8 @@ object KotlinStubbingStrategies {
      * @return a [StubbingStrategy] for stubbing maps
      */
     inline fun <reified T : Map<*, *>> map(
-            crossinline mapFactory: (Map<*, *>) -> T,
-            crossinline mapSize: (StubbingContext) -> Int
+        crossinline mapFactory: (Map<*, *>) -> T,
+        crossinline mapSize: (StubbingContext) -> Int
     ): StubbingStrategy = StubbingStrategies.map(T::class.java, { mapFactory(it) }, { mapSize(it) })
 
     /**
@@ -95,8 +95,8 @@ object KotlinStubbingStrategies {
      * @return a [StubbingStrategy] for stubbing maps
      */
     inline fun <reified T : Map<*, *>> map(
-            mapSize: Int,
-            crossinline mapFactory: (Map<*, *>) -> T
+        mapSize: Int,
+        crossinline mapFactory: (Map<*, *>) -> T
     ): StubbingStrategy = map(mapFactory) { mapSize }
 
     /**
@@ -132,7 +132,7 @@ object KotlinStubbingStrategies {
      * @return a [StubbingStrategy] providing a stub values using a supplying function
      */
     inline fun <reified T> suppliedValue(crossinline supplier: (Int) -> T): StubbingStrategy =
-            StubbingStrategies.suppliedValue(typeLiteral<T>()) { sequenceNumber -> supplier(sequenceNumber) }
+        StubbingStrategies.suppliedValue(typeLiteral<T>()) { sequenceNumber -> supplier(sequenceNumber) }
 
     /**
      * Inlined wrapper for [StubbingStrategies.implementation].
@@ -142,6 +142,6 @@ object KotlinStubbingStrategies {
      * @return a [StubbingStrategy] that delegates the stubbing of an instance of [T] to stubbing a value for [U]
      */
     inline fun <reified T, reified U : T> implementation(): StubbingStrategy =
-            StubbingStrategies.implementation(typeLiteral<T>(), typeLiteral<U>())
+        StubbingStrategies.implementation(typeLiteral<T>(), typeLiteral<U>())
 
 }

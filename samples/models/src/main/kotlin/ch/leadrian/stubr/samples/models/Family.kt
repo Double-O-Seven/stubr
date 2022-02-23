@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package ch.leadrian.stubr.samples.models
 
 data class Family(
-        val mom: Person?,
-        val dad: Person?,
-        val kids: MutableList<Person>,
-        val pets: MutableList<Pet>
+    val mom: Person?,
+    val dad: Person?,
+    val kids: MutableList<Person>,
+    val pets: MutableList<Pet>
 )

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,16 +37,16 @@ object MockKStubbingStrategies {
     @JvmStatic
     @JvmOverloads
     fun mockkAny(
-            relaxed: Boolean = true,
-            relaxUnitFun: Boolean = false,
-            vararg moreInterfaces: KClass<*>,
-            block: Any.(StubbingContext, Type) -> Unit = { _, _ -> }
+        relaxed: Boolean = true,
+        relaxUnitFun: Boolean = false,
+        vararg moreInterfaces: KClass<*>,
+        block: Any.(StubbingContext, Type) -> Unit = { _, _ -> }
     ): StubbingStrategy {
         return GenericMockStubbingStrategy(
-                relaxed = relaxed,
-                relaxUnitFun = relaxUnitFun,
-                moreInterfaces = moreInterfaces,
-                block = block
+            relaxed = relaxed,
+            relaxUnitFun = relaxUnitFun,
+            moreInterfaces = moreInterfaces,
+            block = block
         )
     }
 
@@ -61,18 +61,18 @@ object MockKStubbingStrategies {
     @JvmStatic
     @JvmOverloads
     fun <T : Any> mockk(
-            type: KClass<T>,
-            relaxed: Boolean = true,
-            relaxUnitFun: Boolean = false,
-            vararg moreInterfaces: KClass<*>,
-            block: T.(StubbingContext) -> Unit = {}
+        type: KClass<T>,
+        relaxed: Boolean = true,
+        relaxUnitFun: Boolean = false,
+        vararg moreInterfaces: KClass<*>,
+        block: T.(StubbingContext) -> Unit = {}
     ): StubbingStrategy {
         return MockStubbingStrategy(
-                type = type,
-                relaxed = relaxed,
-                relaxUnitFun = relaxUnitFun,
-                moreInterfaces = moreInterfaces,
-                block = block
+            type = type,
+            relaxed = relaxed,
+            relaxUnitFun = relaxUnitFun,
+            moreInterfaces = moreInterfaces,
+            block = block
         )
     }
 
@@ -80,17 +80,17 @@ object MockKStubbingStrategies {
      * Inlined variant of [mockk] that uses a reified type [T].
      */
     inline fun <reified T : Any> mockk(
-            relaxed: Boolean = true,
-            relaxUnitFun: Boolean = false,
-            vararg moreInterfaces: KClass<*>,
-            noinline block: T.(StubbingContext) -> Unit = {}
+        relaxed: Boolean = true,
+        relaxUnitFun: Boolean = false,
+        vararg moreInterfaces: KClass<*>,
+        noinline block: T.(StubbingContext) -> Unit = {}
     ): StubbingStrategy {
         return mockk(
-                type = T::class,
-                relaxed = relaxed,
-                relaxUnitFun = relaxUnitFun,
-                block = block,
-                moreInterfaces = moreInterfaces,
+            type = T::class,
+            relaxed = relaxed,
+            relaxUnitFun = relaxUnitFun,
+            block = block,
+            moreInterfaces = moreInterfaces,
         )
     }
 

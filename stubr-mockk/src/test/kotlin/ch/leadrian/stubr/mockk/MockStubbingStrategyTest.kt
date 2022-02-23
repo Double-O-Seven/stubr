@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,52 +32,52 @@ internal class MockStubbingStrategyTest {
     @TestFactory
     fun `test mockk stubbing strategy with default configuration`(): Stream<DynamicTest> {
         return stubbingStrategyTester()
-                .accepts(Foo::class.java)
-                .andStubSatisfies { stub: Any ->
-                    assertThat(stub).isInstanceOfSatisfying(Foo::class.java) { foo ->
-                        assertAll(
-                                { assertThat(foo.getInt()).isZero() },
-                                { assertThat(foo.getString()).isEmpty() }
-                        )
-                    }
+            .accepts(Foo::class.java)
+            .andStubSatisfies { stub: Any ->
+                assertThat(stub).isInstanceOfSatisfying(Foo::class.java) { foo ->
+                    assertAll(
+                        { assertThat(foo.getInt()).isZero() },
+                        { assertThat(foo.getString()).isEmpty() }
+                    )
                 }
-                .rejects(Baz::class.java)
-                .rejects(Int::class.javaPrimitiveType)
-                .rejects(Array<Any>::class.java)
-                .rejects(Qux::class.java)
-                .rejects(object : TypeLiteral<Array<List<String>>>() {})
-                .test(MockKStubbingStrategies.mockk<Foo>())
+            }
+            .rejects(Baz::class.java)
+            .rejects(Int::class.javaPrimitiveType)
+            .rejects(Array<Any>::class.java)
+            .rejects(Qux::class.java)
+            .rejects(object : TypeLiteral<Array<List<String>>>() {})
+            .test(MockKStubbingStrategies.mockk<Foo>())
     }
 
     @TestFactory
     fun `test mockk stubbing strategy with configuration adjustments`(): Stream<DynamicTest> {
         return stubbingStrategyTester()
-                .accepts(Foo::class.java)
-                .andStubSatisfies { stub: Any ->
-                    assertThat(stub).isInstanceOfSatisfying(Foo::class.java) { foo ->
-                        assertAll(
-                                { assertThat(foo.getInt()).isEqualTo(1337) },
-                                { assertThat(catchThrowable { foo.getString() }).isInstanceOf(MockKException::class.java) }
-                        )
-                    }
+            .accepts(Foo::class.java)
+            .andStubSatisfies { stub: Any ->
+                assertThat(stub).isInstanceOfSatisfying(Foo::class.java) { foo ->
+                    assertAll(
+                        { assertThat(foo.getInt()).isEqualTo(1337) },
+                        { assertThat(catchThrowable { foo.getString() }).isInstanceOf(MockKException::class.java) }
+                    )
                 }
-                .test(MockKStubbingStrategies.mockk<Foo>(relaxed = false) {
-                    every { getInt() } returns 1337
-                })
+            }
+            .test(MockKStubbingStrategies.mockk<Foo>(relaxed = false) {
+                every { getInt() } returns 1337
+            })
     }
 
     @TestFactory
     fun `test mockk stubbing strategy with generic class`(): Stream<DynamicTest> {
         return stubbingStrategyTester()
-                .accepts(javaClass<Bla<String>>())
-                .andStubSatisfies { stub: Any ->
-                    assertThat(stub).isInstanceOfSatisfying(javaClass<Bla<String>>()) { bla ->
-                        assertThat(bla.getValue()).isEqualTo("generics need to be handled explicitly")
-                    }
+            .accepts(javaClass<Bla<String>>())
+            .andStubSatisfies { stub: Any ->
+                assertThat(stub).isInstanceOfSatisfying(javaClass<Bla<String>>()) { bla ->
+                    assertThat(bla.getValue()).isEqualTo("generics need to be handled explicitly")
                 }
-                .test(MockKStubbingStrategies.mockk<Bla<String>> {
-                    every { getValue() } returns "generics need to be handled explicitly"
-                })
+            }
+            .test(MockKStubbingStrategies.mockk<Bla<String>> {
+                every { getValue() } returns "generics need to be handled explicitly"
+            })
     }
 
     internal interface Foo {

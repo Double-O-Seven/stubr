@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Adrian-Philipp Leuenberger
+ * Copyright (C) 2022 Adrian-Philipp Leuenberger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,8 @@ class GenericMockStubbingStrategyTest {
                                 () -> assertThat(foo.getString()).isEqualTo("Test")
                         )
                 ))
-                .accepts(new TypeLiteral<Bla<String>>() {})
+                .accepts(new TypeLiteral<Bla<String>>() {
+                })
                 .andStubSatisfies(stub -> assertThat(stub).isInstanceOfSatisfying(Bla.class, bla ->
                         assertAll(
                                 () -> assertThat(bla.getInt()).isEqualTo(1337),
@@ -73,7 +74,8 @@ class GenericMockStubbingStrategyTest {
                 .rejects(int.class)
                 .rejects(Object[].class)
                 .rejects(Qux.class)
-                .rejects(new TypeLiteral<List<String>[]>() {})
+                .rejects(new TypeLiteral<List<String>[]>() {
+                })
                 .test(MockitoStubbingStrategies.mock(true).when(typeIsTestClass()));
     }
 
@@ -99,7 +101,8 @@ class GenericMockStubbingStrategyTest {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @interface TestClass {}
+    @interface TestClass {
+    }
 
     @TestClass
     interface Foo {
