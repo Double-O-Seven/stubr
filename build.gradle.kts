@@ -24,12 +24,14 @@ plugins {
 
 val gitVersion: Closure<String> by extra
 
+version = gitVersion()
+
 val dependenciesProject by extra(project(":dependencies"))
 
 allprojects {
     group = "ch.leadrian.stubr"
 
-    version = gitVersion()
+    version = rootProject.version
 
     repositories {
         mavenCentral()
