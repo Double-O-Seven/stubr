@@ -36,21 +36,21 @@ tasks {
             classDirectories.setFrom(projectsWithTests.map { it.sourceSets.main.get().output })
 
             reports {
-                xml.isEnabled = true
+                xml.required.set(true)
             }
         }
     }
 
     register<JavaExec>("codacyCoverageReport") {
         dependsOn(tasks.jacocoTestReport)
-        main = "com.codacy.CodacyCoverageReporter"
+        mainClass.set("com.codacy.CodacyCoverageReporter")
         classpath = codacyCoverageReport
         args(
-                "report",
-                "-l",
-                "Java",
-                "-r",
-                "${tasks.jacocoTestReport.get().reports.xml.destination}"
+            "report",
+            "-l",
+            "Java",
+            "-r",
+            "${tasks.jacocoTestReport.get().reports.xml.outputLocation}"
         )
     }
 }
@@ -61,7 +61,7 @@ subprojects {
             jacocoTestReport {
                 dependsOn(test)
                 reports {
-                    xml.isEnabled = true
+                    xml.required.set(true)
                 }
             }
         }
