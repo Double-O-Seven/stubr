@@ -27,26 +27,26 @@ import org.spekframework.spek2.style.specification.describe
 internal object SpekStubbersSpec : Spek({
     val stubber by useStubber {
         Stubber.builder()
-                .stubWith(KotlinStubbingStrategies.suppliedValue { i -> "stub $i" })
-                .build()
+            .stubWith(KotlinStubbingStrategies.suppliedValue { i -> "stub $i" })
+            .build()
     }
 
     describe("stubs") {
         val stub1 by memoizedStub<String>()
         val stub2 by memoized<String> { stubber.stub() }
-        val stub3 by memoizedStub<String> { toUpperCase() }
+        val stub3 by memoizedStub<String> { uppercase() }
         val stub4 by memoized<String> { stubber.stub() }
 
         it("should provide and memoize stubs from stubber") {
             assertAll(
-                    { assertThat(stub1).isEqualTo("stub 0") },
-                    { assertThat(stub1).isEqualTo("stub 0") },
-                    { assertThat(stub2).isEqualTo("stub 1") },
-                    { assertThat(stub2).isEqualTo("stub 1") },
-                    { assertThat(stub3).isEqualTo("STUB 2") },
-                    { assertThat(stub3).isEqualTo("STUB 2") },
-                    { assertThat(stub4).isEqualTo("stub 3") },
-                    { assertThat(stub4).isEqualTo("stub 3") },
+                { assertThat(stub1).isEqualTo("stub 0") },
+                { assertThat(stub1).isEqualTo("stub 0") },
+                { assertThat(stub2).isEqualTo("stub 1") },
+                { assertThat(stub2).isEqualTo("stub 1") },
+                { assertThat(stub3).isEqualTo("STUB 2") },
+                { assertThat(stub3).isEqualTo("STUB 2") },
+                { assertThat(stub4).isEqualTo("stub 3") },
+                { assertThat(stub4).isEqualTo("stub 3") },
             )
         }
     }
