@@ -16,4 +16,4 @@ jobs:
       - name: Build with Gradle
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CodacyProjectToken }}
-        run: ./gradlew build codacyCoverageReport -Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m
+        run: ./gradlew build codacyCoverageReport -Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m --scan
