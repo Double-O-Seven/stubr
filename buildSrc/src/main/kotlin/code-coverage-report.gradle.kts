@@ -50,7 +50,7 @@ tasks {
             "-l",
             "Java",
             "-r",
-            "${tasks.jacocoTestReport.get().reports.xml.outputLocation}"
+            "${tasks.jacocoTestReport.get().reports.xml.outputLocation.get()}"
         )
     }
 }
