@@ -63,7 +63,8 @@ inline fun <reified T : Any> LifecycleAware.memoizedStub(
     noinline block: T.(Stubber) -> T = { this },
 ): MemoizedValue<T> = memoizedStub(typeLiteral(), mode, site, block)
 
-fun <T : Any> LifecycleAware.memoizedStub(
+@PublishedApi
+internal fun <T : Any> LifecycleAware.memoizedStub(
     typeLiteral: TypeLiteral<T>,
     mode: CachingMode = defaultCachingMode,
     site: StubbingSite = MemoizingStubbingSite,
