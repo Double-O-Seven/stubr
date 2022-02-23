@@ -18,6 +18,7 @@ package ch.leadrian.stubr.spek
 
 import ch.leadrian.stubr.core.Stubber
 import ch.leadrian.stubr.core.StubbingSite
+import ch.leadrian.stubr.core.type.TypeLiteral
 import ch.leadrian.stubr.kotlin.typeLiteral
 import org.spekframework.spek2.dsl.LifecycleAware
 import org.spekframework.spek2.lifecycle.CachingMode
@@ -34,8 +35,8 @@ import org.spekframework.spek2.lifecycle.MemoizedValue
  * @return a [MemoizedValue] containing the stubber provided by [stubberFactory]
  */
 fun LifecycleAware.useStubber(
-        mode: CachingMode = defaultCachingMode,
-        stubberFactory: () -> Stubber,
+    mode: CachingMode = defaultCachingMode,
+    stubberFactory: () -> Stubber,
 ): MemoizedValue<Stubber> {
     val stubber by memoized(mode, stubberFactory)
     return memoized(mode) { stubber }
@@ -57,12 +58,19 @@ fun LifecycleAware.useStubber(
  * @return a stub memoized using [LifecycleAware.memoized] provided my the stubber
  */
 inline fun <reified T : Any> LifecycleAware.memoizedStub(
-        mode: CachingMode = defaultCachingMode,
-        site: StubbingSite = MemoizingStubbingSite,
-        crossinline block: T.(Stubber) -> T = { this },
+    mode: CachingMode = defaultCachingMode,
+    site: StubbingSite = MemoizingStubbingSite,
+    noinline block: T.(Stubber) -> T = { this },
+): MemoizedValue<T> = memoizedStub(typeLiteral(), mode, site, block)
+
+fun <T : Any> LifecycleAware.memoizedStub(
+    typeLiteral: TypeLiteral<T>,
+    mode: CachingMode = defaultCachingMode,
+    site: StubbingSite = MemoizingStubbingSite,
+    block: T.(Stubber) -> T = { this },
 ): MemoizedValue<T> {
     val stubber by memoized<Stubber>()
     return memoized(mode) {
-        stubber.stub(typeLiteral<T>(), site).run { block(stubber) }
+        stubber.stub(typeLiteral, site).run { block(stubber) }
     }
 }
