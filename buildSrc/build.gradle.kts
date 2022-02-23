@@ -28,3 +28,13 @@ dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "1.4.30")
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+    }
+
+    withSourcesJar()
+    withJavadocJar()
+}
