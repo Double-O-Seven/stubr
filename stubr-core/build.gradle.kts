@@ -22,10 +22,10 @@ plugins {
 }
 
 dependencies {
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
-    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
+    implementation(libs.equalizer.core)
+    implementation(libs.stubr.shaded.dependencies)
 
-    testFixturesApi(group = "org.junit.jupiter", name = "junit-jupiter-api")
+    testFixturesApi(libs.junit.jupiter.api)
 
-    testFixturesImplementation(group = "org.assertj", name = "assertj-core")
+    testFixturesImplementation(libs.assertj.core)
 }

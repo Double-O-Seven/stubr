@@ -26,9 +26,9 @@ dependencies {
     api(kotlin("reflect"))
     api(kotlin("stdlib-jdk8"))
 
-    testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm")
+    testImplementation(group = "org.spekframework.spek2", name = "spek-dsl-jvm", version = "2.0.17")
 
-    testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5")
+    testRuntimeOnly(group = "org.spekframework.spek2", name = "spek-runner-junit5", version = "2.0.17")
 }
 
 tasks {

@@ -22,10 +22,10 @@ plugins {
 
 dependencies {
     api(project(":stubr-core"))
-    api(group = "org.mockito", name = "mockito-core")
+    api(libs.mockito.core)
 
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
-    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
+    implementation(libs.equalizer.core)
+    implementation(libs.stubr.shaded.dependencies)
 
     testImplementation(testFixtures(project(":stubr-core")))
 }

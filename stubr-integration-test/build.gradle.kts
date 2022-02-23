@@ -20,8 +20,9 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.equalizer.core)
+    implementation(libs.stubr.shaded.dependencies)
+    
     testImplementation(project(":stubr-junit"))
     testImplementation(project(":stubr-core"))
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
-    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
 }

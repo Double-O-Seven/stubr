@@ -22,9 +22,9 @@ plugins {
 
 dependencies {
     api(project(":stubr-core"))
-    api(group = "io.mockk", name = "mockk")
+    api(libs.mockk)
 
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
+    implementation(libs.equalizer.core)
 
     testImplementation(testFixtures(project(":stubr-core")))
 }

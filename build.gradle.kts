@@ -26,8 +26,6 @@ val gitVersion: Closure<String> by extra
 
 version = gitVersion()
 
-val dependenciesProject by extra(project(":dependencies"))
-
 allprojects {
     group = "ch.leadrian.stubr"
 

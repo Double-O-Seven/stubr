@@ -52,16 +52,13 @@ java {
     withJavadocJar()
 }
 
-val dependenciesProject: Project by rootProject.extra
-
 dependencies {
-    internal(platform(dependenciesProject))
-
-    testImplementation(group = "org.assertj", name = "assertj-core")
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation(group = "org.assertj", name = "assertj-core", version = "3.22.0")
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api")
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-params")
-    testImplementation(group = "org.mockito", name = "mockito-core")
-    testImplementation(group = "com.google.guava", name = "guava-testlib")
+    testImplementation(group = "org.mockito", name = "mockito-core", version = "1.10.19")
+    testImplementation(group = "com.google.guava", name = "guava-testlib", version = "31.0.1-jre")
 
     testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine")
 }

@@ -22,10 +22,10 @@ plugins {
 
 dependencies {
     api(project(":stubr-core"))
-    api(group = "org.junit.jupiter", name = "junit-jupiter-api")
+    api(libs.junit.jupiter.api)
 
-    implementation(group = "ch.leadrian.equalizer", name = "equalizer-core")
-    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
+    implementation(libs.equalizer.core)
+    implementation(libs.stubr.shaded.dependencies)
 
     testImplementation(testFixtures(project(":stubr-core")))
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-include(":dependencies")
 include(":samples")
 include(":samples:inject-mocked-dependencies")
 include(":samples:junit-basics")

@@ -23,13 +23,13 @@ plugins {
 
 dependencies {
     api(project(":stubr-core"))
-    api(group = "com.github.javafaker", name = "javafaker")
+    api(libs.javafaker)
 
-    implementation(group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies")
+    implementation(libs.stubr.shaded.dependencies)
 
     testImplementation(kotlin("stdlib-jdk8"))
     testImplementation(project(":stubr-junit"))
-    testImplementation(group = "io.mockk", name = "mockk")
+    testImplementation(libs.mockk)
 }
 
 tasks {

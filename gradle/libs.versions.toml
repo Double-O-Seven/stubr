@@ -1,0 +1,19 @@
+[versions]
+assertj = "3.22.0"
+equalizer = "1.2.1"
+javafaker = "1.0.2"
+junit = "5.8.2"
+mockito = "1.10.19"
+mockk = "1.12.2"
+spek = "2.0.17"
+stubr-shaded-dependencies = "1.1.0"
+
+[libraries]
+assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
+equalizer-core = { group = "ch.leadrian.equalizer", name = "equalizer-core", version.ref = "equalizer" }
+javafaker = { group = "com.github.javafaker", name = "javafaker", version.ref = "javafaker" }
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+spek-dsl-jvm = { group = "org.spekframework.spek2", name = "spek-dsl-jvm", version.ref = "spek" }
+stubr-shaded-dependencies = { group = "ch.leadrian.stubr", name = "stubr-shaded-dependencies", version.ref = "stubr-shaded-dependencies" }
