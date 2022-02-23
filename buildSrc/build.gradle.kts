@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("gradle-plugin"))
-    implementation(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "1.4.30")
+    implementation(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "1.5.31")
 }
 
 java {
