@@ -19,29 +19,6 @@ plugins {
     `java-test-fixtures` apply false
 }
 
-val internal: Configuration by configurations.creating {
-    isVisible = false
-    isCanBeConsumed = false
-    isCanBeResolved = false
-}
-
-configurations {
-    compileClasspath.get().extendsFrom(internal)
-    runtimeClasspath.get().extendsFrom(internal)
-    testCompileClasspath.get().extendsFrom(internal)
-    testRuntimeClasspath.get().extendsFrom(internal)
-}
-
-pluginManager.withPlugin("java-test-fixtures") {
-    val javaComponent = components["java"] as AdhocComponentWithVariants
-    configurations {
-        javaComponent.withVariantsFromConfiguration(testFixturesApiElements.get()) { skip() }
-        javaComponent.withVariantsFromConfiguration(testFixturesRuntimeElements.get()) { skip() }
-        testFixturesCompileClasspath.get().extendsFrom(internal)
-        testFixturesRuntimeClasspath.get().extendsFrom(internal)
-    }
-}
-
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
