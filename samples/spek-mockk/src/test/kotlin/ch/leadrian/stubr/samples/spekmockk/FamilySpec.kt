@@ -28,7 +28,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-internal object FamilySpecSpec : Spek({
+internal object FamilySpec : Spek({
     useStubber { familyStubber() }
     val familyFactory by mockedTestDependency<FamilyFactory>()
     val familyService by testSubject<FamilyService>()
